@@ -1,0 +1,11 @@
+*.idea
+*.git
+*.svn
+.settings
+.gradle
+build
+classes
+META-INF
+out
+typings
+node_modules
