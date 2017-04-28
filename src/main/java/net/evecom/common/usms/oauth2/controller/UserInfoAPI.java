@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.oauth2.controller;
 
-import net.evecom.common.usms.core.model.ResultJson;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.oauth2.service.StaffService;
@@ -17,6 +16,8 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
 import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -112,8 +113,8 @@ public class UserInfoAPI {
         return appJsonArr;
     }
 
-    @RequestMapping(value = "/userInfo", produces = "text/html; charset=UTF-8")
-    public String userInfo(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
+    @RequestMapping(value = "/userInfo", produces = "application/json; charset=UTF-8")
+    public ResponseEntity userInfo(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 获取Access Token
@@ -137,9 +138,8 @@ public class UserInfoAPI {
         userJson.put("operations", operJsonArr);
         userJson.put("applications", appJsonArr);
 
-        ResultJson resultJson = new ResultJson(ResultJson.SUCCESS, userJson);
-        JSONObject jsonObject = JSONObject.fromObject(resultJson);
-        return jsonObject.toString();
+        JSONObject jsonObject = JSONObject.fromObject(userJson);
+        return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
 }

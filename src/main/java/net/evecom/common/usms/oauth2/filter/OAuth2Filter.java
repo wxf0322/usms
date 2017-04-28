@@ -5,12 +5,8 @@
  */
 package net.evecom.common.usms.oauth2.filter;
 
-import net.evecom.common.usms.core.model.ResultJson;
 import net.evecom.common.usms.core.util.WebUtil;
 import net.evecom.common.usms.oauth2.Constants;
-import net.evecom.common.usms.core.model.Status;
-import net.sf.json.JSONObject;
-import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -20,7 +16,6 @@ import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 import org.apache.oltu.oauth2.rs.response.OAuthRSResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -79,7 +74,7 @@ public class OAuth2Filter implements Filter {
 
     /**
      * oAuth认证失败时的输出
-     *
+     * AccessToken错误，或者失效，返回401
      * @param response
      * @throws OAuthSystemException
      * @throws IOException
@@ -87,23 +82,14 @@ public class OAuth2Filter implements Filter {
     private void oAuthFailResponse(HttpServletResponse response) throws OAuthSystemException, IOException {
         OAuthResponse oauthResponse = OAuthRSResponse
                 .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
-                .setRealm(Constants.RESOURCE_SERVER_NAME)
                 .setError(OAuthError.ResourceResponse.INVALID_TOKEN)
-                .buildHeaderMessage();
+                .setErrorDescription(Constants.INVALID_ACCESS_TOKEN)
+                .buildJSONMessage();
 
-        // 添加请求头
-        response.addHeader(OAuth.HeaderType.WWW_AUTHENTICATE,
-                oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE));
-        response.addHeader(OAuth.HeaderType.CONTENT_TYPE, "text/html; charset=utf-8");
-
-        // 编写请求
+        response.addHeader("Content-Type", "application/json; charset=utf-8");
+        response.setStatus(oauthResponse.getResponseStatus());
         PrintWriter writer = response.getWriter();
-
-        // 构造响应请求
-        Status status = new Status(HttpStatus.UNAUTHORIZED.getReasonPhrase(), Constants.INVALID_ACCESS_TOKEN);
-        ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-        JSONObject jsonObject = JSONObject.fromObject(resultJson);
-        writer.write(jsonObject.toString());
+        writer.write(oauthResponse.getBody());
         writer.flush();
         writer.close();
     }

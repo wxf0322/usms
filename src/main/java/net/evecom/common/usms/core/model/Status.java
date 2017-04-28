@@ -19,18 +19,18 @@ public class Status implements Serializable {
     /**
      * 错误码
      */
-    private String code;
+    private int code;
 
     /**
      * 错误信息
      */
     private String msg;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -42,7 +42,7 @@ public class Status implements Serializable {
         this.msg = msg;
     }
 
-    public Status(String code, String msg) {
+    public Status(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

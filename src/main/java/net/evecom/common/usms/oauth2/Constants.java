@@ -21,13 +21,7 @@ public interface Constants {
     /**
      * 客户端认证失败
      */
-    String INVALID_CLIENT_ID = "客户端验证失败，如：错误的client_id。";
-
-    /**
-     * 客户端认证失败
-     */
-    String INVALID_CLIENT_SECRET = "客户端验证失败，错误的client_secret。";
-
+    String INVALID_CLIENT_ID = "客户端验证失败，如：错误的client_id/client_secret。";
 
     /**
      * 无效的AccessToken

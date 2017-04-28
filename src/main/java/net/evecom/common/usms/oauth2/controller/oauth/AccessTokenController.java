@@ -5,11 +5,8 @@
  */
 package net.evecom.common.usms.oauth2.controller.oauth;
 
-import net.evecom.common.usms.core.model.ResultJson;
-import net.evecom.common.usms.core.model.Status;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
-import net.sf.json.JSONObject;
 import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.OAuth;
@@ -54,7 +51,18 @@ public class AccessTokenController {
         return new ModelAndView("accesstoken");
     }
 
-    @RequestMapping(value = "/accessToken", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
+    /**
+     * client_id错误或者失效，返回400
+     * client_secret错误或者失效，返回400
+     * code错误返回401
+     * 其他错误返回400
+     *
+     * @param request
+     * @return
+     * @throws URISyntaxException
+     * @throws OAuthSystemException
+     */
+    @RequestMapping(value = "/accessToken", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public HttpEntity token(HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException {
         try {
@@ -63,28 +71,31 @@ public class AccessTokenController {
 
             // 检查提交的客户端id是否正确
             if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
-                Status status = new Status(OAuthError.TokenResponse.INVALID_CLIENT, Constants.INVALID_CLIENT_ID);
-                ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-                JSONObject jsonObject = JSONObject.fromObject(resultJson);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.BAD_REQUEST);
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                        .setError(OAuthError.TokenResponse.INVALID_CLIENT)
+                        .setErrorDescription(Constants.INVALID_CLIENT_ID)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            // 检查客户端安全KEY是否正确
+            // 检查客户端安全Key是否正确
             if (!oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
-                Status status = new Status(OAuthError.TokenResponse.INVALID_CLIENT, Constants.INVALID_CLIENT_SECRET);
-                ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-                JSONObject jsonObject = JSONObject.fromObject(resultJson);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.BAD_REQUEST);
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                        .setError(OAuthError.TokenResponse.UNAUTHORIZED_CLIENT)
+                        .setErrorDescription(Constants.INVALID_CLIENT_ID)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
             String authCode = oauthRequest.getParam(OAuth.OAUTH_CODE);
-            // 检查验证类型，此处只检查AUTHORIZATION_CODE类型，其他的还有PASSWORD或REFRESH_TOKEN
+            // 检查验证类型，此处只检查 AUTHORIZATION_CODE 类型，其他的还有 PASSWORD 或 REFRESH_TOKEN
             if (oauthRequest.getParam(OAuth.OAUTH_GRANT_TYPE).equals(GrantType.AUTHORIZATION_CODE.toString())) {
                 if (!oAuthService.checkAuthCode(authCode)) {
-                    Status status = new Status(OAuthError.TokenResponse.INVALID_CLIENT, Constants.INVALID_AUTH_CODE);
-                    ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-                    JSONObject jsonObject = JSONObject.fromObject(resultJson);
-                    return new ResponseEntity(jsonObject.toString(), HttpStatus.BAD_REQUEST);
+                    OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
+                            .setError(OAuthError.TokenResponse.INVALID_GRANT)
+                            .setErrorDescription(Constants.INVALID_AUTH_CODE)
+                            .buildJSONMessage();
+                    return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
                 }
             }
 
@@ -95,30 +106,26 @@ public class AccessTokenController {
             String accessToken = oAuthService.getNewAccessToken(loginName, clientId, authCode);
 
             // 生成OAuth响应
-            OAuthResponse response = OAuthASResponse
-                    .tokenResponse(HttpServletResponse.SC_OK)
+            OAuthResponse response = OAuthASResponse.tokenResponse(HttpServletResponse.SC_OK)
                     .setAccessToken(accessToken)
                     .setExpiresIn(String.valueOf(oAuthService.getExpiresIn()))
                     .buildJSONMessage();
 
-            ResultJson resultJson = new ResultJson(ResultJson.SUCCESS, response.getBody());
-            JSONObject jsonObject = JSONObject.fromObject(resultJson);
-            return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
+            //根据OAuthResponse生成ResponseEntity
+            return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
 
         } catch (OAuthProblemException e) {
             // 构建错误响应
-            OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+            OAuthResponse response = OAuthASResponse
+                    .errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                     .error(e)
                     .buildJSONMessage();
-
-            ResultJson resultJson = new ResultJson(ResultJson.FAILED, JSONObject.fromObject(response.getBody()));
-            JSONObject jsonObject = JSONObject.fromObject(resultJson);
-            return new ResponseEntity(jsonObject.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
         }
     }
 
     /**
-     * 验证accessToken
+     * 用户验证accessToken的链接
      *
      * @param accessToken
      * @return

@@ -5,14 +5,11 @@
  */
 package net.evecom.common.usms.oauth2.controller.oauth;
 
-import net.evecom.common.usms.core.model.ResultJson;
 import net.evecom.common.usms.oauth2.Constants;
-import net.evecom.common.usms.core.model.Status;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.service.ApplicationService;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.oauth2.service.UserService;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
@@ -66,14 +63,17 @@ public class AuthorizeController {
 
     /**
      * 获得授权码
-     *
+     * client_id错误或者失效，返回400
+     * 重定向成功，返回302
+     * redirect_url未空，返回404
+     * 其他错误，返回400
      * @param model
      * @param request
      * @return
      * @throws URISyntaxException
      * @throws OAuthSystemException
      */
-    @RequestMapping(value = "/authorize", produces = "text/html; charset=UTF-8")
+    @RequestMapping(value = "/authorize", produces = "application/json; charset=UTF-8")
     public Object authorize(Model model, HttpServletRequest request) throws URISyntaxException, OAuthSystemException {
         try {
             // 构建 OAuth 授权请求
@@ -84,10 +84,11 @@ public class AuthorizeController {
 
             // 检查传入的客户端id是否正确
             if (!oAuthService.checkClientId(clientId)) {
-                Status status = new Status(OAuthError.TokenResponse.INVALID_CLIENT, Constants.INVALID_CLIENT_ID);
-                ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-                JSONObject jsonObject = JSONObject.fromObject(resultJson);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.BAD_REQUEST);
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                        .setError(OAuthError.TokenResponse.INVALID_CLIENT)
+                        .setErrorDescription(Constants.INVALID_CLIENT_ID)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
             // 如果用户没有登录，跳转到登陆页面
@@ -96,7 +97,8 @@ public class AuthorizeController {
                 return "oauth2login";
             }
 
-            String loginName = request.getParameter("loginName"); // 获取用户名
+            // 获取用户名
+            String loginName = request.getParameter("loginName");
 
             // 生成授权码
             String authorizationCode = null;
@@ -129,15 +131,18 @@ public class AuthorizeController {
             String redirectUri = e.getRedirectUri();
             if (OAuthUtils.isEmpty(redirectUri)) {
                 //告诉客户端没有传入redirectUri直接报错
-                Status status = new Status(HttpStatus.NOT_FOUND.getReasonPhrase(), Constants.INVALID_REDIRECT_URI);
-                ResultJson resultJson = new ResultJson(ResultJson.FAILED, status);
-                JSONObject jsonObject = JSONObject.fromObject(resultJson);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.NOT_FOUND);
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_NOT_FOUND)
+                        .setError(OAuthError.TokenResponse.INVALID_REQUEST)
+                        .setErrorDescription(Constants.INVALID_REDIRECT_URI)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            //返回错误消息（如?error=）
-            final OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_FOUND)
-                    .error(e).location(redirectUri).buildQueryMessage();
+            // 返回错误消息（如?error=）
+            final OAuthResponse response = OAuthASResponse
+                    .errorResponse(HttpServletResponse.SC_BAD_REQUEST).error(e)
+                    .location(redirectUri)
+                    .buildQueryMessage();
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(response.getLocationUri()));
             return new ResponseEntity(headers, HttpStatus.valueOf(response.getResponseStatus()));
