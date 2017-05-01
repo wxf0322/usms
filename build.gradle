@@ -12,11 +12,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    maven {
-        url "http://repo1.maven.org/maven2"
-    }
-    mavenCentral()
-    jcenter()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 }
 
 dependencies {
@@ -72,7 +68,6 @@ dependencies {
     compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
 
     // apache commons
-    compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
