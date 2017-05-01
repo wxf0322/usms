@@ -131,7 +131,7 @@ public class AuthorizeController {
             String redirectUri = e.getRedirectUri();
             if (OAuthUtils.isEmpty(redirectUri)) {
                 //告诉客户端没有传入redirectUri直接报错
-                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_NOT_FOUND)
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_REQUEST)
                         .setErrorDescription(Constants.INVALID_REDIRECT_URI)
                         .buildJSONMessage();
