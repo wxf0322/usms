@@ -96,7 +96,6 @@ public class GridEntity {
     private Long enabled;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     public long getId() {
         return id;

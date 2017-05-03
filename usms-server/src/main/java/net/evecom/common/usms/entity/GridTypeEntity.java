@@ -44,7 +44,6 @@ public class GridTypeEntity {
     private Date lastModified;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     public long getId() {
         return id;

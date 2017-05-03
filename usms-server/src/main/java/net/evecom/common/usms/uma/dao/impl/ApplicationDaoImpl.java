@@ -78,5 +78,4 @@ public class ApplicationDaoImpl implements ApplicationDao {
         query.setParameter(ApplicationEntity.PARAM_CLIENT_SECRET, clientSecret);
         return JpaUtil.getSingleResult(query.getResultList());
     }
-
 }

@@ -34,5 +34,5 @@ public interface UserDao {
 
     List<OperationEntity> findOperationsById(Long id);
 
-    List<ApplicationEntity> findApplicationsBy(Long id);
+    List<ApplicationEntity> findApplicationsById(Long id);
 }

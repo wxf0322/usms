@@ -1,7 +1,7 @@
 <footer class="footer">
-    <p>&copy; Company 2015</p>
+    <p>&copy; Company evecom.net</p>
 </footer>
 
-</div> <!-- /container -->
+</div>
 </body>
 </html>

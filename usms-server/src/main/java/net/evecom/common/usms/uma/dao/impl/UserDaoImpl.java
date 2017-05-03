@@ -93,18 +93,18 @@ public class UserDaoImpl implements UserDao {
                 .append("     FROM usms_privilege_role pr\n")
                 .append("     WHERE pr.role_id IN (SELECT ur.role_id\n")
                 .append("      FROM usms_user_role ur\n")
-                .append("      WHERE ur.user_id = :user_id))\n")
+                .append("      WHERE ur.user_id = :userId))\n")
                 .append("    AND p.enabled = 1))\n")
                 .append(" AND o.enabled = 1");
 
         String sql = sb.toString();
 
         Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter("user_id", id);
+        query.setParameter("userId", id);
         return query.getResultList();
     }
 
-    public List<ApplicationEntity> findApplicationsBy(Long id) {
+    public List<ApplicationEntity> findApplicationsById(Long id) {
         List<OperationEntity> operations = findOperationsById(id);
         long[] appIds = operations.stream().mapToLong(op -> op.getApplicationId()).distinct().toArray();
         List<ApplicationEntity> applications = new ArrayList<>();

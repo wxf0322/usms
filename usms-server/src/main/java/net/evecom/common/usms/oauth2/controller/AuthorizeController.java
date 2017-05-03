@@ -9,6 +9,7 @@ import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
@@ -20,6 +21,9 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -62,11 +66,19 @@ public class AuthorizeController {
     private UserService userService;
 
     /**
+     * 注入密码加密工具类
+     */
+    @Autowired
+    private PasswordHelper passwordHelper;
+
+
+    /**
      * 获得授权码
      * client_id错误或者失效，返回400
      * 重定向成功，返回302
      * redirect_url未空，返回404
      * 其他错误，返回400
+     *
      * @param model
      * @param request
      * @return
@@ -156,8 +168,8 @@ public class AuthorizeController {
      * @return
      */
     private boolean login(HttpServletRequest request) {
+        // loginName与password只能用post请求提交
         if ("get".equalsIgnoreCase(request.getMethod())) {
-            request.setAttribute("error", "非法的请求");
             return false;
         }
 
@@ -165,26 +177,39 @@ public class AuthorizeController {
         String password = request.getParameter("password");
 
         if (StringUtils.isEmpty(loginName) || StringUtils.isEmpty(password)) {
-            request.setAttribute("error", "登录失败:用户名或密码不能为空");
+            request.setAttribute("error", Constants.EMPTY_ACCOUNT_OR_PASSWORD);
             return false;
         }
-        try {
-            // 写登录逻辑
-            UserEntity user = userService.findByLoginName(loginName);
-            if (user != null) {
-                if (!userService.checkUser(loginName, password, user.getSalt(), user.getPassword())) {
-                    request.setAttribute("error", "登录失败:密码不正确");
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                request.setAttribute("error", "登录失败:用户名不正确");
-                return false;
-            }
-        } catch (Exception e) {
-            request.setAttribute("error", "登录失败:" + e.getClass().getName());
+
+        UserEntity user = userService.findByLoginName(loginName);
+        if (user == null) {
+            request.setAttribute("error", Constants.UNKNOWN_ACCOUNT);
             return false;
+        }
+
+        // 加密过后的密码
+        String encryptPwd = passwordHelper.encryptPassword(loginName, password, user.getSalt());
+
+        // 传入加密过的密码
+        UsernamePasswordToken token = new UsernamePasswordToken(loginName, encryptPwd);
+        Subject subject = SecurityUtils.getSubject();
+        String error = null;
+        try {
+            subject.login(token);
+        } catch (IncorrectCredentialsException e) {
+            error = Constants.INCORRECT_CREDENTIALS;
+        } catch (UnknownAccountException e) {
+            error = Constants.UNKNOWN_ACCOUNT;
+        } catch (LockedAccountException e) {
+            error = Constants.LOCKED_ACCOUNT;
+        } catch (AuthenticationException e) {
+            error = e.getMessage();
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            return false;
+        } else {
+            return true;
         }
     }
 

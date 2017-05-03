@@ -49,6 +49,7 @@ public class UserController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(UserEntity user, RedirectAttributes redirectAttributes) {
         user.setTimeCreated(new Date());
+        user.setEnabled(1L); // 设置用户为启用状态
         userService.createUser(user);
         redirectAttributes.addFlashAttribute("msg", "新增成功");
         return "redirect:/user";

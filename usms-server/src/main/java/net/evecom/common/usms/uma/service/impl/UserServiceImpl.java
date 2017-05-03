@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ApplicationEntity> findApplicationsById(Long id) {
-        return userDao.findApplicationsBy(id);
+        return userDao.findApplicationsById(id);
     }
 
     /**

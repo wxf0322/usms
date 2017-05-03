@@ -21,7 +21,6 @@
     <c:if test="${not empty error}">
     <div class="alert alert-danger" role="alert">${error}</div>
     </c:if>
-
     <div class="row marketing">
         <div class="col-lg-10">
             <form class="form-horizontal" method="post" action="">
@@ -29,13 +28,13 @@
                 <input type="hidden" name="response_type" value="${param.response_type}">
                 <input type="hidden" name="redirect_uri" value="${param.redirect_uri}">
                 <div class="form-group">
-                    <label for="loginName" class="col-sm-4 control-label">用户名</label>
+                    <label class="col-sm-4 control-label">用户名</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" name="loginName" placeholder="用户名">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password" class="col-sm-4 control-label">密码</label>
+                    <label class="col-sm-4 control-label">密码</label>
                     <div class="col-sm-8">
                         <input type="password" class="form-control" name="password" placeholder="密码">
                     </div>
@@ -48,5 +47,4 @@
             </form>
         </div>
     </div>
-
 <jsp:include page="footer.jsp"/>

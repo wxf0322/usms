@@ -14,11 +14,6 @@ package net.evecom.common.usms.oauth2;
  */
 public interface Constants {
     /**
-     * 资源服务器名
-     */
-    String RESOURCE_SERVER_NAME = "oauth-server";
-
-    /**
      * 客户端认证失败
      */
     String INVALID_CLIENT_ID = "客户端验证失败，如：错误的client_id/client_secret。";
@@ -37,4 +32,26 @@ public interface Constants {
      * 无效的授权码
      */
     String INVALID_AUTH_CODE = "错误的授权码。";
+
+
+    /**
+     * 用户密码错误
+     */
+    String INCORRECT_CREDENTIALS = "登录失败: 用户密码错误";
+
+    /**
+     * 账号不存在
+     */
+    String UNKNOWN_ACCOUNT = "登录失败: 用户名不存在";
+
+    /**
+     * 该账号被管理员锁定
+     */
+    String LOCKED_ACCOUNT = "登录失败: 该账号被管理员锁定";
+
+    /**
+     * 用户名或密码不能为空
+     */
+    String EMPTY_ACCOUNT_OR_PASSWORD = "登录失败: 用户名或密码不能为空";
 }
+

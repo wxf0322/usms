@@ -30,28 +30,23 @@ public class PasswordHelper {
     private String algorithmName = "md5";
 
     /**
-     * 散列次数
-     */
-    @Value("${password.hashIterations}")
-    private int hashIterations = 2;
-
-    /**
      * 加密用户信息
      *
      * @param user
      */
     public void encryptPassword(UserEntity user) {
+        // 随机一个盐值
         user.setSalt(randomNumberGenerator.nextBytes().toHex());
+        // 密码采用md5进行加密，盐值为username + salt
         String newPassword = new SimpleHash(
                 algorithmName,
                 user.getPassword(),
-                ByteSource.Util.bytes(user.getCredentialsSalt()),
-                hashIterations).toHex();
+                ByteSource.Util.bytes(user.getCredentialsSalt())).toHex();
         user.setPassword(newPassword);
     }
 
     /**
-     * 根据用户名和盐值加密
+     * 传入表单中的用户名，密码，数据库中的盐，获得加密之后的密码
      *
      * @param username
      * @param password
@@ -61,8 +56,7 @@ public class PasswordHelper {
         String pwd = new SimpleHash(
                 algorithmName,
                 password,
-                ByteSource.Util.bytes(username + salt),
-                hashIterations).toHex();
+                ByteSource.Util.bytes(username + salt)).toHex();
         return pwd;
     }
 

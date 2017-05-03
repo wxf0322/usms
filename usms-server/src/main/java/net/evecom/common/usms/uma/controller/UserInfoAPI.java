@@ -125,10 +125,9 @@ public class UserInfoAPI {
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
 
-        Long userId = user.getId();
-        JSONObject staffJson = getStaffJSONObject(userId);
-        JSONArray operJsonArr = getOperJSONArray(userId);
-        JSONArray appJsonArr = getAppJSONArray(userId);
+        JSONObject staffJson = getStaffJSONObject(user.getStaffId());
+        JSONArray operJsonArr = getOperJSONArray(user.getId());
+        JSONArray appJsonArr = getAppJSONArray(user.getId());
 
         JSONObject userJson = new JSONObject();
         userJson.put("id", user.getId());

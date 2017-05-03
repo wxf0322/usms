@@ -96,7 +96,6 @@ public class InstitutionEntity {
     private String modifier;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     public long getId() {
         return id;

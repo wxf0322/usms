@@ -30,6 +30,7 @@ public class StaffDaoImpl implements StaffDao {
 
     @Override
     public StaffEntity findOne(Long id) {
+        if (id == null) return null;
         return manager.find(StaffEntity.class, id);
     }
 }
