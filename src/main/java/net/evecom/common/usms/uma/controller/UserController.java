@@ -3,10 +3,10 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.controller;
+package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.oauth2.service.UserService;
+import net.evecom.common.usms.uma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

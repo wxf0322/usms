@@ -3,13 +3,13 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.controller.oauth;
+package net.evecom.common.usms.oauth2.controller;
 
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.oauth2.service.ApplicationService;
+import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.oauth2.service.OAuthService;
-import net.evecom.common.usms.oauth2.service.UserService;
+import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;

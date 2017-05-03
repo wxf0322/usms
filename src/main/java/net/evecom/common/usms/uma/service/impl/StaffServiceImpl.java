@@ -3,11 +3,11 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.service.impl;
+package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.entity.StaffEntity;
-import net.evecom.common.usms.oauth2.dao.StaffDao;
-import net.evecom.common.usms.oauth2.service.StaffService;
+import net.evecom.common.usms.uma.dao.StaffDao;
+import net.evecom.common.usms.uma.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

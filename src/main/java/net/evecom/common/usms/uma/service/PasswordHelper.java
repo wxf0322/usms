@@ -1,4 +1,4 @@
-package net.evecom.common.usms.oauth2.service;
+package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.entity.UserEntity;
 import org.apache.shiro.crypto.RandomNumberGenerator;

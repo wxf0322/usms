@@ -3,7 +3,7 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.service;
+package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.OperationEntity;

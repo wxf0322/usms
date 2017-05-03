@@ -98,7 +98,7 @@ public interface OAuthService {
     void deleteRelation(String paramName, String loginName, String clientId);
 
     /**
-     * 获得新的AccessToken，并删除旧的AccessToken和已注册过的AuthCode
+     * 获得新的AccessToken，并删除旧的AccessToken和已获得的AuthCode
      *
      * @return
      */

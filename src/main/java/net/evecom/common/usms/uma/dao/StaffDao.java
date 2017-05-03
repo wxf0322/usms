@@ -3,7 +3,7 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.dao;
+package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.StaffEntity;
 

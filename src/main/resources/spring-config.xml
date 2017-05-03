@@ -79,7 +79,8 @@
     <!-- spring data jpa 扫描的包-->
     <jpa:repositories base-package="net.evecom.common.usms"/>
 
-    <import resource="classpath:spring-config-cache.xml"/>
+    <import resource="classpath:spring-cache.xml"/>
     <import resource="classpath:spring-redis.xml"/>
+    <import resource="classpath:spring-shiro.xml"/>
 
 </beans>

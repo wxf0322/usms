@@ -3,14 +3,14 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.oauth2.dao.impl;
+package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.util.JpaUtil;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.oauth2.dao.ApplicationDao;
-import net.evecom.common.usms.oauth2.dao.UserDao;
+import net.evecom.common.usms.uma.dao.ApplicationDao;
+import net.evecom.common.usms.uma.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
