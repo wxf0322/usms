@@ -1,6 +1,8 @@
 *.idea
 *.git
 *.svn
+*.war
+*.jar
 .settings
 .gradle
 build
