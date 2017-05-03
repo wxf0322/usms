@@ -89,13 +89,26 @@ public interface OAuthService {
     boolean checkClientSecret(String clientSecret);
 
     /**
-     * 删除关联关系
+     * 删除单个授权码
      *
-     * @param paramName
      * @param loginName
      * @param clientId
      */
-    void deleteRelation(String paramName, String loginName, String clientId);
+    void deleteAuthCode(String loginName, String clientId);
+
+    /**
+     * 删除单个令牌
+     *
+     * @param loginName
+     * @param clientId
+     */
+    void deleteAccessToken(String loginName, String clientId);
+
+    /**
+     * 删除当前用户所有的AccessToken
+     * @param loginName
+     */
+    void deleteAccountByloginName(String loginName);
 
     /**
      * 获得新的AccessToken，并删除旧的AccessToken和已获得的AuthCode
@@ -113,5 +126,8 @@ public interface OAuthService {
      * @throws OAuthSystemException
      */
     String getNewAuthCode(String loginName, String clientId) throws OAuthSystemException;
+
+
+    String getCurrentAuthCode(String loginName, String clientId);
 
 }

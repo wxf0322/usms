@@ -21,6 +21,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,11 +37,11 @@ public class OAuthServiceImpl implements OAuthService {
     /**
      * 授权码
      */
-    private static final String AUTH_CODE = "authCode";
+    private static final String AUTH_CODE = "code";
     /**
      * 访问令牌
      */
-    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String ACCESS_TOKEN = "token";
 
     /**
      * 令牌有效时间
@@ -59,12 +60,6 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Autowired
     private ApplicationService applicationService;
-
-    /**
-     * 注入UserService
-     */
-    @Autowired
-    private UserService userService;
 
     /**
      * redis模板对象
@@ -92,10 +87,9 @@ public class OAuthServiceImpl implements OAuthService {
     private String getRelationKey(String paramName, String loginName, String clientId) {
         StringBuffer sb = new StringBuffer();
         String relation = sb.append(paramName).append(":")
-                .append(loginName).append(",").append(clientId)
+                .append(loginName).append(":").append(clientId)
                 .toString();
-        String result = MD5Util.getMD5(relation);
-        return result;
+        return relation;
     }
 
     /**
@@ -222,8 +216,7 @@ public class OAuthServiceImpl implements OAuthService {
      * @param loginName
      * @param clientId
      */
-    @Override
-    public void deleteRelation(String paramName, String loginName, String clientId) {
+    private void deleteRelation(String paramName, String loginName, String clientId) {
         // 获得关联关系
         String relationKey = getRelationKey(paramName, loginName, clientId);
         String relationValue = valueOperations.get(relationKey);
@@ -231,6 +224,45 @@ public class OAuthServiceImpl implements OAuthService {
         if (StringUtils.isNotEmpty(relationKey)) redisTemplate.delete(relationKey);
         // 删除关系值
         if (StringUtils.isNotEmpty(relationValue)) redisTemplate.delete(relationValue);
+    }
+
+    /**
+     * 删除单个授权码
+     *
+     * @param loginName
+     * @param clientId
+     */
+    @Override
+    public void deleteAuthCode(String loginName, String clientId) {
+        deleteRelation(AUTH_CODE, loginName, clientId);
+    }
+
+    /**
+     * 删除单个令牌
+     *
+     * @param loginName
+     * @param clientId
+     */
+    @Override
+    public void deleteAccessToken(String loginName, String clientId) {
+        deleteRelation(ACCESS_TOKEN, loginName, clientId);
+    }
+
+    /**
+     * 根据用户名删除该用户所有的AccessToken
+     *
+     * @param loginName
+     */
+    @Override
+    public void deleteAccountByloginName(String loginName) {
+        String relationKey = getRelationKey(ACCESS_TOKEN, loginName, "*");
+        Set<String> keySet = redisTemplate.keys(relationKey);
+        keySet.forEach(key -> {
+            String[] params = key.split(":");
+            String clientId = params[2];
+            deleteAuthCode(loginName, clientId);
+            deleteAccessToken(loginName, clientId);
+        });
     }
 
     /**
@@ -247,11 +279,11 @@ public class OAuthServiceImpl implements OAuthService {
         OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
         final String accessToken = oAuthIssuer.accessToken();
         // 删除旧的Access Token
-        deleteRelation(ACCESS_TOKEN, loginName, clientId);
+        deleteAccessToken(loginName, clientId);
         // 生成新的Access Token
         addAccessToken(accessToken, loginName, clientId);
         // 得到新的Access Token之后，删除授权码
-        deleteRelation(AUTH_CODE, loginName, clientId);
+        deleteAuthCode(loginName, clientId);
         return accessToken;
     }
 
@@ -268,10 +300,25 @@ public class OAuthServiceImpl implements OAuthService {
         OAuthIssuerImpl oauthIssuer = new OAuthIssuerImpl(new MD5Generator());
         final String authCode = oauthIssuer.authorizationCode();
         // 删除旧的授权码
-        deleteRelation(AUTH_CODE, loginName, clientId);
+        deleteAuthCode(loginName, clientId);
         // 生成新的Access Token
         addAuthCode(authCode, loginName, clientId);
         return authCode;
     }
 
+    /**
+     * 返回当前用户的授权码
+     *
+     * @param loginName
+     * @param clientId
+     * @return
+     */
+    @Override
+    public String getCurrentAuthCode(String loginName, String clientId) {
+        String relationKey = getRelationKey(AUTH_CODE, loginName, clientId);
+        String authCode = valueOperations.get(relationKey);
+        return authCode;
+    }
+
 }
+

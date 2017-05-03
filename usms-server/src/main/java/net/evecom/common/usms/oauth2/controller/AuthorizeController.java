@@ -103,24 +103,37 @@ public class AuthorizeController {
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            // 如果用户没有登录，跳转到登陆页面
-            if (!login(request)) { // 登录失败时跳转到登陆页面
+            Subject subject = SecurityUtils.getSubject();
+            UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
+
+            // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
+            if (user == null && !login(request)) {
                 model.addAttribute("client", applicationService.findByClientId(clientId));
                 return "oauth2login";
             }
 
             // 获取用户名
-            String loginName = request.getParameter("loginName");
-
+            String loginName;
+            if (user == null) {
+                loginName = request.getParameter("loginName");
+            } else {
+                loginName = user.getLoginName();
+            }
             // 生成授权码
             String authorizationCode = null;
 
             // responseType目前仅支持CODE，另外还有TOKEN
             String responseType = oauthRequest.getParam(OAuth.OAUTH_RESPONSE_TYPE);
             if (responseType.equals(ResponseType.CODE.toString())) {
-                authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
+                if (user == null) {
+                    authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
+                } else {
+                    authorizationCode = oAuthService.getCurrentAuthCode(loginName, clientId);
+                    if(authorizationCode == null) {
+                        authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
+                    }
+                }
             }
-
             // 进行OAuth响应构建
             OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
                     OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
@@ -209,6 +222,7 @@ public class AuthorizeController {
             request.setAttribute("error", error);
             return false;
         } else {
+            subject.getSession().setAttribute("user", user);
             return true;
         }
     }
