@@ -1,1 +1,3 @@
 rootProject.name = 'usms'
+
+include 'usms-server', 'usms-server-webapp'
