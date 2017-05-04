@@ -81,7 +81,7 @@ public class UserInfoAPI {
         return staffJson;
     }
 
-    private JSONArray getOperJSONArray(Long userId) {
+    private JSONArray getOperationJSONArray(Long userId) {
         // 获得员工所有的操作
         List<OperationEntity> operations = userService.findOperationsById(userId);
         // 构造操作
@@ -99,7 +99,7 @@ public class UserInfoAPI {
         return operJsonArr;
     }
 
-    private JSONArray getAppJSONArray(Long userId) {
+    private JSONArray getApplicationJSONArray(Long userId) {
         // 获得用户所有的应用
         List<ApplicationEntity> applications = userService.findApplicationsById(userId);
         // 构造应用
@@ -125,9 +125,10 @@ public class UserInfoAPI {
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
 
+        // 获得相应的json对象
         JSONObject staffJson = getStaffJSONObject(user.getStaffId());
-        JSONArray operJsonArr = getOperJSONArray(user.getId());
-        JSONArray appJsonArr = getAppJSONArray(user.getId());
+        JSONArray operJsonArr = getOperationJSONArray(user.getId());
+        JSONArray appJsonArr = getApplicationJSONArray(user.getId());
 
         JSONObject userJson = new JSONObject();
         userJson.put("id", user.getId());
