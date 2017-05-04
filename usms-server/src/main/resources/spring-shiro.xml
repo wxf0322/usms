@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
 
     <!-- 缓存管理 -->
@@ -32,17 +33,22 @@
         <!-- Shiro的核心安全接口，这个属性是必须的 -->
         <property name="securityManager" ref="securityManager"></property>
 
+        <!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+        <property name="loginUrl" value="/"/>
+
         <!-- 用户访问未对其授权的资源时，所显示的连接 -->
         <property name="unauthorizedUrl" value="/"></property>
 
-        <!--
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <!-- 此处可配合我的这篇文章来理解各个过滤连的作用http://blog.csdn.net/jadyer/article/details/12172839 -->
+        <!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->
+        <!-- anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种 -->
+        <!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
         <property name="filterChainDefinitions">
             <value>
-                /security/*=anon
-                /tag=authc
+                /*=anon
             </value>
         </property>
-        -->
     </bean>
 
     <!-- 定义Session ID生成管理器 -->
@@ -66,22 +72,12 @@
         <property name="maxAge" value="-1"/>
     </bean>
 
-    <!-- 配置session的定时验证检测程序类，以让无效的session释放 -->
-    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-        <!-- 设置session的失效扫描间隔，单位为毫秒 -->
-        <property name="sessionValidationInterval" value="3600000"/>
-        <!-- 随后还需要定义有一个会话管理器的程序类的引用 -->
-        <property name="sessionManager" ref="sessionManager"/>
-    </bean>
-
     <!-- 定义会话管理器的操作 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <!-- 定义的是全局的session会话超时时间，此操作会覆盖web.xml文件中的超时时间配置 -->
         <property name="globalSessionTimeout" value="10800000"/>
         <!-- 删除所有无效的Session对象，此时的session被保存在了内存里面 -->
         <property name="deleteInvalidSessions" value="true"/>
-        <!-- 定义要使用的无效的Session定时调度器 -->
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
         <!-- 需要让此session可以使用该定时调度器进行检测 -->
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <!-- 定义Session可以进行序列化的工具类 -->

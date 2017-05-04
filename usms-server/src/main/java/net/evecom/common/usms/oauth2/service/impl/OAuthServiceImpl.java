@@ -71,6 +71,11 @@ public class OAuthServiceImpl implements OAuthService {
      */
     private ValueOperations<String, String> valueOperations;
 
+    /**
+     * 构造函数依赖注入redi
+     *
+     * @param redisTemplate
+     */
     @Autowired
     public OAuthServiceImpl(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -255,13 +260,12 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public void deleteAccountByloginName(String loginName) {
-        String relationKey = getRelationKey(ACCESS_TOKEN, loginName, "*");
+        String relationKey = getRelationKey("*", loginName, "*");
         Set<String> keySet = redisTemplate.keys(relationKey);
         keySet.forEach(key -> {
-            String[] params = key.split(":");
-            String clientId = params[2];
-            deleteAuthCode(loginName, clientId);
-            deleteAccessToken(loginName, clientId);
+            String value = valueOperations.get(key);
+            redisTemplate.delete(value);
+            redisTemplate.delete(key);
         });
     }
 
@@ -319,6 +323,5 @@ public class OAuthServiceImpl implements OAuthService {
         String authCode = valueOperations.get(relationKey);
         return authCode;
     }
-
 }
 
