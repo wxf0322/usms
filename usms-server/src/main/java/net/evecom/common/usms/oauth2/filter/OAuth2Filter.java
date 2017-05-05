@@ -59,8 +59,9 @@ public class OAuth2Filter implements Filter {
             if (!checkAccessToken((HttpServletRequest) request, accessToken)) {
                 // 如果不存在/过期了，返回未验证错误，需重新验证
                 oAuthFailResponse(httpResponse);
+            }else {
+                chain.doFilter(request, response);
             }
-            chain.doFilter(request, response);
         } catch (OAuthProblemException e) {
             try {
                 oAuthFailResponse(httpResponse);

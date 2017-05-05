@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.controller;
 
+import com.sun.org.glassfish.gmbal.ParameterNames;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.StaffService;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +35,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1/openapi")
-public class UserInfoAPI {
+public class UserAPI {
 
     /**
      * 注入OAuthService
@@ -140,6 +142,12 @@ public class UserInfoAPI {
 
         JSONObject jsonObject = JSONObject.fromObject(userJson);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
+    public ResponseEntity usersByGridName(HttpServletRequest request, @RequestParam(value ="grid_name") String gridName) throws OAuthSystemException, OAuthProblemException {
+        System.out.println("gridName:"+gridName);
+        return null;
     }
 
 }
