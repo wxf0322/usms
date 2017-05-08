@@ -48,15 +48,15 @@ public class PasswordHelper {
     /**
      * 传入表单中的用户名，密码，数据库中的盐，获得加密之后的密码
      *
-     * @param username
+     * @param loginName
      * @param password
      * @param salt
      */
-    public String encryptPassword(String username, String password, String salt) {
+    public String encryptPassword(String loginName, String password, String salt) {
         String pwd = new SimpleHash(
                 algorithmName,
                 password,
-                ByteSource.Util.bytes(username + salt)).toHex();
+                ByteSource.Util.bytes(loginName + salt)).toHex();
         return pwd;
     }
 

@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import com.sun.org.glassfish.gmbal.ParameterNames;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.StaffService;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +32,7 @@ import java.util.List;
  * @created 2017/4/25 8:50
  */
 @RestController
-@RequestMapping("/v1/openapi")
+@RequestMapping("/v1/openapi/user")
 public class UserAPI {
 
     /**
@@ -55,12 +53,17 @@ public class UserAPI {
     @Autowired
     private StaffService staffService;
 
+    /**
+     * 获得员工JSON对象
+     *
+     * @param userId
+     * @return
+     */
     private JSONObject getStaffJSONObject(Long userId) {
         // 获得员工实体类
         StaffEntity staff = staffService.findOne(userId);
-        if (staff == null) {
-            return null;
-        }
+        if (staff == null) return new JSONObject();
+
         // 构造机构信息
         List<InstitutionEntity> institutions = staff.getInstitutions();
         JSONArray instJsonArr = new JSONArray();
@@ -74,6 +77,7 @@ public class UserAPI {
             instJson.put("manual_sn", institution.getManualSn());
             instJsonArr.add(instJson);
         }
+
         // 构造员工
         JSONObject staffJson = new JSONObject();
         staffJson.put("moblie", staff.getMobile());
@@ -83,6 +87,12 @@ public class UserAPI {
         return staffJson;
     }
 
+    /**
+     * 获得操作JSON数组
+     *
+     * @param userId
+     * @return
+     */
     private JSONArray getOperationJSONArray(Long userId) {
         // 获得员工所有的操作
         List<OperationEntity> operations = userService.findOperationsById(userId);
@@ -101,6 +111,12 @@ public class UserAPI {
         return operJsonArr;
     }
 
+    /**
+     * 获得应用JSON数组
+     *
+     * @param userId
+     * @return
+     */
     private JSONArray getApplicationJSONArray(Long userId) {
         // 获得用户所有的应用
         List<ApplicationEntity> applications = userService.findApplicationsById(userId);
@@ -115,8 +131,16 @@ public class UserAPI {
         return appJsonArr;
     }
 
-    @RequestMapping(value = "/userInfo", produces = "application/json; charset=UTF-8")
-    public ResponseEntity userInfo(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
+    /**
+     * 获得用户信息
+     *
+     * @param request
+     * @return
+     * @throws OAuthSystemException
+     * @throws OAuthProblemException
+     */
+    @RequestMapping(produces = "application/json; charset=UTF-8")
+    public ResponseEntity getUser(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 获取Access Token
@@ -142,12 +166,6 @@ public class UserAPI {
 
         JSONObject jsonObject = JSONObject.fromObject(userJson);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/users", produces = "application/json; charset=UTF-8")
-    public ResponseEntity usersByGridName(HttpServletRequest request, @RequestParam(value ="grid_name") String gridName) throws OAuthSystemException, OAuthProblemException {
-        System.out.println("gridName:"+gridName);
-        return null;
     }
 
 }
