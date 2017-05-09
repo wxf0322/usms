@@ -87,7 +87,7 @@ public class OAuth2Filter implements Filter {
                 .setErrorDescription(Constants.INVALID_ACCESS_TOKEN)
                 .buildJSONMessage();
 
-        response.addHeader("Content-Type", "application/json; charset=utf-8");
+        response.setContentType("text/html;charset=UTF-8");
         response.setStatus(oauthResponse.getResponseStatus());
         PrintWriter writer = response.getWriter();
         writer.write(oauthResponse.getBody());

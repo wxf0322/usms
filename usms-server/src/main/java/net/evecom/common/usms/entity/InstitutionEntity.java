@@ -17,7 +17,23 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "USMS_INSTITUTIONS")
+@NamedQueries({
+        @NamedQuery(name = InstitutionEntity.QUERY_BY_NAME,
+                query = "select i from InstitutionEntity i where i.name = :"
+                        + InstitutionEntity.PARAM_NAME)
+})
 public class InstitutionEntity {
+
+    /**
+     * 根据登入名查找
+     */
+    public static final String QUERY_BY_NAME = "InstitutionEntity.getByName";
+
+    /**
+     * name参数
+     */
+    public static final String PARAM_NAME = "name";
+
     /**
      * 机构ID
      */

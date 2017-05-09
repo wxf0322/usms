@@ -6,6 +6,8 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.UserEntity;
+
 import java.util.List;
 
 /**
@@ -63,4 +65,10 @@ public interface ApplicationDao {
      */
     ApplicationEntity findByClientSecret(String clientSecret);
 
+    /**
+     * 根据应用编码查询用户列表
+     * @param appName
+     * @return
+     */
+    List<UserEntity> getUsersByApplicationName(String appName);
 }

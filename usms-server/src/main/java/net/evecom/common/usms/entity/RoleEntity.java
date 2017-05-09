@@ -97,4 +97,14 @@ public class RoleEntity {
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RoleEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", label='" + label + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }

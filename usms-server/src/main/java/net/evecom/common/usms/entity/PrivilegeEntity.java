@@ -97,4 +97,14 @@ public class PrivilegeEntity {
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PrivilegeEntity{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", name='" + name + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }

@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -35,4 +36,6 @@ public interface UserDao {
     List<OperationEntity> findOperationsById(Long id);
 
     List<ApplicationEntity> findApplicationsById(Long id);
+
+    List<GridEntity> findGridsByLoginName(String loginName);
 }

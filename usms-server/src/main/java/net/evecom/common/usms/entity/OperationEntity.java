@@ -16,7 +16,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USMS_OPERATIONS")
+
 public class OperationEntity {
+
+
     /**
      * 操作id
      */

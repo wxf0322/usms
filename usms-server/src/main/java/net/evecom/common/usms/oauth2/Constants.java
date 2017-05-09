@@ -33,6 +33,10 @@ public interface Constants {
      */
     String INVALID_AUTH_CODE = "错误的授权码。";
 
+    /**
+     * 错误或无效的参数
+     */
+    String INVALID_PARAMS = "错误或无效的参数";
 
     /**
      * 用户密码错误

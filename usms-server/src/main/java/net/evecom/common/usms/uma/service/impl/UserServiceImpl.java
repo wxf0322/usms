@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.UserDao;
@@ -120,6 +121,16 @@ public class UserServiceImpl implements UserService {
     public boolean checkUser(String loginName, String password, String salt, String encryptpwd) {
         String pwd = passwordHelper.encryptPassword(loginName, password, salt);
         return pwd.equals(encryptpwd);
+    }
+
+    /**
+     * 根据登入名获取网格的数据
+     * @param loginName
+     * @return
+     */
+    @Override
+    public List<GridEntity> findGridsByLoginName(String loginName) {
+        return userDao.findGridsByLoginName(loginName);
     }
 
 }

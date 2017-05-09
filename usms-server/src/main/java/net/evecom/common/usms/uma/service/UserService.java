@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -96,4 +97,12 @@ public interface UserService {
      * @return
      */
     boolean checkUser(String loginName, String password, String salt, String encryptpwd);
+
+
+    /**
+     * 根据登入名获取网格数据
+     * @param loginName
+     * @return
+     */
+    List<GridEntity> findGridsByLoginName(String loginName);
 }

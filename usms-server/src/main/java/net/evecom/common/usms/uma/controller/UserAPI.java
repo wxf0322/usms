@@ -56,12 +56,12 @@ public class UserAPI {
     /**
      * 获得员工JSON对象
      *
-     * @param userId
+     * @param staffId
      * @return
      */
-    private JSONObject getStaffJSONObject(Long userId) {
+    private JSONObject getStaffJSONObject(Long staffId) {
         // 获得员工实体类
-        StaffEntity staff = staffService.findOne(userId);
+        StaffEntity staff = staffService.findOne(staffId);
         if (staff == null) return new JSONObject();
 
         // 构造机构信息
