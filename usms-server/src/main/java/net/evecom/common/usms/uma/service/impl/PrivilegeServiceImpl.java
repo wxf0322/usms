@@ -9,6 +9,7 @@ import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class PrivilegeServiceImpl implements PrivilegeService{
 
     @Resource
+    @Autowired
     private PrivilegeDao privilegeDao;
 
     @Override

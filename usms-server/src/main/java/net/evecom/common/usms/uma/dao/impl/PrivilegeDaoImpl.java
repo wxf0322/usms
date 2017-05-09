@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
-import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;

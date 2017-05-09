@@ -70,13 +70,14 @@ public class InstitutionDaoImpl implements InstitutionDao {
      * @param instName
      * @return
      */
+
     @Override
     public List<UserEntity> getUsersByInstName(String instName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u\n")
                 .append(" where u.staff_id in\n")
-                .append(" (select is.staff_id from usms_staff_institution is\n")
-                .append(" where is.institution_id = :institution_id)\n")
+                .append(" (select usi.staff_id from usms_staff_institution usi where usi.institution_id in\n")
+                .append(" ( select i.id from usms_institutions i where i.name = :name))\n")
                 .append(" and u.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, UserEntity.class);

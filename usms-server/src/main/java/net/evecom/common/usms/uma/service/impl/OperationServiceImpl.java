@@ -9,6 +9,7 @@ import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
 import net.evecom.common.usms.uma.service.OperationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public class OperationServiceImpl implements OperationService {
     /**
      * OperationDao的注入
      */
-    @Resource
+    @Autowired
     private OperationDao operationDao;
 
     @Override
@@ -45,8 +46,4 @@ public class OperationServiceImpl implements OperationService {
         return operationDao.getUsersByOperName(operName);
     }
 
-   /* @Override
-    public List<OperationEntity> getOperation(String operation) {
-        return operationDao.findOperation(operation);
-    }*/
 }

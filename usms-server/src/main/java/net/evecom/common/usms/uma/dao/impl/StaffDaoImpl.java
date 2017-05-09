@@ -6,11 +6,14 @@
 package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.entity.StaffEntity;
+import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * 描述
@@ -32,5 +35,23 @@ public class StaffDaoImpl implements StaffDao {
     public StaffEntity findOne(Long id) {
         if (id == null) return null;
         return manager.find(StaffEntity.class, id);
+    }
+
+    /**
+     * 描述
+     * 查询网格员列表
+     * @return
+     * @param officalPost
+     */
+    @Override
+    public List<UserEntity> findUsersByOfficalPost(String officalPost) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_users u where u.staff_id in\n")
+                .append(" (select s.id from usms_staffs s where s.offical_post = :officalPost)\n")
+                .append("  and u.enabled=1");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql, UserEntity.class);
+        query.setParameter("officalPost", officalPost);
+        return query.getResultList();
     }
 }

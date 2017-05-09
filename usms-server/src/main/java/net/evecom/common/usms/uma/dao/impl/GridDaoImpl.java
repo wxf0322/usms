@@ -41,11 +41,11 @@ public class GridDaoImpl implements GridDao {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u\n")
                 .append(" where u.id in \n" )
-                .append(" (select * from ur.id from usms_user_role ur\n")
+                .append(" (select ur.user_id from usms_user_role ur\n")
                 .append(" where ur.role_id in (")
                 .append(" select r.id from usms_roles r where r.id in\n")
                 .append(" (select rg.role_id from usms_role_grid rg\n")
-                .append(" where rg.grid_id =\n")
+                .append(" where rg.grid_id in\n")
                 .append(" (select g.id from gsmp_loc_grids g where g.name = :name))\n")
                 .append(" and r.enabled = 1)) and u.enabled = 1");
         String sql = sb.toString();

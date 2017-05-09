@@ -69,14 +69,4 @@ public class OperationDaoImpl implements OperationDao{
         return query.getResultList();
     }
 
-    /*@Override
-    public List<OperationEntity> findOperation(String operation) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("SELECT * FROM USMS_OPERATIONS o\n")
-                .append("WHERE o.enabled=1 and o.label=:operation");
-        String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter("operation", operation);
-        return query.getResultList();
-    }*/
 }

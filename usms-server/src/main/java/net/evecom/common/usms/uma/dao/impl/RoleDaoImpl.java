@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
-import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.RoleDao;
@@ -21,7 +20,6 @@ import java.util.List;
  * @version 1.0
  * @created 2017-5-8 18:24
  */
-
 @Repository
 public class RoleDaoImpl implements RoleDao {
     /**
@@ -29,6 +27,7 @@ public class RoleDaoImpl implements RoleDao {
      */
     @PersistenceContext
     private EntityManager manager;
+
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();

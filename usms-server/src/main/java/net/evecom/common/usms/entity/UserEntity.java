@@ -63,10 +63,11 @@ public class UserEntity {
      * 可用状态(1;正常 0:冻结)
      */
     private long enabled;
+
     /**
-     * 关联员工ID
+     * 员工实体类
      */
-    private Long staffId;
+    private StaffEntity staffEntity;
     /**
      * 备注说明
      */
@@ -160,14 +161,14 @@ public class UserEntity {
         this.enabled = enabled;
     }
 
-    @Basic
-    @Column(name = "STAFF_ID")
-    public Long getStaffId() {
-        return staffId;
+    @OneToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="STAFF_ID") // 关联的表为usms_staffs表，其主键是id
+    public StaffEntity getStaffEntity() {
+        return staffEntity;
     }
 
-    public void setStaffId(Long staffId) {
-        this.staffId = staffId;
+    public void setStaffEntity(StaffEntity staffEntity) {
+        this.staffEntity = staffEntity;
     }
 
     @Basic
@@ -268,7 +269,7 @@ public class UserEntity {
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (salt != null ? !salt.equals(that.salt) : that.salt != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (staffId != null ? !staffId.equals(that.staffId) : that.staffId != null) return false;
+        //if (staffId != null ? !staffId.equals(that.staffId) : that.staffId != null) return false;
         if (ramarks != null ? !ramarks.equals(that.ramarks) : that.ramarks != null) return false;
         if (pwdModified != null ? !pwdModified.equals(that.pwdModified) : that.pwdModified != null) return false;
         if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
@@ -289,7 +290,7 @@ public class UserEntity {
         result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (int) (enabled ^ (enabled >>> 32));
-        result = 31 * result + (staffId != null ? staffId.hashCode() : 0);
+        //result = 31 * result + (staffId != null ? staffId.hashCode() : 0);
         result = 31 * result + (ramarks != null ? ramarks.hashCode() : 0);
         result = 31 * result + (pwdModified != null ? pwdModified.hashCode() : 0);
         result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);

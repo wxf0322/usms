@@ -6,10 +6,13 @@
 package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.entity.StaffEntity;
+import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
 import net.evecom.common.usms.uma.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 描述
@@ -31,4 +34,16 @@ public class StaffServiceImpl implements StaffService {
     public StaffEntity findOne(Long id) {
         return staffDao.findOne(id);
     }
+
+    /**
+     * 描述
+     * 查询网格员列表
+     * @return
+     * @param officalPost
+     */
+    @Override
+    public List<UserEntity> findUsersByOfficalPost(String officalPost) {
+        return staffDao.findUsersByOfficalPost(officalPost);
+    }
+
 }

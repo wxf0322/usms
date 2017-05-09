@@ -151,8 +151,13 @@ public class UserAPI {
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
 
+        // 获得员工id
+        Long staffId = null;
+        if(user.getStaffEntity() != null) {
+            staffId = user.getStaffEntity().getId();
+        }
         // 获得相应的json对象
-        JSONObject staffJson = getStaffJSONObject(user.getStaffId());
+        JSONObject staffJson = getStaffJSONObject(staffId);
         JSONArray operJsonArr = getOperationJSONArray(user.getId());
         JSONArray appJsonArr = getApplicationJSONArray(user.getId());
 

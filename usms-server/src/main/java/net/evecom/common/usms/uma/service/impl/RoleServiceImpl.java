@@ -9,6 +9,7 @@ import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.uma.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 public class RoleServiceImpl  implements RoleService{
     @Resource
+    @Autowired
     private RoleDao roleDao;
 
     @Override

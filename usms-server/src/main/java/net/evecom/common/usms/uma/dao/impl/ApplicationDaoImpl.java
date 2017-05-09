@@ -98,7 +98,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
                 .append(" where po.oper_id in (select o.id from usms_operations o\n")
                 .append(" where o.application_id in (select a.id from usms_applications a\n")
                 .append(" where a.name = :name) and o.enabled = 1))\n")
-                .append(" p.enabled = 1)) nd r.enabled = 1)) and u.enabled = 1");
+                .append(" and p.enabled = 1)) and r.enabled = 1)) and u.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, UserEntity.class);
         query.setParameter("name", appName);
