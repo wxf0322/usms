@@ -36,7 +36,7 @@ http://www.baidu.com/?code=63910432da9186b22b1ad888d55ae8ae
 http://192.168.200.209:8080/usms/access
 首先GET方式请求页面，会打开一个表单在该表单中填入必填项，具体表单参数详见说明部分
 
-表单将会以POST方式提交到http://192.168.200.209:8080/usms/accessToken,最终返回accessToken
+表单将会以POST方式提交到http://192.168.200.209:8080/usms/accessToken，最终返回accessToken
 
 需要以POST方式提交以下参数换取accessToken
 
@@ -52,8 +52,8 @@ redirect_uri    http://www.baidu.com                            回调地址
 5. 测试accessToken
 
 http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396fb60a0960c197e
-测试ok的话返回用户名信息，access_token=223ae05dfbb0794396fb60a0960c197e为上一步获取的access_token
+测试ok的话返回用户名信息，access_token=223ae05dfbb0794396fb60a0960c197e 为上一步获取的access_token
 
 注：其中的参数名不要随意更改，固定写法。
-</pre>
+  </pre>
 </div>
