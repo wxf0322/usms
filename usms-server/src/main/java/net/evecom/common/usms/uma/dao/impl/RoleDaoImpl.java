@@ -30,8 +30,9 @@ public class RoleDaoImpl implements RoleDao {
 
     /**
      * 根据用户id获取角色列表
-     * @return List<RoleEntity>
+     *
      * @param userID
+     * @return List<RoleEntity>
      */
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
@@ -48,11 +49,13 @@ public class RoleDaoImpl implements RoleDao {
 
     /**
      * 判断是否拥有该角色
+     *
+     * @param userID
+     * @param roleName
      * @return boolean
-     * @param userID, RoleName
      */
     @Override
-    public boolean hasRole(long userID,String RoleName) {
+    public boolean hasRole(long userID, String roleName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_roles r where r.id in( ")
                 .append("select ur.role_id from usms_user_role ur ")
@@ -60,8 +63,8 @@ public class RoleDaoImpl implements RoleDao {
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, RoleEntity.class);
         query.setParameter("userid", userID);
-        query.setParameter("name", RoleName);
-        return query.getResultList().size()!=0;
+        query.setParameter("name", roleName);
+        return query.getResultList().size() != 0;
     }
 
     /**

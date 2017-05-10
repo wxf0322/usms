@@ -33,7 +33,7 @@ public interface InstitutionService {
      * @param name
      * @return
      */
-    InstitutionEntity getByName(String name);
+    InstitutionEntity findByName(String name);
 
     /**
      * 根据组织机构编码构查询用户列表

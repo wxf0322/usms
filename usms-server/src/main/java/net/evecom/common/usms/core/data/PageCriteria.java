@@ -8,7 +8,7 @@ package net.evecom.common.usms.core.data;
 /**
  * 定义存储库操作中，页面大小与页号的接口。
  *
- * @author Colm Smyth
+ * @author Wash Wang
  */
 public interface PageCriteria {
 

@@ -20,6 +20,7 @@ import java.util.List;
 public interface ApplicationDao {
     /**
      * 创建 Application
+     *
      * @param applicationEntity
      * @return
      */
@@ -27,6 +28,7 @@ public interface ApplicationDao {
 
     /**
      * 更新 Application
+     *
      * @param applicationEntity
      * @return
      */
@@ -34,12 +36,14 @@ public interface ApplicationDao {
 
     /**
      * 根据 id 删除 Application
+     *
      * @param id
      */
     void deleteApplication(Long id);
 
     /**
      * 查询单个
+     *
      * @param id
      * @return
      */
@@ -47,12 +51,14 @@ public interface ApplicationDao {
 
     /**
      * 查询全部
+     *
      * @return
      */
     List<ApplicationEntity> findAll();
 
     /**
      * 根据ClientId查找对象
+     *
      * @param clientId
      * @return
      */
@@ -60,6 +66,7 @@ public interface ApplicationDao {
 
     /**
      * 根据ClientSecret查找对象
+     *
      * @param clientSecret
      * @return
      */
@@ -67,6 +74,7 @@ public interface ApplicationDao {
 
     /**
      * 根据应用编码查询用户列表
+     *
      * @param appName
      * @return
      */

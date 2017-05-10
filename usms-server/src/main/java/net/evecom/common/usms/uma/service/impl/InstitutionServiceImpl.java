@@ -38,8 +38,8 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public InstitutionEntity getByName(String name) {
-        return institutionDao.getByName(name);
+    public InstitutionEntity findByName(String name) {
+        return institutionDao.findByName(name);
     }
 
 

@@ -62,7 +62,7 @@ public class InstitutionDaoImpl implements InstitutionDao {
     }
 
     @Override
-    public InstitutionEntity getByName(String name) {
+    public InstitutionEntity findByName(String name) {
         TypedQuery<InstitutionEntity> query =
                 manager.createNamedQuery(InstitutionEntity.QUERY_BY_NAME, InstitutionEntity.class);
         query.setParameter(InstitutionEntity.PARAM_NAME, name);

@@ -64,7 +64,7 @@ public class InstitutionAPI {
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        InstitutionEntity inst = institutionService.getByName(instName);
+        InstitutionEntity inst = institutionService.findByName(instName);
         JSONObject instJson = getInstJSONObject(inst);
         return new ResponseEntity(instJson.toString(), HttpStatus.OK);
     }

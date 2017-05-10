@@ -22,7 +22,7 @@ import java.util.List;
  * @created 2017-5-8 14:20
  */
 @Repository
-public class OperationDaoImpl implements OperationDao{
+public class OperationDaoImpl implements OperationDao {
     /**
      * 注入实体管理器
      */
@@ -31,8 +31,9 @@ public class OperationDaoImpl implements OperationDao{
 
     /**
      * 根据app名称获取操作列表
-     * @return List<OperationEntity>
+     *
      * @param application
+     * @return List<OperationEntity>
      */
     @Override
     public List<OperationEntity> getOperationsByAppName(String application) {
@@ -73,11 +74,13 @@ public class OperationDaoImpl implements OperationDao{
 
     /**
      * 判断是否拥有该操作
+     *
+     * @param userID
+     * @param operationName
      * @return boolean
-     * @param userID, operationName
      */
     @Override
-    public boolean hasOperation(long userID,String operationName) {
+    public boolean hasOperation(long userID, String operationName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations p where p.id in( ")
                 .append("select po.oper_id from usms_privilege_operation po where po.priv_id in( ")
@@ -88,7 +91,7 @@ public class OperationDaoImpl implements OperationDao{
         Query query = manager.createNativeQuery(sql);
         query.setParameter("userid", userID);
         query.setParameter("operationName", operationName);
-        return query.getResultList().size()!=0;
+        return query.getResultList().size() != 0;
     }
 
 }

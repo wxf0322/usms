@@ -30,8 +30,9 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
 
     /**
      * 根据App名称获取权限列表
-     * @return List<PrivilegeEntity>
+     *
      * @param application
+     * @return List<PrivilegeEntity>
      */
     @Override
     public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
@@ -52,8 +53,9 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
 
     /**
      * 根据用户名查找权限列表
-     * @return List<PrivilegeEntity>
+     *
      * @param userID
+     * @return List<PrivilegeEntity>
      */
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
@@ -73,8 +75,10 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
 
     /**
      * 判断是否拥有该权限
+     *
+     * @param userID
+     * @param privilegeName
      * @return boolean
-     * @param userID, privilegeName
      */
     @Override
     public boolean hasPrivilege(long userID, String privilegeName) {
@@ -90,7 +94,7 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
         Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
         query.setParameter("userid", userID);
         query.setParameter("name", privilegeName);
-        return query.getResultList().size()!=0;
+        return query.getResultList().size() != 0;
     }
 
 

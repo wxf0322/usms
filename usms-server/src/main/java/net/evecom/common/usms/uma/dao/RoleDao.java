@@ -29,7 +29,7 @@ public interface RoleDao {
      * @param userID
      * @return
      */
-    boolean hasRole(long userID,String RoleName);
+    boolean hasRole(long userID,String roleName);
     /**
      * 根据权限角色查询用户列表
      *
