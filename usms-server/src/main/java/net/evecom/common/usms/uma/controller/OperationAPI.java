@@ -67,7 +67,7 @@ public class OperationAPI {
      * @param request
      */
     @RequestMapping(value = "/operation/exist",produces = "application/json; charset=UTF-8")
-    public ResponseEntity getOperation(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
+    public ResponseEntity hasOperation(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String operationName = request.getParameter("operation");
         if(StringUtils.isEmpty(operationName)){
             ErrorStatus errorStatus = new ErrorStatus

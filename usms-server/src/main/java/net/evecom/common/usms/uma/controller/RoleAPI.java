@@ -58,13 +58,14 @@ public class RoleAPI {
 
     /**
      * 判断是否拥有该角色
-     * @return ResponseEntity
+     *
      * @param request
+     * @return ResponseEntity
      */
     @RequestMapping(value = "/role/exist", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getPrivileges(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
+    public ResponseEntity hasPrivilege(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String roleName = request.getParameter("role");
-        if(StringUtils.isEmpty(roleName)){
+        if (StringUtils.isEmpty(roleName)) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
                     .buildJSONMessage();
@@ -84,5 +85,6 @@ public class RoleAPI {
         } else jsonObject.put("result", false);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
+
 }
 

@@ -65,7 +65,7 @@ public class PrivilegeAPI {
      * @return ResponseEntity
      */
     @RequestMapping(value = "privilege/exist", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getPrivilege(HttpServletRequest request)
+    public ResponseEntity hasPrivilege(HttpServletRequest request)
             throws OAuthProblemException, OAuthSystemException {
         String privilegeName = request.getParameter("privilege");
         if (StringUtils.isEmpty(privilegeName)) {
