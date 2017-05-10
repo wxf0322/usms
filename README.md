@@ -23,7 +23,7 @@
 # 1.4 逻辑设计
 # 1.4.1 OAuth2认证过程
 ![usms](https://raw.githubusercontent.com/vancook/MarkdownPhotos/master/res/usms.jpg)
-(1) 浏览器从子系统跳转到USMS，请求用户认证与授权。  
+>(1) 浏览器从子系统跳转到USMS，请求用户认证与授权。  
 (2) 用户认证通过，浏览器跳回子系统，并带回临时授权码code。  
 (3) 子系统从服务端，带着code去USMS换取访问令牌accessToken。  
 (4) USMS各种验证通过后，返回给子系统令牌accessToke。  
