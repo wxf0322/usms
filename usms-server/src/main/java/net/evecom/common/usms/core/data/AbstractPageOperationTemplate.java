@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract class for performing an operation on a potentially large
- * number of items by paging through the items in discreet chunks.
+ * 抽象类，对大数据进行分页的抽象类。
  *
  * @param <T> the type parameter
- * @author Colm Smyth.
+ * @author Wash Wang
  */
 public abstract class AbstractPageOperationTemplate<T> {
 

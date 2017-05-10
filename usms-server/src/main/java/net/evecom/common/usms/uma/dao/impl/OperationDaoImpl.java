@@ -8,15 +8,12 @@ package net.evecom.common.usms.uma.dao.impl;
 import net.evecom.common.usms.entity.OperationEntity;
 
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.uma.dao.ApplicationDao;
 import net.evecom.common.usms.uma.dao.OperationDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -67,6 +64,21 @@ public class OperationDaoImpl implements OperationDao{
         Query query = manager.createNativeQuery(sql, UserEntity.class);
         query.setParameter("name", operName);
         return query.getResultList();
+    }
+
+    @Override
+    public boolean hasOperation(long userID,String operationName) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_operations p where p.id in( ")
+                .append("select po.oper_id from usms_privilege_operation po where po.priv_id in( ")
+                .append("select pr.priv_id from usms_privilege_role pr where pr.role_id in( ")
+                .append("select ur.role_id from usms_user_role ur where ur.user_id = :userid ))) ")
+                .append("and p.enabled=1 and p.name= :operationName");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("userid", userID);
+        query.setParameter("operationName", operationName);
+        return query.getResultList().size()!=0;
     }
 
 }

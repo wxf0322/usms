@@ -5,13 +5,16 @@
  */
 package net.evecom.common.usms.uma.controller;
 
+import net.evecom.common.usms.core.model.ErrorStatus;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.uma.service.RoleService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -48,14 +51,20 @@ public class RoleAPI {
     private UserService userService;
 
     /**
-     *注入
+     * 注入
      */
     @Resource
     private RoleService roleService;
 
-    @RequestMapping(value = "/role/exist",produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/role/exist", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivileges(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
-      String role = request.getParameter("role");
+        String roleName = request.getParameter("role");
+        if(StringUtils.isEmpty(roleName)){
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 获取Access Token
@@ -64,16 +73,10 @@ public class RoleAPI {
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
-        List<RoleEntity> roleEntities =
-                roleService.findRolesByUserId(user.getId());
         JSONObject jsonObject = new JSONObject();
-        for(RoleEntity roleEntity :roleEntities){
-            if(roleEntity.getName().toString().equals(role)){
-                jsonObject.put("result",true);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
-            }
-        }
-        jsonObject.put("result",false);
+        if (roleService.hasRole(user.getId(), roleName)) {
+            jsonObject.put("result", true);
+        } else jsonObject.put("result", false);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 }

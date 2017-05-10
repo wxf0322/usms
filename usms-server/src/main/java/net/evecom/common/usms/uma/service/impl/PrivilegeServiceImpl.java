@@ -11,9 +11,8 @@ import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,10 +20,10 @@ import java.util.List;
  * @version 1.0
  * @created 2017-5-8 17:34
  */
+@Transactional
 @Service
 public class PrivilegeServiceImpl implements PrivilegeService{
 
-    @Resource
     @Autowired
     private PrivilegeDao privilegeDao;
 
@@ -36,6 +35,11 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
         return privilegeDao.getPrivilegesByUserId(userID);
+    }
+
+    @Override
+    public boolean hasPrivilege(long userID, String privilegeName) {
+        return privilegeDao.hasPrivilege(userID,privilegeName);
     }
 
     /**

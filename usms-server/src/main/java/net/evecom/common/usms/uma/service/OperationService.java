@@ -32,11 +32,5 @@ public interface OperationService {
      * @return
      */
     List<UserEntity> getUsersByOperName(String operName);
-
-    /**
-     * 获取某个应用的操作
-     * @param application
-     * @return
-     *//*
-    List<OperationEntity> getOperation(String application);*/
+    boolean hasOperation(long userID,String operationName);
 }

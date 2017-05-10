@@ -6,9 +6,9 @@
 package net.evecom.common.usms.core.data;
 
 /**
- * Default implementation of PageCriteria which specifies
- * both page to be retrieved and page size in the constructor.
- * @author Colm Smyth
+ * 默认PageCriteria，已经指定检索页面和页面大小在构造函数中。
+ *
+ * @author Wash Wang
  */
 public class DefaultPageCriteria implements PageCriteria {
     /**

@@ -15,24 +15,30 @@ import net.sf.json.JSONObject;
  * @created 2017/5/9 10:42
  */
 public class ErrorStatus {
-
+    /**
+     * 无效的参数
+     */
     public static final String INVALID_PARAMS = "invalid_params";
     /**
      * 错误
      */
     private String error;
-
     /**
      * 错误描述
      */
     private String errorDescription;
-
+    /**
+     * 返回的json字符串
+     */
     private String body = "";
 
     public String getBody() {
         return body;
     }
 
+    /**
+     * 对象构造器
+     */
     public static class Builder {
         /**
          * 错误

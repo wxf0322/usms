@@ -4,11 +4,29 @@
   <meta charset="utf-8">
   <title>统一用户管理系统</title>
   <base href="/">
-
+  <script>
+    function basePath() {
+      var local = window.location;
+      var contextPath = local.pathname.split("/")[1];
+      var basePath = local.protocol + "//" + local.host + "/" + contextPath + "/";
+      return basePath;
+    }
+    function setBaseHref(url) {
+      var baseDom = document.getElementsByTagName("base");
+      baseDom[0].href = url;
+    }
+    var basePath = basePath();
+    setBaseHref(basePath);
+  </script>
+  <style>
+    body {
+      margin: 0px;
+    }
+  </style>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root>Loading...</app-root>
+<app-root>Loading...</app-root>
 </body>
 </html>

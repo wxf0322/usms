@@ -11,6 +11,7 @@ import net.evecom.common.usms.uma.dao.StaffDao;
 import net.evecom.common.usms.uma.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/26 10:31
  */
+@Transactional
 @Service
 public class StaffServiceImpl implements StaffService {
 

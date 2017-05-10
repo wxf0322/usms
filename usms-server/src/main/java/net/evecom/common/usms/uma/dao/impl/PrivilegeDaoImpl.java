@@ -61,6 +61,23 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
         return query.getResultList();
     }
 
+    @Override
+    public boolean hasPrivilege(long userID, String privilegeName) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from USMS_PRIVILEGES p ")
+                .append("where p.id in( ")
+                .append("select pr.priv_id from USMS_PRIVILEGE_ROLE pr ")
+                .append("where pr.role_id in( ")
+                .append("select ur.role_id from USMS_USER_ROLE ur ")
+                .append("where ur.user_id =:userid) ")
+                .append(") and p.enabled = 1 and p.name=:name");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
+        query.setParameter("userid", userID);
+        query.setParameter("name", privilegeName);
+        return query.getResultList().size()!=0;
+    }
+
 
     /**
      * 根据权限编码查询用户列表

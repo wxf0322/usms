@@ -34,9 +34,15 @@ import java.util.List;
 @RequestMapping("/v1/openapi/")
 public class GridAPI {
 
+    /**
+     * 注入OAuthService
+     */
     @Autowired
     private OAuthService oAuthService;
 
+    /**
+     * 注入UserService
+     */
     @Autowired
     private UserService userService;
 

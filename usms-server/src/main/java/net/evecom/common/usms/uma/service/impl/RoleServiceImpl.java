@@ -11,6 +11,7 @@ import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.uma.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,15 +21,21 @@ import java.util.List;
  * @version 1.0
  * @created 2017-5-8 18:29
  */
+@Transactional
 @Service
 public class RoleServiceImpl  implements RoleService{
-    @Resource
+
     @Autowired
     private RoleDao roleDao;
 
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
         return roleDao.findRolesByUserId(userID);
+    }
+
+    @Override
+    public boolean hasRole(long userID, String roleName) {
+        return roleDao.hasRole(userID,roleName);
     }
 
     /**

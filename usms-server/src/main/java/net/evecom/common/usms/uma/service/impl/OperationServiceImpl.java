@@ -46,4 +46,9 @@ public class OperationServiceImpl implements OperationService {
         return operationDao.getUsersByOperName(operName);
     }
 
+    @Override
+    public boolean hasOperation(long userID,String operationName) {
+        return operationDao.hasOperation(userID,operationName);
+    }
+
 }

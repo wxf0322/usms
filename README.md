@@ -3,9 +3,9 @@
 
 > 基于 Spring + Spring MVC + Spring Data JPA + Redis 的统一用户管理系统
 
-> OAuth2.0认证流程，基于Apache Oltu实现的。
+> OAuth2.0认证流程，基于Apache Oltu
 
-> 数据库基于 Oracle 11g
+> 数据库，基于Oracle 11g
 
 > src/main/resource/db/ 目录下的有建表语句，在运行该项目之前先运行这些建表语句。
 

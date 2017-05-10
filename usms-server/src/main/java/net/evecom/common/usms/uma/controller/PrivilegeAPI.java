@@ -5,15 +5,18 @@
  */
 package net.evecom.common.usms.uma.controller;
 
+import net.evecom.common.usms.core.model.ErrorStatus;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.PrivilegeService;
 import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -38,8 +41,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/openapi/")
 public class PrivilegeAPI {
-    @Resource
+    /**
+     * 注入PrivilegeService
+     */
+    @Autowired
     private PrivilegeService privilegeService;
+
     /**
      * 注入OAuthService
      */
@@ -58,39 +65,41 @@ public class PrivilegeAPI {
     @Autowired
     private StaffService staffService;
 
-
-
-   @RequestMapping(value = "privilege/exist",produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "privilege/exist", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivilege(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
-      String privilege = request.getParameter("privilege");
-       // 构建OAuth资源请求
-       OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
-       // 获取Access Token
-       String accessToken = oauthRequest.getAccessToken();
-       // 获取用户名
-       String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
-       // 获得用户实体类
-       UserEntity user = userService.findByLoginName(loginName);
-       List<PrivilegeEntity>  privilegeEntities =
-               privilegeService.getPrivilegesByUserId(user.getId());
-       JSONObject jsonObject = new JSONObject();
-       for(PrivilegeEntity privilegeEntity :privilegeEntities){
-           if(privilegeEntity.getLabel().toString().equals(privilege)){
-               jsonObject.put("result",true);
-               return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
-           }
-       }
-       jsonObject.put("result",false);
-       return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
+        String privilegeName = request.getParameter("privilege");
+        if (StringUtils.isEmpty(privilegeName)) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+        // 构建OAuth资源请求
+        OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
+        // 获取Access Token
+        String accessToken = oauthRequest.getAccessToken();
+        // 获取用户名
+        String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
+        // 获得用户实体类
+        UserEntity user = userService.findByLoginName(loginName);
+        JSONObject jsonObject = new JSONObject();
+        if (privilegeService.hasPrivilege(user.getId(), privilegeName)) {
+            jsonObject.put("result", true);
+        } else jsonObject.put("result", false);
+        return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
 
-
-    @RequestMapping(value = "privileges",produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "privileges", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivileges(HttpServletRequest request) {
-        String application = request.getParameter("application");
-        List<PrivilegeEntity> privileges =
-                privilegeService.getPrivilegesByAppName(application);
+        String applicationName = request.getParameter("application");
+        if (StringUtils.isEmpty(applicationName)) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+        List<PrivilegeEntity> privileges = privilegeService.getPrivilegesByAppName(applicationName);
         // 构造操作
         JSONArray priJsonArr = new JSONArray();
         for (PrivilegeEntity privilege : privileges) {
@@ -98,11 +107,10 @@ public class PrivilegeAPI {
             priJson.put("id", privilege.getId());
             priJson.put("label", privilege.getLabel());
             priJson.put("name", privilege.getName());
-            priJson.put("enabled", privilege.getEnabled());
             priJsonArr.add(priJson);
         }
-        JSONObject jsonObject =new JSONObject();
-        jsonObject.put("privileges",priJsonArr);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("privileges", priJsonArr);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 }

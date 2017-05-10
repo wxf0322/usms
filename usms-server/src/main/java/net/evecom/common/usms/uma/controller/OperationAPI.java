@@ -5,15 +5,18 @@
  */
 package net.evecom.common.usms.uma.controller;
 
+import net.evecom.common.usms.core.model.ErrorStatus;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.OperationService;
 import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -60,7 +63,14 @@ public class OperationAPI {
 
     @RequestMapping(value = "/operation/exist",produces = "application/json; charset=UTF-8")
     public ResponseEntity getOperation(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
-        String operation = request.getParameter("operation");
+        String operationName = request.getParameter("operation");
+        if(StringUtils.isEmpty(operationName)){
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 获取Access Token
@@ -71,23 +81,22 @@ public class OperationAPI {
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
 
-        // 获得相应的json对象
-        JSONArray operJsonArr = getOperationJSONArray(user.getId());
         JSONObject jsonObject = new JSONObject();
-        for (int i = 0; i < operJsonArr.size(); i++) {
-            JSONObject json = operJsonArr.getJSONObject(i);
-            if (json.getString("name").equals(operation)) {
-                jsonObject.put("result", true);
-                return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
-            }
-        }
-        jsonObject.put("result", false);
+        if (operationService.hasOperation(user.getId(), operationName)) {
+            jsonObject.put("result", true);
+        } else jsonObject.put("result", false);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/operations", produces = "application/json; charset=UTF-8")
     public ResponseEntity getOperations(HttpServletRequest request) {
         String application = request.getParameter("application");
+        if(StringUtils.isEmpty(application)){
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
         List<OperationEntity> operations =
                 operationService.getOperationsByAppName(application);
         // 构造操作
@@ -111,27 +120,4 @@ public class OperationAPI {
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
-    /**
-     * 获得操作JSON数组
-     *
-     * @param userId
-     * @return
-     */
-    private JSONArray getOperationJSONArray(Long userId) {
-        // 获得员工所有的操作
-        List<OperationEntity> operations = userService.findOperationsById(userId);
-        // 构造操作
-        JSONArray operJsonArr = new JSONArray();
-        for (OperationEntity operation : operations) {
-            JSONObject operJson = new JSONObject();
-            operJson.put("id", operation.getId());
-            operJson.put("label", operation.getLabel());
-            operJson.put("name", operation.getName());
-            operJson.put("tree_level", operation.getTreeLevel());
-            operJson.put("parent_id", operation.getParentId());
-            operJson.put("manual_sn", operation.getManualSn());
-            operJsonArr.add(operJson);
-        }
-        return operJsonArr;
-    }
 }

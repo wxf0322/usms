@@ -6,8 +6,7 @@
 package net.evecom.common.usms.core.data;
 
 /**
- * Interface which defines page criteria for use in
- * a repository operation.
+ * 定义存储库操作中，页面大小与页号的接口。
  *
  * @author Colm Smyth
  */

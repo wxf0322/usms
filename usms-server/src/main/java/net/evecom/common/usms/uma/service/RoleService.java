@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface RoleService {
     List<RoleEntity> findRolesByUserId(long userID);
-
+    boolean hasRole(long userID,String roleName);
     /**
      * 根据角色编码查询用户列表
      *

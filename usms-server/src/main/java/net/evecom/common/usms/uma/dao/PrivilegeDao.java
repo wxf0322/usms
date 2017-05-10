@@ -18,6 +18,10 @@ import java.util.List;
 public interface PrivilegeDao {
     List<PrivilegeEntity> getPrivilegesByAppName(String application);
     List<PrivilegeEntity> getPrivilegesByUserId(long userID);
+    boolean hasPrivilege(long userID,String privilegeName);
+
+
+
     /**
      * 根据权限编码查询用户列表
      *

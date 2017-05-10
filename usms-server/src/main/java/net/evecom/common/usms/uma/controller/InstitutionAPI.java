@@ -37,9 +37,15 @@ import java.util.List;
 @RequestMapping("/v1/openapi/")
 public class InstitutionAPI {
 
+    /**
+     * 注入OAuthService
+     */
     @Autowired
     private OAuthService oAuthService;
 
+    /**
+     * 注入InstitutionService
+     */
     @Autowired
     private InstitutionService institutionService;
 
@@ -72,7 +78,8 @@ public class InstitutionAPI {
      * @throws OAuthProblemException
      */
     @RequestMapping(value = "/institutions", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getInstitutions(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
+    public ResponseEntity getInstitutions(HttpServletRequest request)
+            throws OAuthSystemException, OAuthProblemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 获取Access Token

@@ -40,6 +40,20 @@ public class RoleDaoImpl implements RoleDao {
         return query.getResultList();
     }
 
+
+    @Override
+    public boolean hasRole(long userID,String RoleName) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from USMS_ROLES r where r.id in( ")
+                .append("select ur.role_id from USMS_USER_ROLE ur ")
+                .append("where ur.user_id =:userid) and r.enabled=1 and r.name=:name ");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql, RoleEntity.class);
+        query.setParameter("userid", userID);
+        query.setParameter("name", RoleName);
+        return query.getResultList().size()!=0;
+    }
+
     /**
      * 根据角色编码查询用户列表
      *

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface RoleDao {
     List<RoleEntity> findRolesByUserId(long userID);
-
+    boolean hasRole(long userID,String RoleName);
     /**
      * 根据权限角色查询用户列表
      *
