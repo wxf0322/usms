@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 14:45
  */
@@ -32,5 +32,11 @@ public interface OperationService {
      * @return
      */
     List<UserEntity> getUsersByOperName(String operName);
+
+   /**
+    * 判断是否拥有该操作
+    * @return
+    * @param userID,operationName
+    */
     boolean hasOperation(long userID,String operationName);
 }

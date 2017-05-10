@@ -16,7 +16,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 17:26
  */
@@ -28,6 +28,11 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
     @PersistenceContext
     private EntityManager manager;
 
+    /**
+     * 根据App名称获取权限列表
+     * @return List<PrivilegeEntity>
+     * @param application
+     */
     @Override
     public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
         StringBuffer sb = new StringBuffer();
@@ -45,6 +50,11 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
         return query.getResultList();
     }
 
+    /**
+     * 根据用户名查找权限列表
+     * @return List<PrivilegeEntity>
+     * @param userID
+     */
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();
@@ -61,6 +71,11 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
         return query.getResultList();
     }
 
+    /**
+     * 判断是否拥有该权限
+     * @return boolean
+     * @param userID, privilegeName
+     */
     @Override
     public boolean hasPrivilege(long userID, String privilegeName) {
         StringBuffer sb = new StringBuffer();

@@ -45,7 +45,7 @@ public class OperationAPI {
     /**
      * operationService的注入
      */
-    @Resource
+    @Autowired
     private OperationService operationService;
 
     /**
@@ -61,6 +61,11 @@ public class OperationAPI {
     private UserService userService;
 
 
+    /**
+     * 判断是否允许该操作
+     * @return ResponseEntity
+     * @param request
+     */
     @RequestMapping(value = "/operation/exist",produces = "application/json; charset=UTF-8")
     public ResponseEntity getOperation(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String operationName = request.getParameter("operation");
@@ -88,6 +93,11 @@ public class OperationAPI {
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
+    /**
+     * 获取操作列表
+     * @return ResponseEntity
+     * @param request
+     */
     @RequestMapping(value = "/operations", produces = "application/json; charset=UTF-8")
     public ResponseEntity getOperations(HttpServletRequest request) {
         String application = request.getParameter("application");

@@ -16,7 +16,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 18:24
  */
@@ -28,6 +28,11 @@ public class RoleDaoImpl implements RoleDao {
     @PersistenceContext
     private EntityManager manager;
 
+    /**
+     * 根据用户id获取角色列表
+     * @return List<RoleEntity>
+     * @param userID
+     */
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();
@@ -41,6 +46,11 @@ public class RoleDaoImpl implements RoleDao {
     }
 
 
+    /**
+     * 判断是否拥有该角色
+     * @return boolean
+     * @param userID, RoleName
+     */
     @Override
     public boolean hasRole(long userID,String RoleName) {
         StringBuffer sb = new StringBuffer();

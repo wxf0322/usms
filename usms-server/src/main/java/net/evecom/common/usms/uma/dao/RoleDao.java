@@ -11,12 +11,24 @@ import net.evecom.common.usms.entity.UserEntity;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 18:24
  */
 public interface RoleDao {
+
+    /**
+     * 根据用户名查找角色列表
+     * @param userID
+     * @return
+     */
     List<RoleEntity> findRolesByUserId(long userID);
+
+    /**
+     * 判断是否拥有此角色
+     * @param userID
+     * @return
+     */
     boolean hasRole(long userID,String RoleName);
     /**
      * 根据权限角色查询用户列表

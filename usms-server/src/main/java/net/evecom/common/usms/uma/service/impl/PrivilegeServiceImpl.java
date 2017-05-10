@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 17:34
  */
@@ -24,19 +24,37 @@ import java.util.List;
 @Service
 public class PrivilegeServiceImpl implements PrivilegeService{
 
+    /**
+     * privilegeDao的注入
+     */
     @Autowired
     private PrivilegeDao privilegeDao;
 
+    /**
+     * 根据app名称来获取权限列表
+     * @return
+     * @param
+     */
     @Override
     public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
         return privilegeDao.getPrivilegesByAppName(application);
     }
 
+    /**
+     * 根据用户编码来获取权限列表
+     * @return
+     * @param  userID
+     */
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
         return privilegeDao.getPrivilegesByUserId(userID);
     }
 
+    /**
+     * 判断是否拥有该权限
+     * @return
+     * @param userID,privilegeName
+     */
     @Override
     public boolean hasPrivilege(long userID, String privilegeName) {
         return privilegeDao.hasPrivilege(userID,privilegeName);

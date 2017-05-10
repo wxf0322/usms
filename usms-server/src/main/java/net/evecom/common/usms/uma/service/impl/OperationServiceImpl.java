@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 14:44
  */
@@ -31,6 +31,11 @@ public class OperationServiceImpl implements OperationService {
     @Autowired
     private OperationDao operationDao;
 
+    /**
+     * 获取应用操作列表
+     * @param application
+     * @return
+     */
     @Override
     public List<OperationEntity> getOperationsByAppName(String application) {
         return operationDao.getOperationsByAppName(application);
@@ -46,6 +51,11 @@ public class OperationServiceImpl implements OperationService {
         return operationDao.getUsersByOperName(operName);
     }
 
+    /**
+     * 判断是否拥有该操作
+     * @return
+     * @param userID,operationName
+     */
     @Override
     public boolean hasOperation(long userID,String operationName) {
         return operationDao.hasOperation(userID,operationName);

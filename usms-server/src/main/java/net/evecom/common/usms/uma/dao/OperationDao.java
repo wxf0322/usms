@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 14:20
  */
@@ -27,10 +27,15 @@ public interface OperationDao {
 
     /**
      * 根据操作编码查询用户列表
-     *
      * @param operName
      * @return
      */
     List<UserEntity> getUsersByOperName(String operName);
+
+    /**
+     * 判断是否拥有该操作
+     * @param userID,operationName
+     * @return
+     */
     boolean hasOperation(long userID,String operationName);
 }

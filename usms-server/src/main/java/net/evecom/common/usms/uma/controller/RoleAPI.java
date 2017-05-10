@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 18:13
  */
@@ -53,9 +53,14 @@ public class RoleAPI {
     /**
      * 注入
      */
-    @Resource
+    @Autowired
     private RoleService roleService;
 
+    /**
+     * 判断是否拥有该角色
+     * @return ResponseEntity
+     * @param request
+     */
     @RequestMapping(value = "/role/exist", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivileges(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String roleName = request.getParameter("role");

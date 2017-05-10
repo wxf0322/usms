@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 14:20
  */
@@ -29,6 +29,11 @@ public class OperationDaoImpl implements OperationDao{
     @PersistenceContext
     private EntityManager manager;
 
+    /**
+     * 根据app名称获取操作列表
+     * @return List<OperationEntity>
+     * @param application
+     */
     @Override
     public List<OperationEntity> getOperationsByAppName(String application) {
         StringBuffer sb = new StringBuffer();
@@ -66,6 +71,11 @@ public class OperationDaoImpl implements OperationDao{
         return query.getResultList();
     }
 
+    /**
+     * 判断是否拥有该操作
+     * @return boolean
+     * @param userID, operationName
+     */
     @Override
     public boolean hasOperation(long userID,String operationName) {
         StringBuffer sb = new StringBuffer();

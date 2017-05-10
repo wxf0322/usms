@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author Pisces
+ * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 18:29
  */
@@ -25,14 +25,27 @@ import java.util.List;
 @Service
 public class RoleServiceImpl  implements RoleService{
 
+    /**
+     * roleDao的注入
+     */
     @Autowired
     private RoleDao roleDao;
 
+    /**
+     * 根据用户ID来查找角色列表
+     * @return
+     * @param userID
+     */
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
         return roleDao.findRolesByUserId(userID);
     }
 
+    /**
+     * 判断是否拥有该角色
+     * @return
+     * @param userID,roleName
+     */
     @Override
     public boolean hasRole(long userID, String roleName) {
         return roleDao.hasRole(userID,roleName);

@@ -41,10 +41,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/openapi/")
 public class PrivilegeAPI {
+
     /**
      * 注入PrivilegeService
      */
-    @Autowired
     private PrivilegeService privilegeService;
 
     /**
@@ -65,31 +65,42 @@ public class PrivilegeAPI {
     @Autowired
     private StaffService staffService;
 
+
+
+   /**
+    * 判断是否拥有该权限
+    * @return ResponseEntity
+    * @param request
+    */
     @RequestMapping(value = "privilege/exist", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivilege(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String privilegeName = request.getParameter("privilege");
-        if (StringUtils.isEmpty(privilegeName)) {
-            ErrorStatus errorStatus = new ErrorStatus
-                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
-                    .buildJSONMessage();
-            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
-        }
-        // 构建OAuth资源请求
-        OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
-        // 获取Access Token
-        String accessToken = oauthRequest.getAccessToken();
-        // 获取用户名
-        String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
-        // 获得用户实体类
-        UserEntity user = userService.findByLoginName(loginName);
-        JSONObject jsonObject = new JSONObject();
-        if (privilegeService.hasPrivilege(user.getId(), privilegeName)) {
-            jsonObject.put("result", true);
-        } else jsonObject.put("result", false);
-        return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
-    }
+       if(StringUtils.isEmpty(privilegeName)){
+           ErrorStatus errorStatus = new ErrorStatus
+                   .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                   .buildJSONMessage();
+           return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+       }
+       // 构建OAuth资源请求
+       OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
+       // 获取Access Token
+       String accessToken = oauthRequest.getAccessToken();
+       // 获取用户名
+       String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
+       // 获得用户实体类
+       UserEntity user = userService.findByLoginName(loginName);
+       JSONObject jsonObject = new JSONObject();
+       if (privilegeService.hasPrivilege(user.getId(), privilegeName)) {
+           jsonObject.put("result", true);
+       } else jsonObject.put("result", false);
+       return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
+   }
 
-
+    /**
+     * 获取权限列表
+     * @return ResponseEntity
+     * @param request
+     */
     @RequestMapping(value = "privileges", produces = "application/json; charset=UTF-8")
     public ResponseEntity getPrivileges(HttpServletRequest request) {
         String applicationName = request.getParameter("application");
