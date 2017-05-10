@@ -36,8 +36,8 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from USMS_ROLES r where r.id in( ")
-                .append("select ur.role_id from USMS_USER_ROLE ur ")
+        sb.append("select * from usms_roles r where r.id in( ")
+                .append("select ur.role_id from usms_user_role ur ")
                 .append("where ur.user_id =:userid) and r.enabled=1 ");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, RoleEntity.class);
@@ -54,8 +54,8 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public boolean hasRole(long userID,String RoleName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from USMS_ROLES r where r.id in( ")
-                .append("select ur.role_id from USMS_USER_ROLE ur ")
+        sb.append("select * from usms_roles r where r.id in( ")
+                .append("select ur.role_id from usms_user_role ur ")
                 .append("where ur.user_id =:userid) and r.enabled=1 and r.name=:name ");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, RoleEntity.class);

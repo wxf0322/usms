@@ -37,10 +37,10 @@ public class OperationDaoImpl implements OperationDao{
     @Override
     public List<OperationEntity> getOperationsByAppName(String application) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT * FROM USMS_OPERATIONS o\n")
-                .append("WHERE o.APPLICATION_ID in (")
-                .append("select a.id from USMS_APPLICATIONS a ")
-                .append("where a.name =:application) and o.enabled = 1 ");
+        sb.append("select * from usms_operations o\n")
+                .append("where o.application_id in (")
+                .append("select a.id from usms_applications a ")
+                .append("where a.name =:application) and o.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, OperationEntity.class);
         query.setParameter("application", application);

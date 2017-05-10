@@ -33,23 +33,28 @@ public class InstitutionDaoImpl implements InstitutionDao {
     @PersistenceContext
     private EntityManager manager;
 
+    /**
+     * 根据登入名查询组织机构列表
+     *
+     * @param loginName
+     * @return
+     */
     @Override
     public List<InstitutionEntity> findInstByLoginName(String loginName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT *\n")
-                .append("FROM usms_institutions i\n")
-                .append("WHERE i.id IN (SELECT si.institution_id\n")
-                .append(" FROM usms_staff_institution si\n")
-                .append(" WHERE si.staff_id = (\n")
-                .append("  SELECT s.id\n")
-                .append("  FROM usms_staffs s\n")
-                .append("  WHERE s.id = (\n")
-                .append("   SELECT u.staff_id\n")
-                .append("   FROM usms_users u\n")
-                .append("   WHERE u.login_name = :loginName\n")
-                .append("    AND u.enabled = 1\n")
+        sb.append("select * from usms_institutions i\n")
+                .append("where i.id in (select si.institution_id\n")
+                .append(" from usms_staff_institution si\n")
+                .append(" where si.staff_id = (\n")
+                .append("  select s.id\n")
+                .append("  from usms_staffs s\n")
+                .append("  where s.id = (\n")
+                .append("   select u.staff_id\n")
+                .append("   from usms_users u\n")
+                .append("   where u.login_name = :loginName\n")
+                .append("    and u.enabled = 1\n")
                 .append("   )\n")
-                .append("  )) AND i.enabled = 1");
+                .append("  )) and i.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, InstitutionEntity.class);
         query.setParameter("loginName", loginName);
@@ -70,14 +75,13 @@ public class InstitutionDaoImpl implements InstitutionDao {
      * @param instName
      * @return
      */
-
     @Override
     public List<UserEntity> getUsersByInstName(String instName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u\n")
                 .append(" where u.staff_id in\n")
                 .append(" (select usi.staff_id from usms_staff_institution usi where usi.institution_id in\n")
-                .append(" ( select i.id from usms_institutions i where i.name = :name))\n")
+                .append(" (select i.id from usms_institutions i where i.name = :name))\n")
                 .append(" and u.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, UserEntity.class);

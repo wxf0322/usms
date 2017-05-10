@@ -87,21 +87,21 @@ public class UserDaoImpl implements UserDao {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM usms_operations o\n")
                 .append(" WHERE o.id IN\n")
-                .append("       (SELECT po.oper_id\n")
-                .append("          FROM usms_privilege_operation po\n")
-                .append("         WHERE po.priv_id IN\n")
-                .append("               (SELECT p.id\n")
-                .append("                  FROM usms_privileges p\n")
-                .append("                 WHERE p.id IN (SELECT pr.priv_id\n")
-                .append("                                  FROM usms_privilege_role pr, usms_roles r\n")
-                .append("                                 WHERE pr.role_id IN\n")
-                .append("                                       (SELECT ur.role_id\n")
-                .append("                                          FROM usms_user_role ur\n")
-                .append("                                         WHERE ur.user_id = :userId)\n")
-                .append("                                   and pr.role_id = r.id\n")
-                .append("                                   and r.enabled = 1)\n")
-                .append("                   AND p.enabled = 1))\n")
-                .append("   AND o.enabled = 1");
+                .append(" (SELECT po.oper_id\n")
+                .append(" FROM usms_privilege_operation po\n")
+                .append(" WHERE po.priv_id IN\n")
+                .append(" (SELECT p.id\n")
+                .append(" FROM usms_privileges p\n")
+                .append(" WHERE p.id IN (SELECT pr.priv_id\n")
+                .append(" FROM usms_privilege_role pr, usms_roles r\n")
+                .append(" WHERE pr.role_id IN\n")
+                .append(" (SELECT ur.role_id\n")
+                .append(" FROM usms_user_role ur\n")
+                .append(" WHERE ur.user_id = :userId)\n")
+                .append(" and pr.role_id = r.id\n")
+                .append(" and r.enabled = 1)\n")
+                .append(" AND p.enabled = 1))\n")
+                .append(" AND o.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, OperationEntity.class);
         query.setParameter("userId", id);
@@ -122,20 +122,19 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<GridEntity> findGridsByLoginName(String loginName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from gsmp_loc_grids g\n")
-                .append(" where g.id in\n")
-                .append("       (select rg.grid_id\n")
-                .append("          from usms_role_grid rg\n")
-                .append("         where rg.role_id in (select r.id\n")
-                .append("                                from usms_roles r\n")
-                .append("                               where r.id in\n")
-                .append("                                     (select ur.role_id\n")
-                .append("                                        from usms_user_role ur\n")
-                .append("                                       where ur.user_id =\n")
-                .append("                                             (select u.id\n")
-                .append("                                                from usms_users u\n")
-                .append("                                               where u.login_name = :loginName))\n")
-                .append("                                 and r.enabled = 1))");
+        sb.append("select * from gsmp_loc_grids g where g.id in\n")
+                .append(" (select rg.grid_id\n")
+                .append(" from usms_role_grid rg\n")
+                .append(" where rg.role_id in (select r.id\n")
+                .append(" from usms_roles r\n")
+                .append(" where r.id in\n")
+                .append(" (select ur.role_id\n")
+                .append(" from usms_user_role ur\n")
+                .append(" where ur.user_id =\n")
+                .append(" (select u.id\n")
+                .append(" from usms_users u\n")
+                .append(" where u.login_name = :loginName))\n")
+                .append(" and r.enabled = 1))");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, GridEntity.class);
         query.setParameter("loginName", loginName);

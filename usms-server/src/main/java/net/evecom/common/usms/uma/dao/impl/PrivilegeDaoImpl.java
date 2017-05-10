@@ -58,11 +58,11 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from USMS_PRIVILEGES p ")
+        sb.append("select * from usms_privileges p ")
                 .append("where p.id in( ")
-                .append("select pr.priv_id from USMS_PRIVILEGE_ROLE pr ")
+                .append("select pr.priv_id from usms_privilege_role pr ")
                 .append("where pr.role_id in( ")
-                .append("select ur.role_id from USMS_USER_ROLE ur ")
+                .append("select ur.role_id from usms_user_role ur ")
                 .append("where ur.user_id =:userid) ")
                 .append(") and p.enabled = 1");
         String sql = sb.toString();
@@ -79,11 +79,11 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
     @Override
     public boolean hasPrivilege(long userID, String privilegeName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from USMS_PRIVILEGES p ")
+        sb.append("select * from usms_privileges p ")
                 .append("where p.id in( ")
-                .append("select pr.priv_id from USMS_PRIVILEGE_ROLE pr ")
+                .append("select pr.priv_id from usms_privilege_role pr ")
                 .append("where pr.role_id in( ")
-                .append("select ur.role_id from USMS_USER_ROLE ur ")
+                .append("select ur.role_id from usms_user_role ur ")
                 .append("where ur.user_id =:userid) ")
                 .append(") and p.enabled = 1 and p.name=:name");
         String sql = sb.toString();
