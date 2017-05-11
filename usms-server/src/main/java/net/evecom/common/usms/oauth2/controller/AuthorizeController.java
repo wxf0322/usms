@@ -129,7 +129,7 @@ public class AuthorizeController {
                     authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
                 } else {
                     authorizationCode = oAuthService.getCurrentAuthCode(loginName, clientId);
-                    if(authorizationCode == null) {
+                    if (authorizationCode == null) {
                         authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
                     }
                 }
@@ -146,6 +146,10 @@ public class AuthorizeController {
 
             // 构建响应
             final OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
+
+            // 如果响应构建成功，那么获得重定向地址，并存入Redis
+            String redirectUri = oauthRequest.getRedirectURI();
+            oAuthService.addRedirectUri(redirectUri, loginName, clientId);
 
             // 根据OAuthResponse返回ResponseEntity响应
             HttpHeaders headers = new HttpHeaders();

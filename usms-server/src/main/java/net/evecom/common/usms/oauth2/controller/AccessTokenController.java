@@ -99,8 +99,20 @@ public class AccessTokenController {
                 }
             }
 
+            // 获取当前登入名
             String loginName = oAuthService.getLoginNameByAuthCode(authCode);
+            // 获取当前client_id
             String clientId = oauthRequest.getClientId();
+
+            // 检查重定向地址是否和上次的一样
+            String preRedirectUri = oAuthService.getRedirectUriByRelation(loginName, clientId);
+            if (!preRedirectUri.equals(oauthRequest.getRedirectURI())) {
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                        .setError(OAuthError.TokenResponse.INVALID_REQUEST)
+                        .setErrorDescription(Constants.DIFFERENT_REDIRECT_URI)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
+            }
 
             // 获得新的Access Token
             String accessToken = oAuthService.getNewAccessToken(loginName, clientId, authCode);

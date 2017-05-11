@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
+import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,14 +35,6 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 @Service
 public class OAuthServiceImpl implements OAuthService {
-    /**
-     * 授权码
-     */
-    private static final String AUTH_CODE = "code";
-    /**
-     * 访问令牌
-     */
-    private static final String ACCESS_TOKEN = "token";
 
     /**
      * 令牌有效时间
@@ -72,7 +65,7 @@ public class OAuthServiceImpl implements OAuthService {
     private ValueOperations<String, String> valueOperations;
 
     /**
-     * 构造函数依赖注入redi
+     * 构造函数依赖注入redisTemplate
      *
      * @param redisTemplate
      */
@@ -102,17 +95,18 @@ public class OAuthServiceImpl implements OAuthService {
      *
      * @param authCode
      * @param loginName
+     * @param clientId
      */
     @Override
     public void addAuthCode(String authCode, String loginName, String clientId) {
         // 获得关联关系KEY
-        String relationKey = getRelationKey(AUTH_CODE, loginName, clientId);
+        String relationKey = getRelationKey(OAuth.OAUTH_CODE, loginName, clientId);
 
         // 设置authCode
         valueOperations.set(relationKey, authCode);
         valueOperations.set(authCode, loginName);
 
-        // 设置key超时时间
+        // 设置超时时间
         redisTemplate.expire(relationKey, authCodeExpires, TimeUnit.SECONDS);
         redisTemplate.expire(authCode, authCodeExpires, TimeUnit.SECONDS);
     }
@@ -127,15 +121,31 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public void addAccessToken(String accessToken, String loginName, String clientId) {
         // 获得关联关系KEY
-        String relationKey = getRelationKey(ACCESS_TOKEN, loginName, clientId);
+        String relationKey = getRelationKey(OAuth.OAUTH_ACCESS_TOKEN, loginName, clientId);
 
         // 设置Access Token
         valueOperations.set(relationKey, accessToken);
         valueOperations.set(accessToken, loginName);
 
-        // 设置key超时时间
+        // 设置超时时间
         redisTemplate.expire(relationKey, accessTokenExpires, TimeUnit.SECONDS);
         redisTemplate.expire(accessToken, accessTokenExpires, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void addRedirectUri(String redirectUrl, String loginName, String clientId) {
+        // 获得关联关系KEY
+        String relationKey = getRelationKey(OAuth.OAUTH_REDIRECT_URI, loginName, clientId);
+        // 设置重定向地址
+        valueOperations.set(relationKey, redirectUrl);
+        // 设置超时时间
+        redisTemplate.expire(relationKey, authCodeExpires, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public String getRedirectUriByRelation(String loginName, String clientId) {
+        String relationKey = getRelationKey(OAuth.OAUTH_REDIRECT_URI, loginName, clientId);
+        return valueOperations.get(relationKey);
     }
 
     /**
@@ -232,25 +242,39 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     /**
-     * 删除单个授权码
+     * 删除授权码
      *
      * @param loginName
      * @param clientId
      */
     @Override
     public void deleteAuthCode(String loginName, String clientId) {
-        deleteRelation(AUTH_CODE, loginName, clientId);
+        deleteRelation(OAuth.OAUTH_CODE, loginName, clientId);
     }
 
     /**
-     * 删除单个令牌
+     * 删除令牌
      *
      * @param loginName
      * @param clientId
      */
     @Override
     public void deleteAccessToken(String loginName, String clientId) {
-        deleteRelation(ACCESS_TOKEN, loginName, clientId);
+        deleteRelation(OAuth.OAUTH_ACCESS_TOKEN, loginName, clientId);
+    }
+
+    /**
+     * 删除重定向地址
+     *
+     * @param loginName
+     * @param clientId
+     */
+    @Override
+    public void deleteRedirectUri(String loginName, String clientId) {
+        // 获得关联关系KEY
+        String relationKey = getRelationKey(OAuth.OAUTH_REDIRECT_URI, loginName, clientId);
+        // 删除关系KEY
+        if (StringUtils.isNotEmpty(relationKey)) redisTemplate.delete(relationKey);
     }
 
     /**
@@ -288,6 +312,8 @@ public class OAuthServiceImpl implements OAuthService {
         addAccessToken(accessToken, loginName, clientId);
         // 得到新的Access Token之后，删除授权码
         deleteAuthCode(loginName, clientId);
+        // 删除重定向地址
+        deleteRedirectUri(loginName, clientId);
         return accessToken;
     }
 
@@ -319,7 +345,7 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public String getCurrentAuthCode(String loginName, String clientId) {
-        String relationKey = getRelationKey(AUTH_CODE, loginName, clientId);
+        String relationKey = getRelationKey(OAuth.OAUTH_CODE, loginName, clientId);
         String authCode = valueOperations.get(relationKey);
         return authCode;
     }

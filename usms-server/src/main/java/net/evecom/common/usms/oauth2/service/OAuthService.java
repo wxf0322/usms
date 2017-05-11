@@ -34,6 +34,25 @@ public interface OAuthService {
     void addAccessToken(String accessToken, String loginName, String clientId);
 
     /**
+     * 添加重定向地址
+     *
+     * @param redirectUrl
+     * @param loginName
+     * @param clientId
+     */
+    void addRedirectUri(String redirectUrl, String loginName, String clientId);
+
+    /**
+     * 根据关系获得重定向地址
+     *
+     * @param loginName
+     * @param clientId
+     * @return
+     */
+    String getRedirectUriByRelation(String loginName, String clientId);
+
+
+    /**
      * 验证auth code是否有效
      *
      * @param authCode
@@ -89,7 +108,7 @@ public interface OAuthService {
     boolean checkClientSecret(String clientSecret);
 
     /**
-     * 删除单个授权码
+     * 删除授权码
      *
      * @param loginName
      * @param clientId
@@ -97,7 +116,7 @@ public interface OAuthService {
     void deleteAuthCode(String loginName, String clientId);
 
     /**
-     * 删除单个令牌
+     * 删除令牌
      *
      * @param loginName
      * @param clientId
@@ -105,7 +124,16 @@ public interface OAuthService {
     void deleteAccessToken(String loginName, String clientId);
 
     /**
+     * 删除重定向地址
+     *
+     * @param loginName
+     * @param clientId
+     */
+    void deleteRedirectUri(String loginName, String clientId);
+
+    /**
      * 删除当前用户所有的AccessToken
+     *
      * @param loginName
      */
     void deleteAccountByloginName(String loginName);
@@ -127,7 +155,13 @@ public interface OAuthService {
      */
     String getNewAuthCode(String loginName, String clientId) throws OAuthSystemException;
 
-
+    /**
+     * 获得当前的授权码
+     *
+     * @param loginName
+     * @param clientId
+     * @return
+     */
     String getCurrentAuthCode(String loginName, String clientId);
 
 }

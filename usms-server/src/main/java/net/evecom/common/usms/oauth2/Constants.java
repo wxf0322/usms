@@ -29,6 +29,11 @@ public interface Constants {
     String INVALID_REDIRECT_URI = "缺少授权成功后的回调地址。";
 
     /**
+     * 不同的重定向地址
+     */
+    String DIFFERENT_REDIRECT_URI = "当前redirectUri与获取授权码时的redirectUri不同";
+
+    /**
      * 无效的授权码
      */
     String INVALID_AUTH_CODE = "错误的授权码。";
