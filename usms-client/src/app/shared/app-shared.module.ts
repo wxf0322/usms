@@ -20,7 +20,6 @@ import {
     DropdownModule,
     TreeModule,
     FileUploadModule,
-
     ConfirmationService
 } from 'primeng/primeng';
 
