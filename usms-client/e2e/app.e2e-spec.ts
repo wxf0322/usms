@@ -1,6 +1,6 @@
 import { UsmsClientPage } from './app.po';
 
-describe('usms-client App', function() {
+describe('usms-client App', () => {
   let page: UsmsClientPage;
 
   beforeEach(() => {

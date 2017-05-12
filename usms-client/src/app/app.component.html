@@ -1,15 +1,18 @@
-<div class="body">
+<div class="container">
+
   <h1>Oauth2 Server端认证流程</h1>
-  <div class="right">
-    <a href="client">应用管理</a>
-    <a href="user">用户管理</a>
+  <div class="row">
+    <div class="pull-right">
+      <a href="client">应用管理</a>
+      <a href="user">用户管理</a>
+    </div>
   </div>
-  <pre>
+
+  <pre class="row">
 1. 添加用户
 http://192.168.200.209:8080/usms/user
 
 2. 先注册应用
-
 http://192.168.200.209:8080/usms/client
 
 会生成client_id和client_secret 这两个以后会用到

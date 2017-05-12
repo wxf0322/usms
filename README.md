@@ -17,8 +17,11 @@
 | 资源服务器 | Resource server，统一用户管理系统提供的资源服务，调用资源服务时，需要提交用户认证信息（access_Token）。 |
 | Access_Token | 令牌，在OAuth2协议中，子系统使用令牌代替用户密码作为认证信息，来获取资源服务。 |
 
-## 1.3 逻辑设计
-### 1.3.1 OAuth2认证过程
+## 1.3 常量编码与命名约定
+接入的应用、角色、权限、操作的名称均使用常量定义，且命名符合ClassName命名法。
+
+# 1.4 逻辑设计
+# 1.4.1 OAuth2认证过程
 ![usms](https://raw.githubusercontent.com/vancook/MarkdownPhotos/master/res/usms.jpg)
 >(1) 浏览器从子系统跳转到USMS，请求用户认证与授权。  
 (2) 用户认证通过，浏览器跳回子系统，并带回临时授权码code。  
