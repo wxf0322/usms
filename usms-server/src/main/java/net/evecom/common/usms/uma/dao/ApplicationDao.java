@@ -5,8 +5,10 @@
  */
 package net.evecom.common.usms.uma.dao;
 
+import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -17,44 +19,12 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/24 15:33
  */
-public interface ApplicationDao {
-    /**
-     * 创建 Application
-     *
-     * @param applicationEntity
-     * @return
-     */
-    ApplicationEntity createApplication(ApplicationEntity applicationEntity);
+public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
 
     /**
-     * 更新 Application
-     *
-     * @param applicationEntity
-     * @return
+     * 查询权限列表
      */
-    ApplicationEntity updateApplication(ApplicationEntity applicationEntity);
-
-    /**
-     * 根据 id 删除 Application
-     *
-     * @param id
-     */
-    void deleteApplication(Long id);
-
-    /**
-     * 查询单个
-     *
-     * @param id
-     * @return
-     */
-    ApplicationEntity findOne(Long id);
-
-    /**
-     * 查询全部
-     *
-     * @return
-     */
-    List<ApplicationEntity> findAll();
+    Page<ApplicationEntity> findByPage(int page, int size);
 
     /**
      * 根据ClientId查找对象

@@ -98,7 +98,7 @@ public class StaffEntity {
     /**
      * 备注说明
      */
-    private String ramarks;
+    private String remarks;
     /**
      * 更新时间
      */
@@ -125,9 +125,9 @@ public class StaffEntity {
     private String creator;
 
     /**
-     * 该员工所属机构信息
+     * 照片地址
      */
-    private List<InstitutionEntity> institutions;
+    private String pictureUrl;
 
     @Id
     @Column(name = "ID")
@@ -320,13 +320,13 @@ public class StaffEntity {
     }
 
     @Basic
-    @Column(name = "RAMARKS")
-    public String getRamarks() {
-        return ramarks;
+    @Column(name = "REMARKS")
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setRamarks(String ramarks) {
-        this.ramarks = ramarks;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     @Basic
@@ -389,16 +389,14 @@ public class StaffEntity {
         this.creator = creator;
     }
 
-    @JoinTable(name = "USMS_STAFF_INSTITUTION",
-            joinColumns = @JoinColumn(name = "staff_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "institution_id", referencedColumnName = "id"))
-    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    public List<InstitutionEntity> getInstitutions() {
-        return institutions;
+    @Basic
+    @Column(name = "PICTURE_URL")
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    public void setInstitutions(List<InstitutionEntity> institutions) {
-        this.institutions = institutions;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     @Override
@@ -434,7 +432,7 @@ public class StaffEntity {
         if (adminDivision != null ? !adminDivision.equals(that.adminDivision) : that.adminDivision != null)
             return false;
         if (curResidence != null ? !curResidence.equals(that.curResidence) : that.curResidence != null) return false;
-        if (ramarks != null ? !ramarks.equals(that.ramarks) : that.ramarks != null) return false;
+        if (remarks != null ? !remarks.equals(that.remarks) : that.remarks != null) return false;
         if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
         if (modifierId != null ? !modifierId.equals(that.modifierId) : that.modifierId != null) return false;
         if (modifier != null ? !modifier.equals(that.modifier) : that.modifier != null) return false;
@@ -466,7 +464,7 @@ public class StaffEntity {
         result = 31 * result + (adminDivisionCode != null ? adminDivisionCode.hashCode() : 0);
         result = 31 * result + (adminDivision != null ? adminDivision.hashCode() : 0);
         result = 31 * result + (curResidence != null ? curResidence.hashCode() : 0);
-        result = 31 * result + (ramarks != null ? ramarks.hashCode() : 0);
+        result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
         result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
         result = 31 * result + (modifierId != null ? modifierId.hashCode() : 0);
         result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
@@ -498,14 +496,13 @@ public class StaffEntity {
                 ", adminDivisionCode='" + adminDivisionCode + '\'' +
                 ", adminDivision='" + adminDivision + '\'' +
                 ", curResidence='" + curResidence + '\'' +
-                ", ramarks='" + ramarks + '\'' +
+                ", remarks='" + remarks + '\'' +
                 ", lastModified=" + lastModified +
                 ", modifierId=" + modifierId +
                 ", modifier='" + modifier + '\'' +
                 ", timeCreated=" + timeCreated +
                 ", creatorId=" + creatorId +
                 ", creator='" + creator + '\'' +
-                ", institutions=" + institutions +
                 '}';
     }
 

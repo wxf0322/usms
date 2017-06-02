@@ -66,6 +66,16 @@
         <url-pattern>/v1/openapi/*</url-pattern>
     </filter-mapping>
 
+    <!-- 解决无法跨域访问问题 -->
+    <filter>
+        <filter-name>cors</filter-name>
+        <filter-class>net.evecom.common.usms.core.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>cors</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- Spring MVC 控制器-->
     <servlet>
         <servlet-name>spring</servlet-name>
@@ -83,8 +93,8 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>/index.html</welcome-file>
         <welcome-file>/index.jsp</welcome-file>
+        <welcome-file>/index.html</welcome-file>
     </welcome-file-list>
     
 </web-app>

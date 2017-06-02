@@ -5,11 +5,15 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,8 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class PrivilegeServiceImpl implements PrivilegeService{
+public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
+        implements PrivilegeService {
 
     /**
      * privilegeDao的注入
@@ -30,10 +35,16 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     @Autowired
     private PrivilegeDao privilegeDao;
 
+    @Override
+    public BaseDao<PrivilegeEntity, Long> getBaseDao() {
+        return privilegeDao;
+    }
+
     /**
      * 根据app名称来获取权限列表
+     *
+     * @param application
      * @return
-     * @param
      */
     @Override
     public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
@@ -42,8 +53,9 @@ public class PrivilegeServiceImpl implements PrivilegeService{
 
     /**
      * 根据用户编码来获取权限列表
+     *
+     * @param userID
      * @return
-     * @param  userID
      */
     @Override
     public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
@@ -52,16 +64,18 @@ public class PrivilegeServiceImpl implements PrivilegeService{
 
     /**
      * 判断是否拥有该权限
-     * @return
+     *
      * @param userID,privilegeName
+     * @return
      */
     @Override
     public boolean hasPrivilege(long userID, String privilegeName) {
-        return privilegeDao.hasPrivilege(userID,privilegeName);
+        return privilegeDao.hasPrivilege(userID, privilegeName);
     }
 
     /**
      * 根据权限编码查询用户列表
+     *
      * @param privName
      * @return
      */
@@ -69,4 +83,29 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     public List<UserEntity> getUsersByPrivName(String privName) {
         return privilegeDao.getUsersByPrivName(privName);
     }
+
+    /**
+     * 查询权限列表
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @Override
+    public Page<PrivilegeEntity> findByPage(int page, int size) {
+        return privilegeDao.findByPage(page, size);
+    }
+
+
+
+    @Override
+    public void updateOperations(Long privilegeId, String[] operationIds) {
+           privilegeDao.updateOperations(privilegeId,operationIds);
+    }
+
+    @Override
+    public List<OperationModel> findOperationsByPrivId(Long privilegeId) {
+        return privilegeDao.findOperationsByPrivId(privilegeId);
+    }
+
 }

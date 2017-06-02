@@ -1,62 +1,16 @@
-<div class="container">
+<eve-header></eve-header>
 
-  <h1>Oauth2 Server端认证流程</h1>
-  <div class="row">
-    <div class="pull-right">
-      <a href="client">应用管理</a>
-      <a href="user">用户管理</a>
-    </div>
-  </div>
+<section class="main">
+  <router-outlet></router-outlet>
+</section>
 
-  <pre class="row">
-1. 添加用户
-http://192.168.200.209:8080/usms/user
+<!--消息提示-->
+<p-growl [value]="messages" styleClass="eve-growl" life="5000"></p-growl>
 
-2. 先注册应用
-http://192.168.200.209:8080/usms/client
-
-会生成client_id和client_secret 这两个以后会用到
-client_id               0a626c2d-d0ac-45bd-9918-e66a4117cf4d    应用id
-client_secret           c7569626-05be-41ee-ae6f-a69fdcb3b7eb    应用secret
-
-3. 请求授权码
-http://192.168.200.209:8080/usms/authorize?client_id=0a626c2d-d0ac-45bd-9918-e66a4117cf4d&response_type=code&redirect_uri=http://www.baidu.com
-
-参数说明：
-client_id               应用id
-response_type           返回授权码的标识
-redirect_uri            回调地址
-
-上面的网站会打开oauth server的用户登录页面。用户输入正确的用户名和密码以POST方式提交后会重定向到用户所填的回调地址并在地址后携带授权码.
-
-请求成功后会返回如下的页面:
-http://www.baidu.com/?code=63910432da9186b22b1ad888d55ae8ae
-
-注：这里code=63910432da9186b22b1ad888d55ae8ae 即授权码
-
-4. 换取accessToken (POST操作)
-
-http://192.168.200.209:8080/usms/access
-首先GET方式请求页面，会打开一个表单在该表单中填入必填项，具体表单参数详见说明部分
-
-表单将会以POST方式提交到http://192.168.200.209:8080/usms/accessToken，最终返回accessToken
-
-需要以POST方式提交以下参数换取accessToken
-
-client_id       c1ebe466-1cdc-4bd3-ab69-77c3561b9dee            应用id
-client_secret   d8346ea2-6017-43ed-ad68-19c0f971738b            应用secret
-grant_type      authorization_code                              用于传递授权码的参数名authorization_code
-code            63910432da9186b22b1ad888d55ae8ae                用户登录授权后的授权码
-redirect_uri    http://www.baidu.com                            回调地址
-
-最终返回如下数据
-"expires_in":3600,"access_token":"223ae05dfbb0794396fb60a0960c197e"
-
-5. 测试accessToken
-
-http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396fb60a0960c197e
-测试ok的话返回用户名信息，access_token=223ae05dfbb0794396fb60a0960c197e 为上一步获取的access_token
-
-注：其中的参数名不要随意更改，固定写法。
-  </pre>
-</div>
+<!--操作确认-->
+<p-confirmDialog width="425" #exit>
+  <footer>
+    <button type="button" pButton icon="fa-close" label="否" (click)="exit.reject()"></button>
+    <button type="button" pButton icon="fa-check" label="是" (click)="exit.accept()"></button>
+  </footer>
+</p-confirmDialog>

@@ -5,8 +5,11 @@
  */
 package net.evecom.common.usms.uma.dao;
 
+import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.InstitutionModel;
+import net.evecom.common.usms.model.TreeDataModel;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ import java.util.List;
  * @version 1.0
  * @created 2017/5/8 14:25
  */
-public interface InstitutionDao {
+public interface InstitutionDao extends BaseDao<InstitutionEntity, Long> {
 
     /**
      * 根据登陆名获取机构列表
@@ -42,5 +45,12 @@ public interface InstitutionDao {
      * @return
      */
     List<UserEntity> getUsersByInstName(String instName);
+
+
+    /**
+     * 根据组织机构类型获取组织机构列表
+     */
+    List<InstitutionEntity> getInstitutionsByType(Long type);
+
 
 }

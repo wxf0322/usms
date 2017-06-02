@@ -33,24 +33,17 @@ public class GridDaoImpl implements GridDao {
     /**
      * 根据管辖区域编码查询用户列表
      *
-     * @param gridName
+     * @param gridCode
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByGridName(String gridName) {
+    public List<UserEntity> getUsersByGridCode(String gridCode) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u\n")
-                .append(" where u.id in \n" )
-                .append(" (select ur.user_id from usms_user_role ur\n")
-                .append(" where ur.role_id in (")
-                .append(" select r.id from usms_roles r where r.id in\n")
-                .append(" (select rg.role_id from usms_role_grid rg\n")
-                .append(" where rg.grid_id in\n")
-                .append(" (select g.id from gsmp_loc_grids g where g.name = :name))\n")
-                .append(" and r.enabled = 1)) and u.enabled = 1");
+        sb.append("select * from usms_users u where u.id in\n")
+                .append(" (select ug.user_id from usms_user_grid ug where ug.grid_code=:code)");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("name", gridName);
+        query.setParameter("code", gridCode);
         return query.getResultList();
     }
 }

@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
+import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.entity.OperationEntity;
 
 import net.evecom.common.usms.entity.UserEntity;
@@ -22,7 +23,8 @@ import java.util.List;
  * @created 2017-5-8 14:20
  */
 @Repository
-public class OperationDaoImpl implements OperationDao {
+public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
+        implements OperationDao {
     /**
      * 注入实体管理器
      */
@@ -32,11 +34,11 @@ public class OperationDaoImpl implements OperationDao {
     /**
      * 根据app名称获取操作列表
      *
-     * @param application
+     * @param appName
      * @return List<OperationEntity>
      */
     @Override
-    public List<OperationEntity> getOperationsByAppName(String application) {
+    public List<OperationEntity> getOperationsByAppName(String appName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations o\n")
                 .append("where o.application_id in (")
@@ -44,7 +46,7 @@ public class OperationDaoImpl implements OperationDao {
                 .append("where a.name =:application) and o.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter("application", application);
+        query.setParameter("application", appName);
         return query.getResultList();
     }
 

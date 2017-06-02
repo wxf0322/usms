@@ -1,0 +1,15 @@
+<div id="combotreeContain"  (click)="onMouseclick($event)" class="ui-dropdown ui-widget ui-state-default ui-corner-all ui-helper-clearfix ui-dropdown-open">
+  <!--选择后数据-->
+  <label class="ui-dropdown-label ui-inputtext ui-corner-all">{{selectedNames}}</label>
+  <!--下拉操作-->
+  <div class="ui-dropdown-trigger ui-state-default ui-corner-right">
+    <span class="fa fa-fw fa-caret-down ui-c"></span>
+  </div>
+  <!--下拉面板-->
+  <div  *ngIf="panelVisible" class="ui-dropdown-panel ui-widget-content ui-corner-all ui-shadow">
+    <div class="ui-dropdown-items-wrapper">
+      <p-tree [value]="data" [selectionMode]="selectionMode" [(selection)]="selection"
+              (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
+    </div>
+  </div>
+</div>

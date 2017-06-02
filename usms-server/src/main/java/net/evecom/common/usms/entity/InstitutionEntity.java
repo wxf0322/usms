@@ -27,7 +27,7 @@ public class InstitutionEntity {
     /**
      * 根据登入名查找
      */
-    public static final String QUERY_BY_NAME = "InstitutionEntity.getByName";
+    public static final String QUERY_BY_NAME = "InstitutionEntity.findByName";
 
     /**
      * name参数
@@ -37,7 +37,7 @@ public class InstitutionEntity {
     /**
      * 机构ID
      */
-    private long id;
+    private Long id;
     /**
      * 中文名称
      */
@@ -61,7 +61,7 @@ public class InstitutionEntity {
     /**
      * 类型 1:机构 2:部门
      */
-    private Boolean type;
+    private Long type;
     /**
      * 手动排序
      */
@@ -113,11 +113,11 @@ public class InstitutionEntity {
 
     @Id
     @Column(name = "ID")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -173,11 +173,11 @@ public class InstitutionEntity {
 
     @Basic
     @Column(name = "TYPE")
-    public Boolean getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(Boolean type) {
+    public void setType(Long type) {
         this.type = type;
     }
 

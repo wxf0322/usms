@@ -137,15 +137,15 @@ public class AccessTokenController {
     }
 
     /**
-     * 用户验证accessToken的链接
+     * 验证accessToken是否有效
      *
      * @param accessToken
      * @return
      */
-    @RequestMapping(value = "/checkAccessToken", method = RequestMethod.POST)
-    public ResponseEntity checkAccessToken(@RequestParam("accessToken") String accessToken) {
-        boolean b = oAuthService.checkAccessToken(accessToken);
-        return b ? new ResponseEntity(HttpStatus.valueOf(HttpServletResponse.SC_OK)) :
+    @RequestMapping(value = "/checkAccessToken")
+    public ResponseEntity checkAccessToken(@RequestParam("access_token") String accessToken) {
+        boolean flag = oAuthService.checkAccessToken(accessToken);
+        return flag ? new ResponseEntity(HttpStatus.valueOf(HttpServletResponse.SC_OK)) :
                 new ResponseEntity(HttpStatus.valueOf(HttpServletResponse.SC_UNAUTHORIZED));
     }
 

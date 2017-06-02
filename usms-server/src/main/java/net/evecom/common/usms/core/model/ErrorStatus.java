@@ -8,7 +8,7 @@ package net.evecom.common.usms.core.model;
 import net.sf.json.JSONObject;
 
 /**
- * 描述
+ * 描述 返回错误信息的工具类
  *
  * @author Wash Wang
  * @version 1.0

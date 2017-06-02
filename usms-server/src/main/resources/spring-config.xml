@@ -49,7 +49,7 @@
     <!-- EntityManagerFactory取代Hibernate的sessionFactory -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="net.evecom.common.usms.core.model"/>
+        <property name="packagesToScan" value="net.evecom.common.usms.entity"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
         </property>
@@ -61,7 +61,7 @@
             </props>
         </property>
         <property name="persistenceUnitName" value="defaultPersistenceUnit"/>
-        <property name="mappingResources" value="classpath:db/entity-mappings.xml"/>
+        <property name="mappingResources" value="db/entity-mappings.xml"/>
     </bean>
 
     <!-- 指定jpa基于Hibernate实现 -->

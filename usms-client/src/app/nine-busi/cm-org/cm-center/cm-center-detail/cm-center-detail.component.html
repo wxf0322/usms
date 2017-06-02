@@ -1,0 +1,55 @@
+<eve-top-bar title="综治中心" (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-top-bar>
+
+<!--新增、编辑-->
+<div class="content">
+  <perfect-scrollbar>
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <div class="detail-layout">
+          <form #reForm="ngForm">
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label required">综治中心名称</label>
+                <input pInputText [(ngModel)]="detailData.centerName" placeholder="必填"
+                       name="centerName" [validation-rule]="{'required':{'alertText':'综治中心名称必填'}}">
+              </div>
+              <div class="ui-g-6">
+                <label class="control-label">所在地址</label>
+                <input pInputText [(ngModel)]="detailData.address" [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">中心状态</label>
+                <input pInputText [(ngModel)]="detailData.centerStatus" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="ui-g-6">
+                <label class="control-label">综治中心联系电话</label>
+                <input pInputText [(ngModel)]="detailData.tel" name="tel"
+                       [validation-rule]="{'phone':{'alertText':'号码格式错误'}}">
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">负责人姓名</label>
+                <input pInputText [(ngModel)]="detailData.name" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="ui-g-6 ">
+                <label class="control-label">负责人联系电话</label>
+                <input pInputText [(ngModel)]="detailData.chargeContactTel" name="chargeContactTel"
+                       [validation-rule]="{'phone':{'alertText':'号码格式错误'}}">
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">组成单位</label>
+                <input pInputText [(ngModel)]="detailData.unit" [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </perfect-scrollbar>
+</div>
+

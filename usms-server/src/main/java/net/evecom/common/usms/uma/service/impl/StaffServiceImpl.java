@@ -5,6 +5,8 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.StaffEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
@@ -24,7 +26,8 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class StaffServiceImpl implements StaffService {
+public class StaffServiceImpl extends BaseServiceImpl<StaffEntity, Long>
+        implements StaffService {
 
     /**
      * 注入StaffDao
@@ -33,15 +36,16 @@ public class StaffServiceImpl implements StaffService {
     private StaffDao staffDao;
 
     @Override
-    public StaffEntity findOne(Long id) {
-        return staffDao.findOne(id);
+    public BaseDao<StaffEntity, Long> getBaseDao() {
+        return staffDao;
     }
 
     /**
      * 描述
      * 查询网格员列表
-     * @return
+     *
      * @param officalPost
+     * @return
      */
     @Override
     public List<UserEntity> findUsersByOfficalPost(String officalPost) {

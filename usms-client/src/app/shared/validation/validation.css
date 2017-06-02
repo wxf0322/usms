@@ -1,0 +1,67 @@
+.validation-tip {
+  position: absolute;
+  display: none;
+  padding: .25em .5em;
+}
+
+.validation-tip.validation-tip-right,
+.validation-tip.validation-tip-left {
+  padding: 0 .25em;
+}
+
+.validation-tip.validation-tip-top,
+.validation-tip.validation-tip-bottom {
+  padding: .25em 0;
+}
+
+.validation-tip .validation-tip-text {
+  padding: .125em .5em;
+  background-color: #2d353c;
+  color: #ffffff;
+  white-space: nowrap;
+  border-radius: 0.25em;
+}
+
+.validation-tip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.validation-tip-right .validation-tip-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -.25em;
+  border-width: .25em .25em .25em 0;
+  border-right-color: #2d353c;
+}
+
+.validation-tip-left .validation-tip-arrow {
+  top: 50%;
+  right: 0;
+  margin-top: -.25em;
+  border-width: .25em 0 .25em .25em;
+  border-left-color: #2d353c;
+}
+
+.validation-tip.validation-tip-top {
+  padding: .25em 0;
+}
+
+.validation-tip-top .validation-tip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -.25em;
+  border-width: .25em .25em 0;
+  border-top-color: #2d353c;
+}
+
+.validation-tip-bottom .validation-tip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -.25em;
+  border-width: 0 .25em .25em;
+  border-bottom-color: #2d353c;
+}

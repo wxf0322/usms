@@ -88,6 +88,8 @@
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value strategy="SEQUENCE" generator="StaffEntitySequenceGenerator"/>
+                <sequence-generator name="StaffEntitySequenceGenerator" sequence-name="USMS_STAFFS_SEQ" allocation-size="1"/>
             </id>
         </attributes>
     </entity>

@@ -5,8 +5,11 @@
  */
 package net.evecom.common.usms.uma.dao;
 
+import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.OperationModel;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
  * @version 1.0
  * @created 2017-5-8 17:26
  */
-public interface PrivilegeDao {
+public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
 
     /**
      * 根据app名字获取权限列表
@@ -45,4 +48,22 @@ public interface PrivilegeDao {
      * @return
      */
     List<UserEntity> getUsersByPrivName(String privName);
+
+    /**
+     * 查询权限列表
+     */
+    Page<PrivilegeEntity> findByPage(int page, int size);
+
+
+    /**
+     * 根据权限ID，更新对应操作的关系
+     */
+    void updateOperations(Long privilegeId,String[] operationIds);
+
+
+    /**
+     * 查找权限ID对应的操作列表
+     */
+    List<OperationModel> findOperationsByPrivId(Long privilegeId);
+
 }

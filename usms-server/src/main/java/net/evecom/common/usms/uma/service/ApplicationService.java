@@ -6,8 +6,10 @@
 package net.evecom.common.usms.uma.service;
 
 
+import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,24 +20,48 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/24 15:37
  */
-public interface ApplicationService {
+public interface ApplicationService extends BaseService<ApplicationEntity, Long> {
 
+    /**
+     * 查询应用列表
+     */
+    Page<ApplicationEntity> findByPage(int page, int size);
+
+    /**
+     * 创建应用
+     *
+     * @param application
+     * @return
+     */
     ApplicationEntity createApplication(ApplicationEntity application);
 
+    /**
+     * 更新应用
+     *
+     * @param application
+     * @return
+     */
     ApplicationEntity updateApplication(ApplicationEntity application);
 
-    void deleteApplication(Long id);
-
-    ApplicationEntity findOne(Long id);
-
-    List<ApplicationEntity> findAll();
-
+    /**
+     * 根据ClientId查询单个
+     *
+     * @param clientId
+     * @return
+     */
     ApplicationEntity findByClientId(String clientId);
 
+    /**
+     * 根据ClientSecret查询单个
+     *
+     * @param clientSecret
+     * @return
+     */
     ApplicationEntity findByClientSecret(String clientSecret);
 
     /**
      * 根据应用编码查询用户列表
+     *
      * @param appName
      * @return
      */

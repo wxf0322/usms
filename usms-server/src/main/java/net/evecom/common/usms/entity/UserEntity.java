@@ -7,6 +7,7 @@ package net.evecom.common.usms.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 描述
@@ -18,17 +19,11 @@ import java.util.Date;
 @Entity
 @Table(name = "USMS_USERS")
 @NamedQueries({
-        @NamedQuery(name = UserEntity.QUERY_ALL, query = "select u from UserEntity u"),
         @NamedQuery(name = UserEntity.QUERY_BY_LOGIN_NAME,
                 query = "select u from UserEntity u where u.loginName = :"
                         + UserEntity.PARAM_LOGIN_NAME),
 })
 public class UserEntity {
-
-    /**
-     * 查找全部
-     */
-    public static final String QUERY_ALL = "UserEntity.findAll";
 
     /**
      * 根据登入名查找
@@ -42,7 +37,7 @@ public class UserEntity {
     /**
      * 用户ID
      */
-    private long id;
+    private Long id;
     /**
      * 登录名
      */
@@ -60,10 +55,13 @@ public class UserEntity {
      */
     private String name;
     /**
+     * 用户编号
+     */
+    private String userNo;
+    /**
      * 可用状态(1;正常 0:冻结)
      */
     private long enabled;
-
     /**
      * 员工实体类
      */
@@ -71,7 +69,7 @@ public class UserEntity {
     /**
      * 备注说明
      */
-    private String ramarks;
+    private String remarks;
     /**
      * 最后修改密码日期
      */
@@ -101,13 +99,20 @@ public class UserEntity {
      */
     private String creator;
 
+
+    /**
+     * 该用户所属组织机构信息
+     */
+    private List<InstitutionEntity> institutions;
+
+
     @Id
     @Column(name = "ID")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -152,6 +157,16 @@ public class UserEntity {
     }
 
     @Basic
+    @Column(name = "USER_NO")
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
+
+    @Basic
     @Column(name = "ENABLED")
     public long getEnabled() {
         return enabled;
@@ -172,13 +187,13 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "RAMARKS")
-    public String getRamarks() {
-        return ramarks;
+    @Column(name = "REMARKS")
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setRamarks(String ramarks) {
-        this.ramarks = ramarks;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     @Basic
@@ -256,6 +271,19 @@ public class UserEntity {
         return loginName + salt;
     }
 
+
+    @JoinTable(name = "USMS_USER_INSTITUTION",
+            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "INSTITUTION_ID", referencedColumnName = "ID"))
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    public List<InstitutionEntity> getInstitutions() {
+        return institutions;
+    }
+
+    public void setInstitutions(List<InstitutionEntity> institutions) {
+        this.institutions = institutions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -269,8 +297,7 @@ public class UserEntity {
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (salt != null ? !salt.equals(that.salt) : that.salt != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        //if (staffId != null ? !staffId.equals(that.staffId) : that.staffId != null) return false;
-        if (ramarks != null ? !ramarks.equals(that.ramarks) : that.ramarks != null) return false;
+        if (remarks != null ? !remarks.equals(that.remarks) : that.remarks != null) return false;
         if (pwdModified != null ? !pwdModified.equals(that.pwdModified) : that.pwdModified != null) return false;
         if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
         if (modifierId != null ? !modifierId.equals(that.modifierId) : that.modifierId != null) return false;
@@ -278,7 +305,6 @@ public class UserEntity {
         if (timeCreated != null ? !timeCreated.equals(that.timeCreated) : that.timeCreated != null) return false;
         if (creatorId != null ? !creatorId.equals(that.creatorId) : that.creatorId != null) return false;
         if (creator != null ? !creator.equals(that.creator) : that.creator != null) return false;
-
         return true;
     }
 
@@ -290,8 +316,7 @@ public class UserEntity {
         result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (int) (enabled ^ (enabled >>> 32));
-        //result = 31 * result + (staffId != null ? staffId.hashCode() : 0);
-        result = 31 * result + (ramarks != null ? ramarks.hashCode() : 0);
+        result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
         result = 31 * result + (pwdModified != null ? pwdModified.hashCode() : 0);
         result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
         result = 31 * result + (modifierId != null ? modifierId.hashCode() : 0);
@@ -300,5 +325,29 @@ public class UserEntity {
         result = 31 * result + (creatorId != null ? creatorId.hashCode() : 0);
         result = 31 * result + (creator != null ? creator.hashCode() : 0);
         return result;
+    }
+
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", loginName='" + loginName + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", name='" + name + '\'' +
+                ", userNo='" + userNo + '\'' +
+                ", enabled=" + enabled +
+                ", staffEntity=" + staffEntity +
+                ", remarks='" + remarks + '\'' +
+                ", pwdModified=" + pwdModified +
+                ", lastModified=" + lastModified +
+                ", modifierId=" + modifierId +
+                ", modifier='" + modifier + '\'' +
+                ", timeCreated=" + timeCreated +
+                ", creatorId=" + creatorId +
+                ", creator='" + creator + '\'' +
+                ", institutions=" + institutions +
+                '}';
     }
 }

@@ -1,0 +1,42 @@
+/*********** 网页头部样式 ************/
+.eve-hd-bar {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  color: #fff;
+  background-color: #2DC3E8;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.eve-hd-bar .eve-hd-left {
+  width: 200px;
+  text-align: center;
+  float: left;
+}
+
+.eve-hd-bar .eve-hd-left .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.eve-hd-bar .eve-hd-right {
+  padding: 0 20px;
+}
+
+.nav-items li {
+  float: left;
+  font-size: 14px;
+}
+
+.nav-items li a {
+  display: block;
+  padding: 0 16px;
+  line-height: 50px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-items li a.active,
+.nav-items li a:hover {
+  background: #02aed9;
+}

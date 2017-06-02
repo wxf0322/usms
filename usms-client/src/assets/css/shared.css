@@ -1,0 +1,31 @@
+/**
+ * 通用共享样式
+ */
+
+/************** 浮动 ****************/
+.e-left {
+	float: left!important;
+}
+.e-right {
+	float: right!important;
+}
+
+/************** 按钮 ****************/
+/*a标签按钮*/
+.a-button {
+  cursor: pointer;
+  color: blueviolet;
+}
+/*按钮组区域*/
+.button-group {
+  padding-top: 8px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+}
+
+.validation{
+  float: right!important;
+  color: red;
+  font-size: inherit;
+  margin: 5px 120px 0 0;
+}

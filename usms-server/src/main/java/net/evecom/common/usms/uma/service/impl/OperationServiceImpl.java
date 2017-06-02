@@ -5,6 +5,8 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,7 +24,8 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class OperationServiceImpl implements OperationService {
+public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
+        implements OperationService {
 
     /**
      * OperationDao的注入
@@ -31,14 +33,19 @@ public class OperationServiceImpl implements OperationService {
     @Autowired
     private OperationDao operationDao;
 
+    @Override
+    public BaseDao<OperationEntity, Long> getBaseDao() {
+        return operationDao;
+    }
+
     /**
      * 获取应用操作列表
-     * @param application
+     * @param appName
      * @return
      */
     @Override
-    public List<OperationEntity> getOperationsByAppName(String application) {
-        return operationDao.getOperationsByAppName(application);
+    public List<OperationEntity> getOperationsByAppName(String appName) {
+        return operationDao.getOperationsByAppName(appName);
     }
 
     /**

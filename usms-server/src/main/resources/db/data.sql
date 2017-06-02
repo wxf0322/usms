@@ -44,5 +44,3 @@ VALUES (usms_institutions_seq.nextval, '指挥中心', 'zhzx', 1, 0, 1);
 INSERT INTO usms_institutions (id, label, name, tree_level, parent_id, manual_sn)
 VALUES (usms_institutions_seq.nextval, '调度中心', 'ddzx', 1, 0, 1);
 
-INSERT INTO USMS_STAFF_INSTITUTION (staff_id, institution_id) VALUES (2, 2);
-INSERT INTO USMS_STAFF_INSTITUTION (staff_id, institution_id) VALUES (2, 3);

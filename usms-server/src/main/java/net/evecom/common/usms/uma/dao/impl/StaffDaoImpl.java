@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
+import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.entity.StaffEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
@@ -23,19 +24,14 @@ import java.util.List;
  * @created 2017/4/26 10:21
  */
 @Repository
-public class StaffDaoImpl implements StaffDao {
+public class StaffDaoImpl extends BaseDaoImpl<StaffEntity, Long>
+        implements StaffDao {
 
     /**
      * 注入实体管理器
      */
     @PersistenceContext
     private EntityManager manager;
-
-    @Override
-    public StaffEntity findOne(Long id) {
-        if (id == null) return null;
-        return manager.find(StaffEntity.class, id);
-    }
 
     /**
      * 描述
@@ -54,4 +50,5 @@ public class StaffDaoImpl implements StaffDao {
         query.setParameter("officalPost", officalPost);
         return query.getResultList();
     }
+
 }

@@ -5,17 +5,18 @@
  */
 package net.evecom.common.usms.uma.controller;
 
+import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.UserModel;
 import net.evecom.common.usms.uma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * 描述 user控制器
@@ -27,77 +28,73 @@ import java.util.Date;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     /**
-     * 注入服务
+     * 注入UserService
      */
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String list(Model model) {
-        model.addAttribute("userList", userService.findAll());
-        return "user/list";
+    @ResponseBody
+    @RequestMapping(value = "list")
+    public Page<UserModel> list(Integer page, Integer size) {
+        return userService.findModelsByPage(page, size);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String showCreateForm(Model model) {
-        model.addAttribute("user", new UserEntity());
-        model.addAttribute("op", "新增");
-        return "user/edit";
+    @ResponseBody
+    @RequestMapping(value = "delete")
+    public ResultStatus delete(String columns) {
+        String[] ids = columns.split(",");
+        for (String id : ids) {
+            userService.delete(Long.valueOf(id));
+        }
+        return new ResultStatus(true, "");
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(UserEntity user, RedirectAttributes redirectAttributes) {
-        user.setTimeCreated(new Date());
-        user.setEnabled(1L); // 设置用户为启用状态
-        userService.createUser(user);
-        redirectAttributes.addFlashAttribute("msg", "新增成功");
-        return "redirect:/user";
+    @ResponseBody
+    @RequestMapping(value = "find")
+    public UserModel findOne(Long id) {
+        UserEntity user = userService.findOne(id);
+        UserModel userModel = new UserModel(user);
+        return userModel;
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
-        model.addAttribute("op", "修改");
-        return "user/edit";
+    @ResponseBody
+    @RequestMapping(value = "saveOrUpdate")
+    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel) {
+        if (userModel.getId() == null) {
+            userService.createUser(userModel);
+        } else {
+            userService.updateUser(userModel);
+        }
+        return new ResultStatus(true, "");
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public String update(UserEntity user, RedirectAttributes redirectAttributes) {
-        user.setTimeCreated(new Date());
-        userService.updateUser(user);
-        redirectAttributes.addFlashAttribute("msg", "修改成功");
-        return "redirect:/user";
-    }
-
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public String showDeleteForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
-        model.addAttribute("op", "删除");
-        return "user/edit";
-    }
-
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        userService.deleteUser(id);
-        redirectAttributes.addFlashAttribute("msg", "删除成功");
-        return "redirect:/user";
-    }
-
-    @RequestMapping(value = "/{id}/changePassword", method = RequestMethod.GET)
-    public String showChangePasswordForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
-        model.addAttribute("op", "修改密码");
-        return "user/changePassword";
-    }
-
-    @RequestMapping(value = "/{id}/changePassword", method = RequestMethod.POST)
-    public String changePassword(@PathVariable("id") Long id,
-                                 String newPassword,
-                                 RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    @RequestMapping(value = "password/reset", method = RequestMethod.POST)
+    public ResultStatus resetPassword(Long id) {
+        String newPassword = "123456";
         userService.changePassword(id, newPassword);
-        redirectAttributes.addFlashAttribute("msg", "修改密码成功");
-        return "redirect:/user";
+        return new ResultStatus(true, "");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "institutions/update")
+    public ResultStatus updateInstitutions(Long userId, String institutionIds) {
+        String[] institutionIdArray;
+        if (StringUtils.isEmpty(institutionIds)) {
+            institutionIdArray = null;
+        } else {
+            institutionIdArray = institutionIds.split(",");
+        }
+        userService.updateInstitutions(userId, institutionIdArray);
+        return new ResultStatus(true, "");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "institutions")
+    public List<InstitutionEntity> findInstByUserId(Long userId) {
+        return userService.findInstByUserId(userId);
     }
 
 }

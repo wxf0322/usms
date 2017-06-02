@@ -103,10 +103,9 @@ public class OAuth2Filter implements Filter {
      * @throws IOException
      */
     private boolean checkAccessToken(HttpServletRequest request, String accessToken) throws IOException {
-        String checkAccessCodeUrl = WebUtil.getBasePath(request) + "checkAccessToken?accessToken=";
+        String checkAccessCodeUrl = WebUtil.getBasePath(request) + "checkAccessToken?access_token=";
         URL url = new URL(checkAccessCodeUrl + accessToken);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
         conn.disconnect();
         return HttpServletResponse.SC_OK == conn.getResponseCode();
     }

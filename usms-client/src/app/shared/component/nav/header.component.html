@@ -1,0 +1,23 @@
+<header class="eve-hd-bar">
+  <div class="eve-hd-left">
+    <div class="logo">
+      <img class="logo-image"> 统一用户管理系统
+    </div>
+  </div>
+  <div class="eve-hd-right">
+    <ul class="nav-items">
+      <li>
+        <a href="#" routerLink="/nine-busi" class="fa fa-cubes" routerLinkActive="active"> 综治组织管理</a>
+      </li>
+      <li>
+        <a href="#" routerLink="/usms" class="fa fa-cubes" routerLinkActive="active"> 统一用户管理</a>
+      </li>
+      <li class="e-right">
+        <a (click)="show()">admin</a>
+        <div id="dropMenu" style="display: none;position:absolute;z-index:1000;line-height:20px;">
+          <p-listbox [options]="items"></p-listbox>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>

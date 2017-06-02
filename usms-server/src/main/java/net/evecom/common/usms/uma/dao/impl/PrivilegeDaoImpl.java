@@ -5,23 +5,33 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
+import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
+import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
+ * 权限管理Dao实现类
+ *
  * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 17:26
  */
 @Repository
-public class PrivilegeDaoImpl implements PrivilegeDao {
+public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
+        implements PrivilegeDao {
     /**
      * 注入实体管理器
      */
@@ -118,4 +128,61 @@ public class PrivilegeDaoImpl implements PrivilegeDao {
         query.setParameter("name", privName);
         return query.getResultList();
     }
+
+    /**
+     * 查找权限列表
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @Override
+    public Page<PrivilegeEntity> findByPage(int page, int size) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_privileges");
+        String sql = sb.toString();
+        return super.queryByPage(sql, null, page, size);
+    }
+
+    @Override
+    public void updateOperations(Long privilegeId, String[] operationIds) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("delete from usms_privilege_operation where priv_id =:privilegeId");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("privilegeId", privilegeId);
+        query.executeUpdate();
+        if (operationIds != null) {
+            for (String id : operationIds) {
+                Long operationId = Long.valueOf(id);
+                sql = "insert into usms_privilege_operation values(:privilegeId,:operationId)";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("privilegeId", privilegeId);
+                query.setParameter("operationId", operationId);
+                query.executeUpdate();
+            }
+        }
+    }
+
+    @Override
+    public List<OperationModel> findOperationsByPrivId(Long privilegeId) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_operations where id in(\n")
+                .append(" select oper_id from usms_privilege_operation t\n")
+                .append("where priv_id=?) and enabled=1");
+        String sql = sb.toString();
+        List<Map<String, Object>> rows = super.queryMap(sql, new Object[]{privilegeId});
+        List<OperationModel> result = new ArrayList<>();
+        for (Map<String, Object> row : rows) {
+            try {
+                Map<String, Object> camelMap = MapUtil.toCamelCaseMap(row);
+                OperationModel operation = MapUtil.toObject(OperationModel.class ,camelMap);
+                result.add(operation);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException  e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
 }

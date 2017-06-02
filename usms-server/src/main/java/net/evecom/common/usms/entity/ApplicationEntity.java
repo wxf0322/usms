@@ -17,7 +17,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "USMS_APPLICATIONS")
 @NamedQueries({
-        @NamedQuery(name = ApplicationEntity.QUERY_ALL, query = "select a from ApplicationEntity a"),
         @NamedQuery(name = ApplicationEntity.QUERY_BY_CLIENT_ID,
                 query = "select a from ApplicationEntity a where a.clientId = :"
                         + ApplicationEntity.PARAM_CLIENT_ID),
@@ -38,11 +37,6 @@ public class ApplicationEntity {
     public static final String PARAM_CLIENT_SECRET = "clientSecret";
 
     /**
-     * 查找全部
-     */
-    public static final String QUERY_ALL = "ApplicationEntity.findAll";
-
-    /**
      * 根据Client查找对象
      */
     public static final String QUERY_BY_CLIENT_ID = "ApplicationEntity.getByClientId";
@@ -55,7 +49,7 @@ public class ApplicationEntity {
     /**
      *标识
      */
-    private long id;
+    private Long id;
 
     /**
      *唯一标识码
@@ -109,11 +103,11 @@ public class ApplicationEntity {
 
     @Id
     @Column(name = "ID")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

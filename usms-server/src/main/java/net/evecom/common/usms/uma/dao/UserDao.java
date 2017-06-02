@@ -5,12 +5,13 @@
  */
 package net.evecom.common.usms.uma.dao;
 
-import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.entity.*;
+import net.evecom.common.usms.model.UserModel;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述 UserDao
@@ -19,23 +20,27 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/24 15:46
  */
-public interface UserDao {
+public interface UserDao extends BaseDao<UserEntity, Long> {
 
-    UserEntity createUser(UserEntity user);
-
-    UserEntity updateUser(UserEntity user);
-
-    void deleteUser(Long id);
-
-    UserEntity findOne(Long id);
-
-    List<UserEntity> findAll();
+    /**
+     * @param page 当前页码
+     * @param size 页面数据量
+     * @return
+     */
+    Page<UserModel> findModelsByPage(int page, int size);
 
     UserEntity findByLoginName(String loginName);
+
+    List<RoleEntity> findRolesById(Long id);
 
     List<OperationEntity> findOperationsById(Long id);
 
     List<ApplicationEntity> findApplicationsById(Long id);
 
     List<GridEntity> findGridsByLoginName(String loginName);
+
+    void updateInstitutions(Long userId,String[] institutionIds);
+
+    List<InstitutionEntity> findInstByUserId(Long userId);
+
 }

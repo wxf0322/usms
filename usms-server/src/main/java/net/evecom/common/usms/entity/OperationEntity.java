@@ -16,14 +16,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USMS_OPERATIONS")
-
 public class OperationEntity {
-
 
     /**
      * 操作id
      */
-    private long id;
+    private Long id;
     /**
      * 操作名称中文
      */
@@ -67,15 +65,15 @@ public class OperationEntity {
     /**
      * 应用ID
      */
-    private long applicationId;
+    private Long applicationId;
 
     @Id
     @Column(name = "ID")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -181,11 +179,11 @@ public class OperationEntity {
 
     @Basic
     @Column(name = "APPLICATION_ID")
-    public long getApplicationId() {
+    public Long getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(long applicationId) {
+    public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
     }
 

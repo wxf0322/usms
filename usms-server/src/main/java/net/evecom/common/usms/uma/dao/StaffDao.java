@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.dao;
 
+import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.StaffEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -17,15 +18,14 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/26 9:59
  */
-public interface StaffDao {
-
-    StaffEntity findOne(Long id);
+public interface StaffDao extends BaseDao<StaffEntity, Long> {
 
     /**
      * 描述
      * 查询网格员列表
-     * @return
+     *
      * @param officalPost
+     * @return
      */
     List<UserEntity> findUsersByOfficalPost(String officalPost);
 

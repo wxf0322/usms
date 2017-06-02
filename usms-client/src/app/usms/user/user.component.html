@@ -1,0 +1,54 @@
+<div class="ui-g-3">
+  <p-panel header="组织机构树">
+    <p-tree [value]="tree"></p-tree>
+  </p-panel>
+</div>
+<div class="ui-g-9">
+  <div class="toolkit">
+    <ul>
+      <li class="toolkit-item e-left">
+        <button pButton type="button" icon="fa-plus" label="新增" (click)="gotoDetail('add',null)"></button>
+        <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
+      </li>
+      <li class="toolkit-item e-right">
+        <input type="text" pInputText placeholder="关键字">
+        <button pButton type="button" icon="fa-search" label="查询"></button>
+        <button pButton type="button" icon="fa-refresh" label="重置"></button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="ui-g content-right">
+    <perfect-scrollbar>
+      <div class="ui-g-12">
+        <p-dataTable [value]="viewData" [(selection)]="selectedData">
+          <p-column  [style]="{'width':'60px'}">
+            <ng-template  let-ri="rowIndex" pTemplate="body">
+              <span>{{index[ri]}}</span>
+            </ng-template>
+          </p-column>
+          <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+          <p-column field="loginName" header="账号"></p-column>
+          <p-column field="name" header="用户姓名"></p-column>
+          <p-column field="mobile" header="手机号码" [style]="{'width':'14%'}"></p-column>
+         <!--
+         <p-column field="roles" header="角色"></p-column>
+          -->
+          <p-column field="enabled" header="状态">
+            <ng-template let-user="rowData" pTemplate="body">{{user.enabled | enabledPipe}}</ng-template>
+          </p-column>
+          <p-column [style]="{'width':'28%'}" header="操作">
+            <ng-template let-user="rowData" pTemplate="body">
+              <button type="button" pButton icon="fa-edit" label="编辑" (click)="gotoDetail('edit',user.id)"></button>
+              <button type="button" pButton icon="fa-refresh" label="重置密码" (click)="resetPassword(user.id)"></button>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+        <eve-paginator [rows]="page.size" [totalRecords]="page.totalElements"
+                       [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
+                       (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
+      </div>
+    </perfect-scrollbar>
+  </div>
+</div>
+

@@ -1,0 +1,70 @@
+<div class="ui-g-4">
+  <p-panel header="组织机构树">
+    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
+            (onNodeSelect)="nodeSelect($event)">
+      <ng-template let-node pTemplate="default">
+          <span (mouseenter)="node['enter']=true" (mouseleave)="node['enter']=false">
+            <span>{{node.label}}</span>
+              <span *ngIf="node['enter']">
+                <a class="fa fa-plus a-button" (click)="addTreeNode('add',node.data.id)"></a>
+                <a class="fa fa-trash a-button" (click)="deleteTreeNode(node)"></a>
+                <a class="fa fa-edit a-button" (click)="gotoDetail('edit',node.data.id)"></a>
+              </span>
+          </span>
+      </ng-template>
+    </p-tree>
+  </p-panel>
+</div>
+
+<div class="ui-g-8">
+  <div class="detail-layout">
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <h3 class="legend">组织机构信息</h3>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">中文名称</label>
+        <span>{{detailData.label}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">英文编码</label>
+        <span>{{detailData.name}}</span>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">类型</label>
+        <span>{{detailData.type}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">行政区划</label>
+        <span>{{detailData.adminDivision}}</span>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">行政区划代码</label>
+        <span>{{detailData.adminDivisionCode}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">状态</label>
+        <span>{{detailData.enabled | enabledPipe}}</span>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">社会信用代码</label>
+        <span>{{detailData.socialCreditUnicode}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">组织机构代码</label>
+        <span>{{detailData.orgCode}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+

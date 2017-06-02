@@ -33,11 +33,11 @@ public class GridServiceImpl implements GridService {
     /**
      * 根据管辖区域编码查询用户列表
      *
-     * @param gridName
+     * @param gridCode
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByGridName(String gridName) {
-        return gridDao.getUsersByGridName(gridName);
+    public List<UserEntity> getUsersByGridCode(String gridCode) {
+        return gridDao.getUsersByGridCode(gridCode);
     }
 }

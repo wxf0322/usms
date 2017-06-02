@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.service;
 
+import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.StaffEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -17,9 +18,8 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/26 10:31
  */
-public interface StaffService {
+public interface StaffService extends BaseService<StaffEntity, Long> {
 
-    StaffEntity findOne(Long id);
     /**
      * 描述
      * 查询网格员列表

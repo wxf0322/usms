@@ -5,16 +5,20 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.uma.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Pisces Lu
@@ -23,7 +27,8 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class RoleServiceImpl  implements RoleService{
+public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
+        implements RoleService {
 
     /**
      * roleDao的注入
@@ -31,10 +36,26 @@ public class RoleServiceImpl  implements RoleService{
     @Autowired
     private RoleDao roleDao;
 
+    @Override
+    public BaseDao<RoleEntity, Long> getBaseDao() {
+        return roleDao;
+    }
+
+    /**
+     * 查找所有角色列表
+     *
+     * @return
+     */
+    @Override
+    public Page<RoleEntity> findByPage(int page, int size) {
+        return roleDao.findByPage(page, size);
+    }
+
     /**
      * 根据用户ID来查找角色列表
-     * @return
+     *
      * @param userID
+     * @return
      */
     @Override
     public List<RoleEntity> findRolesByUserId(long userID) {
@@ -43,22 +64,80 @@ public class RoleServiceImpl  implements RoleService{
 
     /**
      * 判断是否拥有该角色
+     *
+     * @param userID
+     * @param roleName
      * @return
-     * @param userID,roleName
      */
     @Override
     public boolean hasRole(long userID, String roleName) {
-        return roleDao.hasRole(userID,roleName);
+        return roleDao.hasRole(userID, roleName);
     }
 
     /**
      * 根据角色编码查询用户列表
+     *
      * @param roleName
      * @return
      */
     @Override
     public List<UserEntity> getUsersByRoleName(String roleName) {
         return roleDao.getUsersByRoleName(roleName);
+    }
+
+
+    @Override
+    public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
+        return roleDao.getSelectedPrivileges(roleId);
+    }
+
+    @Override
+    public List<PrivilegeEntity> getUnselectedPrivileges(Long roleId) {
+        return roleDao.getUnselectedPrivileges(roleId);
+    }
+
+    @Override
+    public void updatePrivileges(Long roleId, String[] privileges) {
+        roleDao.updatePrivileges(roleId, privileges);
+    }
+
+    /**
+     * 根据角色id查找用户列表
+     */
+    public List<UserEntity> findUsersByRoleId(int roleId) {
+        return roleDao.findUsersByRoleId(roleId);
+    }
+
+    /**
+     * 根据角色ID查找已选用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    public List<Map<String, Object>> getSelectedUsers(Long roleId) {
+        return roleDao.getSelectedUsers(roleId);
+    }
+
+    /**
+     * 根据角色ID查找未选用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
+        return roleDao.getUnselectedUsers(roleId);
+    }
+
+    /**
+     * 更新用户列表
+     *
+     * @param roleId
+     * @param users
+     */
+    @Override
+    public void updateUsers(Long roleId, String[] users) {
+        roleDao.updateUsers(roleId, users);
     }
 
 }

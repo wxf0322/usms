@@ -14,13 +14,13 @@
     <bean id="userService" class="net.evecom.common.usms.uma.service.impl.UserServiceImpl"></bean>
 
     <!-- 自定义范围 -->
-    <bean id="realmService" class="net.evecom.common.usms.oauth2.shiro.UserRealm">
+    <bean id="userRealm" class="net.evecom.common.usms.oauth2.shiro.UserRealm">
         <property name="userService" ref="userService"></property>
     </bean>
 
     <!-- Shiro安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="realmService"></property>
+        <property name="realm" ref="userRealm"></property>
         <property name="cacheManager" ref="cacheManager"></property>
         <property name="sessionManager" ref="sessionManager"></property>
     </bean>

@@ -5,18 +5,22 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.entity.*;
+import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.uma.dao.StaffDao;
 import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述 用户Service实现
@@ -27,7 +31,8 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
+        implements UserService {
 
     /**
      * 注入UserDao
@@ -35,27 +40,37 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private StaffDao staffDao;
+
     /**
      * 注入密码工具类
      */
     @Autowired
     private PasswordHelper passwordHelper;
 
+
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public BaseDao<UserEntity, Long> getBaseDao() {
+        return userDao;
+    }
+
+    @Override
+    public UserEntity createUser(UserModel userModel) {
+        UserEntity userEntity = new UserEntity();
+        userEntity = userModel.mergeUserEntity(userEntity);
+        userEntity.setPassword("123456");
+        userEntity.setTimeCreated(new Date());
         //加密密码
-        passwordHelper.encryptPassword(user);
-        return userDao.createUser(user);
+        passwordHelper.encryptPassword(userEntity);
+        return userDao.saveOrUpdate(userEntity);
     }
 
     @Override
-    public UserEntity updateUser(UserEntity user) {
-        return userDao.updateUser(user);
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        userDao.deleteUser(id);
+    public UserEntity updateUser(UserModel userModel) {
+        UserEntity found = userDao.findOne(userModel.getId());
+        found = userModel.mergeUserEntity(found);
+        return userDao.saveOrUpdate(found);
     }
 
     /**
@@ -64,21 +79,17 @@ public class UserServiceImpl implements UserService {
      * @param id
      * @param newPassword
      */
+    @Override
     public void changePassword(Long id, String newPassword) {
         UserEntity user = userDao.findOne(id);
         user.setPassword(newPassword);
         passwordHelper.encryptPassword(user);
-        userDao.updateUser(user);
+        userDao.saveOrUpdate(user);
     }
 
     @Override
-    public UserEntity findOne(Long id) {
-        return userDao.findOne(id);
-    }
-
-    @Override
-    public List<UserEntity> findAll() {
-        return userDao.findAll();
+    public Page<UserModel> findModelsByPage(int page, int size) {
+        return userDao.findModelsByPage(page, size);
     }
 
     /**
@@ -131,6 +142,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<GridEntity> findGridsByLoginName(String loginName) {
         return userDao.findGridsByLoginName(loginName);
+    }
+
+    @Override
+    public void updateInstitutions(Long userId, String[] institutionIds) {
+        userDao.updateInstitutions(userId,institutionIds);
+    }
+
+    @Override
+    public List<InstitutionEntity> findInstByUserId(Long userId) {
+        return userDao.findInstByUserId(userId);
     }
 
 }

@@ -1,0 +1,54 @@
+<div class="toolkit">
+  <ul>
+    <li class="toolkit-item">
+      <p-dropdown [options]="orgTypes" [(ngModel)]="filter.compOrgType"></p-dropdown>
+    </li>
+    <li class="toolkit-item">
+      <input type="text" [(ngModel)]="filter.orgName" pInputText placeholder="机构名称"  (keyup.enter)="search()">
+      <a class="search-btn fa fa-search" (click)="search()" eve-keyUp ></a>
+      <a class="fa fa-refresh" (click)="reset()"></a>
+
+      <a id="advancedQuery" class="a-button" (click)="togglePanel()">高级查询</a>
+      <div (click)="selfClickEvent()" class="drop-panel" *ngIf="isDropPanelShow">
+        <ul>
+          <li><label>机构状态：</label>
+            <p-radioButton name="compOrgStatus" value="1" label="有效" [(ngModel)]="filter.compOrgStatus"></p-radioButton>
+            <p-radioButton name="compOrgStatus" value="0" label="失效" [(ngModel)]="filter.compOrgStatus"></p-radioButton>
+          </li>
+        </ul>
+        <div class="button-group">
+          <button (click)="reset()" pButton type="button" class="ui-button-secondary" label="重置"></button>
+          <button (click)="search()" pButton type="button" label="查询"></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="toolkit-item e-right">
+      <p-splitButton label="新增" icon="fa-plus" (onClick)="gotoDetail('add',null)" [model]="btnItems"></p-splitButton>
+    </li>
+  </ul>
+</div>
+
+<div class="ui-g content">
+  <perfect-scrollbar>
+    <div class="ui-g-12" [ngBusy]="httpService.loading">
+      <p-dataTable [value]="viewData" [contextMenu]="cm"
+                   scrollable="true" scrollHeight="200px"
+                   [(selection)]="selectedData" dataKey="orgId"
+                   (onRowDblclick)="getDetailEvent($event)">
+        <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+        <p-column header="序号" [style]="{'width':'70px'}" styleClass="base-col index-col">
+          <ng-template let-col let-ri="rowIndex" pTemplate="body">
+            <span>{{index[ri]}}</span>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'40%'}" field="orgName" header="机构名称"></p-column>
+        <p-column field="compOrgType" header="机构类型"></p-column>
+        <p-column field="compOrgStatus" header="机构状态"></p-column>
+      </p-dataTable>
+      <eve-paginator [rows]="page.size" [totalRecords]="page.totalElements"
+                   [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
+                     (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)" ></eve-paginator>
+    </div>
+  </perfect-scrollbar>
+</div>

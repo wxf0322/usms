@@ -1,0 +1,81 @@
+<div class="ui-g-4">
+  <p-panel header="网格信息">
+    <p-dropdown [style]="{'width':'100%'}" [options]="cities" [(ngModel)]="selectedCity"></p-dropdown>
+    <br><br>
+    <p-tree [value]="filesTree"></p-tree>
+  </p-panel>
+</div>
+
+<div class="ui-g-8">
+  <div class="detail-layout">
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <h3 class="legend">网格信息</h3>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">网格编码</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">网格名称</label>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">类型编码</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">网格图片</label>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">值班电话</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">网格员数量</label>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">网格户数</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">网格面积</label>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">隶属行政区划</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">行政区划编码</label>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">状态</label>
+        <p></p>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">描述</label>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>

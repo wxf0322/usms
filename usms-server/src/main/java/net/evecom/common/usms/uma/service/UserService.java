@@ -5,10 +5,10 @@
  */
 package net.evecom.common.usms.uma.service;
 
-import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.core.service.BaseService;
+import net.evecom.common.usms.entity.*;
+import net.evecom.common.usms.model.UserModel;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,28 +19,22 @@ import java.util.List;
  * @version 1.0
  * @created 2017/4/25 8:51
  */
-public interface UserService {
+public interface UserService extends BaseService<UserEntity, Long> {
     /**
      * 创建用户
      *
-     * @param user
+     * @param userModel
      */
-    UserEntity createUser(UserEntity user);
+    UserEntity createUser(UserModel userModel);
 
     /**
      * 更新用户
      *
-     * @param user
+     * @param userModel
      * @return
      */
-    UserEntity updateUser(UserEntity user);
+    UserEntity updateUser(UserModel userModel);
 
-    /**
-     * 删除用户
-     *
-     * @param id
-     */
-    void deleteUser(Long id);
 
     /**
      * 修改密码
@@ -51,19 +45,13 @@ public interface UserService {
     void changePassword(Long id, String newPassword);
 
     /**
-     * 根据id查询单个
+     * 分页查询
      *
-     * @param id
+     * @param page
+     * @param size
      * @return
      */
-    UserEntity findOne(Long id);
-
-    /**
-     * 查询全部
-     *
-     * @return
-     */
-    List<UserEntity> findAll();
+    Page<UserModel> findModelsByPage(int page, int size);
 
     /**
      * 根据登入名查找用户
@@ -75,6 +63,7 @@ public interface UserService {
 
     /**
      * 通过 Id 查找权限
+     *
      * @param id
      * @return
      */
@@ -82,6 +71,7 @@ public interface UserService {
 
     /**
      * 通过 Id 查找应用
+     *
      * @param id
      * @return
      */
@@ -98,11 +88,27 @@ public interface UserService {
      */
     boolean checkUser(String loginName, String password, String salt, String encryptpwd);
 
-
     /**
      * 根据登入名获取网格数据
+     *
      * @param loginName
      * @return
      */
     List<GridEntity> findGridsByLoginName(String loginName);
+
+
+    /**
+     * 更新用户与组织机构的关系
+     * @param userId
+     * @param institutionIds
+     */
+    void updateInstitutions(Long userId,String[] institutionIds);
+
+    /**
+     * 获取用户相关的组织机构列表
+     * @param userId
+     * @return
+     */
+    List<InstitutionEntity> findInstByUserId(Long userId);
+
 }

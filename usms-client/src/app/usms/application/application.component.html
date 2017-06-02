@@ -1,0 +1,45 @@
+<div class="toolkit">
+  <ul>
+    <li class="toolkit-item e-left">
+      <button pButton type="button" icon="fa-plus" label="新增" (click)="gotoDetail('add',null)"></button>
+      <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
+    </li>
+    <li class="toolkit-item e-right">
+      <input type="text" pInputText placeholder="关键字">
+      <button pButton type="button" icon="fa-search" label="查询"></button>
+      <button pButton type="button" icon="fa-refresh" label="刷新"></button>
+    </li>
+  </ul>
+</div>
+<div class="ui-g content">
+  <perfect-scrollbar>
+    <div class="ui-g-12">
+      <p-dataTable [value]="viewData" [(selection)]="selectedData">
+        <p-column [style]="{'width':'60px'}">
+          <ng-template let-ri="rowIndex" pTemplate="body">
+            <span>{{index[ri]}}</span>
+          </ng-template>
+        </p-column>
+        <p-column selectionMode="multiple" [style]="{'width':'38px'}"></p-column>
+        <p-column header="应用名称" field="label" [style]="{'width':'120px'}"></p-column>
+        <p-column header="应用编码" field="name"></p-column>
+        <p-column header="应用ID" field="clientId"></p-column>
+        <p-column header="应用Secret" field="clientSecret"></p-column>
+        <p-column header="状态">
+          <ng-template let-application="rowData" pTemplate="body">
+            {{application.enabled | enabledPipe}}
+          </ng-template>
+        </p-column>
+        <p-column header="操作">
+          <ng-template let-application="rowData" pTemplate="body">
+            <button type="button" pButton icon="fa-edit" label="编辑"
+                    (click)="gotoDetail('edit', application.id)"></button>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+      <eve-paginator [rows]="page.size" [totalRecords]="page.totalElements"
+                     [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
+                     (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
+    </div>
+  </perfect-scrollbar>
+</div>

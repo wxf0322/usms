@@ -1,0 +1,12 @@
+<eve-top-bar title="权限信息" (execute)="doExecute($event)"></eve-top-bar>
+
+<div class="ui-g-4">
+  <p-listbox [options]="applications" [style]="{'width':'100%'}"></p-listbox>
+</div>
+
+<div class="ui-g-8">
+  <p-panel header="应用操作树">
+    <p-tree [value]="tree"  selectionMode="checkbox" [(selection)]="selectedNodes"></p-tree>
+  </p-panel>
+</div>
+

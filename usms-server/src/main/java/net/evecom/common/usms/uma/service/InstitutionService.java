@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.service;
 
+import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @version 1.0
  * @created 2017/5/8 15:16
  */
-public interface InstitutionService {
+public interface InstitutionService extends BaseService<InstitutionEntity, Long> {
 
     /**
      * 根据登陆名获取机构列表
@@ -42,4 +43,12 @@ public interface InstitutionService {
      * @return
      */
     List<UserEntity> getUsersByInstName(String instName);
+
+
+    /**
+     * 根据组织机构类型获取组织机构列表
+     */
+    List<InstitutionEntity> getInstitutionsByType(Long type);
+
+
 }

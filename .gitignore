@@ -11,3 +11,4 @@ out
 typings
 node_modules
 usms-client/dist
+logs

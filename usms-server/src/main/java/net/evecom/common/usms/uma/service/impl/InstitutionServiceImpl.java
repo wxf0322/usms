@@ -5,6 +5,8 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
@@ -24,13 +26,19 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class InstitutionServiceImpl implements InstitutionService {
+public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, Long>
+        implements InstitutionService {
 
     /**
      * 注入InstitutionDao
      */
     @Autowired
     private InstitutionDao institutionDao;
+
+    @Override
+    public BaseDao<InstitutionEntity, Long> getBaseDao() {
+        return institutionDao;
+    }
 
     @Override
     public List<InstitutionEntity> findInstByLoginName(String loginName) {
@@ -42,7 +50,6 @@ public class InstitutionServiceImpl implements InstitutionService {
         return institutionDao.findByName(name);
     }
 
-
     /**
      * 根据组织机构编码构查询用户列表
      *
@@ -52,6 +59,11 @@ public class InstitutionServiceImpl implements InstitutionService {
     @Override
     public List<UserEntity> getUsersByInstName(String instName) {
         return institutionDao.getUsersByInstName(instName);
+    }
+
+    @Override
+    public List<InstitutionEntity> getInstitutionsByType(Long type) {
+        return institutionDao.getInstitutionsByType(type);
     }
 
 }

@@ -1,0 +1,66 @@
+<eve-top-bar title="重特大案(事)件" (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-top-bar>
+<!--新增、编辑-->
+<div class="content">
+  <perfect-scrollbar>
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <div class="detail-layout">
+          <form #reForm="ngForm">
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="required control-label">案(事)件名称</label>
+                <input pInputText [(ngModel)]="detailData.caseName"
+                       name="caseName" [validation-rule]="{'required':{'alertText':'案(事)件名称必填'}}">
+              </div>
+              <div class="ui-g-6">
+                <label class="control-label">发生日期</label>
+                <p-calendar [(ngModel)]="detailData.occurDate" [ngModelOptions]="{standalone: true}"
+                            [monthNavigator]="true" readonlyInput="readonlyInput"
+                            [yearNavigator]="true" yearRange="2000:2030"
+                            dateFormat="yy/mm/dd">
+                </p-calendar>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">发生地所在地区划</label>
+                <input pInputText [(ngModel)]="detailData.addrScn" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="ui-g-6">
+                <label class="control-label">发生地</label>
+                <input pInputText [(ngModel)]="detailData.address" [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">事件等级</label>
+                <p-selectButton [options]="caseLvlCdes" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="detailData.caseLvlCde"></p-selectButton>
+              </div>
+              <div class="ui-g-6">
+                <label class="control-label">事件类型</label>
+                <p-selectButton [options]="caseTypes" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="detailData.caseType"></p-selectButton>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-label">案件状态</label>
+                <p-selectButton [options]="seriousCaseStatuses" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="detailData.seriousCaseStatus"></p-selectButton>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad control-group">
+              <div class="ui-g-6">
+                <label class="control-textarea-label">案（事）件情况</label>
+                <textarea class="control-textarea" pInputTextarea autoResize="false" name="caseSituation"
+                          [(ngModel)]="detailData.caseSituation" [ngModelOptions]="{standalone: true}">
+                </textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </perfect-scrollbar>
+</div>

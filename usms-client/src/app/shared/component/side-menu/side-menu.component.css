@@ -1,0 +1,98 @@
+.eve-side-menu {
+  overflow: hidden;
+  width: 200px;
+  float: left;
+  height: 100%;
+  background-color: #273240;
+}
+
+.eve-side-menu .scroll-div {
+  width: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.eve-side-menu .side-menu-list {
+  margin: 0;
+  overflow: hidden;
+  padding: 18px 0 0 0;
+}
+
+.eve-side-menu .side-menu-list a:hover,
+.eve-side-menu .side-menu-list a.active {
+  color: #80c4e8;
+}
+
+.eve-side-menu .side-menu-list-item {
+  position: relative;
+  padding: 0;
+}
+
+.eve-side-menu .side-menu-list-item.active {
+  background-color: #156b9a;
+}
+
+.eve-side-menu .side-menu-list-link {
+  display: block;
+  height: 42px;
+  padding-left: 18px;
+  text-shadow: none;
+  font-size: 13px;
+  text-decoration: none;
+  color: #fff;
+  line-height: 42px;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.eve-side-menu .side-menu-list-link i {
+  margin-right: 18px;
+  width: 16px;
+  display: inline-block;
+}
+
+.eve-side-menu .side-menu-list-link b {
+  display: block;
+  opacity: 1;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-shadow: none;
+  font-size: 18px;
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  padding: 0;
+  text-align: center;
+  color: #fff;
+  transition: transform 0.2s linear;
+}
+
+.eve-side-menu .side-menu-sublist {
+  padding: 0;
+  position: relative;
+  background: #232d3a;
+}
+
+.eve-side-menu .side-menu-sublist-item {
+  display: block;
+  float: none;
+  padding: 0;
+  border-bottom: none;
+  position: relative;
+}
+
+.eve-side-menu .side-menu-sublist-link {
+  display: block;
+  text-shadow: none;
+  font-size: 13px;
+  text-decoration: none;
+  color: #fff;
+  padding-left: 52px;
+  height: auto;
+  line-height: 29px;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}

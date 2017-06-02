@@ -1,0 +1,82 @@
+<div class="toolkit">
+  <ul>
+    <!--<li class="toolkit-item">-->
+    <!--<p-dropdown [options]="centerLvls" [(ngModel)]="filter.centerLvl"></p-dropdown>-->
+    <!--</li>-->
+    <li class="toolkit-item">
+      <input type="text" [(ngModel)]="filter.caseName" pInputText placeholder="案(事)件名称" (keyup.enter)="search()">
+      <a class="search-btn fa fa-search" (click)="search()"></a>
+      <a class="fa fa-refresh" (click)="reset()"></a>
+      <a id="advancedQuery" class="a-button" (click)="togglePanel()">高级查询</a>
+      <div (click)="selfClickEvent()" class="drop-panel" *ngIf="isDropPanelShow">
+        <ul>
+          <li><label>分级：</label>
+            <p-selectButton [options]="caseLvlCdes" multiple="multiple"
+                            [(ngModel)]="selectedCaseLvlCdes"></p-selectButton>
+          </li>
+          <li><label>类型：</label>
+            <p-selectButton [options]="caseTypes" multiple="multiple"
+                            [(ngModel)]="selectedCaseTypes"></p-selectButton>
+          </li>
+          <li><label>状态：</label>
+            <p-selectButton [options]="seriousCaseStatuses" multiple="multiple"
+                            [(ngModel)]="selectedSeriousCaseStatuses"></p-selectButton>
+          </li>
+        </ul>
+        <div class="button-group">
+          <button (click)="reset()" pButton type="button" class="ui-button-secondary" label="重置"></button>
+          <button (click)="search()" pButton type="button" label="查询"></button>
+        </div>
+      </div>
+    </li>
+    <li class="toolkit-item e-right">
+      <p-splitButton label="新增" icon="fa-plus" (onClick)="gotoDetail('add',null)" [model]="btnItems"></p-splitButton>
+    </li>
+  </ul>
+</div>
+
+<div class="ui-g content">
+  <perfect-scrollbar>
+    <div class="ui-g-12" [ngBusy]="httpService.loading">
+      <p-dataTable [value]="viewData" [contextMenu]="cm"
+                   [(selection)]="selectedData" dataKey="id"
+                   (onRowDblclick)="getDetailEvent($event)">
+        <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+        <p-column header="序号" [style]="{'width':'70px'}" field="id" styleClass="base-col index-col">
+          <ng-template let-ri="rowIndex" pTemplate="body">
+            <span>{{index[ri]}}</span>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'20%'}" field="caseName" header="案(事)件名称"></p-column>
+        <p-column [style]="{'width':'20%'}" field="occurDate" header="发生日期">
+          <ng-template  let-data="rowData" pTemplate="body">
+            <span>{{data.occurDate | date:'yyyy-MM-dd'}}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="address" header="发生地"></p-column>
+        <p-column field="caseLvlCde" header="分级">
+          <ng-template  let-data="rowData" pTemplate="body">
+            <span>{{data.caseLvlCde | caseLvlCdePipe}}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="caseType" header="类型">
+          <ng-template  let-data="rowData" pTemplate="body">
+            <span>{{data.caseType | caseTypePipe}}</span>
+          </ng-template>
+        </p-column>
+        <p-column field="seriousCaseStatus" header="案件状态">
+          <ng-template  let-data="rowData" pTemplate="body">
+            <span>{{data.seriousCaseStatus | seriousCaseStatusPipe}}</span>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+      <eve-paginator [rows]="page.size" [totalRecords]="page.totalElements"
+                     [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
+                     (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)" ></eve-paginator>
+    </div>
+  </perfect-scrollbar>
+</div>
+
+
+<!--先隐藏-->
+<!--<p-contextMenu #cm [model]="items"></p-contextMenu>-->

@@ -1,0 +1,275 @@
+/**
+ * 页面公用样式
+ */
+/************* 内容区布局样式 ***************/
+.main-content {
+  position: relative;
+  height: 100%;
+}
+
+.main {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.content {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+.content-left {
+  position: absolute;
+  width: 25%;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+.content-right {
+  position: absolute;
+  width: 75%;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+perfect-scrollbar {
+  height: 100%;
+}
+
+/*详情页返回按钮*/
+.back-btn {
+  padding: 8px;
+}
+
+.logo-image {
+  width: 48px;
+  height: 48px;
+  background-image: url("../img/logo.png");
+}
+
+/************* 表单布局 ************/
+.detail-layout {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  width: 100%;
+  float: left;
+}
+
+.detail-layout .control-group {
+  border-bottom: 1px solid #eee;
+}
+
+.detail-layout .control-group .legend {
+  padding: 4px 8px;
+  color: #666;
+  font-weight: bold;
+  background: #fafafa;
+}
+
+.detail-layout .control-group .control-label {
+  display: inline-block;
+  width: 100px;
+  color: #999;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.detail-layout .control-group .control-span {
+  width: 100px;
+  color: #999;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.detail-layout .control-group .control-textarea-label {
+  display: inline-block;
+  width: 100px;
+  color: #999;
+  text-align: right;
+  margin-right: 10px;
+  vertical-align: top; /*textarea,label置于左上*/
+}
+
+.detail-layout .control-group .control-textarea {
+  width: 400px;
+  height: 100px;
+  resize: none;
+}
+
+/*必填项*/
+.required:before {
+  content: "*";
+  color: red;
+  display: inline-block;
+}
+
+/************* 查询过滤工具条 ************/
+.toolkit {
+  background: #f3f3f3;
+  min-height: 30px;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.toolkit .toolkit-item {
+  float: left;
+  padding-left: 8px;
+  position: relative;
+}
+
+.toolkit .toolkit-item a {
+  cursor: pointer;
+}
+
+.toolkit .toolkit-item .search-btn {
+  position: relative;
+  right: 28px;
+  color: #999;
+}
+
+/* 高级查询 */
+.drop-panel {
+  width: 285px;
+  background: white;
+  display: block;
+  position: absolute;
+  padding: 8px;
+  right: 5px;
+  top: 35px;
+  webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+}
+
+.drop-panel ul > li > label {
+  width: 92px;
+  display: inline-block;
+  text-align: right;
+}
+
+.drop-panel ul > li {
+  margin-top: 8px;
+}
+
+.drop-panel .button-group {
+  padding-top: 8px;
+  margin-top: 8px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+}
+
+/************* primeNG样式重写 **************/
+/*base*/
+.ui-widget {
+
+}
+
+.ui-widget-header {
+  /*border: 1px solid #d4d4d4;
+  background: #fff;*/
+}
+
+.ui-widget-content {
+  background: #fff;
+}
+
+.ui-state-default {
+
+}
+
+.ui-state-hover {
+
+}
+
+.ui-state-active {
+}
+
+.ui-state-highlight {
+}
+
+.ui-state-disabled {
+}
+
+/*base*/
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight {
+  background: #ebf1de;
+}
+
+/* split button */
+.ui-splitbutton .ui-splitbutton-menubutton {
+  font-family: sans-serif;
+}
+
+/* data table */
+.ui-datatable-even,
+.ui-datatable-odd,
+.ui-column-title {
+  height: 38px;
+}
+
+.ui-datatable-odd {
+
+}
+
+.ui-datatable thead th {
+  height: 40px;
+}
+
+.ui-datatable-scrollable-header {
+  background: none;
+}
+
+/*paginator*/
+.ui-paginator {
+  text-align: right;
+}
+
+.ui-paginator.ui-widget-header {
+  border: 1px solid #d4d4d4;
+  border-top: none;
+  background: #fafafa;
+}
+
+.ui-paginator-total {
+  float: left;
+  margin-top: 4px;
+  color: #081c22;
+  padding: 0 8px;
+}
+
+/*growl*/
+.ui-growl-item-container {
+  top: 35px;
+}
+
+/*tree*/
+.ui-tree {
+  width: auto;
+}
+
+.ui-picklist-source-controls.ui-picklist-buttons,
+.ui-picklist-target-controls.ui-picklist-buttons {
+  display: none;
+}
+
+.ui-picklist.ui-picklist-responsive .ui-picklist-listwrapper {
+  width: 43%;
+}
+
+.ui-datatable .ui-datatable-data>tr>td {
+  text-align: center;
+}
+
+

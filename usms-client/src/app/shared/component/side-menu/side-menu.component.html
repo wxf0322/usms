@@ -1,0 +1,44 @@
+<aside class="eve-side-menu" >
+  <perfect-scrollbar>
+  <div class="scroll-div">
+    <!--二级菜单单独展开-->
+    <ul class="side-menu-list" *ngIf="!multiShow">
+      <li *ngFor="let menuItem of menuItems" [ngClass]="{'selected': menuItem.selected,'side-menu-list-item':true}">
+        <a *ngIf="!menuItem.children" class="side-menu-list-link"
+           [routerLink]='menuItem.routerLink' routerLinkActive="active">
+          <i class="{{menuItem.icon}}"></i>{{menuItem.title}}
+        </a>
+        <a *ngIf="menuItem.children" class="side-menu-list-link" (click)="toggleSubMenu(menuItem)">
+          <i class="{{menuItem.icon}}"></i>{{menuItem.title}}
+          <b [ngClass]="{'fa-angle-down': !showMe[menuItem.title],'fa-angle-up':showMe[menuItem.title]}" class="fa"></b>
+        </a>
+        <ul *ngIf="menuItem.children&&showMe[menuItem.title]" class="side-menu-sublist">
+          <li *ngFor="let subItem of menuItem?.children" class="side-menu-sublist-item">
+            <a class="side-menu-sublist-link" [routerLink]="subItem.routerLink" routerLinkActive="active">{{subItem.title}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <!--允许展开多个-->
+    <ul class="side-menu-list" *ngIf="multiShow">
+      <li *ngFor="let menuItem of menuItems" [ngClass]="{'selected': menuItem.selected,'side-menu-list-item':true}">
+        <a *ngIf="!menuItem.children" class="side-menu-list-link"
+           [routerLink]='menuItem.routerLink' routerLinkActive="active">
+          <i class="{{menuItem.icon}}"></i>{{menuItem.title}}
+        </a>
+        <a *ngIf="menuItem.children" class="side-menu-list-link" (click)="menuItem.expanded=!menuItem.expanded">
+          <i class="{{menuItem.icon}}"></i>{{menuItem.title}}
+          <b [ngClass]="{'fa-angle-down': !menuItem.expanded,'fa-angle-up':menuItem.expanded}" class="fa"></b>
+        </a>
+        <ul *ngIf="menuItem.children&&menuItem.expanded" class="side-menu-sublist">
+          <li *ngFor="let subItem of menuItem?.children" class="side-menu-sublist-item">
+            <a class="side-menu-sublist-link" [routerLink]="subItem.routerLink" routerLinkActive="active">{{subItem.title}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  </perfect-scrollbar>
+</aside>

@@ -1,0 +1,11 @@
+<div class="toolkit">
+  <ul>
+    <li class="toolkit-item">
+      <a class="fa fa-chevron-left back-btn" (click)="goBack()"> {{title}}</a>
+    </li>
+    <li class="toolkit-item e-right">
+      <button (click)="goBack()" pButton type="button" label="取消"></button>
+      <button (click)="save()" pButton type="button" label="保存" [disabled]="display"></button>
+    </li>
+  </ul>
+</div>
