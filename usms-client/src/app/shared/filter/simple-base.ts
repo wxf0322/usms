@@ -28,11 +28,6 @@ export abstract class SimpleBase<T> extends Pagination<T> {
   abstract getDetailEvent(event);
 
   /**
-   * 重置
-   */
-  abstract reset();
-
-  /**
    * 分页返回的数据处理
    * @param res
    * @returns {boolean}

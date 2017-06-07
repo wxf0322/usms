@@ -6,10 +6,18 @@
 package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.service.TreeService;
+import net.evecom.common.usms.core.util.MapUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.OperationEntity;
+import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.service.ApplicationService;
+import net.evecom.common.usms.uma.service.OperationService;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,9 +25,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Pisces Lu
@@ -37,8 +48,21 @@ public class ApplicationController {
 
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<ApplicationEntity> list(Integer page, Integer size) {
-        return applicationService.findByPage(page, size);
+    public Page<ApplicationEntity> list(Integer page, Integer size, HttpServletRequest request) {
+        SqlFilter sqlFilter = new SqlFilter();
+        if (!StringUtils.isEmpty(request.getParameter("label"))) {
+            sqlFilter.addFilter("QUERY_a#label_S_LK", request.getParameter("label"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("name"))){
+            sqlFilter.addFilter("QUERY_a#name_S_LK", request.getParameter("name"));
+        }
+        return applicationService.findByPage(page, size,sqlFilter);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "all")
+    public List<ApplicationEntity> findAll(){
+        return applicationService.findAll();
     }
 
     @ResponseBody

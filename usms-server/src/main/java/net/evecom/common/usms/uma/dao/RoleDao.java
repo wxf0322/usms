@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -47,9 +48,20 @@ public interface RoleDao extends BaseDao<RoleEntity, Long> {
     List<UserEntity> getUsersByRoleName(String roleName);
 
     /**
-     * 所有角色列表
+     * 根据权限角色查询列表用户列表
+     *
+     * @param roleNames
+     * @return
      */
-    Page<RoleEntity> findByPage(int page, int size);
+    List<UserEntity> getUsersByRoleNames(String[] roleNames);
+
+    /**
+     * 所有角色列表
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter);
 
 
     /**
@@ -71,7 +83,7 @@ public interface RoleDao extends BaseDao<RoleEntity, Long> {
     /**
      * 根据角色id查找用户列表
      */
-    List<UserEntity> findUsersByRoleId(int roleId);
+    List<UserEntity> findUsersByRoleId(Long roleId);
 
 
     /**

@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -54,7 +55,7 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
     /**
      * 查询权限列表
      */
-    Page<PrivilegeEntity> findByPage(int page, int size);
+    Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter);
 
     /**
      * 根据权限ID，更新对应操作的关系

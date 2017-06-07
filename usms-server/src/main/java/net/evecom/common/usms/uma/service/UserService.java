@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.model.UserModel;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param size
      * @return
      */
-    Page<UserModel> findModelsByPage(int page, int size);
+    Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter);
 
     /**
      * 根据登入名查找用户
@@ -60,6 +61,14 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @return
      */
     UserEntity findByLoginName(String loginName);
+
+    /**
+     * 根据登入名列表查找用户
+     *
+     * @param loginNames
+     * @return
+     */
+    List<UserEntity> findByLoginNames(String[] loginNames);
 
     /**
      * 通过 Id 查找权限
@@ -110,5 +119,10 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @return
      */
     List<InstitutionEntity> findInstByUserId(Long userId);
+
+    /**
+     * 建立用户和机构之间的关系
+     */
+    void createUserInstitution(Long userId,Long institutionId);
 
 }

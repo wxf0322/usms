@@ -231,10 +231,16 @@ public class SqlFilter {
         if (name != null && value != null) {
             if (name.startsWith("QUERY_")) {// 如果有需要过滤的字段
                 String[] filterParams = StringUtils.split(name, "_");
-                if (filterParams.length == 4) {
-                    String columnName = filterParams[1].replaceAll("#", ".");// 要过滤的字段名称
-                    String columnType = filterParams[2];// 字段类型
-                    String operator = filterParams[3];// SQL操作符
+                if (filterParams.length >= 4) {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(filterParams[1]);
+                    for (int i = 2; i < filterParams.length - 2; i++) {
+                        sb.append("_").append(filterParams[i]);
+                    }
+                    String columnName = sb.toString().replaceAll("#", ".");// 要过滤的字段名称
+
+                    String columnType = filterParams[filterParams.length-2];// 字段类型
+                    String operator = filterParams[filterParams.length-1];// SQL操作符
                     /*
                      * if (sql.toString().indexOf("where 1=1") < 0) {
                      * sql.append("  where 1=1 "); }

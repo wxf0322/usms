@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.model.UserModel;
 import net.evecom.common.usms.uma.dao.StaffDao;
@@ -88,8 +89,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     }
 
     @Override
-    public Page<UserModel> findModelsByPage(int page, int size) {
-        return userDao.findModelsByPage(page, size);
+    public Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter) {
+        return userDao.findModelsByPage(page, size,sqlFilter);
     }
 
     /**
@@ -101,6 +102,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public UserEntity findByLoginName(String loginName) {
         return userDao.findByLoginName(loginName);
+    }
+
+    @Override
+    public List<UserEntity> findByLoginNames(String[] loginNames) {
+        return userDao.findByLoginNames(loginNames);
     }
 
     /**
@@ -152,6 +158,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public List<InstitutionEntity> findInstByUserId(Long userId) {
         return userDao.findInstByUserId(userId);
+    }
+
+    @Override
+    public void createUserInstitution(Long userId, Long institutionId) {
+        userDao.createUserInstitution(userId,institutionId);
     }
 
 }

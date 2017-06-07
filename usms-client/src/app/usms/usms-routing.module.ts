@@ -4,7 +4,6 @@ import {UserComponent} from "./user/user.component";
 import {UsmsComponent} from "app/usms/usms.component";
 import {RoleComponent} from "./role/role.component";
 import {OperationComponent} from "./operation/operation.component";
-import {InstitutionComponent} from "./institution/institution.component";
 import {PrivilegeComponent} from "./privilege/privilege.component";
 import {GridComponent} from "./grid/grid.component";
 import {ApplicationComponent} from "./application/application.component";
@@ -13,30 +12,41 @@ import {PrivilegeDetailComponent} from "./privilege/privilege-detail/privilege-d
 import {OperationAllocationComponent} from "./privilege/operation-allocation/operation-allocation.component";
 import {RoleDetailComponent} from "./role/role-detail/role-detail.component";
 import {UserAllocationComponent} from "./role/user-allocation/user-allocation.component";
-import {InstitutionDetailComponent} from "./institution/institution-detail/institution-detail.component";
 import {ApplicationDetailComponent} from "./application/application-detail/application-detail.component";
 import {OperationDetailComponent} from "./operation/operation-detail/operation-detail.component";
 import {PrivilegeAllocationComponent} from "./role/privilege-allocation/privilege-allocation.component";
+import {InstitutionComponent} from "./institution/institution.component";
+import {InstitutionDetailComponent} from "./institution/institution-detail/institution-detail.component";
 
 
 /**
  * 页面组件路由
  */
 const childrenRoutes: Routes = [
-  {path: '', redirectTo: 'user'},
+  {path: '', redirectTo: 'user', pathMatch: 'full'},
   {
     path: 'user',
     children: [
       {path: '', component: UserComponent},
-      {path: 'detail', component: UserDetailComponent}
+      {path: 'user-detail', component: UserDetailComponent},
+      {path:'institution-detail',component:InstitutionDetailComponent}
     ]
   }, {
+    path:"institution",
+    children:[
+      {path:'',component:InstitutionComponent},
+      {path:'detail',component:InstitutionDetailComponent},
+
+    ]
+  },
+  {
     path: 'role',
     children: [
       {path: '', component: RoleComponent},
       {path: 'detail', component: RoleDetailComponent},
       {path: 'user-allocation', component: UserAllocationComponent},
       {path: 'privilege-allocation', component: PrivilegeAllocationComponent}
+
     ]
   }, {
     path: 'operation',
@@ -44,13 +54,7 @@ const childrenRoutes: Routes = [
       {path: '', component: OperationComponent},
       {path: 'detail', component: OperationDetailComponent}
     ]
-  }, {
-    path: 'institution',
-    children: [
-      {path: '', component: InstitutionComponent},
-      {path: 'detail', component: InstitutionDetailComponent}
-    ]
-  }, {
+  },  {
     path: 'privilege',
     children: [
       {path: '', component: PrivilegeComponent},
@@ -74,7 +78,7 @@ const childrenRoutes: Routes = [
 /**
  * 统一用户管理根路由
  */
-export const usmsRoutes: Routes = [
+const usmsRoutes: Routes = [
   {path: '', component: UsmsComponent, children: childrenRoutes}
 ];
 

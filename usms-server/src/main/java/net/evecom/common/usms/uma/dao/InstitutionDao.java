@@ -46,6 +46,14 @@ public interface InstitutionDao extends BaseDao<InstitutionEntity, Long> {
      */
     List<UserEntity> getUsersByInstName(String instName);
 
+    /**
+     * 根据组织机构集合查询用户列表
+     *
+     * @param instNames
+     * @return
+     */
+    List<UserEntity> getUsersByInstNames(String[] instNames);
+
 
     /**
      * 根据组织机构类型获取组织机构列表

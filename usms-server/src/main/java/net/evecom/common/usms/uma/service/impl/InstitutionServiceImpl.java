@@ -62,6 +62,11 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     }
 
     @Override
+    public List<UserEntity> getUsersByInstNames(String[] instNames) {
+        return institutionDao.getUsersByInstNames(instNames);
+    }
+
+    @Override
     public List<InstitutionEntity> getInstitutionsByType(Long type) {
         return institutionDao.getInstitutionsByType(type);
     }

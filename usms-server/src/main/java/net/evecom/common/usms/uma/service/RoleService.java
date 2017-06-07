@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -47,9 +48,17 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
 
 
     /**
+     * 根据权限角色查询列表用户列表
+     *
+     * @param roleNames
+     * @return
+     */
+    List<UserEntity> getUsersByRoleNames(String[] roleNames);
+
+    /**
      * 查询所有角色列表
      */
-    Page<RoleEntity> findByPage(int page, int size);
+    Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter);
 
 
     /**
@@ -70,7 +79,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
     /**
      * 根据角色id查找用户列表
      */
-    List<UserEntity> findUsersByRoleId(int roleId);
+    List<UserEntity> findUsersByRoleId(Long roleId);
 
     /**
      * 根据角色ID查找已选用户列表

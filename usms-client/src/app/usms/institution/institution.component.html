@@ -8,7 +8,7 @@
               <span *ngIf="node['enter']">
                 <a class="fa fa-plus a-button" (click)="addTreeNode('add',node.data.id)"></a>
                 <a class="fa fa-trash a-button" (click)="deleteTreeNode(node)"></a>
-                <a class="fa fa-edit a-button" (click)="gotoDetail('edit',node.data.id)"></a>
+                <a class="fa fa-edit a-button" (click)="editTreeNode('edit',node.data.id)"></a>
               </span>
           </span>
       </ng-template>

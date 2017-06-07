@@ -6,16 +6,22 @@
 package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.uma.service.InstitutionService;
 import net.evecom.common.usms.uma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,17 +34,36 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-
     /**
      * 注入UserService
      */
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private InstitutionService institutionService;
+
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<UserModel> list(Integer page, Integer size) {
-        return userService.findModelsByPage(page, size);
+    public Page<UserModel> list(Integer page, Integer size, HttpServletRequest request) {
+        SqlFilter sqlFilter = new SqlFilter();
+        if (!StringUtils.isEmpty(request.getParameter("loginName"))) {
+            sqlFilter.addFilter("QUERY_u#login_name_S_LK", request.getParameter("loginName"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("name"))){
+            sqlFilter.addFilter("QUERY_u#name_S_LK", request.getParameter("name"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("institutionName"))) {
+            List<UserEntity> entitiesList =
+                    institutionService.getUsersByInstName(request.getParameter("institutionName"));
+            List<UserModel> modelsList = new ArrayList<>();
+            for(UserEntity userEntity:entitiesList){
+                UserModel userModel = new UserModel(userEntity);
+                modelsList.add(userModel);
+            }
+            return new PageImpl<>(modelsList, new PageRequest(page, size), modelsList.size());
+        }
+        return userService.findModelsByPage(page, size,sqlFilter);
     }
 
     @ResponseBody
@@ -61,9 +86,13 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel) {
+    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel,HttpServletRequest request) {
+        String institutionId = request.getParameter("institutionId");
         if (userModel.getId() == null) {
-            userService.createUser(userModel);
+            UserEntity userEntity = userService.createUser(userModel);
+            if(!StringUtils.isEmpty(institutionId)) {
+                userService.createUserInstitution(userEntity.getId(), Long.valueOf(institutionId));
+            }
         } else {
             userService.updateUser(userModel);
         }

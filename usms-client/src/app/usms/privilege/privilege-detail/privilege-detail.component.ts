@@ -32,7 +32,6 @@ export class PrivilegeDetailComponent extends SimpleBaseDetailUtil<Privilege> im
 
   save() {
     let url = GlobalVariable.BASE_URL + 'privilege/saveOrUpdate';
-    console.dir(this.detailData);
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({

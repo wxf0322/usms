@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>《统一用户管理系统API文档_v20170602_2》</title>
+    <title>《统一用户管理系统API文档_v20170607_1》</title>
 </head>
 <body style="display:none">
 <xmp theme="cerulean">
@@ -93,11 +93,11 @@ http://192.168.200.209:8080/usms/authorize
 
 (3) 输入参数
 
-| 参数名         | 是否必填   | 说明                             |
-|----------------|-------------|----------------------------------|
-| client_id      |   是        | 填子系统在 USMS 注册的client_id |
-| response_type  |   是        | 固定值：code                    |
-| redirect_uri   |   是        | 子系统的回调地址                |
+| 参数名         | 是否必填 | 说明                            |
+|----------------|-----------|----------------------------------|
+| client_id      |   是      | 填子系统在 USMS 注册的client_id |
+| response_type  |   是      | 固定值：code                     |
+| redirect_uri   |   是      | 子系统的回调地址                 |
 
 (4) 输入样例
 
@@ -108,10 +108,10 @@ http://192.168.200.209:8080/usms/authorize?client_id=0a626c2d-d0ac-45bd-9918-e66
 (5) 输出样例
 
 ```
-跳转到： https://www.baidu.com/?code=27893fa79e38e449baf09fc2b066f1cc
-
-以上样例中，27893fa79e38e449baf09fc2b066f1cc即为临时授权码。
+HTTP/1.1 302 Found
+Location: http://www.baidu.com/?code=27893fa79e38e449baf09fc2b066f1cc
 ```
+重定向到 http://www.baidu.com，以上样例中 code=27893fa79e38e449baf09fc2b066f1cc 即为临时授权码。
 
 (6) 备注
 
@@ -130,12 +130,12 @@ http://192.168.200.209:8080/usms/accessToken
 (3) 输入参数
 
 | 参数名        | 是否必填    | 说明     |
-|---------------|--------------|----------|
+|---------------|-------------|----------|
 | client_id     | 是           | 填子系统在USMS注册的 client_id    |
 | client_secret | 是           | USMS给子系统生成的KEY             |
 | grant_type    | 是           | 固定值：authorization_code        |
-| code          | 是           | 上个步骤获取的临时授权码           |
-| redirect_uri  | 是           | 与第一步请求的 redirect_uri 相同   |
+| code          | 是           | 上个步骤获取的临时授权码         |
+| redirect_uri  | 是           | 与第一步请求的 redirect_uri 相同  |
 
 (4) 输入样例
 
@@ -168,7 +168,6 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 该请求在服务端只能通过post提交，获取到access token后，子系统可将其保存，做后续使用。
 
-
 #### 2.1.3 登出全部系统
 
 (1) 接口说明
@@ -177,30 +176,25 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 (2) 接口地址
 
-http://192.168.200.209:8080/usms/v1/openapi/loginOut
+重定向至 http://192.168.200.209:8080/usms/v1/openapi/loginOut，进行退出
 
 (3) 输入参数
 
-| 参数名        | 说明     |
-|---------------|----------|
-| access_token  | 访问令牌   |
+| 参数名        |   说明   |
+|---------------|-----------|
+| access_token  | 访问令牌  |
+| client_id     | 填子系统在USMS注册的 client_id |
+| redirect_uri  | 重定向到登入页面之后，登入页面需要跳转的地址 |
 
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/loginOut?access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/loginOut?access_token=ACCESS_TOKEN&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI
 ```
 
-(5) 输出参数
-
-| 参数名       | 说明                         |
-|-------------|------------------------------|
-| result      | 返回结果，true为成功，false为失败 |
-
-(6) 输出样例
-
+(5) 输出结果
 ```
-{ "result": true }
+重定向到登入页面，输入用户名和密码之后，重定向至redirect_uri参数所填写的页面。
 ```
 
 #### 2.1.4 判断accessToken是否有效
@@ -222,7 +216,7 @@ http://192.168.200.209:8080/usms/checkAccessToken
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/checkAccessToken?access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/checkAccessToken?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -253,7 +247,7 @@ http://192.168.200.209:8080/usms/v1/openapi/user
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -262,10 +256,10 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
 |-------------|-------------|
 | id          | 用户ID      |
 | loginName	  |  登录名     |
-| staff       |	关联员工的具体信息 |
-| applications | 应用信息  |
-| operations  | 该用户所拥有的操作信息，注意：不是所有的操作信息 |
-| institutions | 该用户所属的组织机构信息，注意：不是所有的组织机构信息 |
+| staff       |	关联员工的具体信息，具体参数详见 2.3.2 节 输出参数 |
+| application | 当前接入系统的应用信息，里面包含着操作信息 |
+| operations  | 该用户所拥有的操作信息，具体参数详见 2.3.10 节 输出参数（注意：不是所有的操作信息） |
+| institutions | 该用户所属的组织机构信息，具体参数详见 2.3.14 节 输出参数（注意：不是所有的组织机构信息） |
 
 
 (6) 输出样例
@@ -289,11 +283,12 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
         "employeeType": "",
         "employeeNo": "10000000",
         "citizenIdNumber": "",
-        "birthday": "",
+        "birthday": 1496374828,
         "adminDivisionCode": "350100",
         "adminDivision": "福州",
         "curResidence": "福州",
-        "remarks": ""
+        "remarks": "",
+        "pictureUrl": ""
     },
     "institutions": [
         {
@@ -330,12 +325,22 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
             "resUrl": "2"
         }
     ],
-    "applications": [
-        {
-            "label": "zzwg",
-            "name": "综治网格"
-        }
-    ]
+    "application" : {
+        "id": 10
+        "label": "综治网格",
+        "name": "zzwg",
+        "clientId": "",
+        "clientSecret": "",
+        "operations": [{
+            "iconPath": "2",
+            "id": 1,
+            "label": "增加",
+            "name": "add",
+            "optType": 2,
+            "parentId": 0,
+            "resUrl": "2"
+        }]
+    }
 }
 ```
 
@@ -359,7 +364,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?grid=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?grid=GRID_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -381,7 +386,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users?grid=XXX&access_token=223ae05d
 | officalDuty        | 职务              |
 | employeeType       | 员工类型          |
 | employeeNo         | 员工工号          |
-| birthday           | 出生日期          |
+| birthday           | 出生日期，注意：这里返回的日期为数值类型的时间戳，需要通过代码转化为日期类型 |
 | adminDivisionCode  | 居住地行政区划编号 |
 | adminDivision      | 居住地行政区划    |
 | curResidence       | 现居住地址        |
@@ -442,7 +447,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?institution=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?institution=INSTITUTION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -471,7 +476,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?operation=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?operation=OPERATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -499,7 +504,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?privilege=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?privilege=PRIVILEGE_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -528,7 +533,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?operation=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?operation=OPERATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -557,7 +562,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?role=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?role=ROLE_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -586,7 +591,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?offical_post=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/users?offical_post=OFFICAL_POST&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -615,7 +620,7 @@ http://192.168.200.209:8080/usms/v1/openapi/privileges
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/privileges?application=XXX& access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -661,7 +666,7 @@ http://192.168.200.209:8080/usms/v1/openapi/operations
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/privileges?application=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -714,7 +719,7 @@ http://192.168.200.209:8080/usms/v1/openapi/role/exist
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/role/exist?role=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/role/exist?role=ROLE_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -750,7 +755,7 @@ http://192.168.200.209:8080/usms/v1/openapi/privilege/exist
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/privilege/exist?privilege=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/privilege/exist?privilege=PRIVILEGE_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -787,7 +792,7 @@ http://192.168.200.209:8080/usms/v1/openapi/operation/exist
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/operation/exist?operation=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/operation/exist?operation=OPERATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -823,7 +828,7 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/institutions?type=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/institutions?type=TYPE&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -894,7 +899,7 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/institutions?access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/institutions?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -923,13 +928,13 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/institution?institution=XXX&access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/institution?institution=INSTITUTION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
 
-| 参数名      | 说明    |
-|------------|----------|
+| 参数名               |       说明                   |
+|-----------------------|------------------------------|
 | id                    | 机构id                       |
 | label                 | 中文名称                     |
 | name                  | 英文名称                     |
@@ -978,13 +983,13 @@ http://192.168.200.209:8080/usms/v1/openapi/grids
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=223ae05dfbb0794396fb60a0960c197e
+http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
 
-| 参数名      | 说明    |
-|------------|----------|
+| 参数名                | 说明                     |
+|-----------------------|---------------------------|
 | id                    | 网格id                    |
 | code                  | 网格编码                  |
 | lvl                   | 网格层级                  |
@@ -1028,6 +1033,119 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=223ae05dfbb079439
     ]
 }
 ```
+
+### 2.3.18 角色列表，需access_token鉴权
+
+(1) 接口说明
+
+返回所有角色的列表，需access_token鉴权。
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/openapi/roles
+
+(3) 输入参数
+
+| 参数名       | 是否必填 | 说明    |
+|--------------|---------|---------|
+| access_token | 是      | 访问令牌 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/openapi/roles?access_token=ACCESS_TOKEN
+```
+
+### 2.3.19 用户列表，根据组织编码集合
+
+(1) 接口说明
+根据组织编码集合获取用户信息
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/internalapi/users
+
+(3) 输入参数
+
+| 参数名       | 是否必填   | 说明     |
+|--------------|-------------|----------|
+|institutions  |是           | 组织机构编码集合，用 "," 连接 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/internalapi/users?institutions=yfzx,yfwb
+```
+
+(5) 输出参数
+
+同 2.3.2 节 输出参数
+
+(6) 输出样例
+
+同 2.3.2 节 输出样例
+
+### 2.3.20 用户列表，角色编码集合
+
+(1) 接口说明
+
+根据角色编码集合获取用户信息
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/internalapi/users
+
+(3) 输入参数
+
+| 参数名       | 是否必填   | 说明     |
+|--------------|-------------|----------|
+| roles  |是           | 角色编码集合，用 "," 连接 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/internalapi/users?roles=admin,guest
+```
+
+(5) 输出参数
+
+同 2.3.2 节 输出参数
+
+(6) 输出样例
+
+同 2.3.2 节 输出样例
+
+
+### 2.3.21 用户列表，根据登入名集合
+
+(1) 接口说明
+
+根据登入名集合获取用户信息
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/internalapi/users
+
+(3) 输入参数
+
+| 参数名       | 是否必填   | 说明     |
+|--------------|-------------|----------|
+|login_names  |是           | 登入名集合，用 "," 连接 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/internalapi/users?login_names=admin,vance
+```
+
+(5) 输出参数
+
+同 2.3.2 节 输出参数
+
+(6) 输出样例
+
+同 2.3.2 节 输出样例
+
 
 </xmp>
 

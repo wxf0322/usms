@@ -119,9 +119,9 @@ public class AuthorizeController {
             } else {
                 loginName = user.getLoginName();
             }
+
             // 生成授权码
             String authorizationCode = null;
-
             // responseType目前仅支持CODE，另外还有TOKEN
             String responseType = oauthRequest.getParam(OAuth.OAUTH_RESPONSE_TYPE);
             if (responseType.equals(ResponseType.CODE.toString())) {
@@ -129,11 +129,12 @@ public class AuthorizeController {
                     authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
                 } else {
                     authorizationCode = oAuthService.getCurrentAuthCode(loginName, clientId);
-                    if (authorizationCode == null) {
+                    if (StringUtils.isEmpty(authorizationCode)) {
                         authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
                     }
                 }
             }
+
             // 进行OAuth响应构建
             OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
                     OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
@@ -145,7 +146,7 @@ public class AuthorizeController {
             String redirectURI = oauthRequest.getParam(OAuth.OAUTH_REDIRECT_URI);
 
             // 构建响应
-            final OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
+            OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
 
             // 如果响应构建成功，那么获得重定向地址，并存入Redis
             String redirectUri = oauthRequest.getRedirectURI();
@@ -168,7 +169,7 @@ public class AuthorizeController {
             }
 
             // 返回错误消息（如?error=）
-            final OAuthResponse response = OAuthASResponse
+            OAuthResponse response = OAuthASResponse
                     .errorResponse(HttpServletResponse.SC_BAD_REQUEST).error(e)
                     .location(redirectUri)
                     .buildQueryMessage();

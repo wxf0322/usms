@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
     /**
      * 查询权限列表
      */
-    Page<ApplicationEntity> findByPage(int page, int size);
+    Page<ApplicationEntity> findByPage(int page, int size, SqlFilter sqlFilter);
 
     /**
      * 根据ClientId查找对象

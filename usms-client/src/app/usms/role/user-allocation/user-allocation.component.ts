@@ -31,13 +31,11 @@ export class UserAllocationComponent extends SimpleBaseDetailUtil<User> implemen
 
   save() {
     let id=this.route.snapshot.params['id'];
-    console.dir(id);
     let saveUrl = GlobalVariable.BASE_URL + 'role/users/update';
     let ids='';
     for(var i in this.targetUsers){
       ids=ids+this.targetUsers[i].ID+',';
     }
-    console.dir(ids)
     let params = {
       roleId: id,
       userIds:ids
@@ -51,7 +49,6 @@ export class UserAllocationComponent extends SimpleBaseDetailUtil<User> implemen
         });
         this.goBack();
       });
-
   }
 
   clear() {

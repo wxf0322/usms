@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.service.PrivilegeService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -35,8 +37,15 @@ public class PrivilegeController {
 
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<PrivilegeEntity> list(Integer page, Integer size) {
-        return privilegeService.findByPage(page, size);
+    public Page<PrivilegeEntity> list(Integer page, Integer size, HttpServletRequest request) {
+        SqlFilter sqlFilter = new SqlFilter();
+        if (!StringUtils.isEmpty(request.getParameter("label"))) {
+            sqlFilter.addFilter("QUERY_p#label_S_LK", request.getParameter("label"));
+        }
+        if(!StringUtils.isEmpty(request.getParameter("name"))){
+            sqlFilter.addFilter("QUERY_p#name_S_LK", request.getParameter("name"));
+        }
+        return privilegeService.findByPage(page, size,sqlFilter);
     }
 
     @ResponseBody

@@ -9,15 +9,10 @@ import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.TreeDataModel;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,12 +27,6 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
         implements InstitutionDao {
 
     /**
-     * 注入实体管理器
-     */
-    @PersistenceContext
-    private EntityManager manager;
-
-    /**
      * 根据登入名查询组织机构列表
      *
      * @param loginName
@@ -50,11 +39,9 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
                 .append("( select ui.institution_id from usms_user_institution ui ")
                 .append(" where ui.user_id in ")
                 .append(" (select u.id   from usms_users u ")
-                .append("  where u.login_name =:loginName))");
+                .append("  where u.login_name = ?))");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, InstitutionEntity.class);
-        query.setParameter("loginName", loginName);
-        return query.getResultList();
+        return super.queryBySql(InstitutionEntity.class, sql, new Object[]{loginName});
     }
 
     /**
@@ -65,10 +52,9 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      */
     @Override
     public InstitutionEntity findByName(String name) {
-        TypedQuery<InstitutionEntity> query =
-                manager.createNamedQuery(InstitutionEntity.QUERY_BY_NAME, InstitutionEntity.class);
-        query.setParameter(InstitutionEntity.PARAM_NAME, name);
-        return JpaUtil.getSingleResult(query.getResultList());
+        String sql = "select * from usms_institutions where name = ?";
+        List<InstitutionEntity> result = super.queryBySql(InstitutionEntity.class, sql, new Object[]{name});
+        return JpaUtil.getSingleResult(result);
     }
 
     /**
@@ -83,22 +69,38 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
         sb.append("select * from usms_users u where u.id in(  ")
                 .append(" select  ui.user_id from usms_user_institution ui ")
                 .append(" where ui.institution_id in( ")
-                .append(" select i.id from usms_institutions i where i.name =:name)) ");
+                .append(" select i.id from usms_institutions i where i.name =?)) ");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("name", instName);
-        return query.getResultList();
+        return super.queryBySql(UserEntity.class, sql, new Object[]{instName});
+    }
+
+    @Override
+    public List<UserEntity> getUsersByInstNames(String[] instNames) {
+        StringBuffer queryParams = new StringBuffer();
+        if(instNames != null && instNames.length > 0) {
+            int i = 0;
+            for (String ignored : instNames) {
+                if (i == 0) queryParams.append("?");
+                else queryParams.append(",?");
+                i++;
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_users u where u.id in ( \n")
+                .append("select distinct ui.user_id from usms_user_institution ui where ui.institution_id in (\n")
+                .append("select i.id from usms_institutions i where i.name in (")
+                .append(queryParams).append(") and i.enabled = 1 ))");
+        String sql = sb.toString();
+        return super.queryBySql(UserEntity.class, sql, instNames);
     }
 
     @Override
     public List<InstitutionEntity> getInstitutionsByType(Long type) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select *  from  usms_institutions i ")
-                .append(" where i.type =:type and enabled =1");
+        sb.append("select * from usms_institutions i ")
+                .append(" where i.type = ? and enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql,InstitutionEntity.class);
-        query.setParameter("type",type);
-        return query.getResultList();
+        return super.queryBySql(InstitutionEntity.class, sql, new Object[]{type});
     }
 
 }

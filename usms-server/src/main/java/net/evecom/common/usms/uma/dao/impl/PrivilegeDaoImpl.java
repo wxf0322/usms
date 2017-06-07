@@ -7,10 +7,13 @@ package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.MapUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +35,12 @@ import java.util.Map;
 @Repository
 public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
         implements PrivilegeDao {
+
+    /**
+     * 日志管理器
+     */
+    private static Logger logger = LoggerFactory.getLogger(PrivilegeDaoImpl.class);
+
     /**
      * 注入实体管理器
      */
@@ -137,11 +146,11 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public Page<PrivilegeEntity> findByPage(int page, int size) {
+    public Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges");
+        sb.append("select * from usms_privileges p where 1=1 "+sqlFilter.getWhereSql());
         String sql = sb.toString();
-        return super.queryByPage(sql, null, page, size);
+        return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     @Override
@@ -179,7 +188,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
                 OperationModel operation = MapUtil.toObject(OperationModel.class ,camelMap);
                 result.add(operation);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException  e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         return result;

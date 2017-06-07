@@ -8,12 +8,19 @@ package net.evecom.common.usms.oauth2.shiro;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
 
 /**
  * 描述
@@ -41,7 +48,9 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {
-        //从token中 获取用户身份信息
+
+
+        //从 token 中，获取用户身份信息
         String loginName = (String) authenticationToken.getPrincipal();
         UserEntity user = userService.findByLoginName(loginName);
         if (user == null) {
@@ -52,6 +61,18 @@ public class UserRealm extends AuthorizingRealm {
             // 帐号被锁定，抛出异常
             throw new LockedAccountException();
         }
+
+        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
+        DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager();
+        Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();//获取当前已登录的用户session列表
+
+        for (Session session : sessions) {
+            //清除该用户以前登录时保存的session
+            if (loginName.equals(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)))) {
+                sessionManager.getSessionDAO().delete(session);
+            }
+        }
+
         //返回认证信息由父类AuthenticatingRealm进行认证
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getLoginName(),

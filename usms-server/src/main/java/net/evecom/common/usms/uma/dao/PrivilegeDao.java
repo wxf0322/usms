@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.OperationModel;
@@ -52,7 +53,7 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
     /**
      * 查询权限列表
      */
-    Page<PrivilegeEntity> findByPage(int page, int size);
+    Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter );
 
 
     /**

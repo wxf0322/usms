@@ -18,7 +18,6 @@ import {
 import {EveHighlightDirective} from './attribute-directive/highlight.directive';
 import {EveLabelInputComponent} from './component/label-input/label-input.component';
 import {SideMenuComponent} from './component/side-menu/side-menu.component';
-import {BusyModule} from 'angular2-busy';
 import {ValidationRuleEngine} from './validation/validation-rule-engine';
 import {SubmitDirective} from './validation/submit-directive';
 import {PerfectScrollbarModule} from 'angular2-perfect-scrollbar';
@@ -31,7 +30,6 @@ import {ListboxModule} from 'primeng/components/listbox/listbox';
 import {PickListModule} from 'primeng/components/picklist/picklist';
 import {ToggleButtonModule} from 'primeng/components/togglebutton/togglebutton';
 import {InputSwitchModule} from 'primeng/components/inputswitch/inputswitch';
-
 import {CustomFormsModule} from 'ng2-validation';
 
 
@@ -43,10 +41,10 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule, BusyModule,
+    CommonModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule,
     TreeModule, ButtonModule, ListboxModule, ToggleButtonModule, PickListModule, InputSwitchModule,
     TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule,
-    PerfectScrollbarModule.forChild(), TabViewModule, // nice scroll
+    PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, // nice scroll
     // 管道
     PipeModule
   ],
@@ -54,22 +52,22 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     EveHighlightDirective,
     EveLabelInputComponent,
     SideMenuComponent,
-    //表单验证
+    // 表单验证
     ValidationRuleEngine, SubmitDirective,
-    //分页
+    // 分页
     PaginatorComponent, CombotreeComponent,
     TopBarComponent,
   ],
   exports: [
     // module：导出共享模块，导入本模块的模块无需重复导入这些模块，包括一些常用的第三方模块
-    CommonModule, FormsModule, ReactiveFormsModule, HttpModule, BusyModule,
+    CommonModule, FormsModule, ReactiveFormsModule, HttpModule,
     // PrimeNg Module
     DataTableModule, InputTextModule, ButtonModule, DropdownModule, RadioButtonModule,
     PaginatorModule, PanelMenuModule, BreadcrumbModule, TabViewModule, DialogModule,
     ConfirmDialogModule, StepsModule, PanelModule, InputTextareaModule, CalendarModule,
     TabMenuModule, TreeModule, AutoCompleteModule, SplitButtonModule, SelectButtonModule,
     GrowlModule, TooltipModule, CheckboxModule, ContextMenuModule, ToggleButtonModule,
-    PerfectScrollbarModule, ListboxModule, InputSwitchModule, PickListModule,
+    PerfectScrollbarModule, ListboxModule, InputSwitchModule, PickListModule,CalendarModule,
     // directive：共享指令
     EveHighlightDirective,
     // 共享组件

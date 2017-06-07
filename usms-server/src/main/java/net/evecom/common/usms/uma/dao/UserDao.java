@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.model.UserModel;
 import org.springframework.data.domain.Page;
@@ -27,9 +28,11 @@ public interface UserDao extends BaseDao<UserEntity, Long> {
      * @param size 页面数据量
      * @return
      */
-    Page<UserModel> findModelsByPage(int page, int size);
+    Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter);
 
     UserEntity findByLoginName(String loginName);
+
+    List<UserEntity> findByLoginNames(String[] loginNames);
 
     List<RoleEntity> findRolesById(Long id);
 
@@ -42,5 +45,7 @@ public interface UserDao extends BaseDao<UserEntity, Long> {
     void updateInstitutions(Long userId,String[] institutionIds);
 
     List<InstitutionEntity> findInstByUserId(Long userId);
+
+    void createUserInstitution(Long userId,Long institutionId);
 
 }

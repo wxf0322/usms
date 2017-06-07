@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +32,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/role")
 public class RoleController {
-
     /**
      * 注入roleService
      */
@@ -44,8 +45,15 @@ public class RoleController {
      */
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<RoleEntity> list(Integer page, Integer size) {
-        return roleService.findByPage(page, size);
+    public Page<RoleEntity> list(Integer page, Integer size, HttpServletRequest request) {
+        SqlFilter sqlFilter = new SqlFilter();
+        if (!org.springframework.util.StringUtils.isEmpty(request.getParameter("label"))) {
+            sqlFilter.addFilter("QUERY_r#label_S_LK", request.getParameter("label"));
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(request.getParameter("name"))){
+            sqlFilter.addFilter("QUERY_r#name_S_LK", request.getParameter("name"));
+        }
+        return roleService.findByPage(page, size,sqlFilter);
     }
 
     @ResponseBody

@@ -5,9 +5,9 @@
       <button pButton type="button" label="删除" icon="fa-trash" (click)="deleteSelected()"></button>
     </li>
     <li class="toolkit-item e-right">
-      <input type="text" pInputText placeholder="关键字">
-      <button pButton icon="fa-search" label="查询"></button>
-      <button pButton icon="fa-refresh" label="重置"></button>
+      <p-dropdown [options]="selects" [(ngModel)]="selectKey"></p-dropdown>
+      <input type="text" pInputText placeholder="关键字" [(ngModel)]="key">
+      <button pButton icon="fa-search" (click)="query()" label="查询"></button>
     </li>
   </ul>
 </div>

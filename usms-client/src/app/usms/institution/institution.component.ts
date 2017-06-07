@@ -16,6 +16,7 @@ import {Institution} from "./institution";
 })
 export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit {
 
+
   tree: TreeNode[] = [];
 
   selectedNode: TreeNode;
@@ -35,7 +36,7 @@ export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit 
     this.refreshTree();
   }
 
-  refreshTree() {
+  refreshTree(){
     let url = GlobalVariable.BASE_URL + 'institution/tree';
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
@@ -66,6 +67,15 @@ export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit 
    */
   addTreeNode(type: string, parentId: string) {
     this.router.navigate(['detail', {type: type, parentId: parentId}], {relativeTo: this.route});
+  }
+
+  /**
+   * 编辑树形节点
+   * @param type
+   * @param id
+   */
+  editTreeNode(type: string, id: string) {
+    this.router.navigate(['detail', {type: type, id: id}], {relativeTo: this.route});
   }
 
   /**

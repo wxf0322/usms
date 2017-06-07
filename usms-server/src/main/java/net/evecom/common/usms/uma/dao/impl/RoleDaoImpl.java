@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -49,13 +50,10 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_roles r where r.id in( ")
                 .append("select ur.role_id from usms_user_role ur ")
-                .append("where ur.user_id =:userid) and r.enabled=1 ");
+                .append("where ur.user_id = ?) and r.enabled = 1 ");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, RoleEntity.class);
-        query.setParameter("userid", userID);
-        return query.getResultList();
+        return super.queryBySql(sql, new Object[]{userID});
     }
-
 
     /**
      * 判断是否拥有该角色
@@ -69,11 +67,11 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_roles r where r.id in( ")
                 .append("select ur.role_id from usms_user_role ur ")
-                .append("where ur.user_id =:userid) and r.enabled=1 and r.name=:name ");
+                .append("where ur.user_id = ?) and r.enabled=1 and r.name= ? ");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, RoleEntity.class);
-        query.setParameter("userid", userID);
-        query.setParameter("name", roleName);
+        query.setParameter(1, userID);
+        query.setParameter(2, roleName);
         return query.getResultList().size() != 0;
     }
 
@@ -88,13 +86,37 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ur.user_id from usms_user_role ur\n")
-                .append(" where ur.role_id in\n")
-                .append(" (select r.id from usms_roles r where r.name = :name))\n")
+                .append(" where ur.role_id in \n")
+                .append(" (select r.id from usms_roles r where r.name = ? and r.enabled = 1))\n")
                 .append(" and u.enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("name", roleName);
-        return query.getResultList();
+        return super.queryBySql(UserEntity.class, sql, new Object[]{roleName});
+    }
+
+    /**
+     * @param roleNames
+     * @return
+     */
+    @Override
+    public List<UserEntity> getUsersByRoleNames(String[] roleNames) {
+        StringBuffer queryParams = new StringBuffer();
+        if (roleNames != null && roleNames.length > 0) {
+            int i = 0;
+            for (String ignored : roleNames) {
+                if (i == 0) queryParams.append("?");
+                else queryParams.append(",?");
+                i++;
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_users u where u.id in\n")
+                .append(" (select ur.user_id from usms_user_role ur\n")
+                .append(" where ur.role_id in\n")
+                .append(" (select r.id from usms_roles r where r.name in (")
+                .append(queryParams).append(") and r.enabled = 1 ))\n")
+                .append(" and u.enabled = 1");
+        String sql = sb.toString();
+        return super.queryBySql(UserEntity.class, sql, roleNames);
     }
 
     /**
@@ -103,25 +125,23 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
      * @return
      */
     @Override
-    public Page<RoleEntity> findByPage(int page, int size) {
+    public Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_roles");
+        sb.append("select * from usms_roles r where 1=1 "+sqlFilter.getWhereSql());
         String sql = sb.toString();
-        return queryByPage(sql, null, page, size);
+        return queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     /**
      * 根据角色id查找用户列表
      */
-    public List<UserEntity> findUsersByRoleId(int roleId) {
+    public List<UserEntity> findUsersByRoleId(Long roleId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ur.user_id from usms_user_role ur\n")
-                .append(" where ur.role_id =:roleid )\n");
+                .append(" where ur.role_id = ? )\n");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("roleid", roleId);
-        return query.getResultList();
+        return super.queryBySql(UserEntity.class, sql, new Object[]{roleId});
     }
 
     /**
@@ -131,7 +151,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_privileges where id in(")
-                .append("select priv_id from USMS_PRIVILEGE_ROLE t ")
+                .append("select priv_id from usms_privilege_role t ")
                 .append("where role_id=:roleId) and enabled=1 ");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
@@ -146,7 +166,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     public List<PrivilegeEntity> getUnselectedPrivileges(Long roleId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_privileges where id not in(")
-                .append("select priv_id from USMS_PRIVILEGE_ROLE t ")
+                .append("select priv_id from usms_privilege_role t ")
                 .append("where role_id=:roleId) and enabled=1 ");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
@@ -190,7 +210,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     public List<Map<String, Object>> getSelectedUsers(Long roleId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select id,login_name,name from usms_users where id in(\n")
-                .append("  select user_id from USMS_user_ROLE t\n")
+                .append("  select user_id from usms_user_role t\n")
                 .append("where role_id=?) and enabled=1");
         String sql = sb.toString();
         return super.queryMap(sql, new Object[]{roleId});
@@ -201,7 +221,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select id,login_name, name from usms_users where id not in(\n")
-                .append("  select user_id from USMS_user_ROLE t\n")
+                .append(" select user_id from usms_user_role t\n")
                 .append("where role_id=?) and enabled=1");
         String sql = sb.toString();
         return super.queryMap(sql, new Object[]{roleId});

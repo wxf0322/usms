@@ -8,7 +8,10 @@ package net.evecom.common.usms.uma.api;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.model.InstitutionModel;
 import net.evecom.common.usms.model.OperationModel;
+import net.evecom.common.usms.model.StaffModel;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.uma.service.ApplicationService;
+import net.evecom.common.usms.uma.service.OperationService;
 import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
@@ -50,10 +53,22 @@ public class UserAPI {
     private UserService userService;
 
     /**
+     * 注入ApplicationService
+     */
+    @Autowired
+    private ApplicationService applicationService;
+
+    /**
      * 注入StaffService
      */
     @Autowired
     private StaffService staffService;
+
+    /**
+     * 注入OperationService
+     */
+    @Autowired
+    private OperationService operationService;
 
     /**
      * 获得员工JSON对象
@@ -63,16 +78,11 @@ public class UserAPI {
      */
     private JSONObject getStaffJSONObject(Long staffId) {
         // 获得员工实体类
-        StaffEntity staff = staffService.findOne(staffId);
-        if (staff == null) return new JSONObject();
-        JSONObject staffJson = JSONObject.fromObject(staff);
-        staffJson.remove("id");
-        staffJson.remove("lastModified");
-        staffJson.remove("modifierId");
-        staffJson.remove("modifier");
-        staffJson.remove("timeCreated");
-        staffJson.remove("creatorId");
-        staffJson.remove("creator");
+        StaffEntity staffEntity = staffService.findOne(staffId);
+        if (staffEntity == null) return new JSONObject();
+        // 获得用户model
+        StaffModel staffModel = new StaffModel(staffEntity);
+        JSONObject staffJson = JSONObject.fromObject(staffModel);
         return staffJson;
     }
 
@@ -97,43 +107,36 @@ public class UserAPI {
     }
 
     /**
-     * 获得操作JSON数组
+     * 获得应用JSON数组
      *
-     * @param userId
+     * @param clientId
      * @return
      */
-    private JSONArray getOperationJSONArray(Long userId) {
-        // 获得员工所有的操作
-        List<OperationEntity> operations = userService.findOperationsById(userId);
+    private JSONObject getApplicationJSON(String clientId) {
+        ApplicationEntity application = applicationService.findByClientId(clientId);
+
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("id", application.getId());
+        resultJson.put("label", application.getLabel());
+        resultJson.put("name", application.getName());
+        resultJson.put("clientId", application.getClientId());
+        resultJson.put("clientSecret", application.getClientSecret());
+
+        String appName = application.getName();
+        List<OperationEntity> operations = operationService.getOperationsByAppName(appName);
+
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
         for (OperationEntity operation : operations) {
             OperationModel operationModel = new OperationModel(operation);
             JSONObject operJson = JSONObject.fromObject(operationModel);
             operJson.remove("enabled");
+            operJson.remove("applicationId");
             operJsonArr.add(operJson);
         }
-        return operJsonArr;
-    }
 
-    /**
-     * 获得应用JSON数组
-     *
-     * @param userId
-     * @return
-     */
-    private JSONArray getApplicationJSONArray(Long userId) {
-        // 获得用户所有的应用
-        List<ApplicationEntity> applications = userService.findApplicationsById(userId);
-        // 构造应用
-        JSONArray appJsonArr = new JSONArray();
-        for (ApplicationEntity application : applications) {
-            JSONObject appJson = new JSONObject();
-            appJson.put("label", application.getLabel());
-            appJson.put("name", application.getName());
-            appJsonArr.add(appJson);
-        }
-        return appJsonArr;
+        resultJson.put("operations", operJsonArr);
+        return resultJson;
     }
 
     /**
@@ -152,27 +155,29 @@ public class UserAPI {
         String accessToken = oauthRequest.getAccessToken();
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
+
+        // 获取ClientId
+        String clientId = oAuthService.getClientIdByAccessToken(accessToken);
+
         // 获得用户实体类
         UserEntity user = userService.findByLoginName(loginName);
         // 获得员工id
         Long staffId = (user.getStaffEntity() != null) ? user.getStaffEntity().getId() : null;
+
         // 获得相应的json对象
         JSONObject staffJson = getStaffJSONObject(staffId);
-        JSONArray operJsonArr = getOperationJSONArray(user.getId());
-        JSONArray appJsonArr = getApplicationJSONArray(user.getId());
+        JSONObject appJson = getApplicationJSON(clientId);
         JSONArray instJsonArr = getInstitutionJSONArray(user.getId());
 
         // 构造userJson
-        JSONObject userJson = new JSONObject();
-        userJson.put("id", user.getId());
-        userJson.put("name", user.getName());
-        userJson.put("loginName", user.getLoginName());
-        userJson.put("staff", staffJson);
-        userJson.put("institutions", instJsonArr);
-        userJson.put("operations", operJsonArr);
-        userJson.put("applications", appJsonArr);
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("id", user.getId());
+        resultJson.put("name", user.getName());
+        resultJson.put("loginName", user.getLoginName());
+        resultJson.put("staff", staffJson);
+        resultJson.put("institutions", instJsonArr);
+        resultJson.put("application", appJson);
 
-        JSONObject resultJson = JSONObject.fromObject(userJson);
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 

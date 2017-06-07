@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.ApplicationDao;
@@ -37,11 +38,11 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
     private EntityManager manager;
 
     @Override
-    public Page<ApplicationEntity> findByPage(int page, int size) {
+    public Page<ApplicationEntity> findByPage(int page, int size , SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_applications");
+        sb.append("select * from usms_applications a where 1=1 "+sqlFilter.getWhereSql());
         String sql = sb.toString();
-        return super.queryByPage(sql, null, page, size);
+        return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     @Override

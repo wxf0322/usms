@@ -34,7 +34,7 @@ export class User {
   // 员工工号
   employeeNo: string;
   // 出生日期
-  birthday: string;
+  birthday: number;
   // 居住地行政区划编号
   adminDivisionCode: string;
   //居住地行政区划

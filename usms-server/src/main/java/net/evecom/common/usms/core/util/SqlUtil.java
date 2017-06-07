@@ -214,9 +214,6 @@ public class SqlUtil {
                 }
             }
         }
-        // 将数据装入reslutMap中。
-        // System.out.println("sb is :" + sb.toString());
-
         if (valueList.size() == 0) {
             if (StringUtils.isNotEmpty(sb.toString())) {
                 resultMap.put("sql", sb.toString());

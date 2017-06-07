@@ -5,10 +5,8 @@
 package net.evecom.common.usms.core.util;
 
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 描述
+ * 描述 JavaBean操作工具类
  *
  * @author Flex Hu
  * @version 1.1
@@ -86,10 +84,8 @@ public class BeanUtil {
                     Object value = ((DynaBean) orig).get(name);
                     try {
                         beanUtils.copyProperty(dest, name, value);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        logger.error(e.getMessage(), e);
                     }
                 }
             }
@@ -101,10 +97,8 @@ public class BeanUtil {
                 if (beanUtils.getPropertyUtils().isWriteable(dest, name)) {
                     try {
                         beanUtils.copyProperty(dest, name, entry.getValue());
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        logger.error(e.getMessage(), e);
                     }
                 }
             }
@@ -124,12 +118,8 @@ public class BeanUtil {
                         if (value != null) {
                             beanUtils.copyProperty(dest, name, value);
                         }
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                        logger.error(e.getMessage(), e);
                     }
                 }
             }
@@ -298,7 +288,7 @@ public class BeanUtil {
             Method method = ownerClass.getMethod("get" + methodName);
             return method.invoke(owner);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return null;
         }
     }

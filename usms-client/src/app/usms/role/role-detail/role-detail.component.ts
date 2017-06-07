@@ -40,7 +40,6 @@ export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements O
 
   save() {
     let url = GlobalVariable.BASE_URL + 'role/saveOrUpdate';
-   // console.dir(this.detailData);
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({

@@ -15,6 +15,10 @@ import java.util.Locale;
  * @created 2017/6/1 14:56
  */
 public class JavaBeanUtil {
+
+    /**
+     * 下划线
+     */
     private static final char SEPARATOR = '_';
 
     /**
@@ -171,15 +175,5 @@ public class JavaBeanUtil {
         }
         sb.insert(0, "get");
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(JavaBeanUtil.toUnderlineString("ISOCertifiedStaff"));
-        System.out.println(JavaBeanUtil.getValidPropertyName("CertifiedStaff"));
-        System.out.println(JavaBeanUtil.getSetterMethodName("userID"));
-        System.out.println(JavaBeanUtil.getGetterMethodName("userID"));
-        System.out.println(JavaBeanUtil.toCamelCaseString("iso_certified_staff", true));
-        System.out.println(JavaBeanUtil.getValidPropertyName("certified_staff"));
-        System.out.println(JavaBeanUtil.toCamelCaseString("site_Id"));
     }
 }

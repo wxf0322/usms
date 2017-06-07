@@ -18,22 +18,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "USMS_USERS")
-@NamedQueries({
-        @NamedQuery(name = UserEntity.QUERY_BY_LOGIN_NAME,
-                query = "select u from UserEntity u where u.loginName = :"
-                        + UserEntity.PARAM_LOGIN_NAME),
-})
 public class UserEntity {
-
-    /**
-     * 根据登入名查找
-     */
-    public static final String QUERY_BY_LOGIN_NAME = "UserEntity.getByLoginName";
-
-    /**
-     * loginName参数
-     */
-    public static final String PARAM_LOGIN_NAME = "loginName";
     /**
      * 用户ID
      */
@@ -326,7 +311,6 @@ public class UserEntity {
         result = 31 * result + (creator != null ? creator.hashCode() : 0);
         return result;
     }
-
 
     @Override
     public String toString() {

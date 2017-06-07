@@ -9,7 +9,8 @@ import {Message} from 'primeng/primeng';
 })
 export class AppComponent {
 
-  private messages: Message[] = [];//消息提示
+  // 消息提示
+  messages: Message[] = [];
 
   constructor(private httpService: HttpService) {
     /*监听提示信息变化*/

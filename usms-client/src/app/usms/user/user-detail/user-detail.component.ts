@@ -1,15 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
-import {ActivatedRoute} from "@angular/router";
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
-import {HttpService} from "../../../core/service/http.service";
-import {GlobalVariable} from "../../../shared/global-variable";
-import {User} from "../user";
-import {TreeNode} from "primeng/primeng";
-import {TreeUtil} from "../../../shared/util/tree-util";
-import {TreeData} from "../../../shared/util/tree-data";
-
+import {ActivatedRoute} from '@angular/router';
+import {SimpleBaseDetailUtil} from '../../../shared/util/simple-base-detail.util';
+import {HttpService} from '../../../core/service/http.service';
+import {GlobalVariable} from '../../../shared/global-variable';
+import {User} from '../user';
 
 @Component({
   selector: 'app-user-detail',
@@ -18,20 +14,16 @@ import {TreeData} from "../../../shared/util/tree-data";
 })
 export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements OnInit {
 
-  //表单验证
+  // 表单验证
   @ViewChild('reForm') reForm: NgForm;
 
-  display: boolean = false;
+  roleDisplay = false;
 
-  /**
-   * 树形节点
-   */
-  tree: TreeNode[];
+  date: Date;
 
-  /**
-   * 已经选中的节点
-   */
-  selectedNodes: TreeNode[];
+  sourceRoles: any[];
+
+  targetRoles: any[];
 
   constructor(private location: Location,
               protected httpService: HttpService,
@@ -42,32 +34,16 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
     this.detailData.sex = 1;
   }
 
-  setSelected() {
-    const id = this.route.snapshot.params['id'];
-    const selectedUrl = GlobalVariable.BASE_URL + 'user/institutions';
-    const params = {userId: id};
-    this.selectedNodes = [];
-    this.httpService.findByParams(selectedUrl, params)
-      .then(res => {
-        TreeUtil.setSelection(this.tree, this.selectedNodes, res);
-      });
-  }
-
-  refreshTree() {
-    let url = GlobalVariable.BASE_URL + 'institution/tree';
-    let treeDataArr: TreeData[];
-    this.httpService.findByParams(url)
-      .then(res => {
-        treeDataArr = res;
-        this.tree = TreeUtil.buildTrees(treeDataArr);
-        this.setSelected();
-      });
-  }
-
   ngOnInit(): void {
-    let url = GlobalVariable.BASE_URL + 'user/find';
-    this.init(url);
-    this.refreshTree();
+    const url = GlobalVariable.BASE_URL + 'user/find';
+    this.init(url).then(
+      res => {
+        if (this.detailData.birthday != null) {
+          this.date = new Date(this.detailData.birthday);
+        }else {
+          this.date = new Date();
+        }
+      });
   }
 
   goBack() {
@@ -75,7 +51,12 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
   }
 
   save() {
-    let url = GlobalVariable.BASE_URL + 'user/saveOrUpdate';
+    this.detailData.birthday = this.date.getTime();
+    let institutionId = this.route.snapshot.params['institutionId'];
+    if (typeof (institutionId) === 'undefined') {
+      institutionId = '';
+    }
+    const url = GlobalVariable.BASE_URL + 'user/saveOrUpdate?institutionId=' + institutionId;
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({
@@ -87,8 +68,8 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
       });
   }
 
-  showDialog() {
-    this.display = true;
+  showRoleDialog() {
+    this.roleDisplay = true;
   }
 
 }

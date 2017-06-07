@@ -58,6 +58,19 @@ public class OperationModel {
      */
     private Long enabled;
 
+    /**
+     * 关联的应用id
+     */
+    private Long applicationId;
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -144,8 +157,9 @@ public class OperationModel {
                 ", name='" + name + '\'' +
                 ", resUrl='" + resUrl + '\'' +
                 ", iconPath='" + iconPath + '\'' +
-                ", optType='" + optType + '\'' +
-                ", enabled='" + enabled + '\'' +
+                ", optType=" + optType +
+                ", enabled=" + enabled +
+                ", applicationId=" + applicationId +
                 '}';
     }
 }

@@ -6,6 +6,7 @@
 package net.evecom.common.usms.core.service.impl;
 
 import net.evecom.common.usms.core.service.TreeService;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.model.TreeDataModel;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
@@ -292,11 +293,18 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public List<TreeDataModel> findAllTreeData(String tableName) {
+        SqlFilter sqlFilter = new SqlFilter();
+        return  this.findAllTreeData(tableName, sqlFilter);
+    }
+
+    @Override
+    public List<TreeDataModel> findAllTreeData(String tableName, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
         sb.append("select id, label, name, parent_id from ")
-                .append(tableName).append(" order by manual_sn");
-        String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql);
+                .append(tableName)
+                .append(" where 1=1 "+sqlFilter.getWhereSql())
+                .append(" order by manual_sn");
+        Query query = this.getExecuteQuery(sb.toString(), sqlFilter.getParams().toArray());
         List<Object> list = query.getResultList();
         List<TreeDataModel> trees = new ArrayList<>();
         for (Object row : list) {

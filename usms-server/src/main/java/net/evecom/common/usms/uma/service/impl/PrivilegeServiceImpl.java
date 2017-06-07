@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.OperationModel;
@@ -92,8 +93,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public Page<PrivilegeEntity> findByPage(int page, int size) {
-        return privilegeDao.findByPage(page, size);
+    public Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
+        return privilegeDao.findByPage(page, size,sqlFilter);
     }
 
 

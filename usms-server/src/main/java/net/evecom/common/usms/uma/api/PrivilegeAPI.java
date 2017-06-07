@@ -57,7 +57,6 @@ public class PrivilegeAPI {
     @Autowired
     private UserService userService;
 
-
     /**
      * 判断是否拥有该权限
      *

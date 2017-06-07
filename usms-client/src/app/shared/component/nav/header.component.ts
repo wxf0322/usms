@@ -10,7 +10,7 @@ import {SelectItem} from 'primeng/primeng';
 
 export class EveHeaderComponent implements OnInit {
 
-  private items: SelectItem[];
+  items: SelectItem[];
 
   ngOnInit(): void {
     this.items = [];

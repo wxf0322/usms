@@ -9,6 +9,7 @@ import net.evecom.common.usms.core.model.ResultStatus;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.BeanUtil;
 import net.evecom.common.usms.core.util.MapUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.model.InstitutionModel;
 import net.evecom.common.usms.model.TreeDataModel;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +58,7 @@ public class InstitutionController {
 
     @ResponseBody
     @RequestMapping(value = "tree")
-    public List<TreeDataModel> findAllTreeData() {
+    public List<TreeDataModel> findAllTreeData(HttpServletRequest request) {
         return treeService.findAllTreeData("usms_institutions");
     }
 
@@ -76,7 +79,7 @@ public class InstitutionController {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(institutionModel));
             this.treeService.saveOrUpdateTreeData(entityId, parentId, underlineMap,
                     "usms_institutions",
-                    "usms_institutions_seq");
+                    "usms_institutions_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage(), e);
             return new ResultStatus(false, "");

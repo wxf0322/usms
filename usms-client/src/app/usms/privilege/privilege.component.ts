@@ -11,6 +11,9 @@ import {GlobalVariable} from "../../shared/global-variable";
   styleUrls: ['./privilege.component.css']
 })
 export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnInit {
+  selects: SelectItem[];
+  selectKey: string;
+  key: string;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -18,6 +21,10 @@ export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnI
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
+    this.selects = [];
+    this.selects.push({label: '请选择查询条件', value: 0});
+    this.selects.push({label: '权限名称', value: 1});
+    this.selects.push({label: '权限编码', value: 2});
   }
 
   ngOnInit(): void {
@@ -36,15 +43,26 @@ export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnI
     );
   }
 
-  reset() {
-  }
-
   /**
    * 授权操作
    * @param id
    */
   gotoOperAllocation(id: string) {
     this.router.navigate(['operation-allocation', {id: id}], {relativeTo: this.route});
+  }
+
+  query() {
+    var url = GlobalVariable.BASE_URL + 'privilege/list';
+    if (this.selectKey == '1') {
+      url = GlobalVariable.BASE_URL + 'privilege/list?label=' + this.key;
+    } else if (this.selectKey == '2') {
+      url = GlobalVariable.BASE_URL + 'privilege/list?name=' + this.key;
+    }
+    this.httpService.findByPage(url, 0, this.page.size, null).then(
+      res => {
+        return this.setData(res);
+      }
+    );
   }
 
 }

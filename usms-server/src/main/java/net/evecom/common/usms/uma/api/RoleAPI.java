@@ -6,11 +6,13 @@
 package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.RoleService;
 import net.evecom.common.usms.uma.service.UserService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author Pisces Lu
@@ -77,8 +80,25 @@ public class RoleAPI {
         JSONObject jsonObject = new JSONObject();
         if (roleService.hasRole(user.getId(), roleName)) {
             jsonObject.put("result", true);
-        } else jsonObject.put("result", false);
+        } else {
+            jsonObject.put("result", false);
+        }
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/roles", produces = "application/json; charset=UTF-8")
+    public ResponseEntity getRoles(HttpServletRequest request) {
+        List<RoleEntity> roles = roleService.findAll();
+        JSONArray roleJsonArr = new JSONArray();
+        for(RoleEntity role : roles) {
+            if (role.getEnabled() == 0) continue;
+            JSONObject roleJson = JSONObject.fromObject(role);
+            roleJson.remove("enabled");
+            roleJsonArr.add(roleJson);
+        }
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("roles", roleJsonArr);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
 }

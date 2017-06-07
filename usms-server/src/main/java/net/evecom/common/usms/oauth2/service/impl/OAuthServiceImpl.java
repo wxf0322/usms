@@ -5,10 +5,8 @@
  */
 package net.evecom.common.usms.oauth2.service.impl;
 
-import net.evecom.common.usms.core.util.MD5Util;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.oauth2.service.OAuthService;
-import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
@@ -17,6 +15,8 @@ import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -60,6 +60,11 @@ public class OAuthServiceImpl implements OAuthService {
     private RedisTemplate<String, String> redisTemplate;
 
     /**
+     * hash操作对象
+     */
+    private HashOperations<String, String, String> hashOperations;
+
+    /**
      * redis值操作对象
      */
     private ValueOperations<String, String> valueOperations;
@@ -73,6 +78,7 @@ public class OAuthServiceImpl implements OAuthService {
     public OAuthServiceImpl(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.valueOperations = redisTemplate.opsForValue();
+        this.hashOperations = redisTemplate.opsForHash();
     }
 
     /**
@@ -125,7 +131,10 @@ public class OAuthServiceImpl implements OAuthService {
 
         // 设置Access Token
         valueOperations.set(relationKey, accessToken);
-        valueOperations.set(accessToken, loginName);
+
+        // 存入与Access Token相关的值
+        hashOperations.put(accessToken, "loginName", loginName);
+        hashOperations.put(accessToken, "clientId", clientId);
 
         // 设置超时时间
         redisTemplate.expire(relationKey, accessTokenExpires, TimeUnit.SECONDS);
@@ -167,7 +176,18 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public String getLoginNameByAccessToken(String accessToken) {
-        return valueOperations.get(accessToken);
+        return hashOperations.get(accessToken,"loginName");
+    }
+
+    /**
+     * 根据令牌获取ClientId
+     *
+     * @param accessToken
+     * @return
+     */
+    @Override
+    public String getClientIdByAccessToken(String accessToken) {
+        return hashOperations.get(accessToken, "clientId");
     }
 
     /**
@@ -189,7 +209,7 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public boolean checkAccessToken(String accessToken) {
-        return valueOperations.get(accessToken) != null;
+        return hashOperations.get(accessToken, "loginName") != null;
     }
 
     /**
@@ -283,7 +303,7 @@ public class OAuthServiceImpl implements OAuthService {
      * @param loginName
      */
     @Override
-    public void deleteAccountByloginName(String loginName) {
+    public void deleteAccountByLoginName(String loginName) {
         String relationKey = getRelationKey("*", loginName, "*");
         Set<String> keySet = redisTemplate.keys(relationKey);
         keySet.forEach(key -> {

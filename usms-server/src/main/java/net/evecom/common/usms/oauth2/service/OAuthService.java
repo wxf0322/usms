@@ -85,6 +85,13 @@ public interface OAuthService {
     String getLoginNameByAccessToken(String accessToken);
 
     /**
+     * 根据accessToke获取ClientId
+     * @param accessToken
+     * @return
+     */
+    String getClientIdByAccessToken(String accessToken);
+
+    /**
      * auth code / access token 过期时间
      *
      * @return
@@ -136,7 +143,7 @@ public interface OAuthService {
      *
      * @param loginName
      */
-    void deleteAccountByloginName(String loginName);
+    void deleteAccountByLoginName(String loginName);
 
     /**
      * 获得新的AccessToken，并删除旧的AccessToken和已获得的AuthCode

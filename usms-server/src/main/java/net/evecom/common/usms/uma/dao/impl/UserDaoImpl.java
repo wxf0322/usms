@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.model.UserModel;
 import net.evecom.common.usms.uma.dao.UserDao;
@@ -48,14 +49,14 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
      * @return
      */
     @Override
-    public Page<UserModel> findModelsByPage(int page, int size) {
+    public Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
         sb.append("select u.id, u.login_name, u.name, s.mobile, u.enabled\n")
-                .append(" from usms_users u\n")
+                .append(" from usms_users u  " )
                 .append(" left join usms_staffs s\n")
-                .append(" on u.staff_id = s.id");
+                .append(" on u.staff_id = s.id where 1=1 "+sqlFilter.getWhereSql());
         String sql = sb.toString();
-        Page<Map<String, Object>> pageBean = queryMapByPage(sql, null, page, size);
+        Page<Map<String, Object>> pageBean = queryMapByPage(sql, sqlFilter.getParams().toArray(), page, size);
         List<UserModel> list = new ArrayList<>();
         for (Map<String, Object> var : pageBean.getContent()) {
             UserModel userModel = new UserModel();
@@ -79,10 +80,30 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
 
     @Override
     public UserEntity findByLoginName(String loginName) {
-        TypedQuery<UserEntity> query = manager.createNamedQuery(UserEntity.QUERY_BY_LOGIN_NAME, UserEntity.class);
-        query.setParameter(UserEntity.PARAM_LOGIN_NAME, loginName);
-        return JpaUtil.getSingleResult(query.getResultList());
+        String sql = "select * from usms_users u where u.login_name = ?";
+        List<UserEntity> result = super.queryBySql(sql, new Object[]{loginName});
+        return JpaUtil.getSingleResult(result);
     }
+
+    @Override
+    public List<UserEntity> findByLoginNames(String[] loginNames) {
+        StringBuffer queryParams = new StringBuffer();
+        if(loginNames != null && loginNames.length > 0) {
+            int i = 0;
+            for (String ignored : loginNames) {
+                if (i == 0) queryParams.append("?");
+                else queryParams.append(",?");
+                i++;
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("select * from usms_users u where u.login_name in (")
+                .append(queryParams)
+                .append(")");
+        String sql = sb.toString();
+        return super.queryBySql(sql, loginNames);
+    }
+
 
     @Override
     public List<RoleEntity> findRolesById(Long id) {
@@ -109,15 +130,13 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
                 .append(" where pr.role_id in\n")
                 .append(" (select ur.role_id\n")
                 .append(" from usms_user_role ur\n")
-                .append(" where ur.user_id = :userId)\n")
+                .append(" where ur.user_id = ?)\n")
                 .append(" and pr.role_id = r.id\n")
                 .append(" and r.enabled = 1)\n")
                 .append(" and p.enabled = 1))\n")
                 .append(" and o.enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter("userId", id);
-        return query.getResultList();
+        return super.queryBySql(OperationEntity.class, sql, new Object[]{id});
     }
 
     @Override
@@ -182,4 +201,14 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
         return super.queryBySql(InstitutionEntity.class, sql, new Object[]{userId});
     }
 
+    @Override
+    public void createUserInstitution(Long userId, Long institutionId) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("INSERT INTO USMS_USER_INSTITUTION VALUES(:userId,:institutionId)");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("userId",userId);
+        query.setParameter("institutionId",institutionId);
+        query.executeUpdate();
+    }
 }

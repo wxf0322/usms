@@ -1,6 +1,8 @@
 <div class="ui-g-4">
   <p-panel header="系统资源树">
-    <p-dropdown [style]="{'width':'100%'}" [options]="cities" [(ngModel)]="selectedCity"></p-dropdown>
+    <p-dropdown [style]="{'width':'100%'}" [options]="applications"
+                [(ngModel)]="selectedApplication" (onChange)="selectChange()" >
+    </p-dropdown>
     <br><br>
     <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
             (onNodeSelect)="nodeSelect($event)">
@@ -8,15 +10,16 @@
           <span (mouseenter)="node['enter']=true" (mouseleave)="node['enter']=false">
             <span>{{node.label}}</span>
               <span *ngIf="node['enter']">
-                <a class="fa fa-plus a-button" (click)="addTreeNode('add',node.data.id)"></a>
+                <a class="fa fa-plus a-button" (click)="addTreeNode('add',node.data.id,selectedApplication)"></a>
                 <a class="fa fa-trash a-button" (click)="deleteTreeNode(node)" ></a>
-                <a class="fa fa-edit a-button" (click)="gotoDetail('edit',node.data.id)"></a>
+                <a class="fa fa-edit a-button" (click)="editTreeNode('edit',node.data.id)"></a>
               </span>
           </span>
       </ng-template>
     </p-tree>
   </p-panel>
 </div>
+
 <div class="ui-g-8">
   <div class="detail-layout">
     <div class="ui-g-12 ui-g-nopad control-group">
@@ -54,3 +57,4 @@
     </div>
   </div>
 </div>
+

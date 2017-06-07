@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.core.service;
 
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.model.TreeDataModel;
 
 import java.util.List;
@@ -91,5 +92,13 @@ public interface TreeService {
      * @return
      */
     List<TreeDataModel> findAllTreeData(String tableName);
+
+    /**
+     * 获取所有树形数据
+     *
+     * @return
+     */
+    List<TreeDataModel> findAllTreeData(String tableName,SqlFilter sqlFilter );
+
 
 }

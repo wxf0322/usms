@@ -40,6 +40,7 @@ export class OperationDetailComponent extends SimpleBaseDetailUtil<Operation>
     if(this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];
     }
+    this.detailData.applicationId = +this.route.snapshot.params['applicationId'];
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({

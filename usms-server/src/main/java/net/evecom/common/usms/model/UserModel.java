@@ -30,7 +30,7 @@ public class UserModel {
     /**
      * 日志管理器
      */
-     Logger logger = LoggerFactory.getLogger(UserModel.class);
+    private static Logger logger = LoggerFactory.getLogger(UserModel.class);
 
     /**
      * id
@@ -99,7 +99,7 @@ public class UserModel {
     /**
      * 出生日期
      */
-    Date birthday;
+    Long birthday;
     /**
      * 居住地行政区划编号
      */
@@ -257,11 +257,11 @@ public class UserModel {
         this.employeeNo = employeeNo;
     }
 
-    public Date getBirthday() {
+    public Long getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Long birthday) {
         this.birthday = birthday;
     }
 
@@ -325,12 +325,15 @@ public class UserModel {
         try {
             BeanUtils.copyProperties(userEntity, this);
             StaffEntity staffEntity = new StaffEntity();
+            if (this.birthday != null) {
+                staffEntity.setBirthday(new Date(this.birthday));
+            }else {
+                staffEntity.setBirthday(null);
+            }
             BeanUtils.copyProperties(staffEntity, this);
             userEntity.setStaffEntity(staffEntity);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(),e);
-        } catch (InvocationTargetException e) {
-            logger.error(e.getMessage(),e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
         }
         return userEntity;
     }
@@ -343,14 +346,12 @@ public class UserModel {
             BeanUtils.copyProperties(this, userEntity);
             if (userEntity.getStaffEntity() != null) {
                 StaffEntity staffEntity = userEntity.getStaffEntity();
-                BeanUtilsBean.getInstance().getConvertUtils()
-                        .register(new SqlDateConverter(null), Date.class);
                 BeanUtils.copyProperties(this, staffEntity);
+                this.setId(userEntity.getId());
+                this.birthday = (staffEntity.getBirthday() != null) ? staffEntity.getBirthday().getTime() : null;
             }
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(),e);
-        } catch (InvocationTargetException e) {
-            logger.error(e.getMessage(),e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 

@@ -23,15 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 描述
+ * 描述 返回用户列表接口
  *
  * @author Wash Wang
  * @version 1.0
  * @created 2017/5/8 9:58
  */
 @Controller
-@RequestMapping("/v1/openapi/users")
 public class UsersAPI {
+
     /**
      * 注入GridService
      */
@@ -39,7 +39,7 @@ public class UsersAPI {
     private GridService gridService;
 
     /**
-     * 注入InstitutinoService
+     * 注入InstitutionService
      */
     @Autowired
     private InstitutionService institutionService;
@@ -74,50 +74,53 @@ public class UsersAPI {
     @Autowired
     private StaffService staffService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 获取用户列表
      *
      * @param request
      * @return
      */
-    @RequestMapping(produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/v1/openapi/users", produces = "application/json; charset=UTF-8")
     public ResponseEntity getUsers(HttpServletRequest request) {
-        JSONObject usersJson = new JSONObject();
         List<UserEntity> users = null;
         //获取管辖区域编码
         String gridCode = request.getParameter("grid");
         if (StringUtils.isNotEmpty(gridCode)) {
-            users = getUsersByGridCode(gridCode);
+            users = gridService.getUsersByGridCode(gridCode);
         }
         //获取组织机构编码
         String instName = request.getParameter("institution");
         if (StringUtils.isNotEmpty(instName)) {
-            users = getUsersByInstName(instName);
+            users = institutionService.getUsersByInstName(instName);
         }
         //获取应用编码
         String appName = request.getParameter("application");
         if (StringUtils.isNotEmpty(appName)) {
-            users = getUsersByApplicationName(appName);
+            users = applicationService.getUsersByApplicationName(appName);
         }
         //获取权限编码
         String privName = request.getParameter("privilege");
         if (StringUtils.isNotEmpty(privName)) {
-            users = getUsersByPrivName(privName);
+            users = privilegeService.getUsersByPrivName(privName);
         }
         //获取操作编码
         String operName = request.getParameter("operation");
         if (StringUtils.isNotEmpty(operName)) {
-            users = getUsersByOperName(operName);
+            users = operationService.getUsersByOperName(operName);
         }
         //获取角色编码
         String roleName = request.getParameter("role");
         if (StringUtils.isNotEmpty(roleName)) {
-            users = getUsersByRoleName(roleName);
+            users = roleService.getUsersByRoleName(roleName);
         }
         String officalPost = request.getParameter("offical_post");
         if (StringUtils.isNotEmpty(officalPost)) {
-            users = findUsersByOfficalPost(officalPost);
+            users = staffService.findUsersByOfficalPost(officalPost);
         }
+        JSONObject usersJson = new JSONObject();
         if (users == null) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
@@ -129,74 +132,31 @@ public class UsersAPI {
         }
     }
 
-    /**
-     * 根据管辖区域编码查询用户列表
-     *
-     * @param gridCode
-     * @return
-     */
-    List<UserEntity> getUsersByGridCode(String gridCode) {
-        return gridService.getUsersByGridCode(gridCode);
-    }
-
-    /**
-     * 根据组织机构编码构查询用户列表
-     *
-     * @param instName
-     * @return
-     */
-    List<UserEntity> getUsersByInstName(String instName) {
-        return institutionService.getUsersByInstName(instName);
-    }
-
-    /**
-     * 根据应用编码构查询用户列表
-     *
-     * @param appName
-     * @return
-     */
-    List<UserEntity> getUsersByApplicationName(String appName) {
-        return applicationService.getUsersByApplicationName(appName);
-    }
-
-    /**
-     * 根据组权限编码构查询用户列表
-     *
-     * @param privName
-     * @return
-     */
-    List<UserEntity> getUsersByPrivName(String privName) {
-        return privilegeService.getUsersByPrivName(privName);
-    }
-
-    /**
-     * 根据操作编码构查询用户列表
-     *
-     * @param operName
-     * @return
-     */
-    List<UserEntity> getUsersByOperName(String operName) {
-        return operationService.getUsersByOperName(operName);
-    }
-
-    /**
-     * 根据角色编码构查询用户列表
-     *
-     * @param roleName
-     * @return
-     */
-    List<UserEntity> getUsersByRoleName(String roleName) {
-        return roleService.getUsersByRoleName(roleName);
-    }
-
-    /**
-     * 根据职务查询用户列表
-     *
-     * @param officalPost
-     * @return
-     */
-    List<UserEntity> findUsersByOfficalPost(String officalPost) {
-        return staffService.findUsersByOfficalPost(officalPost);
+    @RequestMapping(value = "/v1/internalapi/users", produces = "application/json; charset=UTF-8")
+    public ResponseEntity getUsersToMessageCenter(HttpServletRequest request) {
+        List<UserEntity> users = null;
+        String loginNames = request.getParameter("login_names");
+        if(StringUtils.isNotEmpty(loginNames)) {
+            users = userService.findByLoginNames(loginNames.split(","));
+        }
+        String roleNames = request.getParameter("roles");
+        if(StringUtils.isNotEmpty(roleNames)) {
+            users = roleService.getUsersByRoleNames(roleNames.split(","));
+        }
+        String instNames = request.getParameter("institutions");
+        if(StringUtils.isNotEmpty(instNames)) {
+            users = institutionService.getUsersByInstNames(instNames.split(","));
+        }
+        JSONObject usersJson = new JSONObject();
+        if (users == null) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        } else {
+            usersJson.put("users", getUsersJSONArray(users));
+            return new ResponseEntity(usersJson.toString(), HttpStatus.OK);
+        }
     }
 
     /**

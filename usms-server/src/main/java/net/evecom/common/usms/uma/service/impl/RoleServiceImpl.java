@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -47,8 +48,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public Page<RoleEntity> findByPage(int page, int size) {
-        return roleDao.findByPage(page, size);
+    public Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
+        return roleDao.findByPage(page, size,sqlFilter);
     }
 
     /**
@@ -85,6 +86,16 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
         return roleDao.getUsersByRoleName(roleName);
     }
 
+    /**
+     * 根据角色编码列表查询用户列表
+     *
+     * @param roleNames
+     * @return
+     */
+    @Override
+    public List<UserEntity> getUsersByRoleNames(String[] roleNames) {
+        return roleDao.getUsersByRoleNames(roleNames);
+    }
 
     @Override
     public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
@@ -104,7 +115,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     /**
      * 根据角色id查找用户列表
      */
-    public List<UserEntity> findUsersByRoleId(int roleId) {
+    public List<UserEntity> findUsersByRoleId(Long roleId) {
         return roleDao.findUsersByRoleId(roleId);
     }
 

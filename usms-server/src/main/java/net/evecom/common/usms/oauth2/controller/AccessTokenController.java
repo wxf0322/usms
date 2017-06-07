@@ -106,6 +106,7 @@ public class AccessTokenController {
 
             // 检查重定向地址是否和上次的一样
             String preRedirectUri = oAuthService.getRedirectUriByRelation(loginName, clientId);
+
             if (!preRedirectUri.equals(oauthRequest.getRedirectURI())) {
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_REQUEST)
@@ -125,7 +126,6 @@ public class AccessTokenController {
 
             //根据OAuthResponse生成ResponseEntity
             return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-
         } catch (OAuthProblemException e) {
             // 构建错误响应
             OAuthResponse response = OAuthASResponse

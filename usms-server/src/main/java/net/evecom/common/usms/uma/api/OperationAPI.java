@@ -61,7 +61,6 @@ public class OperationAPI {
     @Autowired
     private UserService userService;
 
-
     /**
      * 判断是否允许该操作
      * @return ResponseEntity
