@@ -31,6 +31,10 @@
                 <p-radioButton name="enbled" value="0" label="冻结"
                                [(ngModel)]="detailData.enabled"></p-radioButton>
               </div>
+              <div class="ui-g-6">
+                <label class=" control-label">备注</label>
+                <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}">
+              </div>
             </div>
           </form>
         </div>

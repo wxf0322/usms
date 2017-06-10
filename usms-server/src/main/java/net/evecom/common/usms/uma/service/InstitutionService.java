@@ -58,5 +58,11 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
      */
     List<InstitutionEntity> getInstitutionsByType(Long type);
 
+    /**
+     * 检查该节点是否能被删除
+     * @param id
+     * @return
+     */
+    boolean canBeDeleted(Long id);
 
 }

@@ -3,4 +3,5 @@ export class Privilege {
   label: string;
   name: string;
   enabled: number;
+  remarks:string;
 }

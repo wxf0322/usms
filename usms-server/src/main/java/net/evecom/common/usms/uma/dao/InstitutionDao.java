@@ -60,5 +60,10 @@ public interface InstitutionDao extends BaseDao<InstitutionEntity, Long> {
      */
     List<InstitutionEntity> getInstitutionsByType(Long type);
 
-
+    /**
+     * 检查是否能被删除
+     * @param id
+     * @return
+     */
+    boolean canBeDeleted(Long id);
 }

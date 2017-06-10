@@ -2,7 +2,7 @@ import {Pagination} from './pagination';
 
 export abstract class SimpleBase<T> extends Pagination<T> {
 
-  filter: T; //封装查询条件
+  filter: any; //封装查询条件
 
   firstIndex: number = 0;//当前页的第一个数的序号，从0开始
 

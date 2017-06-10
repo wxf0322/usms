@@ -10,8 +10,11 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.model.RoleModel;
 import net.evecom.common.usms.uma.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +43,13 @@ public class RoleController {
     private RoleService roleService;
 
     /**
+     * 日志管理器
+     */
+    private static Logger logger = LoggerFactory.getLogger(RoleController.class);
+
+
+
+    /**
      * 查找角色列表
      *
      * @return
@@ -47,11 +58,9 @@ public class RoleController {
     @RequestMapping(value = "list")
     public Page<RoleEntity> list(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!org.springframework.util.StringUtils.isEmpty(request.getParameter("label"))) {
-            sqlFilter.addFilter("QUERY_r#label_S_LK", request.getParameter("label"));
-        }
-        if(!org.springframework.util.StringUtils.isEmpty(request.getParameter("name"))){
-            sqlFilter.addFilter("QUERY_r#name_S_LK", request.getParameter("name"));
+        if (!org.springframework.util.StringUtils.isEmpty(request.getParameter("key"))) {
+            sqlFilter.addOrFilter("QUERY_r#label_S_LK", request.getParameter("key"));
+            sqlFilter.addOrFilter("QUERY_r#name_S_LK", request.getParameter("key"));
         }
         return roleService.findByPage(page, size,sqlFilter);
     }
@@ -74,8 +83,30 @@ public class RoleController {
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody RoleEntity roleEntity) {
-        roleService.saveOrUpdate(roleEntity);
+    public ResultStatus saveOrUpdate(@RequestBody RoleModel roleModel) {
+        RoleEntity roleEntity = null;
+        try {
+            roleEntity = new RoleEntity(roleModel);
+            roleEntity = roleService.saveOrUpdate(roleEntity);
+            String[] privilegeIdArray;
+            if (StringUtils.isEmpty(roleModel.getPrivilegeIds())) {
+                privilegeIdArray = null;
+            } else {
+                privilegeIdArray = roleModel.getPrivilegeIds().split(",");
+            }
+            roleService.updatePrivileges(roleEntity.getId(), privilegeIdArray);
+            String[] userIdArray;
+            if (StringUtils.isEmpty(roleModel.getUserIds())) {
+                userIdArray = null;
+            } else {
+                userIdArray = roleModel.getUserIds().split(",");
+            }
+            roleService.updateUsers(roleEntity.getId(), userIdArray);
+        } catch (InvocationTargetException |IllegalAccessException e) {
+            logger.error(e.getMessage(),e);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+        }
         return new ResultStatus(true, "");
     }
 
@@ -103,24 +134,6 @@ public class RoleController {
     }
 
     /**
-     * 更新角色对应的权限列表
-     * @param roleId
-     * @param privilegeIds
-     */
-    @ResponseBody
-    @RequestMapping(value = "privileges/update")
-    public ResultStatus updatePrivileges(Long roleId, String privilegeIds) {
-        String[] privilegeIdArray;
-        if (StringUtils.isEmpty(privilegeIds)) {
-            privilegeIdArray = null;
-        } else {
-            privilegeIdArray = privilegeIds.split(",");
-        }
-        roleService.updatePrivileges(roleId, privilegeIdArray);
-        return new ResultStatus(true, "");
-    }
-
-    /**
      * 根据角色ID查找已选用户列表
      *
      * @param roleId
@@ -144,23 +157,6 @@ public class RoleController {
         return roleService.getUnselectedUsers(roleId);
     }
 
-    /**
-     * 更新用户列表
-     *
-     * @param roleId
-     * @param userIds
-     */
-    @ResponseBody
-    @RequestMapping(value = "users/update")
-    public ResultStatus updateUsers(Long roleId, String userIds) {
-        String[] userIdArray;
-        if (StringUtils.isEmpty(userIds)) {
-            userIdArray = null;
-        } else {
-            userIdArray = userIds.split(",");
-        }
-        roleService.updateUsers(roleId, userIdArray);
-        return new ResultStatus(true, "");
-    }
+
 
 }

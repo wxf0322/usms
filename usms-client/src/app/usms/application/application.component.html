@@ -5,8 +5,7 @@
       <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
     </li>
     <li class="toolkit-item e-right">
-      <p-dropdown [options]="selects" [(ngModel)]="selectKey"></p-dropdown>
-      <input type="text" pInputText placeholder="关键字" [(ngModel)]="key">
+      <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
       <button pButton type="button" icon="fa-search" label="查询" (click)="query()"></button>
     </li>
   </ul>
@@ -14,7 +13,7 @@
 <div class="ui-g content">
   <perfect-scrollbar>
     <div class="ui-g-12">
-      <p-dataTable [value]="viewData" [(selection)]="selectedData">
+      <p-dataTable [value]="viewData" [(selection)]="selectedData" selectionMode="multiple">
         <p-column [style]="{'width':'60px'}">
           <ng-template let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>
@@ -23,8 +22,7 @@
         <p-column selectionMode="multiple" [style]="{'width':'38px'}"></p-column>
         <p-column header="应用名称" field="label" [style]="{'width':'120px'}"></p-column>
         <p-column header="应用编码" field="name"></p-column>
-        <p-column header="应用ID" field="clientId"></p-column>
-        <p-column header="应用Secret" field="clientSecret"></p-column>
+        <p-column header="应用描述" field="clientDesc"></p-column>
         <p-column header="状态">
           <ng-template let-application="rowData" pTemplate="body">
             {{application.enabled | enabledPipe}}

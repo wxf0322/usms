@@ -99,9 +99,7 @@ public class TreeServiceImpl implements TreeService {
     public boolean isExisted(Long entityId, String tableName) {
         String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
         StringBuffer sql = new StringBuffer("select count(*) from ");
-        sql.append(tableName).append(" where ")
-                .append(primaryKeyName)
-                .append("=? ");
+        sql.append(tableName).append(" where ").append(primaryKeyName).append("=? ");
         if (entityId == null) {
             entityId = 0L;
         }
@@ -121,7 +119,7 @@ public class TreeServiceImpl implements TreeService {
     public Set<String> getColumnNameByTableName(String tableName) {
         Set<String> set = new HashSet<>();
         StringBuffer sql = new StringBuffer("select t.column_name from ")
-                .append("user_tab_columns t where t.table_name=? ");
+                .append("user_tab_columns t where t.table_name=?");
         Query query = manager.createNativeQuery(sql.toString());
         query.setParameter(1, tableName.toUpperCase());
         List<String> list = query.getResultList();
@@ -261,14 +259,14 @@ public class TreeServiceImpl implements TreeService {
             parentId = 0L;
         }
         if (level < 1) level = 1;
-        treeData.put("TREE_LEVEL", level + 1);
-        treeData.put("PARENT_ID", parentId);
-        Long maxSn = getMaxManualSortNumber(tableName);
+        treeData.put("tree_level", level + 1);
+        treeData.put("parent_id", parentId);
+        Long maxSn = getMaxManualSortNumber(tableName, parentId);
         if (maxSn < 1) maxSn = 1L;
 
         // 更新操作
         if (entityId == null) { // 新增
-            treeData.put("MANUAL_SN", maxSn + 1);
+            treeData.put("manual_sn", maxSn + 1);
             entityId = saveOrUpdate(null, treeData, tableName, seqName);
         } else { // 更新
             entityId = saveOrUpdate(entityId, treeData, tableName, null);
@@ -283,27 +281,31 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public Long getMaxManualSortNumber(String tableName) {
+    public Long getMaxManualSortNumber(String tableName, Long parentId) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select max(manual_sn) from ").append(tableName);
+        sb.append("select max(manual_sn) from ").append(tableName).append(" where parent_id = ?");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql);
-        return Long.valueOf(query.getSingleResult().toString());
+        query.setParameter(1, parentId);
+        if (query.getSingleResult() == null) {
+            return 0L;
+        } else {
+            return Long.valueOf(query.getSingleResult().toString());
+        }
     }
 
     @Override
     public List<TreeDataModel> findAllTreeData(String tableName) {
         SqlFilter sqlFilter = new SqlFilter();
-        return  this.findAllTreeData(tableName, sqlFilter);
+        return this.findAllTreeData(tableName, sqlFilter);
     }
 
     @Override
     public List<TreeDataModel> findAllTreeData(String tableName, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select id, label, name, parent_id from ")
-                .append(tableName)
-                .append(" where 1=1 "+sqlFilter.getWhereSql())
-                .append(" order by manual_sn");
+        sb.append("select id, label, name, parent_id, manual_sn from ")
+                .append(tableName).append(" where 1=1 ")
+                .append(sqlFilter.getWhereSql());
         Query query = this.getExecuteQuery(sb.toString(), sqlFilter.getParams().toArray());
         List<Object> list = query.getResultList();
         List<TreeDataModel> trees = new ArrayList<>();
@@ -314,6 +316,9 @@ public class TreeServiceImpl implements TreeService {
             treeNodeModel.setLabel((String) col[1]);
             treeNodeModel.setName((String) col[2]);
             treeNodeModel.setParentId(((BigDecimal) col[3]).longValue());
+            if (col[4] != null) {
+                treeNodeModel.setManualSn(((BigDecimal) col[4]).longValue());
+            }
             trees.add(treeNodeModel);
         }
         return trees;

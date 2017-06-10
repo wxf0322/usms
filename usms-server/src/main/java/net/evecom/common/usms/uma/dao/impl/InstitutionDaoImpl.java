@@ -76,15 +76,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
 
     @Override
     public List<UserEntity> getUsersByInstNames(String[] instNames) {
-        StringBuffer queryParams = new StringBuffer();
-        if(instNames != null && instNames.length > 0) {
-            int i = 0;
-            for (String ignored : instNames) {
-                if (i == 0) queryParams.append("?");
-                else queryParams.append(",?");
-                i++;
-            }
-        }
+        String queryParams = JpaUtil.getQuestionMarks(instNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in ( \n")
                 .append("select distinct ui.user_id from usms_user_institution ui where ui.institution_id in (\n")
@@ -103,4 +95,16 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
         return super.queryBySql(InstitutionEntity.class, sql, new Object[]{type});
     }
 
+    @Override
+    public boolean canBeDeleted(Long id) {
+        String sql = "select i.id from usms_institutions i where i.parent_id = ?";
+        List<Object> children = super.queryObject(sql, new Object[]{id});
+        if (children != null && children.size() > 0) return false;
+        sql = "select ui.user_id from usms_user_institution ui where ui.institution_id = ?";
+        List<Object> users = super.queryObject(sql, new Object[]{id});
+        if (users != null && users.size() > 0) return false;
+        return true;
+    }
+
 }
+

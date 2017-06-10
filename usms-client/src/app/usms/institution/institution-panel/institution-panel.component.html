@@ -1,0 +1,68 @@
+<div class="toolkit">
+  <ul>
+    <li class="toolkit-item e-left">
+      <button pButton type="button" icon="fa-plus" label="新增" (click)="addTreeNode('add',detailData.id)"></button>
+      <button pButton type="button" icon="fa-edit" label="编辑" (click)="editTreeNode('edit',detailData.id)"></button>
+      <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteTreeNode(detailData.id)"></button>
+    </li>
+  </ul>
+</div>
+<div class="ui-g-9 content-right">
+  <div class="detail-layout">
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <h3 class="legend">组织机构信息</h3>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">父机构名称</label>
+        <span>{{parentLabel}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">中文名称</label>
+        <span>{{detailData.label}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">英文编码</label>
+        <span>{{detailData.name}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">类型</label>
+        <span>{{detailData.type}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">状态</label>
+        <span>{{detailData.enabled | enabledPipe}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">行政区划</label>
+        <span>{{detailData.adminDivision}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">行政区划代码</label>
+        <span>{{detailData.adminDivisionCode}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">社会信用代码</label>
+        <span>{{detailData.socialCreditUnicode}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">组织机构代码</label>
+        <span>{{detailData.orgCode}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">同级手动排序</label>
+        <span>{{detailData.manualSn}}</span>
+      </div>
+    </div>
+  </div>
+</div>

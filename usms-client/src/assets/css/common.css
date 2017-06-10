@@ -35,8 +35,7 @@
 
 .content-right {
   position: absolute;
-  width: 75%;
-  top: 50px;
+  top: 45px;
   right: 0;
   bottom: 0;
   overflow: auto;
@@ -55,6 +54,7 @@ perfect-scrollbar {
   width: 48px;
   height: 48px;
   background-image: url("../img/logo.png");
+  border: 0 none;
 }
 
 /************* 表单布局 ************/
@@ -268,7 +268,7 @@ perfect-scrollbar {
   width: 43%;
 }
 
-.ui-datatable .ui-datatable-data>tr>td {
+.ui-datatable .ui-datatable-data > tr > td {
   text-align: center;
 }
 

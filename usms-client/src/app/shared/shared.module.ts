@@ -13,7 +13,8 @@ import {
   PaginatorModule, PanelMenuModule, BreadcrumbModule, TabViewModule, DialogModule,
   ConfirmDialogModule, StepsModule, PanelModule, InputTextareaModule, CalendarModule,
   TabMenuModule, TreeModule, AutoCompleteModule, SplitButtonModule, SelectButtonModule,
-  GrowlModule, TooltipModule, CheckboxModule, ContextMenuModule
+  GrowlModule, TooltipModule, CheckboxModule, ContextMenuModule, TreeTableModule, ListboxModule,
+  PickListModule, ToggleButtonModule, InputSwitchModule, InplaceModule
 } from 'primeng/primeng';
 import {EveHighlightDirective} from './attribute-directive/highlight.directive';
 import {EveLabelInputComponent} from './component/label-input/label-input.component';
@@ -26,10 +27,6 @@ import {PaginatorComponent} from './component/paginator/paginator.component';
 import {CombotreeComponent} from './component/combotree/combotree.component';
 import {TopBarComponent} from './component/top-bar/top-bar.component';
 import {PipeModule} from './pipe/pipe.module';
-import {ListboxModule} from 'primeng/components/listbox/listbox';
-import {PickListModule} from 'primeng/components/picklist/picklist';
-import {ToggleButtonModule} from 'primeng/components/togglebutton/togglebutton';
-import {InputSwitchModule} from 'primeng/components/inputswitch/inputswitch';
 import {CustomFormsModule} from 'ng2-validation';
 
 
@@ -43,8 +40,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule,
     TreeModule, ButtonModule, ListboxModule, ToggleButtonModule, PickListModule, InputSwitchModule,
-    TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule,
-    PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, // nice scroll
+    TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule, TreeTableModule,
+    PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, InplaceModule,
     // 管道
     PipeModule
   ],
@@ -67,7 +64,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmDialogModule, StepsModule, PanelModule, InputTextareaModule, CalendarModule,
     TabMenuModule, TreeModule, AutoCompleteModule, SplitButtonModule, SelectButtonModule,
     GrowlModule, TooltipModule, CheckboxModule, ContextMenuModule, ToggleButtonModule,
-    PerfectScrollbarModule, ListboxModule, InputSwitchModule, PickListModule,CalendarModule,
+    PerfectScrollbarModule, ListboxModule, InputSwitchModule, PickListModule,
+    InplaceModule, TreeTableModule,
     // directive：共享指令
     EveHighlightDirective,
     // 共享组件

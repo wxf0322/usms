@@ -40,7 +40,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
     @Override
     public Page<ApplicationEntity> findByPage(int page, int size , SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_applications a where 1=1 "+sqlFilter.getWhereSql());
+        sb.append("select * from usms_applications a "+sqlFilter.getWhereSql());
         String sql = sb.toString();
         return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }

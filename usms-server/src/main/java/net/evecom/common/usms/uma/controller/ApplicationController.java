@@ -50,11 +50,9 @@ public class ApplicationController {
     @RequestMapping(value = "list")
     public Page<ApplicationEntity> list(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!StringUtils.isEmpty(request.getParameter("label"))) {
-            sqlFilter.addFilter("QUERY_a#label_S_LK", request.getParameter("label"));
-        }
-        if(!StringUtils.isEmpty(request.getParameter("name"))){
-            sqlFilter.addFilter("QUERY_a#name_S_LK", request.getParameter("name"));
+        if (!StringUtils.isEmpty(request.getParameter("key"))) {
+            sqlFilter.addOrFilter("QUERY_a#label_S_LK", request.getParameter("key"));
+            sqlFilter.addOrFilter("QUERY_a#name_S_LK", request.getParameter("key"));
         }
         return applicationService.findByPage(page, size,sqlFilter);
     }

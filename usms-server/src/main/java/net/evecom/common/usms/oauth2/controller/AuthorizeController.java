@@ -227,6 +227,10 @@ public class AuthorizeController {
             request.setAttribute("error", error);
             return false;
         } else {
+            // 删除该用户所有的accessToken
+            oAuthService.deleteAccountByLoginName(loginName);
+            // 停用该用户的session
+            subject.getSession().stop();
             subject.getSession().setAttribute("user", user);
             return true;
         }

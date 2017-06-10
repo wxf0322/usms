@@ -47,11 +47,9 @@ public class UserController {
     @RequestMapping(value = "list")
     public Page<UserModel> list(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!StringUtils.isEmpty(request.getParameter("loginName"))) {
-            sqlFilter.addFilter("QUERY_u#login_name_S_LK", request.getParameter("loginName"));
-        }
-        if(!StringUtils.isEmpty(request.getParameter("name"))){
-            sqlFilter.addFilter("QUERY_u#name_S_LK", request.getParameter("name"));
+        if (!StringUtils.isEmpty(request.getParameter("key"))) {
+            sqlFilter.addOrFilter("QUERY_u#login_name_S_LK", request.getParameter("key"));
+            sqlFilter.addOrFilter("QUERY_u#name_S_LK", request.getParameter("key"));
         }
         if(!StringUtils.isEmpty(request.getParameter("institutionName"))) {
             List<UserEntity> entitiesList =
@@ -101,9 +99,12 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "password/reset", method = RequestMethod.POST)
-    public ResultStatus resetPassword(Long id) {
+    public ResultStatus resetPassword(String  ids) {
+        String[] idArray = ids.split(",");
         String newPassword = "123456";
-        userService.changePassword(id, newPassword);
+        for (String id : idArray) {
+            userService.changePassword(Long.valueOf(id), newPassword);
+        }
         return new ResultStatus(true, "");
     }
 

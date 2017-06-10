@@ -32,10 +32,56 @@
                 <p-radioButton name="enbled" value="0" label="冻结"
                                [(ngModel)]="detailData.enabled"></p-radioButton>
               </div>
+              <div class="ui-g-6">
+                <label class=" control-label">备注</label>
+                <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}">
+              </div>
             </div>
           </form>
         </div>
+        <p-tabView>
+          <p-tabPanel header="分配权限">
+            <div class="ui-g">
+              <div class="ui-g-12">
+                <p-pickList [source]="sourcePrivileges" [target]="targetPrivileges"
+                            sourceHeader="可选权限列表" targetHeader="已选权限列表" [responsive]="true"
+                            [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+                  <ng-template let-privilege pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                      <div style="font-size:14px;float:left;margin:15px 6px 0 80px">{{privilege.label}}</div>
+                      <div style="font-size:14px;float:right;margin:15px 80px 0 6px">{{privilege.name}}</div>
+                    </div>
+                  </ng-template>
+                </p-pickList>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="分配用户">
+            <div class="ui-g">
+              <div class="ui-g-4">
+                <p-tree [value]="tree"></p-tree>
+              </div>
+              <div class="ui-g-8">
+                <p-pickList [source]="sourceUsers" [target]="targetUsers"
+                            sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"
+                            [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+                  <ng-template let-user pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                      <div style="font-size:14px;float:left;margin:15px 15px 0 15px">{{user.LOGIN_NAME}}</div>
+                      <div style="font-size:14px;float:right;margin:15px 15px 0 15px">{{user.NAME}}</div>
+                    </div>
+                  </ng-template>
+                </p-pickList>
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
       </div>
     </div>
   </perfect-scrollbar>
+
 </div>
+
+
+
+

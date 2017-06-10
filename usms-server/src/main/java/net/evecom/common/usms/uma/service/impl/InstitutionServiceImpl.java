@@ -40,11 +40,23 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
         return institutionDao;
     }
 
+    /**
+     * 根据登入名查询组织机构
+     *
+     * @param loginName
+     * @return
+     */
     @Override
     public List<InstitutionEntity> findInstByLoginName(String loginName) {
         return institutionDao.findInstByLoginName(loginName);
     }
 
+    /**
+     * 根据编码查找组织机构
+     *
+     * @param name
+     * @return
+     */
     @Override
     public InstitutionEntity findByName(String name) {
         return institutionDao.findByName(name);
@@ -61,14 +73,37 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
         return institutionDao.getUsersByInstName(instName);
     }
 
+    /**
+     * 根据组织机构集合查找员工
+     *
+     * @param instNames
+     * @return
+     */
     @Override
     public List<UserEntity> getUsersByInstNames(String[] instNames) {
         return institutionDao.getUsersByInstNames(instNames);
     }
 
+    /**
+     * 根据类型查找组织机构信息
+     *
+     * @param type
+     * @return
+     */
     @Override
     public List<InstitutionEntity> getInstitutionsByType(Long type) {
         return institutionDao.getInstitutionsByType(type);
+    }
+
+    /**
+     * 检查是否能被删除
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean canBeDeleted(Long id) {
+        return institutionDao.canBeDeleted(id);
     }
 
 }

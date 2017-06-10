@@ -5,7 +5,11 @@
  */
 package net.evecom.common.usms.entity;
 
+import net.evecom.common.usms.model.RoleModel;
+import org.apache.commons.beanutils.BeanUtils;
+
 import javax.persistence.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 描述
@@ -33,6 +37,11 @@ public class RoleEntity {
      *可用状态(1;正常 0:冻结)
      */
     private Long enabled;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     @Id
     @Column(name = "ID")
@@ -74,6 +83,17 @@ public class RoleEntity {
         this.enabled = enabled;
     }
 
+    @Basic
+    @Column(name = "REMARKS")
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,8 +105,8 @@ public class RoleEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (label != null ? !label.equals(that.label) : that.label != null) return false;
         if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
+        return remarks != null ? remarks.equals(that.remarks) : that.remarks == null;
 
-        return true;
     }
 
     @Override
@@ -95,7 +115,15 @@ public class RoleEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (label != null ? label.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
+        result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
         return result;
+    }
+
+    public RoleEntity(){
+
+    }
+    public  RoleEntity(RoleModel roleModel) throws InvocationTargetException, IllegalAccessException {
+        BeanUtils.copyProperties(this, roleModel);
     }
 
     @Override
@@ -105,6 +133,7 @@ public class RoleEntity {
                 ", name='" + name + '\'' +
                 ", label='" + label + '\'' +
                 ", enabled=" + enabled +
+                ", remarks='" + remarks + '\'' +
                 '}';
     }
 }

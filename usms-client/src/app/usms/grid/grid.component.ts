@@ -8,17 +8,11 @@ import {SelectItem, TreeNode} from 'primeng/primeng';
 })
 export class GridComponent implements OnInit {
 
-  cities: SelectItem[];
-
-  selectedCity: string;
-
   filesTree: TreeNode[];
 
-  ngOnInit(): void {
-    this.cities = [];
-    this.cities.push({label: 'New York', value: {id: 1, name: 'New York', code: 'NY'}});
-    this.cities.push({label: 'Rome', value: {id: 2, name: 'Rome', code: 'RM'}});
+  gridTree: TreeNode[];
 
+  ngOnInit(): void {
     this.filesTree = [{
       'label': 'Documents',
       'data': 'Documents Folder',
@@ -33,9 +27,95 @@ export class GridComponent implements OnInit {
           'label': 'Expenses.doc',
           'icon': 'fa-file-word-o',
           'data': 'Expenses Document'
-        }, {'label': 'Resume.doc', 'icon': 'fa-file-word-o', 'data': 'Resume Document'}]
+        }, {
+          'label': 'Resume.doc',
+          'icon': 'fa-file-word-o',
+          'data': 'Resume Document'
+        }]
       }]
     }];
+
+    this.gridTree = [
+        {
+          'data': {
+            'name': 'Documents',
+            'size': '75kb',
+            'type': 'Folder'
+          },
+          'children': [
+            {
+              'data': {
+                'name': 'Work',
+                'size': '55kb',
+                'type': 'Folder'
+              },
+              'children': [
+                {
+                  'data': {
+                    'name': 'Expenses.doc',
+                    'size': '30kb',
+                    'type': 'Document'
+                  }
+                },
+                {
+                  'data': {
+                    'name': 'Resume.doc',
+                    'size': '25kb',
+                    'type': 'Resume'
+                  }
+                }
+              ]
+            },
+            {
+              'data': {
+                'name': 'Home',
+                'size': '20kb',
+                'type': 'Folder'
+              },
+              'children': [
+                {
+                  'data': {
+                    'name': 'Invoices',
+                    'size': '20kb',
+                    'type': 'Text'
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          'data': {
+            'name': 'Pictures',
+            'size': '150kb',
+            'type': 'Folder'
+          },
+          'children': [
+            {
+              'data': {
+                'name': 'barcelona.jpg',
+                'size': '90kb',
+                'type': 'Picture'
+              }
+            },
+            {
+              'data': {
+                'name': 'primeui.png',
+                'size': '30kb',
+                'type': 'Picture'
+              }
+            },
+            {
+              'data': {
+                'name': 'optimus.jpg',
+                'size': '30kb',
+                'type': 'Picture'
+              }
+            }
+          ]
+        }
+      ];
+
   }
 
 

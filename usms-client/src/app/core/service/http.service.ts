@@ -1,9 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http} from "@angular/http";
+import {Injectable} from '@angular/core';
+import {Headers, Http} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {Message} from 'primeng/primeng';
-import {IBusyConfig} from "angular2-busy";
-import {Loading} from "../../shared/animation/loading";
 import 'rxjs/add/operator/toPromise';
 import * as $ from 'jquery';
 
@@ -14,23 +12,22 @@ import * as $ from 'jquery';
 @Injectable()
 export class HttpService {
 
+  // 表单类型
   private formHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
+  // json类型
   private jsonHeaders = new Headers({'Content-Type': 'application/json'});
 
   /* 消息提示 */
   private messages = new Subject<Message[]>(); // Observable Message[] sources
-  messages$ = this.messages.asObservable();// Observable Message[] streams
+  messages$ = this.messages.asObservable(); // Observable Message[] streams
   private msgs: Message[];
-
-  /* http动画加载 */
-  loading: IBusyConfig = Loading;
 
   constructor(private http: Http) {
   }
 
   /**
-   *设置消息提示信息
+   * 设置消息提示信息
    * @param msg
    */
   setMessage(msg) {
@@ -46,23 +43,23 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   saveOrUpdate(url: string, obj: any) {
-    return this.loading.busy = this.http.post(url, obj, {headers: this.jsonHeaders})
+    return this.http.post(url, obj, {headers: this.jsonHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
   }
 
   /**
-   * 删除id数组的记录
+   * 删除id数组的记录，后端用columns进行读取
    * @param url
    * @param objects
    * @returns {Promise<any>}
    */
   deleteByColNames(url: string, cols: string[]) {
-    let requestBody = $.param({
+    const requestBody = $.param({
       columns: cols.join(',')
     });
-    return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
+    return this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -112,7 +109,7 @@ export class HttpService {
    */
   findById(url: string, id: string) {
     url += '?id=' + id;
-    return this.loading.busy = this.http.get(url)
+    return this.http.get(url)
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -135,8 +132,8 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   executeByParams(url: any, params?: any) {
-    let requestBody = (params == null) ? null : $.param(params);
-    return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
+    const requestBody = (params == null) ? null : $.param(params);
+    return this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -155,9 +152,9 @@ export class HttpService {
       page: currentPage,
       size: rowsPerPage
     };
-    let pageRequest = $.extend(pageBean, queryParams);
-    let requestBody = $.param(pageRequest);
-    return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
+    const pageRequest = $.extend(pageBean, queryParams);
+    const requestBody = $.param(pageRequest);
+    return this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -173,4 +170,5 @@ export class HttpService {
     console.log('状态：', error.status);
     return Promise.reject(error.message || error);
   }
+
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>《统一用户管理系统API文档_v20170607_1》</title>
+    <title>《统一用户管理系统API文档_v20170608_1》</title>
 </head>
 <body style="display:none">
 <xmp theme="cerulean">
@@ -34,7 +34,7 @@
 2. 用户认证通过，浏览器跳回子系统，并带回临时授权码code。
 3. 子系统从服务端，带着code去USMS换取访问令牌accessToken。
 4. USMS各种验证通过后，返回给子系统令牌accessToke。
-5. 子系统使用accessToken去请求数据服务。
+5. 子系统使用Access Token去请求数据服务。
 6. USMS验证令牌后，返回所请求的数据。
 
 #### 1.3.2 SSO过程
@@ -176,7 +176,7 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 (2) 接口地址
 
-重定向至 http://192.168.200.209:8080/usms/v1/openapi/loginOut，进行退出
+重定向至 http://192.168.200.209:8080/usms/v1/openapi/loginOut ，进行退出
 
 (3) 输入参数
 
@@ -312,17 +312,6 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
             "parentId": 1,
             "socialCreditUnicode": "45",
             "type": 1
-        }
-    ],
-    "operations": [
-        {
-            "iconPath": "2",
-            "id": 1,
-            "label": "增加",
-            "name": "add",
-            "optType": 2,
-            "parentId": 0,
-            "resUrl": "2"
         }
     ],
     "application" : {
@@ -808,27 +797,26 @@ http://192.168.200.209:8080/usms/v1/openapi/operation/exist?operation=OPERATION_
 { "result": true }
 ```
 
-### 2.3.14 组织机构列表，根据组织机构类型查询，需access_token鉴权
+### 2.3.14 所有组织机构列表，需access_token鉴权
 
 (1) 接口说明
 
-返回组织机构列表，根据组织机构类型查询，需access_token鉴权。
+返回所有组织机构列表，需access_token鉴权。
 
 (2) 接口地址
 
-http://192.168.200.209:8080/usms/v1/openapi/institutions
+http://192.168.200.209:8080/usms/v1/openapi/institutions/all
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
-|--------------|-------------|----------|
-| type  | 是      | 组织机构类型 |
+| 参数名       | 是否必填 | 说明    |
+|--------------|---------|----------|
 | access_token | 是      | 访问令牌 |
 
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/institutions?type=TYPE&access_token=ACCESS_TOKEN
+http://192.168.200.209:8080/usms/v1/openapi/institutions/all?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -853,19 +841,6 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions?type=TYPE&access_token=
         {
             "id": "",
             "label": "消防网格",
-            "name": "net.evecom.gsmp.fr",
-            "treeLevel": "2",
-            "parentId": "",
-            "type": "1",
-            "manualSn": "2",
-            "adminDivisionCode": "",
-            "adminDivision": "",
-            "socialCreditUnicode": "",
-            "orgCode": ""
-        },
-        {
-            "id": "",
-            "label": "综治网格",
             "name": "net.evecom.gsmp.fr",
             "treeLevel": "2",
             "parentId": "",
@@ -1067,7 +1042,7 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明     |
+| 参数名       | 是否必填     | 说明     |
 |--------------|-------------|----------|
 |institutions  |是           | 组织机构编码集合，用 "," 连接 |
 
@@ -1097,9 +1072,9 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明     |
-|--------------|-------------|----------|
-| roles  |是           | 角色编码集合，用 "," 连接 |
+| 参数名 | 是否必填   | 说明     |
+|--------|-----------|----------|
+| roles  |是         | 角色编码集合，用 "," 连接 |
 
 (4) 输入样例
 
@@ -1128,8 +1103,8 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明     |
-|--------------|-------------|----------|
+| 参数名      | 是否必填     | 说明     |
+|-------------|-------------|----------|
 |login_names  |是           | 登入名集合，用 "," 连接 |
 
 (4) 输入样例
@@ -1145,7 +1120,6 @@ http://192.168.200.209:8080/usms/v1/internalapi/users?login_names=admin,vance
 (6) 输出样例
 
 同 2.3.2 节 输出样例
-
 
 </xmp>
 

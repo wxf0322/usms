@@ -17,7 +17,8 @@ export class TreeUtil {
       data: {
         id: treeData.id,
         name: treeData.name,
-        parentId: treeData.parentId
+        parentId: treeData.parentId,
+        manualSn: treeData.manualSn
       },
       children: []
     };
@@ -28,6 +29,9 @@ export class TreeUtil {
         treeNode.children.push(this.buildTreeNode(childNode, treeMap));
       }
     }
+    treeNode.children.sort(function (a, b) {
+      return a.data.manualSn - b.data.manualSn;
+    });
     return treeNode;
   }
 
@@ -40,7 +44,7 @@ export class TreeUtil {
     if (treeDataArr == null || treeDataArr.length === 0) {
       return [];
     }
-    let treeMap: any = {};
+    const treeMap: any = {};
     for (let i = 0; i < treeDataArr.length; i++) {
       const parentId = treeDataArr[i].parentId.toString();
       if (treeMap[parentId] == null) {

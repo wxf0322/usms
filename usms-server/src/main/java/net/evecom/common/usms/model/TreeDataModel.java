@@ -31,6 +31,11 @@ public class TreeDataModel {
      */
     String name;
 
+    /**
+     * 当前层级排序
+     */
+    Long manualSn;
+
     public Long getId() {
         return id;
     }
@@ -63,13 +68,22 @@ public class TreeDataModel {
         this.name = name;
     }
 
+    public Long getManualSn() {
+        return manualSn;
+    }
+
+    public void setManualSn(Long manualSn) {
+        this.manualSn = manualSn;
+    }
+
     @Override
     public String toString() {
-        return "TreeNodeModel{" +
+        return "TreeDataModel{" +
                 "id=" + id +
                 ", parentId=" + parentId +
                 ", label='" + label + '\'' +
                 ", name='" + name + '\'' +
+                ", manualSn=" + manualSn +
                 '}';
     }
 }

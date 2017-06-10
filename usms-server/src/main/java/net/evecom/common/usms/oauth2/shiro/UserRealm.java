@@ -53,6 +53,7 @@ public class UserRealm extends AuthorizingRealm {
         //从 token 中，获取用户身份信息
         String loginName = (String) authenticationToken.getPrincipal();
         UserEntity user = userService.findByLoginName(loginName);
+
         if (user == null) {
             // 用户名不存在，抛出异常
             throw new UnknownAccountException();
@@ -61,7 +62,6 @@ public class UserRealm extends AuthorizingRealm {
             // 帐号被锁定，抛出异常
             throw new LockedAccountException();
         }
-
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
         DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager();
         Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();//获取当前已登录的用户session列表

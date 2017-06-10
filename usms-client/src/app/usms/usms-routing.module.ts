@@ -1,52 +1,49 @@
-import {NgModule} from '@angular/core'
-import {Routes, RouterModule} from "@angular/router";
-import {UserComponent} from "./user/user.component";
-import {UsmsComponent} from "app/usms/usms.component";
-import {RoleComponent} from "./role/role.component";
-import {OperationComponent} from "./operation/operation.component";
-import {PrivilegeComponent} from "./privilege/privilege.component";
-import {GridComponent} from "./grid/grid.component";
-import {ApplicationComponent} from "./application/application.component";
-import {UserDetailComponent} from "./user/user-detail/user-detail.component";
-import {PrivilegeDetailComponent} from "./privilege/privilege-detail/privilege-detail.component";
-import {OperationAllocationComponent} from "./privilege/operation-allocation/operation-allocation.component";
-import {RoleDetailComponent} from "./role/role-detail/role-detail.component";
-import {UserAllocationComponent} from "./role/user-allocation/user-allocation.component";
-import {ApplicationDetailComponent} from "./application/application-detail/application-detail.component";
-import {OperationDetailComponent} from "./operation/operation-detail/operation-detail.component";
-import {PrivilegeAllocationComponent} from "./role/privilege-allocation/privilege-allocation.component";
-import {InstitutionComponent} from "./institution/institution.component";
-import {InstitutionDetailComponent} from "./institution/institution-detail/institution-detail.component";
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {UserComponent} from './user/user.component';
+import {UsmsComponent} from 'app/usms/usms.component';
+import {RoleComponent} from './role/role.component';
+import {OperationComponent} from './operation/operation.component';
+import {PrivilegeComponent} from './privilege/privilege.component';
+import {GridComponent} from './grid/grid.component';
+import {ApplicationComponent} from './application/application.component';
+import {UserDetailComponent} from './user/user-detail/user-detail.component';
+import {PrivilegeDetailComponent} from './privilege/privilege-detail/privilege-detail.component';
+import {OperationAllocationComponent} from './privilege/operation-allocation/operation-allocation.component';
+import {RoleDetailComponent} from './role/role-detail/role-detail.component';
+import {ApplicationDetailComponent} from './application/application-detail/application-detail.component';
+import {OperationDetailComponent} from './operation/operation-detail/operation-detail.component';
+import {InstitutionComponent} from './institution/institution.component';
+import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
+import {InstitutionPanelComponent} from "./institution/institution-panel/institution-panel.component";
 
 
 /**
  * 页面组件路由
  */
 const childrenRoutes: Routes = [
-  {path: '', redirectTo: 'user', pathMatch: 'full'},
+  {path: '', redirectTo: 'application', pathMatch: 'full'},
   {
     path: 'user',
     children: [
       {path: '', component: UserComponent},
       {path: 'user-detail', component: UserDetailComponent},
-      {path:'institution-detail',component:InstitutionDetailComponent}
+      {path: 'institution-detail', component: InstitutionDetailComponent}
     ]
   }, {
-    path:"institution",
-    children:[
-      {path:'',component:InstitutionComponent},
-      {path:'detail',component:InstitutionDetailComponent},
-
+    path: 'institution',
+    component: InstitutionComponent,
+    children: [
+      {path: '', redirectTo: 'panel', pathMatch: 'full'},
+      {path: 'panel', component: InstitutionPanelComponent },
+      {path: 'detail', component: InstitutionDetailComponent},
     ]
   },
   {
     path: 'role',
     children: [
       {path: '', component: RoleComponent},
-      {path: 'detail', component: RoleDetailComponent},
-      {path: 'user-allocation', component: UserAllocationComponent},
-      {path: 'privilege-allocation', component: PrivilegeAllocationComponent}
-
+      {path: 'detail', component: RoleDetailComponent}
     ]
   }, {
     path: 'operation',
@@ -54,7 +51,7 @@ const childrenRoutes: Routes = [
       {path: '', component: OperationComponent},
       {path: 'detail', component: OperationDetailComponent}
     ]
-  },  {
+  }, {
     path: 'privilege',
     children: [
       {path: '', component: PrivilegeComponent},

@@ -13,23 +13,16 @@ import {GlobalVariable} from "../../shared/global-variable";
 })
 export class RoleComponent extends SimpleBaseUtil<Role> implements OnInit {
 
-  selects: SelectItem[];
-  selectKey: string;
-  key: string;
-
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
-    this.selects = [];
-    this.selects.push({label: '请选择查询条件', value: 0});
-    this.selects.push({label: '角色名称', value: 1});
-    this.selects.push({label: '角色编码', value: 2});
   }
 
   ngOnInit(): void {
+    this.filter = '';
     this.getDataByPage(0, this.page.size, this.filter);
   }
 
@@ -50,20 +43,15 @@ export class RoleComponent extends SimpleBaseUtil<Role> implements OnInit {
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: Role) {
-    let url = GlobalVariable.BASE_URL + 'role/list';
-    this.httpService.findByPage(url, currentPage, rowsPerPage, null).then(
+    let url = GlobalVariable.BASE_URL + 'role/list?key='+this.filter;
+    this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'role/list';
-    if (this.selectKey == '1') {
-      url = GlobalVariable.BASE_URL + 'role/list?label=' + this.key;
-    } else if (this.selectKey == '2') {
-      url = GlobalVariable.BASE_URL + 'role/list?name=' + this.key;
-    }
-    this.httpService.findByPage(url, 0, this.page.size, null).then(
+    var url = GlobalVariable.BASE_URL + 'role/list?key='+this.filter;
+    this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);
       }

@@ -7,8 +7,9 @@ import {HttpService} from '../../core/service/http.service';
 import {GlobalVariable} from '../../shared/global-variable';
 import {TreeData} from '../../shared/util/tree-data';
 import {TreeUtil} from '../../shared/util/tree-util';
-import {SelectItem} from 'primeng/components/common/api';
-import {User} from '../role/user-allocation/users';
+import {User} from './user';
+
+
 
 @Component({
   selector: 'app-user',
@@ -21,25 +22,10 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
    */
   tree: TreeNode[];
 
-  /**
-   * 选中的树
-   */
-  selectedNode: TreeNode;
+  sourceUsers: User[] = [];
+  targetUsers: User[] = [];
 
-  /**
-   * 查询相关的三个变量
-   */
-  selects: SelectItem[];
-
-  /**
-   * 选中查询
-   */
-  selectKey: string;
-
-  /**
-   * 查询关键词
-   */
-  key: string;
+  selectedNode: TreeNode[];
 
   /**
    * 用户所选的机构id
@@ -51,32 +37,18 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
    */
   userDisplay = false;
 
-  /**
-   * 已选中用户
-   */
-  sourceUsers: User[] = [];
-
-  /**
-   * 待选中用户
-   * @type {Array}
-   */
-  targetUsers: User[] = [];
-
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
-    this.selects = [];
-    this.selects.push({label: '请选择查询条件', value: 0});
-    this.selects.push({label: '用户帐号', value: 1});
-    this.selects.push({label: '用户姓名', value: 2});
   }
 
   ngOnInit(): void {
     this.refreshTree();
-    this.getDataByPage(0, this.page.size, this.filter);
+    this.filter = '';
+    this.getDataByPage(this.page.number, this.page.size, this.filter);
   }
 
   deleteSelected() {
@@ -84,9 +56,9 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
     this.delete(url, 'id');
   }
 
-  getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = GlobalVariable.BASE_URL + 'user/list';
-    this.httpService.findByPage(url, currentPage, rowsPerPage, null).then(
+  getDataByPage(currentPage: any, rowsPerPage: any, filter: string) {
+    const url = GlobalVariable.BASE_URL + 'user/list?key=' + this.filter;
+    this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
       res => {
         return this.setData(res);
       }
@@ -103,9 +75,11 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
       });
   }
 
-  resetPassword(id: string) {
+  resetPassword() {
     const url = GlobalVariable.BASE_URL + 'user/password/reset';
-    const params = {id: id};
+    const params = {
+      ids: this.selectedData.map(data => data['id']).join(',')
+    };
     this.httpService.executeByParams(url, params).then(
       res => {
         this.httpService.setMessage({
@@ -118,12 +92,7 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   }
 
   query() {
-    let url = GlobalVariable.BASE_URL + 'user/list';
-    if (this.selectKey === '1') {
-      url = GlobalVariable.BASE_URL + 'user/list?loginName=' + this.key;
-    } else if (this.selectKey === '2') {
-      url = GlobalVariable.BASE_URL + 'user/list?name=' + this.key;
-    }
+    const url = GlobalVariable.BASE_URL + 'user/list?key=' + this.filter;
     this.httpService.findByPage(url, 0, this.page.size, null).then(
       res => {
         return this.setData(res);
@@ -155,11 +124,9 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
     );
   }
 
-
   moveUsers() {
     this.userDisplay = true;
   }
-
 
 
 }

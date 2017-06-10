@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
         sb.append("select u.id, u.login_name, u.name, s.mobile, u.enabled\n")
                 .append(" from usms_users u  " )
                 .append(" left join usms_staffs s\n")
-                .append(" on u.staff_id = s.id where 1=1 "+sqlFilter.getWhereSql());
+                .append(" on u.staff_id = s.id "+sqlFilter.getWhereSql());
         String sql = sb.toString();
         Page<Map<String, Object>> pageBean = queryMapByPage(sql, sqlFilter.getParams().toArray(), page, size);
         List<UserModel> list = new ArrayList<>();
@@ -87,15 +86,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
 
     @Override
     public List<UserEntity> findByLoginNames(String[] loginNames) {
-        StringBuffer queryParams = new StringBuffer();
-        if(loginNames != null && loginNames.length > 0) {
-            int i = 0;
-            for (String ignored : loginNames) {
-                if (i == 0) queryParams.append("?");
-                else queryParams.append(",?");
-                i++;
-            }
-        }
+        String queryParams = JpaUtil.getQuestionMarks(loginNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.login_name in (")
                 .append(queryParams)
@@ -204,7 +195,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
     @Override
     public void createUserInstitution(Long userId, Long institutionId) {
         StringBuffer sb = new StringBuffer();
-        sb.append("INSERT INTO USMS_USER_INSTITUTION VALUES(:userId,:institutionId)");
+        sb.append("insert into usms_user_institution values(:userId,:institutionId)");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql);
         query.setParameter("userId",userId);

@@ -65,6 +65,10 @@ public class InstitutionModel {
      * 组织机构代码
      */
     private String orgCode;
+    /**
+     * 手动排序
+     */
+    private Long manualSn;
 
     public Long getId() {
         return id;
@@ -144,6 +148,14 @@ public class InstitutionModel {
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
+    }
+
+    public Long getManualSn() {
+        return manualSn;
+    }
+
+    public void setManualSn(Long manualSn) {
+        this.manualSn = manualSn;
     }
 
     public InstitutionModel() {

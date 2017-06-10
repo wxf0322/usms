@@ -7,9 +7,7 @@ package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
 import net.evecom.common.usms.core.service.TreeService;
-import net.evecom.common.usms.core.util.BeanUtil;
 import net.evecom.common.usms.core.util.MapUtil;
-import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.model.InstitutionModel;
 import net.evecom.common.usms.model.TreeDataModel;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -90,8 +87,12 @@ public class InstitutionController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(Long id) {
-        institutionService.delete(id);
-        return new ResultStatus(true, "");
+        if (institutionService.canBeDeleted(id)) {
+            institutionService.delete(id);
+            return new ResultStatus(true, "");
+        } else {
+            return new ResultStatus(false, "");
+        }
     }
 
 }

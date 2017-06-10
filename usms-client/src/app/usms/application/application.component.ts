@@ -12,9 +12,6 @@ import {GlobalVariable} from '../../shared/global-variable';
   styleUrls: ['./application.component.css']
 })
 export class ApplicationComponent extends SimpleBaseUtil<Application> implements OnInit {
-  selects: SelectItem[];
-  selectKey: string;
-  key: string;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -22,10 +19,6 @@ export class ApplicationComponent extends SimpleBaseUtil<Application> implements
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
-    this.selects = [];
-    this.selects.push({label: '请选择查询条件', value: 0});
-    this.selects.push({label: '应用名称', value: 1});
-    this.selects.push({label: '应用编码', value: 2});
   }
 
   deleteSelected() {
@@ -34,24 +27,20 @@ export class ApplicationComponent extends SimpleBaseUtil<Application> implements
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = GlobalVariable.BASE_URL + 'application/list';
-    this.httpService.findByPage(url, currentPage, rowsPerPage, null).then(
+    const url = GlobalVariable.BASE_URL + 'application/list?key='+this.filter;
+    this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
   }
 
   ngOnInit(): void {
+    this.filter = '';
     this.getDataByPage(0, this.page.size, this.filter);
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'application/list';
-    if (this.selectKey == '1') {
-      url = GlobalVariable.BASE_URL + 'application/list?label=' + this.key;
-    } else if (this.selectKey == '2') {
-      url = GlobalVariable.BASE_URL + 'application/list?name=' + this.key;
-    }
-    this.httpService.findByPage(url, 0, this.page.size, null).then(
+    var url = GlobalVariable.BASE_URL + 'application/list?key='+this.filter;
+    this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);
       }

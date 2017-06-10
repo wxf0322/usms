@@ -3,4 +3,7 @@ export class Role {
   label: string;
   name: string;
   enabled: number;
+  remarks:string;
+  privilegeIds:string;
+  userIds:string;
 }

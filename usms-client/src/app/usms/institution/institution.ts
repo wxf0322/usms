@@ -39,4 +39,8 @@ export class Institution {
    * 组织机构代码
    */
   orgCode: string;
+  /**
+   * 手动排序
+   */
+  manualSn: string;
 }

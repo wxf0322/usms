@@ -17,7 +17,7 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
   // 表单验证
   @ViewChild('reForm') reForm: NgForm;
 
-  roleDisplay = false;
+  roleDisplay = true;
 
   date: Date;
 
@@ -68,8 +68,5 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
       });
   }
 
-  showRoleDialog() {
-    this.roleDisplay = true;
-  }
 
 }

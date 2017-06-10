@@ -140,9 +140,7 @@ public class MapUtil extends MapUtils {
     /**
      * 转换成Map并提供字段命名驼峰转平行
      *
-     * @param clazz  目标对象所在类
      * @param object 目标对象
-     * @param map    待转换Map
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      * @throws IllegalAccessException

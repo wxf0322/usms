@@ -80,17 +80,6 @@ public class InstitutionAPI {
      */
     @RequestMapping(value = "/institutions", produces = "application/json; charset=UTF-8")
     public ResponseEntity getInstitutions(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
-        int len = request.getParameterMap().size();
-        if (len == 1) {
-            return getInstitutionsByLoginName(request);
-        } else {
-            return getInstitutionsByType(request);
-        }
-    }
-
-
-    public ResponseEntity getInstitutionsByLoginName(HttpServletRequest request)
-            throws OAuthSystemException, OAuthProblemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest
                 = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
@@ -99,8 +88,7 @@ public class InstitutionAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得机构信息
-        List<InstitutionEntity> institutions =
-                institutionService.findInstByLoginName(loginName);
+        List<InstitutionEntity> institutions = institutionService.findInstByLoginName(loginName);
         // 返回数组
         JSONArray instJsonArr = new JSONArray();
         for (InstitutionEntity inst : institutions) {
@@ -109,6 +97,23 @@ public class InstitutionAPI {
         }
         JSONObject resultJson = new JSONObject();
         resultJson.put("institutions", instJsonArr);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
+    }
+
+    /**
+     * 根据组织类型查询组织机构列表
+     */
+    @RequestMapping(value = "/institutions/all", produces = "application/json; charset=UTF-8")
+    private ResponseEntity findAll() {
+        List<InstitutionEntity> institutionEntities = institutionService.findAll();
+        JSONArray jsonArray = new JSONArray();
+        for (InstitutionEntity institutionEntity : institutionEntities) {
+            InstitutionModel institutionModel = new InstitutionModel(institutionEntity);
+            JSONObject jsonObject = JSONObject.fromObject(institutionModel);
+            jsonArray.add(jsonObject);
+        }
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("institutions", jsonArray);
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
@@ -124,32 +129,6 @@ public class InstitutionAPI {
             instJson.remove("enabled");
         }
         return instJson;
-    }
-
-    /**
-     * 根据组织类型查询组织机构列表
-     */
-    private ResponseEntity getInstitutionsByType(HttpServletRequest request) {
-        Long type;
-        try {
-            type = Long.valueOf(request.getParameter("type"));
-        } catch (Exception e) {
-            ErrorStatus errorStatus = new ErrorStatus
-                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
-                    .buildJSONMessage();
-            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
-        }
-        List<InstitutionEntity> institutionEntities =
-                institutionService.getInstitutionsByType(type);
-        JSONArray jsonArray = new JSONArray();
-        for (InstitutionEntity institutionEntity : institutionEntities) {
-            InstitutionModel institutionModel = new InstitutionModel(institutionEntity);
-            JSONObject jsonObject = JSONObject.fromObject(institutionModel);
-            jsonArray.add(jsonObject);
-        }
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("institutions", jsonArray);
-        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
 }

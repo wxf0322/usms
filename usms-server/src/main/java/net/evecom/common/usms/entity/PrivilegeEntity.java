@@ -34,6 +34,12 @@ public class PrivilegeEntity {
      */
     private Long enabled;
 
+    /**
+     * 备注
+     */
+    private String remarks;
+
+
     @Id
     @Column(name = "ID")
     public long getId() {
@@ -74,6 +80,16 @@ public class PrivilegeEntity {
         this.enabled = enabled;
     }
 
+    @Basic
+    @Column(name = "REMARKS")
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,8 +101,8 @@ public class PrivilegeEntity {
         if (label != null ? !label.equals(that.label) : that.label != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
+        return remarks != null ? remarks.equals(that.remarks) : that.remarks == null;
 
-        return true;
     }
 
     @Override
@@ -95,6 +111,7 @@ public class PrivilegeEntity {
         result = 31 * result + (label != null ? label.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
+        result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
         return result;
     }
 
@@ -105,6 +122,7 @@ public class PrivilegeEntity {
                 ", label='" + label + '\'' +
                 ", name='" + name + '\'' +
                 ", enabled=" + enabled +
+                ", remarks='" + remarks + '\'' +
                 '}';
     }
 }

@@ -1,23 +1,5 @@
 <eve-top-bar title="用户信息" (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-top-bar>
 
-
-<p-dialog header="角色列表" [(visible)]="roleDisplay">
-  <p-pickList [source]="sourceRoles" [target]="targetRoles"
-              sourceHeader="可选角色列表" targetHeader="已选角色列表" [responsive]="true"
-              [sourceStyle]="{'height':'400px'}" [targetStyle]="{'height':'400px'}">
-    <ng-template let-role pTemplate="item">
-      <div class="ui-helper-clearfix">
-        <div style="font-size:14px;float:left;margin:15px 6px 0 80px">
-          {{role.label}}
-        </div>
-        <div style="font-size:14px;float:right;margin:15px 80px 0 6px">
-          {{role.name}}
-        </div>
-      </div>
-    </ng-template>
-  </p-pickList>
-</p-dialog>
-
 <div class="content">
   <div class="ui-g">
     <div class="ui-g-12">
@@ -27,143 +9,164 @@
             <h3 class="legend">基本信息</h3>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-8">
+              <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
-              <label class="required control-label">登入名</label>
+              <label class="required control-label">登入名:</label>
               <input pInputText [(ngModel)]="detailData.loginName"
                      name="loginName" #loginName="ngModel" required>
               <div class="validation" *ngIf="loginName.errors?.required">该项必填</div>
             </div>
             <div class="ui-g-6">
-              <label class=" control-label">姓名</label>
+              <label class=" control-label">姓名:</label>
               <input pInputText [(ngModel)]="detailData.name" [ngModelOptions]="{standalone: true}">
             </div>
+              </div>
+              <div class="ui-g-12 ui-g-nopad control-group">
+                <div class="ui-g-6 ">
+                  <label class="control-label">手机电话:</label>
+                  <input pInputText [(ngModel)]="detailData.mobile"
+                         name="mobile" #mobile="ngModel" phone="CN">
+                  <div class="validation" *ngIf="mobile.errors?.phone">格式有误</div>
+                </div>
+                <div class="ui-g-6 ">
+                  <label class="control-label">固定电话:</label>
+                  <input pInputText [(ngModel)]="detailData.tel" [ngModelOptions]="{standalone: true}">
+
+                </div>
+              </div>
+
+              <div class="ui-g-12 ui-g-nopad control-group">
+                <div class="ui-g-6 ">
+                  <label class="control-label">状态:</label>
+                  <p-radioButton name="enbled" value="1" label="激活" [(ngModel)]="detailData.enabled"></p-radioButton>
+                  &nbsp;
+                  <p-radioButton name="enbled" value="0" label="冻结" [(ngModel)]="detailData.enabled"></p-radioButton>
+
+                </div>
+                <div class="ui-g-6 ">
+                  <label class="control-label">性别:</label>
+                  <p-radioButton name="sex" value="1" label="男" [(ngModel)]="detailData.sex"></p-radioButton>
+                  &nbsp;
+                  <p-radioButton name="sex" value="2" label="女" [(ngModel)]="detailData.sex"></p-radioButton>
+
+                </div>
+              </div>
           </div>
-          <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">状态</label>
-              <p-radioButton name="enbled" value="1" label="激活" [(ngModel)]="detailData.enabled"></p-radioButton>
-              &nbsp;
-              <p-radioButton name="enbled" value="0" label="冻结" [(ngModel)]="detailData.enabled"></p-radioButton>
-            </div>
-            <div class="ui-g-6">
-              <label class="control-label">备注说明</label>
-              <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}">
+            <div class="ui-g-4">
+              <label class=" control-textarea-label">照片:</label>
+                <img #img src="../../../../assets/img/photo.png" >
             </div>
           </div>
+
+
           <div class="ui-g-12 ui-g-nopad control-group">
-            <h3 class="legend">关联员工信息</h3>
-          </div>
-          <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">所属角色</label>
-              <button pButton label="修改该用户所属角色" (click)="showRoleDialog()"></button>
-            </div>
-            <div class="ui-g-6">
-              <label class="control-label">现居住地址</label>
-              <input pInputText [(ngModel)]="detailData.curResidence" [ngModelOptions]="{standalone: true}">
-            </div>
-          </div>
-          <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">手机电话</label>
-              <input pInputText [(ngModel)]="detailData.mobile"
-                    name="mobile" #mobile="ngModel" phone="CN">
-              <div class="validation" *ngIf="mobile.errors?.phone">格式有误</div>
-            </div>
-            <div class="ui-g-6">
-              <label class="control-label">固定电话</label>
-              <input pInputText [(ngModel)]="detailData.tel" [ngModelOptions]="{standalone: true}">
+            <div class="ui-g-12">
+              <label class="control-label">现居住地址:</label>
+              <input pInputText [(ngModel)]="detailData.curResidence" [ngModelOptions]="{standalone: true}" size="100">
             </div>
           </div>
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <div class="ui-g-6">
-                <label class="control-label">性别</label>
-                <p-radioButton name="sex" value="1" label="男" [(ngModel)]="detailData.sex"></p-radioButton>
-                &nbsp;
-                <p-radioButton name="sex" value="2" label="女" [(ngModel)]="detailData.sex"></p-radioButton>
-              </div>
+            <div class="ui-g-4">
+              <label class="control-label">别名:</label>
+              <input pInputText [(ngModel)]="detailData.aliasNames" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="ui-g-6">
-              <label class="control-label">身份证号码</label>
+            <div class="ui-g-4 ui-md-4">
+              <label class="control-label">出生日期:</label>
+              <p-calendar [(ngModel)]="date" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [ngModelOptions]="{standalone: true}"></p-calendar>
+            </div>
+            <div class="ui-g-4">
+              <label class="control-label">身份证号码:</label>
               <input pInputText [(ngModel)]="detailData.citizenIdNumber" [ngModelOptions]="{standalone: true}">
             </div>
           </div>
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">内网邮箱</label>
+          </div>
+
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-4">
+              <label class="control-label">邮编:</label>
+              <input pInputText [(ngModel)]="detailData.zipCode" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="ui-g-4">
+              <label class="control-label">内网邮箱:</label>
               <input pInputText [(ngModel)]="detailData.email"
                      [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="ui-g-6">
-              <label class="control-label">外网邮箱</label>
+            <div class="ui-g-4">
+              <label class="control-label">外网邮箱:</label>
               <input pInputText [(ngModel)]="detailData.extranetEmail" [ngModelOptions]="{standalone: true}">
             </div>
           </div>
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">邮编</label>
-              <input pInputText [(ngModel)]="detailData.zipCode" [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="ui-g-6">
-              <label class="control-label">别名</label>
-              <input pInputText [(ngModel)]="detailData.aliasNames" [ngModelOptions]="{standalone: true}">
-            </div>
-          </div>
-
-          <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">职称</label>
+            <div class="ui-g-4">
+              <label class="control-label">职称:</label>
               <input pInputText [(ngModel)]="detailData.professionalTitle" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="ui-g-6">
-              <label class="control-label">职责</label>
+            <div class="ui-g-4">
+              <label class="control-label">职责:</label>
               <input pInputText [(ngModel)]="detailData.officalPost" [ngModelOptions]="{standalone: true}">
             </div>
-          </div>
-
-          <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">职务</label>
+            <div class="ui-g-4">
+              <label class="control-label">职务:</label>
               <input pInputText [(ngModel)]="detailData.officalDuty" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="ui-g-6 ui-md-4">
-              <label class="control-label">出生日期</label>
-              <p-calendar [(ngModel)]="date" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [ngModelOptions]="{standalone: true}"></p-calendar>
-            </div>
           </div>
 
+
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">员工类型</label>
+            <div class="ui-g-4">
+              <label class="control-label">员工类型:</label>
               <input pInputText [(ngModel)]="detailData.employeeType" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="ui-g-6">
-              <label class="control-label">员工工号</label>
+            <div class="ui-g-4">
+              <label class="control-label">员工工号:</label>
               <input pInputText [(ngModel)]="detailData.employeeNo" [ngModelOptions]="{standalone: true}">
             </div>
+
           </div>
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">居住地行政区划编号</label>
-              <input pInputText [(ngModel)]="detailData.adminDivisionCode" [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="ui-g-6">
-              <label class="control-label">居住地行政区划</label>
+            <div class="ui-g-4">
+              <label class="control-label">居住地行政区划:</label>
               <input pInputText [(ngModel)]="detailData.adminDivision" [ngModelOptions]="{standalone: true}">
             </div>
+            <div class="ui-g-4">
+              <label class="control-label">居住地行政区划编号:</label>
+              <input pInputText [(ngModel)]="detailData.adminDivisionCode" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-12">
+              <label class="control-label">备注说明:</label>
+              <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}" size="100">
+            </div>
           </div>
 
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-6">
-              <label class="control-label">照片</label>
-              <p>{{detailData.pictureUrl}}</p>
-            </div>
+            <h3 class="legend">角色分配</h3>
+          </div>
+          <br><br>
+          <div>
+          <p-pickList [source]="sourceRoles" [target]="targetRoles"
+                      sourceHeader="可选角色列表" targetHeader="已选角色列表" [responsive]="true"
+                      [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+            <ng-template let-role pTemplate="item">
+              <div class="ui-helper-clearfix">
+                <div style="font-size:14px;float:left;margin:15px 6px 0 80px">
+                  {{role.label}}
+                </div>
+                <div style="font-size:14px;float:right;margin:15px 80px 0 6px">
+                  {{role.name}}
+                </div>
+              </div>
+            </ng-template>
+          </p-pickList>
           </div>
         </form>
       </div>

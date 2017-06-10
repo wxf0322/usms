@@ -6,7 +6,7 @@ import {Renderer} from "@angular/core";
 
 export abstract class SimpleBaseUtil<T> extends SimpleBase<T> {
 
-  isDropPanelShow: boolean = false;// 显示高级查询面板
+  isDropPanelShow: boolean = false; // 显示高级查询面板
 
   selfClick: boolean; // 标记点击是组件自身，而不是其他区域
 

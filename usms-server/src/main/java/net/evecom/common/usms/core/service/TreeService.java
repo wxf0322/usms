@@ -39,7 +39,7 @@ public interface TreeService {
     boolean isExisted(Long entityId, String tableName);
 
     /**
-     * 改表所有的字段名
+     * 获取该表所有的字段名
      *
      * @param tableName
      * @return
@@ -84,7 +84,7 @@ public interface TreeService {
      *
      * @return
      */
-    Long getMaxManualSortNumber(String tableName);
+    Long getMaxManualSortNumber(String tableName, Long parentId);
 
     /**
      * 获取所有树形数据
@@ -99,6 +99,5 @@ public interface TreeService {
      * @return
      */
     List<TreeDataModel> findAllTreeData(String tableName,SqlFilter sqlFilter );
-
 
 }

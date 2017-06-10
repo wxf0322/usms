@@ -1,10 +1,11 @@
-import {Pipe, PipeTransform} from "@angular/core";
-@Pipe({name:'enabledPipe'})
-export class EnablePipe implements PipeTransform{
+import {Pipe, PipeTransform} from '@angular/core';
+
+@Pipe({name: 'enabledPipe'})
+export class EnablePipe implements PipeTransform {
   transform(value: number): any {
-    switch (value){
+    switch (value) {
       case 1:
-        return '激活';
+        return '正常';
       case 0:
         return '冻结';
       default:

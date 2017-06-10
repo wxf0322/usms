@@ -52,4 +52,22 @@ public class JpaUtil {
         entityManager.flush();
         return tmp;
     }
+
+    /**
+     * 根据传入的参数，获取用逗号拼接的问号字符串
+     *
+     * @param params
+     * @return
+     */
+    public static String getQuestionMarks(Object[] params) {
+        StringBuffer queryParams = new StringBuffer();
+        if (params != null && params.length > 0) {
+            for (int i = 0; i < params.length; i++) {
+                if (i == 0) queryParams.append("?");
+                else queryParams.append(",?");
+            }
+        }
+        return queryParams.toString();
+    }
+
 }

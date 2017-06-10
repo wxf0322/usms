@@ -11,9 +11,6 @@ import {GlobalVariable} from "../../shared/global-variable";
   styleUrls: ['./privilege.component.css']
 })
 export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnInit {
-  selects: SelectItem[];
-  selectKey: string;
-  key: string;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -21,13 +18,10 @@ export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnI
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
-    this.selects = [];
-    this.selects.push({label: '请选择查询条件', value: 0});
-    this.selects.push({label: '权限名称', value: 1});
-    this.selects.push({label: '权限编码', value: 2});
   }
 
   ngOnInit(): void {
+    this.filter = '';
     this.getDataByPage(0, this.page.size, this.filter);
   }
 
@@ -37,7 +31,7 @@ export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnI
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    let url = GlobalVariable.BASE_URL + 'privilege/list';
+    let url = GlobalVariable.BASE_URL + 'privilege/list?key='+this.filter;
     this.httpService.findByPage(url, currentPage, rowsPerPage, null).then(
       res => this.setData(res)
     );
@@ -52,13 +46,8 @@ export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnI
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'privilege/list';
-    if (this.selectKey == '1') {
-      url = GlobalVariable.BASE_URL + 'privilege/list?label=' + this.key;
-    } else if (this.selectKey == '2') {
-      url = GlobalVariable.BASE_URL + 'privilege/list?name=' + this.key;
-    }
-    this.httpService.findByPage(url, 0, this.page.size, null).then(
+    var url = GlobalVariable.BASE_URL + 'privilege/list?key='+this.filter;
+    this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);
       }

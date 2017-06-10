@@ -148,7 +148,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
     @Override
     public Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges p where 1=1 "+sqlFilter.getWhereSql());
+        sb.append("select * from usms_privileges p "+sqlFilter.getWhereSql());
         String sql = sb.toString();
         return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }

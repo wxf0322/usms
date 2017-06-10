@@ -5,8 +5,7 @@
       <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
     </li>
     <li class="toolkit-item e-right">
-      <p-dropdown [options]="selects" [(ngModel)]="selectKey"></p-dropdown>
-      <input type="text" pInputText placeholder="关键字" [(ngModel)]="key" >
+      <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter" >
       <button pButton type="button" icon="fa-search"  label="查询" (click)="query()"></button>
     </li>
   </ul>
@@ -14,7 +13,7 @@
 <div class="ui-g content">
   <perfect-scrollbar>
     <div class="ui-g-12">
-      <p-dataTable [value]="viewData" [(selection)]="selectedData">
+      <p-dataTable [value]="viewData" [(selection)]="selectedData" selectionMode="multiple">
         <p-column  [style]="{'width':'60px'}">
           <ng-template  let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>
@@ -28,6 +27,8 @@
             {{privilege.enabled | enabledPipe}}
           </ng-template>
         </p-column>
+        <p-column header="备注" field="remarks"></p-column>
+
         <p-column header="操作" field="operation">
           <ng-template let-privilege="rowData" pTemplate="body">
             <button type="button" pButton icon="fa-edit" label="编辑" (click)="gotoDetail('edit', privilege.id)"></button>
