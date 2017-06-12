@@ -103,7 +103,7 @@ public class PrivilegeAPI {
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        List<PrivilegeEntity> privileges = privilegeService.getPrivilegesByAppName(applicationName);
+        List<PrivilegeEntity> privileges = privilegeService.findPrivilegesByAppName(applicationName);
         // 构造操作
         JSONArray privJsonArr = new JSONArray();
         for (PrivilegeEntity privilege : privileges) {

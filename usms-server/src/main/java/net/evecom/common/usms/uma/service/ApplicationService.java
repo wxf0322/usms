@@ -66,6 +66,6 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
      * @param appName
      * @return
      */
-    List<UserEntity> getUsersByApplicationName(String appName);
+    List<UserEntity> findUsersByAppName(String appName);
 
 }

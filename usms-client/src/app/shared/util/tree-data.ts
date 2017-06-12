@@ -5,4 +5,3 @@ export class TreeData {
   label: string;
   name: string;
 }
-

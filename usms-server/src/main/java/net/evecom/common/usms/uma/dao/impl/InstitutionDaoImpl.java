@@ -64,7 +64,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByInstName(String instName) {
+    public List<UserEntity> findUsersByInstName(String instName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in(  ")
                 .append(" select  ui.user_id from usms_user_institution ui ")
@@ -75,7 +75,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
     }
 
     @Override
-    public List<UserEntity> getUsersByInstNames(String[] instNames) {
+    public List<UserEntity> findUsersByInstNames(String[] instNames) {
         String queryParams = JpaUtil.getQuestionMarks(instNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in ( \n")
@@ -87,7 +87,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
     }
 
     @Override
-    public List<InstitutionEntity> getInstitutionsByType(Long type) {
+    public List<InstitutionEntity> findInstitutionsByType(Long type) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_institutions i ")
                 .append(" where i.type = ? and enabled = 1");

@@ -12,12 +12,12 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.UserModel;
 import net.evecom.common.usms.uma.service.InstitutionService;
 import net.evecom.common.usms.uma.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,17 +51,17 @@ public class UserController {
             sqlFilter.addOrFilter("QUERY_u#login_name_S_LK", request.getParameter("key"));
             sqlFilter.addOrFilter("QUERY_u#name_S_LK", request.getParameter("key"));
         }
-        if(!StringUtils.isEmpty(request.getParameter("institutionName"))) {
+        if (!StringUtils.isEmpty(request.getParameter("institutionName"))) {
             List<UserEntity> entitiesList =
-                    institutionService.getUsersByInstName(request.getParameter("institutionName"));
+                    institutionService.findUsersByInstName(request.getParameter("institutionName"));
             List<UserModel> modelsList = new ArrayList<>();
-            for(UserEntity userEntity:entitiesList){
+            for (UserEntity userEntity : entitiesList) {
                 UserModel userModel = new UserModel(userEntity);
                 modelsList.add(userModel);
             }
             return new PageImpl<>(modelsList, new PageRequest(page, size), modelsList.size());
         }
-        return userService.findModelsByPage(page, size,sqlFilter);
+        return userService.findModelsByPage(page, size, sqlFilter);
     }
 
     @ResponseBody
@@ -84,11 +84,11 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel,HttpServletRequest request) {
+    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel, HttpServletRequest request) {
         String institutionId = request.getParameter("institutionId");
         if (userModel.getId() == null) {
             UserEntity userEntity = userService.createUser(userModel);
-            if(!StringUtils.isEmpty(institutionId)) {
+            if (!StringUtils.isEmpty(institutionId)) {
                 userService.createUserInstitution(userEntity.getId(), Long.valueOf(institutionId));
             }
         } else {
@@ -99,7 +99,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "password/reset", method = RequestMethod.POST)
-    public ResultStatus resetPassword(String  ids) {
+    public ResultStatus resetPassword(String ids) {
         String[] idArray = ids.split(",");
         String newPassword = "123456";
         for (String id : idArray) {

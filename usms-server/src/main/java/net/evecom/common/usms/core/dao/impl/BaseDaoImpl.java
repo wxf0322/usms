@@ -139,11 +139,13 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
      * @return
      */
     @Override
-    public List<Object> queryObjectByPage(String sqlString, Object[] values, int page, int pageSize) {
+    public Page<Object> queryObjectByPage(String sqlString, Object[] values, int page, int pageSize) {
         Query query = this.getExecuteQuery(sqlString, values);
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
-        return query.getResultList();
+        return new PageImpl<Object>(query.getResultList(),
+                new PageRequest(page, pageSize),
+                getCountBySql(sqlString, values));
     }
 
     /**
@@ -402,7 +404,6 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
             }
         }
     }
-
 
     /**
      * 单行删除

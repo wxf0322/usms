@@ -44,7 +44,7 @@ public interface InstitutionDao extends BaseDao<InstitutionEntity, Long> {
      * @param instName
      * @return
      */
-    List<UserEntity> getUsersByInstName(String instName);
+    List<UserEntity> findUsersByInstName(String instName);
 
     /**
      * 根据组织机构集合查询用户列表
@@ -52,13 +52,13 @@ public interface InstitutionDao extends BaseDao<InstitutionEntity, Long> {
      * @param instNames
      * @return
      */
-    List<UserEntity> getUsersByInstNames(String[] instNames);
+    List<UserEntity> findUsersByInstNames(String[] instNames);
 
 
     /**
      * 根据组织机构类型获取组织机构列表
      */
-    List<InstitutionEntity> getInstitutionsByType(Long type);
+    List<InstitutionEntity> findInstitutionsByType(Long type);
 
     /**
      * 检查是否能被删除

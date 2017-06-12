@@ -83,7 +83,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByRoleName(String roleName) {
+    public List<UserEntity> findUsersByRoleName(String roleName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ur.user_id from usms_user_role ur\n")
@@ -99,7 +99,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByRoleNames(String[] roleNames) {
+    public List<UserEntity> findUsersByRoleNames(String[] roleNames) {
         String queryParams = JpaUtil.getQuestionMarks(roleNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in\n")

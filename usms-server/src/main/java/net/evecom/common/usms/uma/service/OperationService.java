@@ -22,10 +22,11 @@ import java.util.List;
 public interface OperationService extends BaseService<OperationEntity, Long> {
     /**
      * 获取应用操作列表
+     *
      * @param application
      * @return
      */
-    List<OperationEntity> getOperationsByAppName(String application);
+    List<OperationEntity> findOperationsByAppName(String application);
 
     /**
      * 根据操作编码查询用户列表
@@ -33,13 +34,14 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
      * @param operName
      * @return
      */
-    List<UserEntity> getUsersByOperName(String operName);
+    List<UserEntity> findUsersByOperName(String operName);
 
-   /**
-    * 判断是否拥有该操作
-    * @return
-    * @param userID,operationName
-    */
-    boolean hasOperation(long userID,String operationName);
+    /**
+     * 判断是否拥有该操作
+     *
+     * @param userID,operationName
+     * @return
+     */
+    boolean hasOperation(long userID, String operationName);
 
 }

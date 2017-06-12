@@ -5,6 +5,8 @@
  */
 package net.evecom.common.usms.uma.dao;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
 import java.util.List;
@@ -16,14 +18,13 @@ import java.util.List;
  * @version 1.0
  * @created 2017/5/8 15:58
  */
-public interface GridDao {
+public interface GridDao extends BaseDao<GridEntity, Long> {
     /**
      * 根据管辖区域编码查询用户列表
      *
      * @param gridCode
      * @return
      */
-    List<UserEntity> getUsersByGridCode(String gridCode);
-
+    List<UserEntity> findUsersByGridCode(String gridCode);
 
 }

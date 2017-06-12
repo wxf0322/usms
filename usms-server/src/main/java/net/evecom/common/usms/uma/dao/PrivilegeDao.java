@@ -23,24 +23,27 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
 
     /**
      * 根据app名字获取权限列表
+     *
      * @param application
      * @return
      */
-    List<PrivilegeEntity> getPrivilegesByAppName(String application);
+    List<PrivilegeEntity> findPrivilegesByAppName(String application);
 
     /**
      * 根据用户名获取权限列表
+     *
      * @param userID
      * @return
      */
-    List<PrivilegeEntity> getPrivilegesByUserId(long userID);
+    List<PrivilegeEntity> findPrivilegesByUserId(long userID);
 
     /**
      * 判断是否拥有次权限
+     *
      * @param userID,privilegeName
      * @return
      */
-    boolean hasPrivilege(long userID,String privilegeName);
+    boolean hasPrivilege(long userID, String privilegeName);
 
     /**
      * 根据权限编码查询用户列表
@@ -48,18 +51,18 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param privName
      * @return
      */
-    List<UserEntity> getUsersByPrivName(String privName);
+    List<UserEntity> findUsersByPrivName(String privName);
 
     /**
      * 查询权限列表
      */
-    Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter );
+    Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter);
 
 
     /**
      * 根据权限ID，更新对应操作的关系
      */
-    void updateOperations(Long privilegeId,String[] operationIds);
+    void updateOperations(Long privilegeId, String[] operationIds);
 
 
     /**

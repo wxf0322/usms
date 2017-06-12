@@ -55,12 +55,12 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     /**
      * 根据用户ID来查找角色列表
      *
-     * @param userID
+     * @param userId
      * @return
      */
     @Override
-    public List<RoleEntity> findRolesByUserId(long userID) {
-        return roleDao.findRolesByUserId(userID);
+    public List<RoleEntity> findRolesByUserId(long userId) {
+        return roleDao.findRolesByUserId(userId);
     }
 
     /**
@@ -71,8 +71,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public boolean hasRole(long userID, String roleName) {
-        return roleDao.hasRole(userID, roleName);
+    public boolean hasRole(long userId, String roleName) {
+        return roleDao.hasRole(userId, roleName);
     }
 
     /**
@@ -82,8 +82,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByRoleName(String roleName) {
-        return roleDao.getUsersByRoleName(roleName);
+    public List<UserEntity> findUsersByRoleName(String roleName) {
+        return roleDao.findUsersByRoleName(roleName);
     }
 
     /**
@@ -93,8 +93,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByRoleNames(String[] roleNames) {
-        return roleDao.getUsersByRoleNames(roleNames);
+    public List<UserEntity> findUsersByRoleNames(String[] roleNames) {
+        return roleDao.findUsersByRoleNames(roleNames);
     }
 
     @Override

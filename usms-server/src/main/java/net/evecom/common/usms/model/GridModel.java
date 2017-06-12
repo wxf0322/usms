@@ -90,6 +90,10 @@ public class GridModel {
      * 轮廓ID
      */
     private Long geoOutlineId;
+    /**
+     * 可用状态
+     */
+    private Long enabled;
 
     public long getId() {
         return id;
@@ -219,6 +223,14 @@ public class GridModel {
         this.geoOutlineId = geoOutlineId;
     }
 
+    public Long getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Long enabled) {
+        this.enabled = enabled;
+    }
+
     public GridModel(GridEntity gridEntity) {
         try {
             BeanUtils.copyProperties(this, gridEntity);
@@ -228,7 +240,6 @@ public class GridModel {
             logger.error(e.getMessage(),e);
         }
     }
-
 
     @Override
     public String toString() {

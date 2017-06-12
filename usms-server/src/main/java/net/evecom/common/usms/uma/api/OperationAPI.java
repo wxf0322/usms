@@ -63,13 +63,14 @@ public class OperationAPI {
 
     /**
      * 判断是否允许该操作
-     * @return ResponseEntity
+     *
      * @param request
+     * @return ResponseEntity
      */
-    @RequestMapping(value = "/operation/exist",produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/operation/exist", produces = "application/json; charset=UTF-8")
     public ResponseEntity hasOperation(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         String operationName = request.getParameter("operation");
-        if(StringUtils.isEmpty(operationName)){
+        if (StringUtils.isEmpty(operationName)) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
                     .buildJSONMessage();
@@ -95,20 +96,20 @@ public class OperationAPI {
 
     /**
      * 获取操作列表
-     * @return ResponseEntity
+     *
      * @param request
+     * @return ResponseEntity
      */
     @RequestMapping(value = "/operations", produces = "application/json; charset=UTF-8")
     public ResponseEntity getOperations(HttpServletRequest request) {
         String application = request.getParameter("application");
-        if(StringUtils.isEmpty(application)){
+        if (StringUtils.isEmpty(application)) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        List<OperationEntity> operations =
-                operationService.getOperationsByAppName(application);
+        List<OperationEntity> operations = operationService.findOperationsByAppName(application);
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
         for (OperationEntity operation : operations) {
@@ -117,8 +118,8 @@ public class OperationAPI {
             operJson.remove("enabled");
             operJsonArr.add(operJson);
         }
-        JSONObject jsonObject =new JSONObject();
-        jsonObject.put("operations",operJsonArr);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("operations", operJsonArr);
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 

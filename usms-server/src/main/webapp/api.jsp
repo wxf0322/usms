@@ -938,7 +938,6 @@ http://192.168.200.209:8080/usms/v1/openapi/institution?institution=INSTITUTION_
 }
 ```
 
-
 ### 2.3.17 管辖区域列表，根据access_token查询
 
 (1) 接口说明
@@ -981,6 +980,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 | adminDivision         | 隶属行政区划              |
 | manualSn              | 手动排序                  |
 | geoOutlineId          | 轮廓ID                    |
+| enabled               | 可用状态（0: 冻结 1: 正常）|
 
 (6) 输出样例
 
@@ -1003,13 +1003,45 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
             "adminDivisionCode": "",
             "adminDivision": "",
             "manualSn": "",
-            "geoOutlineId": ""
+            "geoOutlineId": "",
+            "enabled": ""
         }
     ]
 }
 ```
 
-### 2.3.18 角色列表，需access_token鉴权
+ ### 2.3.18 返回管辖区域列表，需access_token鉴权
+
+(1) 接口说明
+
+返回所有的管辖区域列表，根据access_token查询
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/openapi/grids/all
+
+(3) 输入参数
+
+| 参数名       | 是否必填  | 说明    |
+|--------------|----------|---------|
+| access_token | 是       | 访问令牌 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/openapi/grids/all?access_token=ACCESS_TOKEN
+```
+
+(5) 输出参数
+
+同 2.3.17 输出参数
+
+(6) 输出样例
+
+同 2.3.17 输出样例
+
+
+### 2.3.19 角色列表，需access_token鉴权
 
 (1) 接口说明
 
@@ -1031,9 +1063,10 @@ http://192.168.200.209:8080/usms/v1/openapi/roles
 http://192.168.200.209:8080/usms/v1/openapi/roles?access_token=ACCESS_TOKEN
 ```
 
-### 2.3.19 用户列表，根据组织编码集合
+### 2.3.20 用户列表，根据组织编码集合
 
 (1) 接口说明
+
 根据组织编码集合获取用户信息
 
 (2) 接口地址
@@ -1060,7 +1093,7 @@ http://192.168.200.209:8080/usms/v1/internalapi/users?institutions=yfzx,yfwb
 
 同 2.3.2 节 输出样例
 
-### 2.3.20 用户列表，角色编码集合
+### 2.3.21 用户列表，角色编码集合
 
 (1) 接口说明
 
@@ -1072,9 +1105,9 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名 | 是否必填   | 说明     |
+| 参数名 | 是否必填  | 说明     |
 |--------|-----------|----------|
-| roles  |是         | 角色编码集合，用 "," 连接 |
+| roles  | 是        | 角色编码集合，用 "," 连接 |
 
 (4) 输入样例
 
@@ -1091,7 +1124,7 @@ http://192.168.200.209:8080/usms/v1/internalapi/users?roles=admin,guest
 同 2.3.2 节 输出样例
 
 
-### 2.3.21 用户列表，根据登入名集合
+### 2.3.22 用户列表，根据登入名集合
 
 (1) 接口说明
 

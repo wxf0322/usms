@@ -48,7 +48,7 @@ public interface BaseDao<T, ID extends Serializable> {
      * @param pageSize  the page size
      * @return 查询结果 list
      */
-    List<Object> queryObjectByPage(String sqlString, Object[] values, int page, int pageSize);
+    Page<Object> queryObjectByPage(String sqlString, Object[] values, int page, int pageSize);
 
     /**
      * 查询返回ListMap

@@ -54,7 +54,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      * @return List<PrivilegeEntity>
      */
     @Override
-    public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
+    public List<PrivilegeEntity> findPrivilegesByAppName(String application) {
         StringBuffer sb = new StringBuffer();
         sb.append("select *  from usms_privileges p ")
                 .append("where p.id in (select po.priv_id from usms_privilege_operation po ")
@@ -77,7 +77,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      * @return List<PrivilegeEntity>
      */
     @Override
-    public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
+    public List<PrivilegeEntity> findPrivilegesByUserId(long userID) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_privileges p ")
                 .append("where p.id in( ")
@@ -124,7 +124,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByPrivName(String privName) {
+    public List<UserEntity> findUsersByPrivName(String privName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u\n")
                 .append(" where u.id in (select ur.user_id from usms_user_role ur\n")

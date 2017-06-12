@@ -47,8 +47,6 @@ public class RoleController {
      */
     private static Logger logger = LoggerFactory.getLogger(RoleController.class);
 
-
-
     /**
      * 查找角色列表
      *
@@ -58,11 +56,11 @@ public class RoleController {
     @RequestMapping(value = "list")
     public Page<RoleEntity> list(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!org.springframework.util.StringUtils.isEmpty(request.getParameter("key"))) {
+        if (!StringUtils.isEmpty(request.getParameter("key"))) {
             sqlFilter.addOrFilter("QUERY_r#label_S_LK", request.getParameter("key"));
             sqlFilter.addOrFilter("QUERY_r#name_S_LK", request.getParameter("key"));
         }
-        return roleService.findByPage(page, size,sqlFilter);
+        return roleService.findByPage(page, size, sqlFilter);
     }
 
     @ResponseBody
@@ -102,10 +100,8 @@ public class RoleController {
                 userIdArray = roleModel.getUserIds().split(",");
             }
             roleService.updateUsers(roleEntity.getId(), userIdArray);
-        } catch (InvocationTargetException |IllegalAccessException e) {
-            logger.error(e.getMessage(),e);
-        }catch (Exception e){
-            logger.error(e.getMessage(),e);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            logger.error(e.getMessage(), e);
         }
         return new ResultStatus(true, "");
     }
@@ -124,6 +120,7 @@ public class RoleController {
 
     /**
      * 查找角色Id对应的未选择权限列表
+     *
      * @param roleId
      * @return
      */
@@ -156,7 +153,5 @@ public class RoleController {
     public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
         return roleService.getUnselectedUsers(roleId);
     }
-
-
 
 }

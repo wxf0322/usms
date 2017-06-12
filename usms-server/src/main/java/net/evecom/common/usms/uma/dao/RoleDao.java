@@ -45,7 +45,7 @@ public interface RoleDao extends BaseDao<RoleEntity, Long> {
      * @param roleName
      * @return
      */
-    List<UserEntity> getUsersByRoleName(String roleName);
+    List<UserEntity> findUsersByRoleName(String roleName);
 
     /**
      * 根据权限角色查询列表用户列表
@@ -53,7 +53,7 @@ public interface RoleDao extends BaseDao<RoleEntity, Long> {
      * @param roleNames
      * @return
      */
-    List<UserEntity> getUsersByRoleNames(String[] roleNames);
+    List<UserEntity> findUsersByRoleNames(String[] roleNames);
 
     /**
      * 所有角色列表

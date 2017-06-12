@@ -89,32 +89,32 @@ public class UsersAPI {
         //获取管辖区域编码
         String gridCode = request.getParameter("grid");
         if (StringUtils.isNotEmpty(gridCode)) {
-            users = gridService.getUsersByGridCode(gridCode);
+            users = gridService.findUsersByGridCode(gridCode);
         }
         //获取组织机构编码
         String instName = request.getParameter("institution");
         if (StringUtils.isNotEmpty(instName)) {
-            users = institutionService.getUsersByInstName(instName);
+            users = institutionService.findUsersByInstName(instName);
         }
         //获取应用编码
         String appName = request.getParameter("application");
         if (StringUtils.isNotEmpty(appName)) {
-            users = applicationService.getUsersByApplicationName(appName);
+            users = applicationService.findUsersByAppName(appName);
         }
         //获取权限编码
         String privName = request.getParameter("privilege");
         if (StringUtils.isNotEmpty(privName)) {
-            users = privilegeService.getUsersByPrivName(privName);
+            users = privilegeService.findUsersByPrivName(privName);
         }
         //获取操作编码
         String operName = request.getParameter("operation");
         if (StringUtils.isNotEmpty(operName)) {
-            users = operationService.getUsersByOperName(operName);
+            users = operationService.findUsersByOperName(operName);
         }
         //获取角色编码
         String roleName = request.getParameter("role");
         if (StringUtils.isNotEmpty(roleName)) {
-            users = roleService.getUsersByRoleName(roleName);
+            users = roleService.findUsersByRoleName(roleName);
         }
         String officalPost = request.getParameter("offical_post");
         if (StringUtils.isNotEmpty(officalPost)) {
@@ -141,11 +141,11 @@ public class UsersAPI {
         }
         String roleNames = request.getParameter("roles");
         if(StringUtils.isNotEmpty(roleNames)) {
-            users = roleService.getUsersByRoleNames(roleNames.split(","));
+            users = roleService.findUsersByRoleNames(roleNames.split(","));
         }
         String instNames = request.getParameter("institutions");
         if(StringUtils.isNotEmpty(instNames)) {
-            users = institutionService.getUsersByInstNames(instNames.split(","));
+            users = institutionService.findUsersByInstNames(instNames.split(","));
         }
         JSONObject usersJson = new JSONObject();
         if (users == null) {
@@ -169,15 +169,15 @@ public class UsersAPI {
         if (users == null) {
             return new JSONArray();
         } else {
-            JSONArray usersArray = new JSONArray();
+            JSONArray usersJsonArr = new JSONArray();
             for (UserEntity user : users) {
                 UserModel userModel = new UserModel(user);
                 JSONObject userJson = JSONObject.fromObject(userModel);
                 userJson.remove("enabled");
                 userJson.remove("roleNames");
-                usersArray.add(userJson);
+                usersJsonArr.add(userJson);
             }
-            return usersArray;
+            return usersJsonArr;
         }
     }
 

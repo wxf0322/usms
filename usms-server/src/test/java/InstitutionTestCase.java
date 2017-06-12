@@ -38,20 +38,19 @@ public class InstitutionTestCase {
 
     @Test
     public void test() {
-        List<UserEntity> list = institutionDao.getUsersByInstNames(new String[]{"yfzx", "tree1"});
+        List<UserEntity> list = institutionDao.findUsersByInstNames(new String[]{"yfzx", "tree1"});
         System.out.println(list);
     }
 
     @Test
     public void test1() {
-        List<UserEntity> list = roleDao.getUsersByRoleNames(new String[]{"88", "test12"});
+        List<UserEntity> list = roleDao.findUsersByRoleNames(new String[]{"88", "test12"});
         System.out.println(list.size());
         System.out.println(list);
     }
 
     @Test
     public void test2() {
-        //List<UserEntity> list = userDao.findByLoginNames(new String[]{"admin", "tcwangyq"});
         List<UserEntity> list = userDao.findByLoginNames(null);
         System.out.println(list.size());
         System.out.println(list);

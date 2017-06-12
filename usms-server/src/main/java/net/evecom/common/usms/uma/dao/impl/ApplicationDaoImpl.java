@@ -38,9 +38,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
     private EntityManager manager;
 
     @Override
-    public Page<ApplicationEntity> findByPage(int page, int size , SqlFilter sqlFilter) {
+    public Page<ApplicationEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_applications a "+sqlFilter.getWhereSql());
+        sb.append("select * from usms_applications a " + sqlFilter.getWhereSql());
         String sql = sb.toString();
         return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }
@@ -68,7 +68,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByApplicationName(String appName) {
+    public List<UserEntity> findUsersByAppName(String appName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u\n")
                 .append(" where u.id in (select ur.user_id from usms_user_role ur\n")

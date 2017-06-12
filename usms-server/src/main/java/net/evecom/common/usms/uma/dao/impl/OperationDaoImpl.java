@@ -38,7 +38,7 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
      * @return List<OperationEntity>
      */
     @Override
-    public List<OperationEntity> getOperationsByAppName(String appName) {
+    public List<OperationEntity> findOperationsByAppName(String appName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations o\n")
                 .append("where o.application_id in (")
@@ -57,7 +57,7 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByOperName(String operName) {
+    public List<UserEntity> findUsersByOperName(String operName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ur.user_id from usms_user_role ur\n")

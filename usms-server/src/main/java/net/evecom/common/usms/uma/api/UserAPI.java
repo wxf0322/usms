@@ -112,7 +112,7 @@ public class UserAPI {
      * @param clientId
      * @return
      */
-    private JSONObject getApplicationJSON(String clientId) {
+    private JSONObject getApplicationJSONObject(String clientId) {
         ApplicationEntity application = applicationService.findByClientId(clientId);
 
         JSONObject resultJson = new JSONObject();
@@ -123,7 +123,7 @@ public class UserAPI {
         resultJson.put("clientSecret", application.getClientSecret());
 
         String appName = application.getName();
-        List<OperationEntity> operations = operationService.getOperationsByAppName(appName);
+        List<OperationEntity> operations = operationService.findOperationsByAppName(appName);
 
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
@@ -155,7 +155,6 @@ public class UserAPI {
         String accessToken = oauthRequest.getAccessToken();
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
-
         // 获取ClientId
         String clientId = oAuthService.getClientIdByAccessToken(accessToken);
 
@@ -166,7 +165,7 @@ public class UserAPI {
 
         // 获得相应的json对象
         JSONObject staffJson = getStaffJSONObject(staffId);
-        JSONObject appJson = getApplicationJSON(clientId);
+        JSONObject appJson = getApplicationJSONObject(clientId);
         JSONArray instJsonArr = getInstitutionJSONArray(user.getId());
 
         // 构造userJson

@@ -48,8 +48,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public List<PrivilegeEntity> getPrivilegesByAppName(String application) {
-        return privilegeDao.getPrivilegesByAppName(application);
+    public List<PrivilegeEntity> findPrivilegesByAppName(String application) {
+        return privilegeDao.findPrivilegesByAppName(application);
     }
 
     /**
@@ -59,8 +59,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public List<PrivilegeEntity> getPrivilegesByUserId(long userID) {
-        return privilegeDao.getPrivilegesByUserId(userID);
+    public List<PrivilegeEntity> findPrivilegesByUserId(long userID) {
+        return privilegeDao.findPrivilegesByUserId(userID);
     }
 
     /**
@@ -81,8 +81,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByPrivName(String privName) {
-        return privilegeDao.getUsersByPrivName(privName);
+    public List<UserEntity> findUsersByPrivName(String privName) {
+        return privilegeDao.findUsersByPrivName(privName);
     }
 
     /**

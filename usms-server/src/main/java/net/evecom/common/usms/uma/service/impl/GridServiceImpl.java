@@ -5,6 +5,9 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
+import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.GridDao;
 import net.evecom.common.usms.uma.service.GridService;
@@ -23,12 +26,19 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class GridServiceImpl implements GridService {
+public class GridServiceImpl extends BaseServiceImpl<GridEntity, Long>
+        implements GridService {
+
     /**
      * 注入GridDao
      */
     @Autowired
     private GridDao gridDao;
+
+    @Override
+    public BaseDao<GridEntity, Long> getBaseDao() {
+        return gridDao;
+    }
 
     /**
      * 根据管辖区域编码查询用户列表
@@ -37,7 +47,8 @@ public class GridServiceImpl implements GridService {
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByGridCode(String gridCode) {
-        return gridDao.getUsersByGridCode(gridCode);
+    public List<UserEntity> findUsersByGridCode(String gridCode) {
+        return gridDao.findUsersByGridCode(gridCode);
     }
+
 }

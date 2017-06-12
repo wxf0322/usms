@@ -24,7 +24,7 @@ public interface OperationDao extends BaseDao<OperationEntity, Long> {
      * @param appName
      * @return
      */
-    List<OperationEntity> getOperationsByAppName(String appName);
+    List<OperationEntity> findOperationsByAppName(String appName);
 
     /**
      * 根据操作编码查询用户列表
@@ -32,7 +32,7 @@ public interface OperationDao extends BaseDao<OperationEntity, Long> {
      * @param operName
      * @return
      */
-    List<UserEntity> getUsersByOperName(String operName);
+    List<UserEntity> findUsersByOperName(String operName);
 
     /**
      * 判断是否拥有该操作

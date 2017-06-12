@@ -44,8 +44,8 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      * @return
      */
     @Override
-    public List<OperationEntity> getOperationsByAppName(String appName) {
-        return operationDao.getOperationsByAppName(appName);
+    public List<OperationEntity> findOperationsByAppName(String appName) {
+        return operationDao.findOperationsByAppName(appName);
     }
 
     /**
@@ -54,8 +54,8 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByOperName(String operName) {
-        return operationDao.getUsersByOperName(operName);
+    public List<UserEntity> findUsersByOperName(String operName) {
+        return operationDao.findUsersByOperName(operName);
     }
 
     /**

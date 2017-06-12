@@ -8,6 +8,7 @@ package net.evecom.common.usms.uma.api;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.model.GridModel;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.uma.service.GridService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -47,6 +48,20 @@ public class GridAPI {
     @Autowired
     private UserService userService;
 
+    /**
+     * 注入GridService
+     */
+    @Autowired
+    private GridService gridService;
+
+    /**
+     * 根据 access_token 返回网格信息
+     *
+     * @param request
+     * @return
+     * @throws OAuthProblemException
+     * @throws OAuthSystemException
+     */
     @RequestMapping(value = "/grids", produces = "application/json; charset=UTF-8")
     public ResponseEntity getGrids(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         // 构建OAuth资源请求
@@ -59,6 +74,25 @@ public class GridAPI {
         List<GridEntity> grids = userService.findGridsByLoginName(loginName);
         JSONArray gridJsonArr = new JSONArray();
         // 遍历网格数据
+        for (GridEntity grid : grids) {
+            GridModel gridModel = new GridModel(grid);
+            JSONObject gridJson = JSONObject.fromObject(gridModel);
+            gridJsonArr.add(gridJson);
+        }
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("grids", gridJsonArr);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
+    }
+
+    /**
+     * 返回所有网格的信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/grids/all", produces = "application/json; charset=UTF-8")
+    public ResponseEntity findAll() {
+        List<GridEntity> grids = gridService.findAll();
+        JSONArray gridJsonArr = new JSONArray();
         for (GridEntity grid : grids) {
             GridModel gridModel = new GridModel(grid);
             JSONObject gridJson = JSONObject.fromObject(gridModel);

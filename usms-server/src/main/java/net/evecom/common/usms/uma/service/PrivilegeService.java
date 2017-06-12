@@ -7,7 +7,6 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.core.util.SqlFilter;
-import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.model.OperationModel;
@@ -24,24 +23,27 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
 
     /**
      * 根据app名称来获取权限列表
+     *
+     * @param application
      * @return
-     * @param
      */
-    List<PrivilegeEntity> getPrivilegesByAppName(String application);
+    List<PrivilegeEntity> findPrivilegesByAppName(String application);
 
     /**
      * 根据用户编码来获取权限列表
+     *
+     * @param userID
      * @return
-     * @param  userID
      */
-    List<PrivilegeEntity> getPrivilegesByUserId(long userID);
+    List<PrivilegeEntity> findPrivilegesByUserId(long userID);
 
     /**
      * 判断是否拥有该权限
-     * @return
+     *
      * @param userID,privilegeName
+     * @return
      */
-    boolean hasPrivilege(long userID,String privilegeName);
+    boolean hasPrivilege(long userID, String privilegeName);
 
     /**
      * 根据权限编码查询用户列表
@@ -49,8 +51,7 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
      * @param privName
      * @return
      */
-    List<UserEntity> getUsersByPrivName(String privName);
-
+    List<UserEntity> findUsersByPrivName(String privName);
 
     /**
      * 查询权限列表
@@ -60,8 +61,7 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
     /**
      * 根据权限ID，更新对应操作的关系
      */
-    void updateOperations(Long privilegeId,String[] operationIds);
-
+    void updateOperations(Long privilegeId, String[] operationIds);
 
     /**
      * 查找权限ID对应的操作列表

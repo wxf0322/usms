@@ -5,6 +5,8 @@
  */
 package net.evecom.common.usms.uma.dao.impl;
 
+import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.GridDao;
 import org.springframework.stereotype.Repository;
@@ -22,7 +24,8 @@ import java.util.List;
  * @created 2017/5/8 15:58
  */
 @Repository
-public class GridDaoImpl implements GridDao {
+public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
+        implements GridDao {
     /**
      *
      * 注入实体管理器
@@ -37,7 +40,7 @@ public class GridDaoImpl implements GridDao {
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByGridCode(String gridCode) {
+    public List<UserEntity> findUsersByGridCode(String gridCode) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ug.user_id from usms_user_grid ug where ug.grid_code=:code)");

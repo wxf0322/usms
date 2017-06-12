@@ -6,7 +6,6 @@
 package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
-import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.MapUtil;
@@ -40,13 +39,15 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
         implements ApplicationService {
 
     /**
+     * 日志管理器
+     */
+    private Logger logger = org.slf4j.LoggerFactory.getLogger(ApplicationServiceImpl.class);
+
+    /**
      * 注入ApplicationDao
      */
     @Autowired
     private ApplicationDao applicationDao;
-
-    private Logger logger = org.slf4j.LoggerFactory.getLogger(ApplicationServiceImpl.class);
-
 
     /**
      * 注入TreeService
@@ -83,7 +84,6 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
             logger.error(e.getMessage(), e);
             return applicationEntity;
         }
-
         return applicationEntity;
     }
 
@@ -109,7 +109,8 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByApplicationName(String appName) {
-        return applicationDao.getUsersByApplicationName(appName);
+    public List<UserEntity> findUsersByAppName(String appName) {
+        return applicationDao.findUsersByAppName(appName);
     }
+
 }

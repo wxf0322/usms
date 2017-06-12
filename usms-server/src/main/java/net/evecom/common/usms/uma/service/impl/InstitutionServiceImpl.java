@@ -69,8 +69,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByInstName(String instName) {
-        return institutionDao.getUsersByInstName(instName);
+    public List<UserEntity> findUsersByInstName(String instName) {
+        return institutionDao.findUsersByInstName(instName);
     }
 
     /**
@@ -80,8 +80,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> getUsersByInstNames(String[] instNames) {
-        return institutionDao.getUsersByInstNames(instNames);
+    public List<UserEntity> findUsersByInstNames(String[] instNames) {
+        return institutionDao.findUsersByInstNames(instNames);
     }
 
     /**
@@ -91,8 +91,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<InstitutionEntity> getInstitutionsByType(Long type) {
-        return institutionDao.getInstitutionsByType(type);
+    public List<InstitutionEntity> findInstitutionsByType(Long type) {
+        return institutionDao.findInstitutionsByType(type);
     }
 
     /**
