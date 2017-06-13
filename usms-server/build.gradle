@@ -64,6 +64,10 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
 
+    // http
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+    compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+
     // oltu
     compile group: 'org.apache.oltu.oauth2', name: 'org.apache.oltu.oauth2.client', version: oltuVer
     compile group: 'org.apache.oltu.oauth2', name: 'org.apache.oltu.oauth2.authzserver', version: oltuVer

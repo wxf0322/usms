@@ -25,6 +25,9 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   sourceUsers: User[] = [];
   targetUsers: User[] = [];
 
+  /**
+   * 选中的节点
+   */
   selectedNode: TreeNode[];
 
   /**

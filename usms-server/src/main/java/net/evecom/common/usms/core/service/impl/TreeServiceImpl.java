@@ -7,7 +7,7 @@ package net.evecom.common.usms.core.service.impl;
 
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.SqlFilter;
-import net.evecom.common.usms.model.TreeDataModel;
+import net.evecom.common.usms.core.model.TreeDataModel;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -295,15 +295,15 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public List<TreeDataModel> findAllTreeData(String tableName) {
+    public List<TreeDataModel> findTreeData(String tableName) {
         SqlFilter sqlFilter = new SqlFilter();
-        return this.findAllTreeData(tableName, sqlFilter);
+        return this.findTreeData(tableName, sqlFilter);
     }
 
     @Override
-    public List<TreeDataModel> findAllTreeData(String tableName, SqlFilter sqlFilter) {
+    public List<TreeDataModel> findTreeData(String tableName, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select id, label, name, parent_id, manual_sn from ")
+        sb.append("select id, parent_id, label, name, manual_sn from ")
                 .append(tableName).append(" where 1=1 ")
                 .append(sqlFilter.getWhereSql());
         Query query = this.getExecuteQuery(sb.toString(), sqlFilter.getParams().toArray());
@@ -313,12 +313,21 @@ public class TreeServiceImpl implements TreeService {
             Object[] col = (Object[]) row;
             TreeDataModel treeNodeModel = new TreeDataModel();
             treeNodeModel.setId(((BigDecimal) col[0]).longValue());
-            treeNodeModel.setLabel((String) col[1]);
-            treeNodeModel.setName((String) col[2]);
-            treeNodeModel.setParentId(((BigDecimal) col[3]).longValue());
+            treeNodeModel.setParentId(((BigDecimal) col[1]).longValue());
+            treeNodeModel.setLabel((String) col[2]);
+
+            // 设置树形节点上的数据
+            Map<String, Object> data = new HashMap<>();
+            String name = (String) col[3];
+            Long manualSn;
             if (col[4] != null) {
-                treeNodeModel.setManualSn(((BigDecimal) col[4]).longValue());
+                manualSn = ((BigDecimal) col[4]).longValue();
+            }else {
+                manualSn = 0L;
             }
+            data.put("name", name);
+            data.put("manualSn", manualSn);
+            treeNodeModel.setData(data);
             trees.add(treeNodeModel);
         }
         return trees;

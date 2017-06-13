@@ -14,14 +14,14 @@ export class TreeUtil {
       label: treeData.label,
       expandedIcon: 'fa-folder-open',
       collapsedIcon: 'fa-folder',
-      data: {
-        id: treeData.id,
-        name: treeData.name,
-        parentId: treeData.parentId,
-        manualSn: treeData.manualSn
-      },
+      data: {},
       children: []
     };
+    treeNode.data = treeData.data;
+    treeNode.data['id'] = treeData.id;
+    treeNode.data['parentId'] = treeData.parentId;
+    treeNode.data['label'] = treeData.label;
+
     const id = treeData.id.toString();
     if (treeMap[id] != null) {
       for (let i = 0; i < treeMap[id].length; i++) {

@@ -74,6 +74,9 @@ public class UsersAPI {
     @Autowired
     private StaffService staffService;
 
+    /**
+     * 注入UserService
+     */
     @Autowired
     private UserService userService;
 
@@ -132,19 +135,25 @@ public class UsersAPI {
         }
     }
 
+    /**
+     * 内部接口获得用户列表
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/v1/internalapi/users", produces = "application/json; charset=UTF-8")
     public ResponseEntity getUsersToMessageCenter(HttpServletRequest request) {
         List<UserEntity> users = null;
         String loginNames = request.getParameter("login_names");
-        if(StringUtils.isNotEmpty(loginNames)) {
+        if (StringUtils.isNotEmpty(loginNames)) {
             users = userService.findByLoginNames(loginNames.split(","));
         }
         String roleNames = request.getParameter("roles");
-        if(StringUtils.isNotEmpty(roleNames)) {
+        if (StringUtils.isNotEmpty(roleNames)) {
             users = roleService.findUsersByRoleNames(roleNames.split(","));
         }
         String instNames = request.getParameter("institutions");
-        if(StringUtils.isNotEmpty(instNames)) {
+        if (StringUtils.isNotEmpty(instNames)) {
             users = institutionService.findUsersByInstNames(instNames.split(","));
         }
         JSONObject usersJson = new JSONObject();

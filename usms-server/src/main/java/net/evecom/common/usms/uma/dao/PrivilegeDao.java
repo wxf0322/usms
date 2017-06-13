@@ -24,10 +24,10 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
     /**
      * 根据app名字获取权限列表
      *
-     * @param application
+     * @param appName
      * @return
      */
-    List<PrivilegeEntity> findPrivilegesByAppName(String application);
+    List<PrivilegeEntity> findPrivilegesByAppName(String appName);
 
     /**
      * 根据用户名获取权限列表

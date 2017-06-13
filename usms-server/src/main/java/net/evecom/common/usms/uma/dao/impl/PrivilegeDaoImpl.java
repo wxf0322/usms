@@ -48,25 +48,25 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
     private EntityManager manager;
 
     /**
-     * 根据App名称获取权限列表
+     * 根据应用编码获取权限列表
      *
-     * @param application
-     * @return List<PrivilegeEntity>
+     * @param appName
+     * @return
      */
     @Override
-    public List<PrivilegeEntity> findPrivilegesByAppName(String application) {
+    public List<PrivilegeEntity> findPrivilegesByAppName(String appName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select *  from usms_privileges p ")
+        sb.append("select * from usms_privileges p ")
                 .append("where p.id in (select po.priv_id from usms_privilege_operation po ")
                 .append("where po.oper_id in (select o.id ")
                 .append("from usms_operations o ")
                 .append("where o.application_id in ")
                 .append(" (select a.id  from usms_applications a ")
-                .append("where a.name=:application)")
+                .append("where a.name= ?)")
                 .append("and o.enabled = 1))");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
-        query.setParameter("application", application);
+        query.setParameter(1, appName);
         return query.getResultList();
     }
 
@@ -74,7 +74,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      * 根据用户名查找权限列表
      *
      * @param userID
-     * @return List<PrivilegeEntity>
+     * @return
      */
     @Override
     public List<PrivilegeEntity> findPrivilegesByUserId(long userID) {
@@ -115,7 +115,6 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
         query.setParameter("name", privilegeName);
         return query.getResultList().size() != 0;
     }
-
 
     /**
      * 根据权限编码查询用户列表

@@ -1,7 +1,7 @@
 export class TreeData {
   id: number;
   parentId: number;
-  manualSn: number;
   label: string;
-  name: string;
+  // 树形数据
+  data: any;
 }

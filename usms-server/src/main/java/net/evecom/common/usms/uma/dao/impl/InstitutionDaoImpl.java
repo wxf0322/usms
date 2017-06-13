@@ -38,7 +38,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
         sb.append("select * from usms_institutions i where i.id in \n")
                 .append("( select ui.institution_id from usms_user_institution ui ")
                 .append(" where ui.user_id in ")
-                .append(" (select u.id   from usms_users u ")
+                .append(" (select u.id from usms_users u ")
                 .append("  where u.login_name = ?))");
         String sql = sb.toString();
         return super.queryBySql(InstitutionEntity.class, sql, new Object[]{loginName});
@@ -67,7 +67,7 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
     public List<UserEntity> findUsersByInstName(String instName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in(  ")
-                .append(" select  ui.user_id from usms_user_institution ui ")
+                .append(" select ui.user_id from usms_user_institution ui ")
                 .append(" where ui.institution_id in( ")
                 .append(" select i.id from usms_institutions i where i.name =?)) ");
         String sql = sb.toString();

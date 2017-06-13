@@ -43,10 +43,10 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
         sb.append("select * from usms_operations o\n")
                 .append("where o.application_id in (")
                 .append("select a.id from usms_applications a ")
-                .append("where a.name =:application) and o.enabled = 1");
+                .append("where a.name = ?) and o.enabled = 1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter("application", appName);
+        query.setParameter(1, appName);
         return query.getResultList();
     }
 
@@ -78,21 +78,21 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
      * 判断是否拥有该操作
      *
      * @param userID
-     * @param operationName
+     * @param operName
      * @return boolean
      */
     @Override
-    public boolean hasOperation(long userID, String operationName) {
+    public boolean hasOperation(long userID, String operName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations p where p.id in( ")
                 .append("select po.oper_id from usms_privilege_operation po where po.priv_id in( ")
                 .append("select pr.priv_id from usms_privilege_role pr where pr.role_id in( ")
-                .append("select ur.role_id from usms_user_role ur where ur.user_id = :userid ))) ")
-                .append("and p.enabled=1 and p.name= :operationName");
+                .append("select ur.role_id from usms_user_role ur where ur.user_id = ? ))) ")
+                .append("and p.enabled=1 and p.name= ?");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql);
-        query.setParameter("userid", userID);
-        query.setParameter("operationName", operationName);
+        query.setParameter(1, userID);
+        query.setParameter(2, operName);
         return query.getResultList().size() != 0;
     }
 

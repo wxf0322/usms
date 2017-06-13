@@ -62,7 +62,6 @@ export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit 
     } else {
       parentLabel = event.node.parent.label;
     }
-    console.log(parentLabel);
     this.router.navigate(['panel', {id: id, parentLabel: parentLabel}], {
       relativeTo: this.route,
       skipLocationChange: true

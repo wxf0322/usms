@@ -1,122 +1,56 @@
-import {Component, OnInit} from '@angular/core';
-import {SelectItem, TreeNode} from 'primeng/primeng';
+import {Component, OnInit, Renderer} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {ConfirmationService, TreeNode} from 'primeng/primeng';
+import {GlobalVariable} from "../../shared/global-variable";
+import {TreeData} from "../../shared/util/tree-data";
+import {TreeUtil} from "../../shared/util/tree-util";
+import {HttpService} from "../../core/service/http.service";
+import {SimpleBaseUtil} from "../../shared/util/simple-base.util";
+import {User} from "../user/user";
 
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.css']
 })
-export class GridComponent implements OnInit {
+export class GridComponent extends SimpleBaseUtil<any>  implements OnInit {
 
-  filesTree: TreeNode[];
 
-  gridTree: TreeNode[];
+  /**
+   * 树形节点
+   */
+  tree: TreeNode[];
 
-  ngOnInit(): void {
-    this.filesTree = [{
-      'label': 'Documents',
-      'data': 'Documents Folder',
-      'expandedIcon': 'fa-folder-open',
-      'collapsedIcon': 'fa-folder',
-      'children': [{
-        'label': 'Work',
-        'data': 'Work Folder',
-        'expandedIcon': 'fa-folder-open',
-        'collapsedIcon': 'fa-folder',
-        'children': [{
-          'label': 'Expenses.doc',
-          'icon': 'fa-file-word-o',
-          'data': 'Expenses Document'
-        }, {
-          'label': 'Resume.doc',
-          'icon': 'fa-file-word-o',
-          'data': 'Resume Document'
-        }]
-      }]
-    }];
-
-    this.gridTree = [
-        {
-          'data': {
-            'name': 'Documents',
-            'size': '75kb',
-            'type': 'Folder'
-          },
-          'children': [
-            {
-              'data': {
-                'name': 'Work',
-                'size': '55kb',
-                'type': 'Folder'
-              },
-              'children': [
-                {
-                  'data': {
-                    'name': 'Expenses.doc',
-                    'size': '30kb',
-                    'type': 'Document'
-                  }
-                },
-                {
-                  'data': {
-                    'name': 'Resume.doc',
-                    'size': '25kb',
-                    'type': 'Resume'
-                  }
-                }
-              ]
-            },
-            {
-              'data': {
-                'name': 'Home',
-                'size': '20kb',
-                'type': 'Folder'
-              },
-              'children': [
-                {
-                  'data': {
-                    'name': 'Invoices',
-                    'size': '20kb',
-                    'type': 'Text'
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          'data': {
-            'name': 'Pictures',
-            'size': '150kb',
-            'type': 'Folder'
-          },
-          'children': [
-            {
-              'data': {
-                'name': 'barcelona.jpg',
-                'size': '90kb',
-                'type': 'Picture'
-              }
-            },
-            {
-              'data': {
-                'name': 'primeui.png',
-                'size': '30kb',
-                'type': 'Picture'
-              }
-            },
-            {
-              'data': {
-                'name': 'optimus.jpg',
-                'size': '30kb',
-                'type': 'Picture'
-              }
-            }
-          ]
-        }
-      ];
-
+  constructor(protected router: Router,
+              protected route: ActivatedRoute,
+              protected httpService: HttpService,
+              protected confirmationService: ConfirmationService,
+              protected renderer: Renderer) {
+    super(router, route, httpService, confirmationService, renderer);
   }
 
+  ngOnInit(): void {
+    const url = GlobalVariable.BASE_URL + 'grid/tree';
+
+    let treeDataArr: TreeData[];
+    this.httpService.findByParams(url)
+      .then(res => {
+        treeDataArr = res;
+        this.tree = TreeUtil.buildTrees(treeDataArr);
+      });
+
+    this.getDataByPage(0, this.page.size, this.filter);
+  }
+
+  deleteSelected() {
+  }
+
+  getDataByPage(currentPage: any, rowsPerPage: any, filter: User) {
+    let res = [];
+    this.viewData = [{
+      loginName: 'admin',
+      name: 'admin'
+    }];
+  }
 
 }

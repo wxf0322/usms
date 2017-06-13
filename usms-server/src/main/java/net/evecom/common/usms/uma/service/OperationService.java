@@ -8,8 +8,6 @@ package net.evecom.common.usms.uma.service;
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.TreeDataModel;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -23,10 +21,10 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
     /**
      * 获取应用操作列表
      *
-     * @param application
+     * @param appName
      * @return
      */
-    List<OperationEntity> findOperationsByAppName(String application);
+    List<OperationEntity> findOperationsByAppName(String appName);
 
     /**
      * 根据操作编码查询用户列表
@@ -39,9 +37,10 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
     /**
      * 判断是否拥有该操作
      *
-     * @param userID,operationName
+     * @param userID
+     * @param operName
      * @return
      */
-    boolean hasOperation(long userID, String operationName);
+    boolean hasOperation(long userID, String operName);
 
 }

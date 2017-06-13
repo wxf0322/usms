@@ -8,8 +8,6 @@ package net.evecom.common.usms.uma.dao;
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.InstitutionModel;
-import net.evecom.common.usms.model.TreeDataModel;
 
 import java.util.List;
 

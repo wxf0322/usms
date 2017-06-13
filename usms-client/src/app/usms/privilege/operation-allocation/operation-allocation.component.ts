@@ -7,6 +7,7 @@ import {TreeNode, SelectItem} from 'primeng/primeng';
 import {GlobalVariable} from '../../../shared/global-variable';
 import {TreeData} from '../../../shared/util/tree-data';
 import {TreeUtil} from '../../../shared/util/tree-util';
+
 @Component({
   selector: 'app-operation-allocation',
   templateUrl: './operation-allocation.component.html',

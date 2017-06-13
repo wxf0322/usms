@@ -64,8 +64,8 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      * @param userID,operationName
      */
     @Override
-    public boolean hasOperation(long userID,String operationName) {
-        return operationDao.hasOperation(userID,operationName);
+    public boolean hasOperation(long userID,String operName) {
+        return operationDao.hasOperation(userID,operName);
     }
 
 }

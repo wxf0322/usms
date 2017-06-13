@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.model.TreeDataModel;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -49,6 +50,16 @@ public class GridServiceImpl extends BaseServiceImpl<GridEntity, Long>
     @Override
     public List<UserEntity> findUsersByGridCode(String gridCode) {
         return gridDao.findUsersByGridCode(gridCode);
+    }
+
+    /**
+     * 返回网格数据
+     *
+     * @return
+     */
+    @Override
+    public List<TreeDataModel> findTreeData() {
+        return gridDao.findTreeData();
     }
 
 }

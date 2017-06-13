@@ -95,6 +95,8 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     }
 
     /**
+     * 根据角色编码集合查询用户列表
+     *
      * @param roleNames
      * @return
      */
@@ -115,18 +117,23 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     /**
      * 查找所有角色列表
      *
+     * @param page
+     * @param size
+     * @param sqlFilter
      * @return
      */
     @Override
     public Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_roles r  "+sqlFilter.getWhereSql());
+        sb.append("select * from usms_roles r  " + sqlFilter.getWhereSql());
         String sql = sb.toString();
         return queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     /**
      * 根据角色id查找用户列表
+     * @param roleId
+     * @return
      */
     public List<UserEntity> findUsersByRoleId(Long roleId) {
         StringBuffer sb = new StringBuffer();
@@ -143,9 +150,9 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     @Override
     public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
         StringBuffer sb = new StringBuffer();
-        if(roleId==null){
+        if (roleId == null) {
             return new ArrayList<>();
-        }else{
+        } else {
             sb.append("select * from usms_privileges where id in(")
                     .append("select priv_id from usms_privilege_role t ")
                     .append("where role_id=:roleId) and enabled=1 ");
@@ -162,7 +169,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     @Override
     public List<PrivilegeEntity> getUnselectedPrivileges(Long roleId) {
         StringBuffer sb = new StringBuffer();
-        if(roleId!=null){
+        if (roleId != null) {
             sb.append("select * from usms_privileges where id not in(")
                     .append("select priv_id from usms_privilege_role t ")
                     .append("where role_id=?) and enabled=1 ");
@@ -170,7 +177,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
             Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
             query.setParameter(1, roleId);
             return query.getResultList();
-        }else {
+        } else {
             sb.append("select * from usms_privileges where enabled=1");
             String sql = sb.toString();
             Query query = manager.createNativeQuery(sql, PrivilegeEntity.class);
@@ -213,11 +220,11 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     @Override
     public List<Map<String, Object>> getSelectedUsers(Long roleId) {
         StringBuffer sb = new StringBuffer();
-        if(roleId==null){
+        if (roleId == null) {
             return new ArrayList<>();
-        }else {
+        } else {
             sb.append("select id,login_name,name from usms_users where id in(\n")
-                    .append("  select user_id from usms_user_role t\n")
+                    .append(" select user_id from usms_user_role t\n")
                     .append("where role_id=?) and enabled=1");
             String sql = sb.toString();
             return super.queryMap(sql, new Object[]{roleId});
@@ -227,10 +234,10 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
     @Override
     public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
         StringBuffer sb = new StringBuffer();
-        if(roleId==null){
+        if (roleId == null) {
             sb.append("select id,login_name, name from usms_users where enabled=1");
             String sql = sb.toString();
-            return super.queryMap(sql,new Object[]{});
+            return super.queryMap(sql, new Object[]{});
         }
         sb.append("select id,login_name, name from usms_users where id not in(\n")
                 .append(" select user_id from usms_user_role t\n")
@@ -250,7 +257,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity, Long> implements RoleDa
         if (userIds != null) {
             for (String id : userIds) {
                 Long userId = Long.valueOf(id);
-                sql = "INSERT INTO usms_user_role VALUES(:roleId,:userId)";
+                sql = "insert into usms_user_role values(:roleId,:userId)";
                 query = manager.createNativeQuery(sql);
                 query.setParameter("roleId", roleId);
                 query.setParameter("userId", userId);

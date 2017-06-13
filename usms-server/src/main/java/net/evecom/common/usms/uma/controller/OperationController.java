@@ -7,12 +7,11 @@ package net.evecom.common.usms.uma.controller;
 
 import net.evecom.common.usms.core.model.ResultStatus;
 import net.evecom.common.usms.core.service.TreeService;
-import net.evecom.common.usms.core.util.BeanUtil;
 import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.model.OperationModel;
-import net.evecom.common.usms.model.TreeDataModel;
+import net.evecom.common.usms.core.model.TreeDataModel;
 import net.evecom.common.usms.uma.service.OperationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -56,12 +54,12 @@ public class OperationController {
 
     @ResponseBody
     @RequestMapping(value = "tree")
-    public List<TreeDataModel> findAllTreeData(HttpServletRequest request) {
+    public List<TreeDataModel> findTreeData(HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
         if(!StringUtils.isEmpty(request.getParameter("applicationId"))){
             sqlFilter.addFilter("QUERY_o#application_id_L_EQ",request.getParameter("applicationId"));
         }
-        return treeService.findAllTreeData("usms_operations o",sqlFilter);
+        return treeService.findTreeData("usms_operations o",sqlFilter);
     }
 
     @ResponseBody

@@ -25,7 +25,6 @@ public class GridModel {
      * 日志管理器
      */
     Logger logger = LoggerFactory.getLogger(InstitutionModel.class);
-
     /**
      * 网格ID
      */

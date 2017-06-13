@@ -3,7 +3,7 @@ import {Role} from "./role";
 import {SimpleBaseUtil} from "../../shared/util/simple-base.util";
 import {Router, ActivatedRoute} from "@angular/router";
 import {HttpService} from "../../core/service/http.service";
-import {ConfirmationService, SelectItem} from "primeng/components/common/api";
+import {ConfirmationService} from "primeng/components/common/api";
 import {GlobalVariable} from "../../shared/global-variable";
 
 @Component({
@@ -26,35 +26,25 @@ export class RoleComponent extends SimpleBaseUtil<Role> implements OnInit {
     this.getDataByPage(0, this.page.size, this.filter);
   }
 
-
-  /* 分配用户 */
-  gotoUserAllocation(id: string) {
-    this.router.navigate(['user-allocation', {id: id}], {relativeTo: this.route});
-  }
-
-  /* 分配权限 */
-  gotoPrivilegeAllocation(id: string) {
-    this.router.navigate(['privilege-allocation', {id: id}], {relativeTo: this.route});
-  }
-
   deleteSelected() {
     let url = GlobalVariable.BASE_URL + 'role/delete';
     this.delete(url, 'id');
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: Role) {
-    let url = GlobalVariable.BASE_URL + 'role/list?key='+this.filter;
+    let url = GlobalVariable.BASE_URL + 'role/list?key=' + this.filter;
     this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'role/list?key='+this.filter;
+    var url = GlobalVariable.BASE_URL + 'role/list?key=' + this.filter;
     this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);
       }
     );
   }
+
 }

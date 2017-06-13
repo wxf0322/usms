@@ -23,7 +23,11 @@ import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -70,7 +74,6 @@ public class AuthorizeController {
      */
     @Autowired
     private PasswordHelper passwordHelper;
-
 
     /**
      * 获得授权码
@@ -227,11 +230,6 @@ public class AuthorizeController {
             request.setAttribute("error", error);
             return false;
         } else {
-            // 删除该用户所有的accessToken
-            oAuthService.deleteAccountByLoginName(loginName);
-            // 停用该用户的session
-            subject.getSession().stop();
-            subject.getSession().setAttribute("user", user);
             return true;
         }
     }

@@ -1,6 +1,3 @@
-/**
- * Created by Arno Chen on 2017/5/17.
- */
 import {Component, OnInit,ViewChild} from '@angular/core';
 import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
 import {NgForm} from "@angular/forms";
@@ -18,6 +15,7 @@ import {Privilege} from "../privilege";
 export class PrivilegeDetailComponent extends SimpleBaseDetailUtil<Privilege> implements OnInit {
   //表单验证
   @ViewChild('reForm') reForm: NgForm;
+
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute) {

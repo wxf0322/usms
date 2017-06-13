@@ -21,6 +21,7 @@ public class RoleModel {
      *角色ID
      */
     private long id;
+
     /**
      *角色英文名称
      */

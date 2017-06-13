@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.uma.service;
 
+import net.evecom.common.usms.core.model.TreeDataModel;
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
@@ -27,4 +28,11 @@ public interface GridService extends BaseService<GridEntity, Long> {
      * @return
      */
     List<UserEntity> findUsersByGridCode(String gridCode);
+
+    /**
+     * 返回所有的树形数据
+     *
+     * @return
+     */
+    List<TreeDataModel> findTreeData();
 }

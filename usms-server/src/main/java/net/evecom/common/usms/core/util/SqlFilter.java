@@ -35,7 +35,7 @@ import org.apache.commons.lang.time.DateUtils;
  * // LLK 左模糊 TLK 树本级和下级 TCLK 树下级
  *
  * @author Fandy Liu
- * @created 2014年10月5日 下午11:36:54
+ * @created 2014/10/5 11:36
  */
 public class SqlFilter {
 

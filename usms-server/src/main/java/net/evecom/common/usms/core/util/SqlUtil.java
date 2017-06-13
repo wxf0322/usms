@@ -25,7 +25,7 @@ public class SqlUtil {
      *
      * @see Logger
      */
-    static final Logger LOG = Logger.getLogger(SqlUtil.class);
+    private static final Logger LOG = Logger.getLogger(SqlUtil.class);
 
     /**
      * 根据SQL查询语句获取映射表对象（MODEL 或VMODEL)字段数组

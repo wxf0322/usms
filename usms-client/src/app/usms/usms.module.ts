@@ -18,6 +18,8 @@ import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
 import {InstitutionService} from './institution/institution.service';
+import { GridAllocationComponent } from './grid/grid-allocation/grid-allocation/grid-allocation.component';
+import { UserAllocationComponent } from './grid/user-allocation/user-allocation/user-allocation.component';
 
 /**
  * 统一用户管理根模块
@@ -35,6 +37,8 @@ import {InstitutionService} from './institution/institution.service';
     ApplicationComponent, ApplicationDetailComponent,
     InstitutionComponent, InstitutionPanelComponent, InstitutionDetailComponent,
     GridComponent,
+    GridAllocationComponent,
+    UserAllocationComponent,
   ],
   providers: [
     InstitutionService

@@ -10,7 +10,7 @@ import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.model.InstitutionModel;
-import net.evecom.common.usms.model.TreeDataModel;
+import net.evecom.common.usms.core.model.TreeDataModel;
 import net.evecom.common.usms.uma.service.InstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +55,8 @@ public class InstitutionController {
 
     @ResponseBody
     @RequestMapping(value = "tree")
-    public List<TreeDataModel> findAllTreeData(HttpServletRequest request) {
-        return treeService.findAllTreeData("usms_institutions");
+    public List<TreeDataModel> findTreeData(HttpServletRequest request) {
+        return treeService.findTreeData("usms_institutions");
     }
 
     @ResponseBody

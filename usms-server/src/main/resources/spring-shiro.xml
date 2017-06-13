@@ -10,13 +10,8 @@
     <!-- 缓存管理 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
 
-    <!-- 用户Service层 -->
-    <bean id="userService" class="net.evecom.common.usms.uma.service.impl.UserServiceImpl"></bean>
-
     <!-- 自定义权限范围 -->
-    <bean id="userRealm" class="net.evecom.common.usms.oauth2.shiro.UserRealm">
-        <property name="userService" ref="userService"></property>
-    </bean>
+    <bean id="userRealm" class="net.evecom.common.usms.oauth2.shiro.UserRealm"></bean>
 
     <!-- Shiro安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

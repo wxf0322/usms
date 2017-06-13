@@ -40,6 +40,6 @@ public interface OperationDao extends BaseDao<OperationEntity, Long> {
      * @param userID,operationName
      * @return
      */
-    boolean hasOperation(long userID, String operationName);
+    boolean hasOperation(long userID, String operName);
 
 }

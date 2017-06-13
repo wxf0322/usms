@@ -14,8 +14,8 @@
   <perfect-scrollbar>
     <div class="ui-g-12">
       <p-dataTable [value]="viewData" [(selection)]="selectedData" selectionMode="multiple">
-        <p-column header="序号"  [style]="{'width':'60px'}">
-          <ng-template  let-ri="rowIndex" pTemplate="body">
+        <p-column header="序号" [style]="{'width':'60px'}">
+          <ng-template let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>
           </ng-template>
         </p-column>

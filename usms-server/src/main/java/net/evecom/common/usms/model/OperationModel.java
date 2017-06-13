@@ -57,7 +57,6 @@ public class OperationModel {
      * 状态
      */
     private Long enabled;
-
     /**
      * 关联的应用id
      */

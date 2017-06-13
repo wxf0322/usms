@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.core.dao.BaseDao;
+import net.evecom.common.usms.core.model.TreeDataModel;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
 
@@ -27,4 +28,10 @@ public interface GridDao extends BaseDao<GridEntity, Long> {
      */
     List<UserEntity> findUsersByGridCode(String gridCode);
 
+    /**
+     * 查询所有的树形组织机构数据
+     *
+     * @return
+     */
+    List<TreeDataModel> findTreeData();
 }

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>统一用户管理系统OAuth2.0认证流程说明文档</title>
 </head>
+
 <body style="display:none">
 <xmp theme="cerulean">
 # 统一用户管理系统OAuth2.0认证流程说明文档
@@ -17,24 +18,26 @@
 
 统一用户管理系统会分配给对接系统 **client_id** 和 **client_secret** 这两个以后会用到
 
-|   参数名  |   值    |
-|-----------|--------------------------------------------|
-|client_id  |  0a626c2d-d0ac-45bd-9918-e66a4117cf4d应用id |
-|client_secret | c7569626-05be-41ee-ae6f-a69fdcb3b7eb应用secret |
+|   参数名      |   值                   | 参数说明              |
+|--------------|------------------------|---------------------|
+| client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
+| client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
 
 ###2. 请求授权码
 
 ####2.1 请求地址
+
 ```
-http://192.168.200.209:8080/usms/authorize?client_id=0a626c2d-d0ac-45bd-9918-e66a4117cf4d&response_type=code&redirect_uri=http://www.baidu.com
+http://192.168.200.209:8080/usms/authorize?client_id=6433ada9-de68-40ba-89a0-7aa8ee9128df&response_type=code&redirect_uri=http://www.baidu.com
 ```
+
 ####2.2 参数说明
 
-|   参数名  |   值    |
-|------------|--------------------|
-| client_id  | 应用id |
-| response_type |  返回授权码的标识 |
-| redirect_uri | 回调地址 |
+|   参数名       |   值         |
+|---------------|--------------|
+| client_id     | 应用id        |
+| response_type | 返回授权码的标识 |
+| redirect_uri  | 回调地址        |
 
 上面的网站会打开Oauth Server的用户登录页面，用户输入正确的用户名和密码，并以POST方式提交后，会重定向到用户所填的回调地址并在地址，
 并在地址后方携带授权码。请求成功后会返回如下的页面：
@@ -45,15 +48,16 @@ http://www.baidu.com/?code=63910432da9186b22b1ad888d55ae8ae
 
 ####2.3 备注
 
-这里 code=63910432da9186b22b1ad888d55ae8ae 即**授权码**
-
+这里 code=63910432da9186b22b1ad888d55ae8ae 即 **授权码**
 
 ###3. 换取access_token (POST操作)
 
 ####3.1 流程说明
+
 ```
 http://192.168.200.209:8080/usms/access
 ```
+
 首先GET方式请求该页面，会打开一个表单在该表单中填入必填项，具体表单参数详见说明部分。
 
 表单将会以POST方式提交到 http://192.168.200.209:8080/usms/accessToken ，最终返回 access_token
@@ -62,15 +66,16 @@ http://192.168.200.209:8080/usms/access
 
 ####3.2 参数说明
 
-|   参数名  |   值    | 参数说明 |
-|------------|--------------------|
-| client_id  | c1ebe466-1cdc-4bd3-ab69-77c3561b9dee | 应用id  |
-| client_secret |  d8346ea2-6017-43ed-ad68-19c0f971738b | 应用secret |
-| grant_type | authorization_code | 用于传递授权码的参数名authorization_code |
-| code   |  63910432da9186b22b1ad888d55ae8ae | 用户登录授权后的授权码 |
-| redirect_uri | http://www.baidu.com | 回调地址 |
+|   参数名        |   值               | 参数说明  |
+|---------------|--------------------|-----------------------------|
+| client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
+| client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
+| grant_type    | authorization_code | 用于传递授权码的参数名authorization_code |
+| code          | 63910432da9186b22b1ad888d55ae8ae     | 用户登录授权后的授权码 |
+| redirect_uri  | http://www.baidu.com                 | 回调地址    |
 
 最终返回如下数据
+
 ```
 { "expires_in":3600, "access_token":"223ae05dfbb0794396fb60a0960c197e" }
 ```
@@ -78,6 +83,7 @@ http://192.168.200.209:8080/usms/access
 ###4. 测试 access_token
 
 ####4.1 请求地址
+
 ```
 http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396fb60a0960c197e
 ```
@@ -86,9 +92,10 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
 
 ####4.2 备注
 
-其中的参数名不要随意更改，固定写法。
-
+参数名不要随意更改，固定写法。
 </xmp>
+
 <script src="${pageContext.request.contextPath}/static/plugins/strapdown/strapdown.js"></script>
+
 </body>
 </html>
