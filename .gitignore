@@ -11,5 +11,5 @@ META-INF
 out
 typings
 node_modules
-usms-client/dist
+dist
 logs
