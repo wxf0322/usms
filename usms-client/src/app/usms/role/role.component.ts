@@ -40,9 +40,7 @@ export class RoleComponent extends SimpleBaseUtil<Role> implements OnInit {
   query() {
     const url = 'role/list?key=' + this.filter;
     this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
-      res => {
-        return this.setData(res);
-      }
+      res => this.setData(res)
     );
   }
 
