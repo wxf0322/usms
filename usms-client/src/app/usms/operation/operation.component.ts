@@ -4,7 +4,6 @@ import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
-import {GlobalVariable} from '../../shared/global-variable';
 import {TreeData} from 'app/shared/util/tree-data';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {Operation} from './operation';
@@ -40,7 +39,7 @@ export class OperationComponent extends SimpleBaseUtil<any> implements OnInit {
     if (typeof (this.selectedApplication) === 'undefined') {
       this.selectedApplication = '';
     }
-    const url = GlobalVariable.BASE_URL + 'operation/tree?applicationId=' + this.selectedApplication;
+    const url = 'operation/tree?applicationId=' + this.selectedApplication;
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
       .then(res => {
@@ -51,7 +50,7 @@ export class OperationComponent extends SimpleBaseUtil<any> implements OnInit {
 
   ngOnInit(): void {
     this.refreshTree();
-    const url = GlobalVariable.BASE_URL + 'application/all';
+    const url = 'application/all';
     this.httpService.findByParams(url).then(
       res => {
         for (let i = 0; i < res.length; i++) {
@@ -63,7 +62,7 @@ export class OperationComponent extends SimpleBaseUtil<any> implements OnInit {
 
   nodeSelect(event) {
     const id = event.node.data.id;
-    const url = GlobalVariable.BASE_URL + 'operation/find';
+    const url = 'operation/find';
     this.httpService.findById(url, id).then(
       res => {
         this.detailData = res;
@@ -109,7 +108,7 @@ export class OperationComponent extends SimpleBaseUtil<any> implements OnInit {
         message: '你确定要删除该节点的数据？',
         header: '提示',
         accept: () => {
-          const url = GlobalVariable.BASE_URL + 'operation/delete';
+          const url = 'operation/delete';
           const param = {id: treeNode.data.id};
           this.httpService.executeByParams(url, param).then(
             res => {

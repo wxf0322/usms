@@ -6,7 +6,6 @@ import {ConfirmationService} from 'primeng/primeng';
 import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {TreeData} from '../../shared/util/tree-data';
-import {GlobalVariable} from '../../shared/global-variable';
 import {InstitutionService} from "./institution.service";
 
 @Component({
@@ -41,7 +40,7 @@ export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit 
   }
 
   refreshTree() {
-    const url = GlobalVariable.BASE_URL + 'institution/tree';
+    const url = 'institution/tree';
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
       .then(res => {

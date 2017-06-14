@@ -4,7 +4,6 @@ import {SimpleBaseUtil} from "../../shared/util/simple-base.util";
 import {Router, ActivatedRoute} from "@angular/router";
 import {HttpService} from "../../core/service/http.service";
 import {ConfirmationService} from "primeng/components/common/api";
-import {GlobalVariable} from "../../shared/global-variable";
 
 @Component({
   selector: 'app-role',
@@ -27,19 +26,19 @@ export class RoleComponent extends SimpleBaseUtil<Role> implements OnInit {
   }
 
   deleteSelected() {
-    let url = GlobalVariable.BASE_URL + 'role/delete';
+    const url = 'role/delete';
     this.delete(url, 'id');
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: Role) {
-    let url = GlobalVariable.BASE_URL + 'role/list?key=' + this.filter;
+    const url = 'role/list?key=' + this.filter;
     this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'role/list?key=' + this.filter;
+    const url = 'role/list?key=' + this.filter;
     this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);

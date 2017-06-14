@@ -4,7 +4,6 @@ import {Location} from '@angular/common';
 import {HttpService} from '../../../core/service/http.service';
 import {ActivatedRoute} from '@angular/router';
 import {TreeNode, SelectItem} from 'primeng/primeng';
-import {GlobalVariable} from '../../../shared/global-variable';
 import {TreeData} from '../../../shared/util/tree-data';
 import {TreeUtil} from '../../../shared/util/tree-util';
 
@@ -47,7 +46,7 @@ export class OperationAllocationComponent extends SimpleBaseDetailUtil<any> impl
     let operationIds = selectedIds.join(',');
     let privilegeId = this.route.snapshot.params['id'];
     let params = {privilegeId: privilegeId, operationIds: operationIds};
-    let url = GlobalVariable.BASE_URL + 'privilege/operations/update';
+    let url = 'privilege/operations/update';
     this.httpService.findByParams(url, params).then(
       res => {
         this.httpService.setMessage({
@@ -62,17 +61,17 @@ export class OperationAllocationComponent extends SimpleBaseDetailUtil<any> impl
 
   setSelected() {
     const id = this.route.snapshot.params['id'];
-    const selectedUrl = GlobalVariable.BASE_URL + 'privilege/operations';
+    const url = 'privilege/operations';
     const params = {privilegeId: id};
     this.selectedNodes = [];
-    this.httpService.findByParams(selectedUrl, params)
+    this.httpService.findByParams(url, params)
       .then(res => {
         TreeUtil.setSelection(this.tree, this.selectedNodes, res);
       });
   }
 
   refreshTree() {
-    const url = GlobalVariable.BASE_URL + 'operation/tree';
+    const url = 'operation/tree';
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
       .then(res => {

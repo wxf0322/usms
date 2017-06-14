@@ -5,7 +5,6 @@ import {ActivatedRoute} from "@angular/router";
 import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
 import {HttpService} from "../../../core/service/http.service";
 import {Role} from "../role";
-import {GlobalVariable} from "../../../shared/global-variable";
 import {Privilege} from "../../privilege/privilege";
 import {TreeNode} from "primeng/components/common/api";
 
@@ -40,7 +39,7 @@ export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements O
   ngOnInit() {
     this.privilegesInit();
     this.usersInit();
-    let url = GlobalVariable.BASE_URL + 'role/find';
+    const url = 'role/find';
     this.init(url);
   }
 
@@ -49,16 +48,16 @@ export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements O
   }
 
   save() {
-    let url = GlobalVariable.BASE_URL + 'role/saveOrUpdate';
+    let url = 'role/saveOrUpdate';
     this.detailData.privilegeIds = '';
-    for (var i in this.targetPrivileges) {
+    for (let i in this.targetPrivileges) {
       this.detailData.privilegeIds =
         this.detailData.privilegeIds + this.targetPrivileges[i].id + ',';
     }
     this.detailData.userIds = '';
-    for(var i in this.targetUsers){
+    for (let i in this.targetUsers) {
       this.detailData.userIds =
-        this.detailData.userIds+this.targetUsers[i].ID+',';
+        this.detailData.userIds + this.targetUsers[i].ID + ',';
     }
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
@@ -71,23 +70,26 @@ export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements O
       });
   }
 
-  privilegesInit(){
+  privilegesInit() {
     let id = this.route.snapshot.params['id'];
-    let selectedUrl = GlobalVariable.BASE_URL + 'role/privileges/selected';
-    let unSelectedUrl = GlobalVariable.BASE_URL + 'role/privileges/unselected';
+    let selectedUrl = 'role/privileges/selected';
+    let unSelectedUrl = 'role/privileges/unselected';
     let params = {
       roleId: id
     };
     this.httpService.executeByParams(unSelectedUrl, params).then(
-      res => {this.sourcePrivileges = res;}
+      res => {
+        this.sourcePrivileges = res;
+      }
     );
     this.httpService.executeByParams(selectedUrl, params).then(
-      res => {this.targetPrivileges = res;}
+      res => {
+        this.targetPrivileges = res;
+      }
     );
   }
 
-
-  usersInit(){
+  usersInit() {
     this.tree = [
       {
         "label": "Documents",
@@ -116,19 +118,22 @@ export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements O
     ];
 
     let id = this.route.snapshot.params['id'];
-    let selectedUrl = GlobalVariable.BASE_URL + 'role/users/selected';
-    let unSelectedUrl = GlobalVariable.BASE_URL + 'role/users/unselected';
+    let selectedUrl = 'role/users/selected';
+    let unSelectedUrl = 'role/users/unselected';
     let params = {
       roleId: id
     };
     this.httpService.executeByParams(unSelectedUrl, params).then(
-      res => {this.sourceUsers = res;}
+      res => {
+        this.sourceUsers = res;
+      }
     );
     this.httpService.executeByParams(selectedUrl, params).then(
-      res => {this.targetUsers = res;}
+      res => {
+        this.targetUsers = res;
+      }
     );
   }
-
 
 
 }

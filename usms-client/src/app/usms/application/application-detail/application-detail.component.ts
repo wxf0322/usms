@@ -7,7 +7,6 @@ import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
 import {HttpService} from "../../../core/service/http.service";
-import {GlobalVariable} from "../../../shared/global-variable";
 import {Application} from "../application";
 
 @Component({
@@ -33,9 +32,9 @@ export class ApplicationDetailComponent extends SimpleBaseDetailUtil<Application
   save() {
     let url;
     if (this.detailData.id == null) {
-      url = GlobalVariable.BASE_URL + 'application/create';
+      url = 'application/create';
     } else {
-      url = GlobalVariable.BASE_URL + 'application/update';
+      url = 'application/update';
     }
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
@@ -49,7 +48,7 @@ export class ApplicationDetailComponent extends SimpleBaseDetailUtil<Application
   }
 
   ngOnInit(): void {
-    let url = GlobalVariable.BASE_URL + 'application/find';
+    let url = 'application/find';
     this.init(url);
   }
 

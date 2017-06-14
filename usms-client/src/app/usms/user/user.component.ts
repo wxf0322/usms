@@ -4,7 +4,6 @@ import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
 import {ConfirmationService} from 'primeng/primeng';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
-import {GlobalVariable} from '../../shared/global-variable';
 import {TreeData} from '../../shared/util/tree-data';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {User} from './user';
@@ -55,12 +54,12 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   }
 
   deleteSelected() {
-    const url = GlobalVariable.BASE_URL + 'user/delete';
+    const url = 'user/delete';
     this.delete(url, 'id');
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: string) {
-    const url = GlobalVariable.BASE_URL + 'user/list?key=' + this.filter;
+    const url = 'user/list?key=' + this.filter;
     this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
       res => {
         return this.setData(res);
@@ -69,7 +68,7 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   }
 
   refreshTree() {
-    const url = GlobalVariable.BASE_URL + 'institution/tree';
+    const url = 'institution/tree';
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
       .then(res => {
@@ -79,7 +78,7 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   }
 
   resetPassword() {
-    const url = GlobalVariable.BASE_URL + 'user/password/reset';
+    const url = 'user/password/reset';
     const params = {
       ids: this.selectedData.map(data => data['id']).join(',')
     };
@@ -95,7 +94,7 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   }
 
   query() {
-    const url = GlobalVariable.BASE_URL + 'user/list?key=' + this.filter;
+    const url = 'user/list?key=' + this.filter;
     this.httpService.findByPage(url, 0, this.page.size, null).then(
       res => {
         return this.setData(res);
@@ -119,7 +118,7 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
    */
   nodeSelect(event) {
     this.institutionId = event.node.data.id;
-    const url = GlobalVariable.BASE_URL + 'user/list?institutionName=' + event.node.data.name;
+    const url = 'user/list?institutionName=' + event.node.data.name;
     this.httpService.findByPage(url, 0, this.page.size, null).then(
       res => {
         return this.setData(res);

@@ -5,7 +5,6 @@ import {HttpService} from "../../../core/service/http.service";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from '@angular/common';
 import {Operation} from "../operation";
-import {GlobalVariable} from "../../../shared/global-variable";
 
 @Component({
   selector: "app-operation-detail",
@@ -27,7 +26,7 @@ export class OperationDetailComponent extends SimpleBaseDetailUtil<Operation>
   }
 
   ngOnInit(): void {
-    let url = GlobalVariable.BASE_URL + 'operation/find';
+    const url = 'operation/find';
     this.init(url);
   }
 
@@ -36,7 +35,7 @@ export class OperationDetailComponent extends SimpleBaseDetailUtil<Operation>
   }
 
   save() {
-    let url =  GlobalVariable.BASE_URL + 'operation/saveOrUpdate';
+    let url = 'operation/saveOrUpdate';
     if(this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];
     }

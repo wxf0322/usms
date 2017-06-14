@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Institution} from '../institution';
 import {HttpService} from '../../../core/service/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {GlobalVariable} from '../../../shared/global-variable';
 import {InstitutionService} from '../institution.service';
 import {ConfirmationService} from 'primeng/primeng';
 
@@ -40,7 +39,7 @@ export class InstitutionPanelComponent implements OnInit {
         const id = this.detailData.id = params['id'];
         this.parentLabel = params['parentLabel'];
         if (typeof (id) !== 'undefined') {
-          const url = GlobalVariable.BASE_URL + 'institution/find';
+          const url = 'institution/find';
           this.httpService.findById(url, id).then(
             res => {
               this.detailData = res;
@@ -107,7 +106,7 @@ export class InstitutionPanelComponent implements OnInit {
       message: '你确定要删除该节点的数据？',
       header: '提示',
       accept: () => {
-        const url = GlobalVariable.BASE_URL + 'institution/delete';
+        const url = 'institution/delete';
         const param = {id: id};
         this.httpService.executeByParams(url, param).then(
           res => {

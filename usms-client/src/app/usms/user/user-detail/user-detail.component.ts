@@ -4,7 +4,6 @@ import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {SimpleBaseDetailUtil} from '../../../shared/util/simple-base-detail.util';
 import {HttpService} from '../../../core/service/http.service';
-import {GlobalVariable} from '../../../shared/global-variable';
 import {User} from '../user';
 
 @Component({
@@ -35,7 +34,7 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
   }
 
   ngOnInit(): void {
-    const url = GlobalVariable.BASE_URL + 'user/find';
+    const url = 'user/find';
     this.init(url).then(
       res => {
         if (this.detailData.birthday != null) {
@@ -56,7 +55,7 @@ export class UserDetailComponent extends SimpleBaseDetailUtil<User> implements O
     if (typeof (institutionId) === 'undefined') {
       institutionId = '';
     }
-    const url = GlobalVariable.BASE_URL + 'user/saveOrUpdate?institutionId=' + institutionId;
+    const url = 'user/saveOrUpdate?institutionId=' + institutionId;
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({

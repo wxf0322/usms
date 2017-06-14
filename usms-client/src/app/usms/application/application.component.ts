@@ -4,7 +4,6 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService, SelectItem} from 'primeng/components/common/api';
 import {Application} from './application';
-import {GlobalVariable} from '../../shared/global-variable';
 
 @Component({
   selector: 'app-application',
@@ -22,12 +21,12 @@ export class ApplicationComponent extends SimpleBaseUtil<Application> implements
   }
 
   deleteSelected() {
-    const url = GlobalVariable.BASE_URL + 'application/delete';
+    const url = 'application/delete';
     this.delete(url, 'id');
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = GlobalVariable.BASE_URL + 'application/list?key='+this.filter;
+    const url = 'application/list?key='+this.filter;
     this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
@@ -39,7 +38,7 @@ export class ApplicationComponent extends SimpleBaseUtil<Application> implements
   }
 
   query() {
-    var url = GlobalVariable.BASE_URL + 'application/list?key='+this.filter;
+    let url = 'application/list?key='+this.filter;
     this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
       res => {
         return this.setData(res);

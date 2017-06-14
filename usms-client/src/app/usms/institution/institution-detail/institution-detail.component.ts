@@ -4,7 +4,6 @@ import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {SimpleBaseDetailUtil} from '../../../shared/util/simple-base-detail.util';
 import {HttpService} from '../../../core/service/http.service';
-import {GlobalVariable} from '../../../shared/global-variable';
 import {Institution} from '../institution';
 import {InstitutionService} from '../institution.service';
 
@@ -36,7 +35,7 @@ export class InstitutionDetailComponent extends SimpleBaseDetailUtil<Institution
    */
   ngOnInit(): void {
     this.parentLabel = this.route.snapshot.params['parentLabel'];
-    const url = GlobalVariable.BASE_URL + 'institution/find';
+    const url = 'institution/find';
     this.init(url);
   }
 
@@ -51,7 +50,7 @@ export class InstitutionDetailComponent extends SimpleBaseDetailUtil<Institution
    * 保存操作
    */
   save() {
-    const url = GlobalVariable.BASE_URL + 'institution/saveOrUpdate';
+    const url = 'institution/saveOrUpdate';
     if (this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];
     }

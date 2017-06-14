@@ -4,7 +4,6 @@ import {NgForm} from "@angular/forms";
 import {Location} from '@angular/common';
 import {HttpService} from "../../../core/service/http.service";
 import {ActivatedRoute} from "@angular/router";
-import {GlobalVariable} from "../../../shared/global-variable";
 import {Privilege} from "../privilege";
 
 @Component({
@@ -29,7 +28,7 @@ export class PrivilegeDetailComponent extends SimpleBaseDetailUtil<Privilege> im
   }
 
   save() {
-    let url = GlobalVariable.BASE_URL + 'privilege/saveOrUpdate';
+    let url = 'privilege/saveOrUpdate';
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({
@@ -42,7 +41,7 @@ export class PrivilegeDetailComponent extends SimpleBaseDetailUtil<Privilege> im
   }
 
   ngOnInit(): void {
-    let url = GlobalVariable.BASE_URL + 'privilege/find';
+    let url = 'privilege/find';
     this.init(url);
   }
 

@@ -1,7 +1,6 @@
 import {Component, OnInit, Renderer} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService, TreeNode} from 'primeng/primeng';
-import {GlobalVariable} from "../../shared/global-variable";
 import {TreeData} from "../../shared/util/tree-data";
 import {TreeUtil} from "../../shared/util/tree-util";
 import {HttpService} from "../../core/service/http.service";
@@ -30,7 +29,7 @@ export class GridComponent extends SimpleBaseUtil<any>  implements OnInit {
   }
 
   ngOnInit(): void {
-    const url = GlobalVariable.BASE_URL + 'grid/tree';
+    const url = 'grid/tree';
 
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
