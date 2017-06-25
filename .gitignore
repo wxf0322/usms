@@ -5,6 +5,7 @@
 *.iml
 .settings
 .gradle
+.DS_Store
 build
 classes
 META-INF
