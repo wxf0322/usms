@@ -8,7 +8,7 @@ package net.evecom.common.usms.uma.service;
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.vo.UserVO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -24,17 +24,17 @@ public interface UserService extends BaseService<UserEntity, Long> {
     /**
      * 创建用户
      *
-     * @param userModel
+     * @param userVO
      */
-    UserEntity createUser(UserModel userModel);
+    UserEntity createUser(UserVO userVO);
 
     /**
      * 更新用户
      *
-     * @param userModel
+     * @param userVO
      * @return
      */
-    UserEntity updateUser(UserModel userModel);
+    UserEntity updateUser(UserVO userVO);
 
 
     /**
@@ -50,9 +50,10 @@ public interface UserService extends BaseService<UserEntity, Long> {
      *
      * @param page
      * @param size
+     * @param institutionId
      * @return
      */
-    Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter);
+    Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter);
 
     /**
      * 根据登入名查找用户
@@ -60,7 +61,7 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param loginName
      * @return
      */
-    UserEntity findByLoginName(String loginName);
+    UserEntity getUserByLoginName(String loginName);
 
     /**
      * 根据登入名列表查找用户
@@ -68,15 +69,15 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param loginNames
      * @return
      */
-    List<UserEntity> findByLoginNames(String[] loginNames);
+    List<UserEntity> listUsersByLoginNames(String[] loginNames);
 
     /**
-     * 通过 Id 查找权限
+     * 通过 userId 查找操作
      *
-     * @param id
+     * @param userId
      * @return
      */
-    List<OperationEntity> findOperationsById(Long id);
+    List<OperationEntity> listOpersByUserId(Long userId);
 
     /**
      * 通过 Id 查找应用
@@ -84,7 +85,7 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param id
      * @return
      */
-    List<ApplicationEntity> findApplicationsById(Long id);
+    List<ApplicationEntity> listAppsByUserId(Long id);
 
     /**
      * 验证登录
@@ -103,26 +104,54 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param loginName
      * @return
      */
-    List<GridEntity> findGridsByLoginName(String loginName);
-
+    List<GridEntity> listGridsByLoginName(String loginName);
 
     /**
      * 更新用户与组织机构的关系
+     *
      * @param userId
      * @param institutionIds
      */
-    void updateInstitutions(Long userId,String[] institutionIds);
+    void updateInstitutions(Long userId, String[] institutionIds);
 
     /**
      * 获取用户相关的组织机构列表
+     *
      * @param userId
      * @return
      */
-    List<InstitutionEntity> findInstByUserId(Long userId);
+    List<InstitutionEntity> listInstsByUserId(Long userId);
 
     /**
      * 建立用户和机构之间的关系
+     *
+     * @param userId
+     * @param institutionId
      */
-    void createUserInstitution(Long userId,Long institutionId);
+    void createUserInstitution(Long userId, Long institutionId);
+
+    /**
+     * 获得当前用户已选中的用户
+     *
+     * @param userId
+     * @return
+     */
+    List<RoleEntity> listTargetRoles(Long userId);
+
+    /**
+     * 获得当前用户未选中的用户
+     *
+     * @param userId
+     * @return
+     */
+    List<RoleEntity> listSourceRoles(Long userId);
+
+    /**
+     * 更新用户与角色之间的关系
+     *
+     * @param userId
+     * @param roleIds
+     */
+    void updateRoles(Long userId, String[] roleIds);
 
 }

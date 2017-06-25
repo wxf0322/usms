@@ -51,14 +51,20 @@ public class WebUtil {
 
     /**
      * 获取基础Http路径
+     *
      * @param request
      * @return
      */
     public static String getBasePath(HttpServletRequest request) {
+        StringBuffer sb = new StringBuffer();
         String path = request.getContextPath();
-        String basePath = request.getScheme() + "://"
-                + request.getServerName() + ":"
-                + request.getServerPort() + path + "/";
+        String basePath = sb.append(request.getScheme())
+                .append("://")
+                .append(request.getServerName())
+                .append(":")
+                .append(request.getServerPort())
+                .append(path)
+                .append("/").toString();
         return basePath;
     }
 

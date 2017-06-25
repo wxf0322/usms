@@ -12,12 +12,11 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 
 /**
+ * 操作相关实现类
+ *
  * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 14:20
@@ -25,29 +24,22 @@ import java.util.List;
 @Repository
 public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
         implements OperationDao {
-    /**
-     * 注入实体管理器
-     */
-    @PersistenceContext
-    private EntityManager manager;
 
     /**
      * 根据app名称获取操作列表
      *
      * @param appName
-     * @return List<OperationEntity>
+     * @return
      */
     @Override
-    public List<OperationEntity> findOperationsByAppName(String appName) {
+    public List<OperationEntity> listOpersByAppName(String appName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations o\n")
                 .append("where o.application_id in (")
                 .append("select a.id from usms_applications a ")
                 .append("where a.name = ?) and o.enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, OperationEntity.class);
-        query.setParameter(1, appName);
-        return query.getResultList();
+        return super.queryForClass(sql, new Object[]{appName});
     }
 
     /**
@@ -57,7 +49,7 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByOperName(String operName) {
+    public List<UserEntity> listUsersByOperName(String operName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in\n")
                 .append(" (select ur.user_id from usms_user_role ur\n")
@@ -69,20 +61,18 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
                 .append(" where o.name = :name)) and p.enabled = 1))\n")
                 .append(" and r.enabled = 1)) and u.enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("name", operName);
-        return query.getResultList();
+        return super.queryForClass(UserEntity.class, sql, new Object[]{operName});
     }
 
     /**
      * 判断是否拥有该操作
      *
-     * @param userID
+     * @param userId
      * @param operName
      * @return boolean
      */
     @Override
-    public boolean hasOperation(long userID, String operName) {
+    public boolean hasOperation(long userId, String operName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations p where p.id in( ")
                 .append("select po.oper_id from usms_privilege_operation po where po.priv_id in( ")
@@ -90,10 +80,8 @@ public class OperationDaoImpl extends BaseDaoImpl<OperationEntity, Long>
                 .append("select ur.role_id from usms_user_role ur where ur.user_id = ? ))) ")
                 .append("and p.enabled=1 and p.name= ?");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter(1, userID);
-        query.setParameter(2, operName);
-        return query.getResultList().size() != 0;
+        List results = super.queryForClass(sql, new Object[]{userId, operName});
+        return results.size() != 0;
     }
 
 }

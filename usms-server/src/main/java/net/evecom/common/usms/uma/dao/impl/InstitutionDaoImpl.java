@@ -12,7 +12,6 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,15 +32,15 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      * @return
      */
     @Override
-    public List<InstitutionEntity> findInstByLoginName(String loginName) {
+    public List<InstitutionEntity> listInstsByLoginName(String loginName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_institutions i where i.id in \n")
                 .append("( select ui.institution_id from usms_user_institution ui ")
                 .append(" where ui.user_id in ")
                 .append(" (select u.id from usms_users u ")
-                .append("  where u.login_name = ?))");
+                .append(" where u.login_name = ?))");
         String sql = sb.toString();
-        return super.queryBySql(InstitutionEntity.class, sql, new Object[]{loginName});
+        return super.queryForClass(sql, new Object[]{loginName});
     }
 
     /**
@@ -51,9 +50,9 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      * @return
      */
     @Override
-    public InstitutionEntity findByName(String name) {
+    public InstitutionEntity getInstByInstName(String instName) {
         String sql = "select * from usms_institutions where name = ?";
-        List<InstitutionEntity> result = super.queryBySql(InstitutionEntity.class, sql, new Object[]{name});
+        List<InstitutionEntity> result = super.queryForClass(InstitutionEntity.class, sql, new Object[]{instName});
         return JpaUtil.getSingleResult(result);
     }
 
@@ -64,18 +63,18 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByInstName(String instName) {
+    public List<UserEntity> listUsersByInstName(String instName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.id in(  ")
                 .append(" select ui.user_id from usms_user_institution ui ")
                 .append(" where ui.institution_id in( ")
                 .append(" select i.id from usms_institutions i where i.name =?)) ");
         String sql = sb.toString();
-        return super.queryBySql(UserEntity.class, sql, new Object[]{instName});
+        return super.queryForClass(UserEntity.class, sql, new Object[]{instName});
     }
 
     @Override
-    public List<UserEntity> findUsersByInstNames(String[] instNames) {
+    public List<UserEntity> listUsersByInstNames(String[] instNames) {
         String queryParams = JpaUtil.getQuestionMarks(instNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.id in ( \n")
@@ -83,27 +82,29 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
                 .append("select i.id from usms_institutions i where i.name in (")
                 .append(queryParams).append(") and i.enabled = 1 ))");
         String sql = sb.toString();
-        return super.queryBySql(UserEntity.class, sql, instNames);
+        return super.queryForClass(UserEntity.class, sql, instNames);
     }
 
     @Override
-    public List<InstitutionEntity> findInstitutionsByType(Long type) {
+    public List<InstitutionEntity> listInstsByType(Long type) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_institutions i ")
                 .append(" where i.type = ? and enabled = 1");
         String sql = sb.toString();
-        return super.queryBySql(InstitutionEntity.class, sql, new Object[]{type});
+        return super.queryForClass(sql, new Object[]{type});
     }
 
     @Override
     public boolean canBeDeleted(Long id) {
         String sql = "select i.id from usms_institutions i where i.parent_id = ?";
-        List<Object> children = super.queryObject(sql, new Object[]{id});
+        List<Object> children = super.queryForObject(sql, new Object[]{id});
         if (children != null && children.size() > 0) return false;
         sql = "select ui.user_id from usms_user_institution ui where ui.institution_id = ?";
-        List<Object> users = super.queryObject(sql, new Object[]{id});
-        if (users != null && users.size() > 0) return false;
-        return true;
+        List<Object> users = super.queryForObject(sql, new Object[]{id});
+        if (users != null && users.size() > 0)
+            return false;
+        else
+            return true;
     }
 
 }

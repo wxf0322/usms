@@ -1,6 +1,6 @@
 -- 创建临时表空间
 CREATE TEMPORARY TABLESPACE USMS_TEMP
-TEMPFILE 'D:\app\Lenovo\oradata\usms_temp.dbf'
+TEMPFILE '/u01/app/oracle/oradata/usms_temp.dbf'
 SIZE 32m
 AUTOEXTEND ON
 NEXT 32m MAXSIZE UNLIMITED
@@ -9,7 +9,7 @@ EXTENT MANAGEMENT LOCAL;
 -- 创建表空间
 CREATE TABLESPACE USMS_DATA
 LOGGING
-  DATAFILE 'D:\app\Lenovo\oradata\usms_data.dbf'
+  DATAFILE '/u01/app/oracle/oradata/usms_data.dbf'
 SIZE 32m
 AUTOEXTEND ON
 NEXT 32m MAXSIZE UNLIMITED

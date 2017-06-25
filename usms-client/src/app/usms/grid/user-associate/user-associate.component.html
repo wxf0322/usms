@@ -1,0 +1,4 @@
+<eve-top-bar title="关联用户" (execute)="doExecute($event)" [display]="false"></eve-top-bar>
+
+<app-grid-user-selector [tree]="tree" [(sourceUsers)]="sourceUsers"
+                   [(targetUsers)]="targetUsers" [gridCode]="gridCode"></app-grid-user-selector>

@@ -15,7 +15,7 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- 可以使用RequestContextHolder.currentRequestAttributes() 获取到请求的attr -->
+    <!-- 可以使用 RequestContextHolder.currentRequestAttributes() 获取到请求的attr -->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
@@ -65,16 +65,6 @@
     <filter-mapping>
         <filter-name>oauth2</filter-name>
         <url-pattern>/v1/openapi/*</url-pattern>
-    </filter-mapping>
-
-    <!-- 解决无法跨域访问问题 -->
-    <filter>
-        <filter-name>cors</filter-name>
-        <filter-class>net.evecom.common.usms.core.filter.CORSFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>cors</filter-name>
-        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <!-- Spring MVC 控制器-->

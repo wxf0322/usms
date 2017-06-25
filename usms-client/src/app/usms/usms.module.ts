@@ -10,7 +10,6 @@ import {GridComponent} from './grid/grid.component';
 import {ApplicationComponent} from './application/application.component';
 import {UserDetailComponent} from './user/user-detail/user-detail.component';
 import {PrivilegeDetailComponent} from './privilege/privilege-detail/privilege-detail.component';
-import {OperationAllocationComponent} from './privilege/operation-allocation/operation-allocation.component';
 import {RoleDetailComponent} from './role/role-detail/role-detail.component';
 import {ApplicationDetailComponent} from './application/application-detail/application-detail.component';
 import {OperationDetailComponent} from './operation/operation-detail/operation-detail.component';
@@ -18,6 +17,9 @@ import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
 import {InstitutionService} from './institution/institution.service';
+import {UserAssociateComponent} from './grid/user-associate/user-associate.component';
+import {RoleUserSelectorComponent} from "./role/role-user-selector/role-user-selector.component";
+import {GridUserSelectorComponent} from "./grid/grid-user-selector/grid-user-selector.component";
 
 /**
  * 统一用户管理根模块
@@ -29,12 +31,12 @@ import {InstitutionService} from './institution/institution.service';
   declarations: [
     UsmsComponent,
     UserComponent, UserDetailComponent,
-    RoleComponent, RoleDetailComponent,
-    PrivilegeComponent, PrivilegeDetailComponent, OperationAllocationComponent,
+    RoleComponent, RoleDetailComponent,RoleUserSelectorComponent,
+    PrivilegeComponent, PrivilegeDetailComponent,
     OperationComponent, OperationDetailComponent,
     ApplicationComponent, ApplicationDetailComponent,
     InstitutionComponent, InstitutionPanelComponent, InstitutionDetailComponent,
-    GridComponent,
+    GridComponent, UserAssociateComponent,GridUserSelectorComponent,
   ],
   providers: [
     InstitutionService

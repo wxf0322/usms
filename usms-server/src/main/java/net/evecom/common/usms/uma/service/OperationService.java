@@ -24,7 +24,7 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
      * @param appName
      * @return
      */
-    List<OperationEntity> findOperationsByAppName(String appName);
+    List<OperationEntity> listOpersByAppName(String appName);
 
     /**
      * 根据操作编码查询用户列表
@@ -32,15 +32,15 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
      * @param operName
      * @return
      */
-    List<UserEntity> findUsersByOperName(String operName);
+    List<UserEntity> listUsersByOperName(String operName);
 
     /**
      * 判断是否拥有该操作
      *
-     * @param userID
+     * @param userId
      * @param operName
      * @return
      */
-    boolean hasOperation(long userID, String operName);
+    boolean hasOperation(long userId, String operName);
 
 }

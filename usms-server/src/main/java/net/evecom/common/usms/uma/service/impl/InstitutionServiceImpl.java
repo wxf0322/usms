@@ -47,8 +47,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<InstitutionEntity> findInstByLoginName(String loginName) {
-        return institutionDao.findInstByLoginName(loginName);
+    public List<InstitutionEntity> listInstsByLoginName(String loginName) {
+        return institutionDao.listInstsByLoginName(loginName);
     }
 
     /**
@@ -58,8 +58,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public InstitutionEntity findByName(String name) {
-        return institutionDao.findByName(name);
+    public InstitutionEntity getInstByInstName(String instName) {
+        return institutionDao.getInstByInstName(instName);
     }
 
     /**
@@ -69,8 +69,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByInstName(String instName) {
-        return institutionDao.findUsersByInstName(instName);
+    public List<UserEntity> listUsersByInstName(String instName) {
+        return institutionDao.listUsersByInstName(instName);
     }
 
     /**
@@ -80,8 +80,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByInstNames(String[] instNames) {
-        return institutionDao.findUsersByInstNames(instNames);
+    public List<UserEntity> listUsersByInstNames(String[] instNames) {
+        return institutionDao.listUsersByInstNames(instNames);
     }
 
     /**
@@ -91,8 +91,8 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      * @return
      */
     @Override
-    public List<InstitutionEntity> findInstitutionsByType(Long type) {
-        return institutionDao.findInstitutionsByType(type);
+    public List<InstitutionEntity> listInstsByType(Long type) {
+        return institutionDao.listInstsByType(type);
     }
 
     /**

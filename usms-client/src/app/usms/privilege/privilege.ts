@@ -4,4 +4,5 @@ export class Privilege {
   name: string;
   enabled: number;
   remarks:string;
+  roleIds:string;
 }

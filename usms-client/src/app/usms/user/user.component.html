@@ -16,7 +16,9 @@
         <button pButton type="button" icon="fa-plus" label="新增" (click)="gotoUserDetail('add',null)"></button>
         <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
         <button pButton type="button" icon="fa-refresh" label="重置密码" (click)="resetPassword()"></button>
+        <!--
         <button pButton type="button" icon="fa-plus" label="移入用户" (click)="moveUsers()"></button>
+        -->
       </li>
       <li class="toolkit-item e-right">
         <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
@@ -25,21 +27,27 @@
     </ul>
   </div>
   <div class="ui-g-9 content-right">
-    <perfect-scrollbar>
       <div class="ui-g-12">
-        <p-dataTable [value]="viewData" [(selection)]="selectedData" selectionMode="multiple" >
-          <p-column  [style]="{'width':'60px'}">
-            <ng-template  let-ri="rowIndex" pTemplate="body">
+        <p-dataTable [value]="viewData" scrollable="true"
+                     [(selection)]="selectedData"
+                     selectionMode="multiple">
+          <p-column [style]="{'width':'60px'}">
+            <ng-template let-ri="rowIndex" pTemplate="body">
               <span>{{index[ri]}}</span>
             </ng-template>
           </p-column>
           <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
           <p-column field="loginName" header="账号"></p-column>
-          <p-column field="name" header="用户姓名" ></p-column>
+          <p-column  header="用户姓名" >
+            <ng-template  let-user="rowData" pTemplate="body" >
+              <span (click)="gotoUserDetail('edit',user.id)">{{user.name}}</span>
+            </ng-template>
+          </p-column>
           <p-column field="mobile" header="手机号码" [style]="{'width':'14%'}"></p-column>
           <p-column header="机构"></p-column>
           <p-column field="enabled" header="状态">
-            <ng-template let-user="rowData" pTemplate="body">{{user.enabled | enabledPipe}}</ng-template>
+            <ng-template let-user="rowData" pTemplate="body">
+              {{user.enabled | enabledPipe}}</ng-template>
           </p-column>
           <p-column [style]="{'width':'18%'}" header="操作">
             <ng-template let-user="rowData" pTemplate="body">
@@ -51,10 +59,10 @@
                        [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
                        (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
       </div>
-    </perfect-scrollbar>
   </div>
 </div>
 
+<!--
 <p-dialog header="用户列表" [(visible)]="userDisplay">
   <p-pickList [source]="sourceUsers" [target]="targetUsers"
               sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"
@@ -71,8 +79,8 @@
     </ng-template>
   </p-pickList>
   <div class="e-right">
-  <button type="button" pButton  label="确定" style="background-color: #156b9a"></button>
-  <button type="button" pButton  label="取消" style="background-color: #156b9a"></button>
+    <button type="button" pButton label="确定"></button>
+    <button type="button" pButton label="取消"></button>
   </div>
 </p-dialog>
-
+-->

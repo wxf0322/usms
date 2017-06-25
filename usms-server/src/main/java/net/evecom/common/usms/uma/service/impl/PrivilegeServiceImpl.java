@@ -9,8 +9,9 @@ import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
+import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.OperationModel;
+import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,34 +45,35 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
     /**
      * 根据app名称来获取权限列表
      *
-     * @param application
+     * @param appName
      * @return
      */
     @Override
-    public List<PrivilegeEntity> findPrivilegesByAppName(String application) {
-        return privilegeDao.findPrivilegesByAppName(application);
+    public List<PrivilegeEntity> listPrivsByAppName(String appName) {
+        return privilegeDao.listPrivsByAppName(appName);
     }
 
     /**
      * 根据用户编码来获取权限列表
      *
-     * @param userID
+     * @param userId
      * @return
      */
     @Override
-    public List<PrivilegeEntity> findPrivilegesByUserId(long userID) {
-        return privilegeDao.findPrivilegesByUserId(userID);
+    public List<PrivilegeEntity> listPrivsByUserId(long userId) {
+        return privilegeDao.listPrivsByUserId(userId);
     }
 
     /**
      * 判断是否拥有该权限
      *
-     * @param userID,privilegeName
+     * @param userId
+     * @param privName
      * @return
      */
     @Override
-    public boolean hasPrivilege(long userID, String privilegeName) {
-        return privilegeDao.hasPrivilege(userID, privilegeName);
+    public boolean hasPrivilege(long userId, String privName) {
+        return privilegeDao.hasPrivilege(userId, privName);
     }
 
     /**
@@ -81,8 +83,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByPrivName(String privName) {
-        return privilegeDao.findUsersByPrivName(privName);
+    public List<UserEntity> listUsersByPrivName(String privName) {
+        return privilegeDao.listUsersByPrivName(privName);
     }
 
     /**
@@ -93,20 +95,34 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      * @return
      */
     @Override
-    public Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
-        return privilegeDao.findByPage(page, size,sqlFilter);
+    public Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter) {
+        return privilegeDao.listPrivsByPage(page, size, sqlFilter);
     }
-
 
 
     @Override
     public void updateOperations(Long privilegeId, String[] operationIds) {
-           privilegeDao.updateOperations(privilegeId,operationIds);
+        privilegeDao.updateOperations(privilegeId, operationIds);
     }
 
     @Override
-    public List<OperationModel> findOperationsByPrivId(Long privilegeId) {
-        return privilegeDao.findOperationsByPrivId(privilegeId);
+    public List<OperationVO> listOpersByPrivId(Long privilegeId) {
+        return privilegeDao.listOpersByPrivId(privilegeId);
+    }
+
+    @Override
+    public List<RoleEntity> listTargetRoles(Long privilegeId) {
+        return privilegeDao.listTargetRoles(privilegeId);
+    }
+
+    @Override
+    public List<RoleEntity> listSourceRoles(Long privilegeId) {
+        return privilegeDao.listSourceRoles(privilegeId);
+    }
+
+    @Override
+    public void updateRoles(Long privilegeId, String[] roleIds) {
+        privilegeDao.updateRoles(privilegeId, roleIds);
     }
 
 }

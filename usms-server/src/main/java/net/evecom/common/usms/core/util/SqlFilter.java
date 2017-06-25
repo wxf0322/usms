@@ -33,6 +33,7 @@ import org.apache.commons.lang.time.DateUtils;
  * <p>
  * // EQ 相等 // NE 不等 // LT 小于 // GT 大于 // LE 小于等于 // GE 大于等于 // LK 模糊 // RLK 右模糊
  * // LLK 左模糊 TLK 树本级和下级 TCLK 树下级
+ * // QUERY_t#id_EQNULL 表示 is null
  *
  * @author Fandy Liu
  * @created 2014/10/5 11:36
@@ -241,12 +242,13 @@ public class SqlFilter {
                     }
                     String columnName = sb.toString().replaceAll("#", ".");// 要过滤的字段名称
 
-                    String columnType = filterParams[filterParams.length-2];// 字段类型
-                    String operator = filterParams[filterParams.length-1];// SQL操作符
-                    /*
-                     * if (sql.toString().indexOf("where 1=1") < 0) {
-                     * sql.append("  where 1=1 "); }
-                     */
+                    String columnType = filterParams[filterParams.length - 2];// 字段类型
+                    String operator = filterParams[filterParams.length - 1];// SQL操作符
+
+                    if (sql.toString().indexOf("where 1=1") < 0) {
+                        sql.append("  where 1=1 ");
+                    }
+
                     // TLK 树本级和下级
                     if (StringUtils.equalsIgnoreCase(operator, "TLK")) {
                         sql.append(" and (" + columnName + " = ? or " + columnName + " like ?) ");
@@ -255,14 +257,14 @@ public class SqlFilter {
                     }
                     // TCLK 树下级
                     else if (StringUtils.equalsIgnoreCase(operator, "TCLK")) {
-                        sql.append(" and "+columnName + " like ? ");
+                        sql.append(" and " + columnName + " like ? ");
                         params.add(value + ".%");
                     } else if (StringUtils.equalsIgnoreCase(operator, "EQNULL")) {
                         sql.append(" and " + columnName + " is null ");
                     } else if (StringUtils.equalsIgnoreCase(operator, "IN") && StringUtils.isNotBlank(value)) {
-                        sql.append(" and  "+ columnName + " in (" + toSql(value) + ")  ");
+                        sql.append(" and  " + columnName + " in (" + toSql(value) + ")  ");
                     } else {
-                        sql.append(" and "+columnName + " " + getSqlOperator(operator) + "? ");// 拼HQL
+                        sql.append(" and " + columnName + " " + getSqlOperator(operator) + "? ");// 拼HQL
                         params.add(getObjValue(columnType, operator, value));
                     }
                 }
@@ -282,15 +284,12 @@ public class SqlFilter {
                     }
                     String columnName = sb.toString().replaceAll("#", ".");// 要过滤的字段名称
 
-                    String columnType = filterParams[filterParams.length-2];// 字段类型
-                    String operator = filterParams[filterParams.length-1];// SQL操作符
-                    /*
-                     * if (sql.toString().indexOf("where 1=1") < 0) {
-                     * sql.append("  where 1=1 "); }
-                     */
-                    if(sql.toString().indexOf("where")<0){
+                    String columnType = filterParams[filterParams.length - 2];// 字段类型
+                    String operator = filterParams[filterParams.length - 1];// SQL操作符
+                    if (sql.toString().indexOf("where") < 0) {
                         sql.append(" where 1=2 ");
                     }
+
                     // TLK 树本级和下级
                     if (StringUtils.equalsIgnoreCase(operator, "TLK")) {
                         sql.append(" or (" + columnName + " = ? or " + columnName + " like ?) ");
@@ -299,21 +298,20 @@ public class SqlFilter {
                     }
                     // TCLK 树下级
                     else if (StringUtils.equalsIgnoreCase(operator, "TCLK")) {
-                        sql.append(" or "+columnName + " like ? ");
+                        sql.append(" or " + columnName + " like ? ");
                         params.add(value + ".%");
                     } else if (StringUtils.equalsIgnoreCase(operator, "EQNULL")) {
                         sql.append(" or " + columnName + " is null ");
                     } else if (StringUtils.equalsIgnoreCase(operator, "IN") && StringUtils.isNotBlank(value)) {
-                        sql.append(" or  "+ columnName + " in (" + toSql(value) + ")  ");
+                        sql.append(" or  " + columnName + " in (" + toSql(value) + ")  ");
                     } else {
-                        sql.append(" or "+columnName + " " + getSqlOperator(operator) + "? ");// 拼HQL
+                        sql.append(" or " + columnName + " " + getSqlOperator(operator) + "? ");// 拼HQL
                         params.add(getObjValue(columnType, operator, value));
                     }
                 }
             }
         }
     }
-
 
 
     /**

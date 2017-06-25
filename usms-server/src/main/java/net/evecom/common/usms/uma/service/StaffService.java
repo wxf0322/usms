@@ -26,7 +26,7 @@ public interface StaffService extends BaseService<StaffEntity, Long> {
      * @return
      * @param officalPost
      */
-    List<UserEntity> findUsersByOfficalPost(String officalPost);
+    List<UserEntity> listUsersByOfficalPost(String officalPost);
 
 
 }

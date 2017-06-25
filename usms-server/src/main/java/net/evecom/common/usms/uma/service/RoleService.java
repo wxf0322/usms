@@ -28,7 +28,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param userId
      * @return
      */
-    List<RoleEntity> findRolesByUserId(long userId);
+    List<RoleEntity> listRolesByUserId(long userId);
 
     /**
      * 判断是否拥有该角色
@@ -45,7 +45,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param roleName
      * @return
      */
-    List<UserEntity> findUsersByRoleName(String roleName);
+    List<UserEntity> listUsersByRoleName(String roleName);
 
     /**
      * 根据权限角色查询列表用户列表
@@ -53,7 +53,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param roleNames
      * @return
      */
-    List<UserEntity> findUsersByRoleNames(String[] roleNames);
+    List<UserEntity> listUsersByRoleNames(String[] roleNames);
 
     /**
      * 查询所有角色列表
@@ -63,18 +63,18 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param sqlFilter
      * @return
      */
-    Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter);
+    Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter);
 
 
     /**
      * 查找角色Id对应的权限列表
      */
-    List<PrivilegeEntity> getSelectedPrivileges(Long roleId);
+    List<PrivilegeEntity> listTargetPrivileges(Long roleId);
 
     /**
      * 查找角色Id对应的未选择权限列表
      */
-    List<PrivilegeEntity> getUnselectedPrivileges(Long roleId);
+    List<PrivilegeEntity> listSourcePrivileges(Long roleId);
 
     /**
      * 更新角色对应的权限列表
@@ -84,7 +84,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
     /**
      * 根据角色id查找用户列表
      */
-    List<UserEntity> findUsersByRoleId(Long roleId);
+    List<UserEntity> listUsersByRoleId(Long roleId);
 
     /**
      * 根据角色ID查找已选用户列表
@@ -92,7 +92,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param roleId
      * @return
      */
-    List<Map<String, Object>> getSelectedUsers(Long roleId);
+    List<Map<String, Object>> listTargetUsers(Long roleId,SqlFilter sqlFilter);
 
     /**
      * 根据角色ID查找未选用户列表
@@ -100,7 +100,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param roleId
      * @return
      */
-    List<Map<String, Object>> getUnselectedUsers(Long roleId);
+    List<Map<String, Object>> listSourceUsers(Long roleId,SqlFilter sqlFilter);
 
     /**
      * 更新用户列表

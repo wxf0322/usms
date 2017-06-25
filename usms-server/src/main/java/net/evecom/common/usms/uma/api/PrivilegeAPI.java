@@ -5,7 +5,7 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.Constants;
@@ -80,7 +80,7 @@ public class PrivilegeAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得用户实体类
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
         JSONObject jsonObject = new JSONObject();
         if (privilegeService.hasPrivilege(user.getId(), privilegeName)) {
             jsonObject.put("result", true);
@@ -103,7 +103,7 @@ public class PrivilegeAPI {
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        List<PrivilegeEntity> privileges = privilegeService.findPrivilegesByAppName(applicationName);
+        List<PrivilegeEntity> privileges = privilegeService.listPrivsByAppName(applicationName);
         // 构造操作
         JSONArray privJsonArr = new JSONArray();
         for (PrivilegeEntity privilege : privileges) {

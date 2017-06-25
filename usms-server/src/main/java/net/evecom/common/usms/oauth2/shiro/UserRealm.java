@@ -59,7 +59,7 @@ public class UserRealm extends AuthorizingRealm {
 
         //从 token 中，获取用户身份信息
         String loginName = (String) authenticationToken.getPrincipal();
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
 
         if (user == null) {
             // 用户名不存在，抛出异常

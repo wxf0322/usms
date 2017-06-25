@@ -5,9 +5,9 @@
  */
 package net.evecom.common.usms.core.service.impl;
 
+import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.SqlFilter;
-import net.evecom.common.usms.core.model.TreeDataModel;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -43,9 +43,9 @@ public class TreeServiceImpl implements TreeService {
      *
      * @param sqlString the sql string
      * @param values    the values
-     * @return the execute query
+     * @return the native query
      */
-    private Query getExecuteQuery(String sqlString, Object[] values) {
+    private Query createNativeQuery(String sqlString, Object[] values) {
         Query query = manager.createNativeQuery(sqlString);
         if (values != null && values.length > 0) {
             for (int i = 0, j = 1; i < values.length; i++, j++) {
@@ -66,8 +66,8 @@ public class TreeServiceImpl implements TreeService {
      * @param values
      * @return
      */
-    private Map<String, Object> queryUniqueMap(String sqlString, Object[] values) {
-        Query query = this.getExecuteQuery(sqlString, values);
+    private Map<String, Object> queryForMap(String sqlString, Object[] values) {
+        Query query = this.createNativeQuery(sqlString, values);
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         List list = query.getResultList();
         if (list == null || list.size() == 0) {
@@ -86,8 +86,8 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public List<String> getPrimaryKeyName(String tableName) {
         StringBuffer sql = new StringBuffer(
-                "select cu.column_name from user_cons_columns cu")
-                .append(", user_constraints au where cu.constraint_name = au.constraint_name ")
+                "select cu.column_name from user_cons_columns cu, ")
+                .append("user_constraints au where cu.constraint_name = au.constraint_name ")
                 .append("and au.constraint_type = 'P' and au.table_name=?");
         Query query = manager.createNativeQuery(sql.toString());
         query.setParameter(1, tableName.toUpperCase());
@@ -169,7 +169,7 @@ public class TreeServiceImpl implements TreeService {
             sql.append(" where ").append(primaryKeyName).append("=?");
             targetVals.add(entityId);
             if (targetCols.size() > 0) {
-                Query query = this.getExecuteQuery(sql.toString(), targetVals.toArray());
+                Query query = this.createNativeQuery(sql.toString(), targetVals.toArray());
                 query.executeUpdate();
             }
         }
@@ -231,7 +231,7 @@ public class TreeServiceImpl implements TreeService {
             sql.deleteCharAt(sql.length() - 1);
             sql.append(")");
 
-            Query query = this.getExecuteQuery(sql.toString(), targetVals.toArray());
+            Query query = this.createNativeQuery(sql.toString(), targetVals.toArray());
             int result = query.executeUpdate();
             if (result == 1) {
                 return (entityId != null) ? entityId : nextSeq;
@@ -249,9 +249,12 @@ public class TreeServiceImpl implements TreeService {
         String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
         if (parentId != null && parentId != 0L) {
             StringBuffer sql = new StringBuffer("select * from ")
-                    .append(tableName).append(" where ")
-                    .append(primaryKeyName).append("=? ");
-            Map<String, Object> parentData = this.queryUniqueMap(sql.toString(), new Object[]{parentId});
+                    .append(tableName)
+                    .append(" where ")
+                    .append(primaryKeyName)
+                    .append(" =?");
+
+            Map<String, Object> parentData = this.queryForMap(sql.toString(), new Object[]{parentId});
             path = (String) parentData.get("PATH");
             level = Integer.parseInt(parentData.get("TREE_LEVEL").toString());
         } else {
@@ -295,23 +298,22 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public List<TreeDataModel> findTreeData(String tableName) {
+    public List<TreeData> listTreeData(String tableName) {
         SqlFilter sqlFilter = new SqlFilter();
-        return this.findTreeData(tableName, sqlFilter);
+        return this.listTreeData(tableName, sqlFilter);
     }
 
     @Override
-    public List<TreeDataModel> findTreeData(String tableName, SqlFilter sqlFilter) {
+    public List<TreeData> listTreeData(String tableName, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
         sb.append("select id, parent_id, label, name, manual_sn from ")
-                .append(tableName).append(" where 1=1 ")
-                .append(sqlFilter.getWhereSql());
-        Query query = this.getExecuteQuery(sb.toString(), sqlFilter.getParams().toArray());
+                .append(tableName).append(sqlFilter.getWhereSql());
+        Query query = this.createNativeQuery(sb.toString(), sqlFilter.getParams().toArray());
         List<Object> list = query.getResultList();
-        List<TreeDataModel> trees = new ArrayList<>();
+        List<TreeData> trees = new ArrayList<>();
         for (Object row : list) {
             Object[] col = (Object[]) row;
-            TreeDataModel treeNodeModel = new TreeDataModel();
+            TreeData treeNodeModel = new TreeData();
             treeNodeModel.setId(((BigDecimal) col[0]).longValue());
             treeNodeModel.setParentId(((BigDecimal) col[1]).longValue());
             treeNodeModel.setLabel((String) col[2]);

@@ -5,7 +5,7 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.core.util.WebUtil;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 描述 登入相关控制器
@@ -58,7 +57,7 @@ public class LoginAPI {
      * @throws OAuthSystemException
      */
     @RequestMapping(value = "loginOut")
-    public Object loginOut(HttpServletRequest request, HttpServletResponse response) throws OAuthProblemException, OAuthSystemException {
+    public Object loginOut(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
         // 重定向地址
@@ -74,7 +73,7 @@ public class LoginAPI {
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
 
-        if (applicationService.findByClientId(clientId) == null) {
+        if (applicationService.getAppByClientId(clientId) == null) {
              ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_CLIENT_ID)
                     .buildJSONMessage();

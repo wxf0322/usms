@@ -40,13 +40,13 @@ public class OAuthServiceImpl implements OAuthService {
      * 令牌有效时间
      */
     @Value("${accessToken.expires}")
-    private Long accessTokenExpires = 3600L;
+    private Long accessTokenExpires;
 
     /**
      * 授权码有效时间
      */
     @Value("${authCode.expires}")
-    private Long authCodeExpires = 300L;
+    private Long authCodeExpires;
 
     /**
      * 注入ApplicationService
@@ -152,7 +152,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public String getRedirectUriByRelation(String loginName, String clientId) {
+    public String getRedirectUri(String loginName, String clientId) {
         String relationKey = getRelationKey(OAuth.OAUTH_REDIRECT_URI, loginName, clientId);
         return valueOperations.get(relationKey);
     }
@@ -220,7 +220,7 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public boolean checkClientId(String clientId) {
-        return applicationService.findByClientId(clientId) != null;
+        return applicationService.getAppByClientId(clientId) != null;
     }
 
     /**
@@ -231,7 +231,7 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public boolean checkClientSecret(String clientSecret) {
-        return applicationService.findByClientSecret(clientSecret) != null;
+        return applicationService.getAppByClientSecret(clientSecret) != null;
     }
 
     /**
@@ -323,9 +323,9 @@ public class OAuthServiceImpl implements OAuthService {
      * @throws OAuthSystemException
      */
     @Override
-    public String getNewAccessToken(String loginName, String clientId, String authCode) throws OAuthSystemException {
+    public String generateAccessToken(String loginName, String clientId, String authCode) throws OAuthSystemException {
         OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
-        final String accessToken = oAuthIssuer.accessToken();
+        String accessToken = oAuthIssuer.accessToken();
         // 删除旧的Access Token
         deleteAccessToken(loginName, clientId);
         // 生成新的Access Token
@@ -334,6 +334,17 @@ public class OAuthServiceImpl implements OAuthService {
         deleteAuthCode(loginName, clientId);
         // 删除重定向地址
         deleteRedirectUri(loginName, clientId);
+        return accessToken;
+    }
+
+    @Override
+    public String generateAccessToken(String loginName, String clientId) throws OAuthSystemException {
+        OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
+        String accessToken = oAuthIssuer.accessToken();
+         // 删除旧的Access Token
+        deleteAccessToken(loginName, clientId);
+        // 生成新的Access Token
+        addAccessToken(accessToken, loginName, clientId);
         return accessToken;
     }
 
@@ -346,9 +357,9 @@ public class OAuthServiceImpl implements OAuthService {
      * @throws OAuthSystemException
      */
     @Override
-    public String getNewAuthCode(String loginName, String clientId) throws OAuthSystemException {
+    public String generateAuthCode(String loginName, String clientId) throws OAuthSystemException {
         OAuthIssuerImpl oauthIssuer = new OAuthIssuerImpl(new MD5Generator());
-        final String authCode = oauthIssuer.authorizationCode();
+        String authCode = oauthIssuer.authorizationCode();
         // 删除旧的授权码
         deleteAuthCode(loginName, clientId);
         // 生成新的Access Token
@@ -364,7 +375,7 @@ public class OAuthServiceImpl implements OAuthService {
      * @return
      */
     @Override
-    public String getCurrentAuthCode(String loginName, String clientId) {
+    public String getAuthCode(String loginName, String clientId) {
         String relationKey = getRelationKey(OAuth.OAUTH_CODE, loginName, clientId);
         String authCode = valueOperations.get(relationKey);
         return authCode;

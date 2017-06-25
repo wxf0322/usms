@@ -26,7 +26,12 @@ public interface Constants {
     /**
      * 无效的回调地址
      */
-    String INVALID_REDIRECT_URI = "缺少授权成功后的回调地址。";
+    String INVALID_REDIRECT_URI = "缺少回调地址。";
+
+    /**
+     * 无效的ResponseType
+     */
+    String INVALID_RESPONSE_TYPE = "无效的ResponseType。";
 
     /**
      * 不同的重定向地址
@@ -46,21 +51,21 @@ public interface Constants {
     /**
      * 用户密码错误
      */
-    String INCORRECT_CREDENTIALS = "登录失败: 用户密码错误";
+    String INCORRECT_CREDENTIALS = "用户密码错误";
 
     /**
      * 账号不存在
      */
-    String UNKNOWN_ACCOUNT = "登录失败: 用户名不存在";
+    String UNKNOWN_ACCOUNT = "用户名不存在";
 
     /**
      * 该账号被管理员锁定
      */
-    String LOCKED_ACCOUNT = "登录失败: 该账号被管理员锁定";
+    String LOCKED_ACCOUNT = "该账号已被管理员锁定";
 
     /**
      * 用户名或密码不能为空
      */
-    String EMPTY_ACCOUNT_OR_PASSWORD = "登录失败: 用户名或密码不能为空";
+    String EMPTY_ACCOUNT_OR_PASSWORD = "用户名或密码不能为空";
 }
 

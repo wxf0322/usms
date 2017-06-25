@@ -5,12 +5,11 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.vo.ResultStatus;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
-import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.RoleModel;
+import net.evecom.common.usms.vo.RoleVO;
 import net.evecom.common.usms.uma.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,16 +34,17 @@ import java.util.Map;
 @Controller
 @RequestMapping("/role")
 public class RoleController {
-    /**
-     * 注入roleService
-     */
-    @Autowired
-    private RoleService roleService;
 
     /**
      * 日志管理器
      */
     private static Logger logger = LoggerFactory.getLogger(RoleController.class);
+
+    /**
+     * 注入roleService
+     */
+    @Autowired
+    private RoleService roleService;
 
     /**
      * 查找角色列表
@@ -54,13 +53,13 @@ public class RoleController {
      */
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<RoleEntity> list(Integer page, Integer size, HttpServletRequest request) {
+    public Page<RoleEntity> listRolesByPage(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
         if (!StringUtils.isEmpty(request.getParameter("key"))) {
             sqlFilter.addOrFilter("QUERY_r#label_S_LK", request.getParameter("key"));
             sqlFilter.addOrFilter("QUERY_r#name_S_LK", request.getParameter("key"));
         }
-        return roleService.findByPage(page, size, sqlFilter);
+        return roleService.listRolesByPage(page, size, sqlFilter);
     }
 
     @ResponseBody
@@ -81,25 +80,31 @@ public class RoleController {
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody RoleModel roleModel) {
-        RoleEntity roleEntity = null;
+    public ResultStatus saveOrUpdate(@RequestBody RoleVO roleVO) {
+        RoleEntity roleEntity;
         try {
-            roleEntity = new RoleEntity(roleModel);
+            // 将model转换为entity
+            roleEntity = new RoleEntity(roleVO);
             roleEntity = roleService.saveOrUpdate(roleEntity);
-            String[] privilegeIdArray;
-            if (StringUtils.isEmpty(roleModel.getPrivilegeIds())) {
-                privilegeIdArray = null;
+
+            // 获得前端传来的集合
+            String[] privilegeIds;
+            if (StringUtils.isEmpty(roleVO.getPrivilegeIds())) {
+                privilegeIds = null;
             } else {
-                privilegeIdArray = roleModel.getPrivilegeIds().split(",");
+                privilegeIds = roleVO.getPrivilegeIds().split(",");
             }
-            roleService.updatePrivileges(roleEntity.getId(), privilegeIdArray);
-            String[] userIdArray;
-            if (StringUtils.isEmpty(roleModel.getUserIds())) {
-                userIdArray = null;
+            // 更新权限
+            roleService.updatePrivileges(roleEntity.getId(), privilegeIds);
+
+            String[] userIds;
+            if (StringUtils.isEmpty(roleVO.getUserIds())) {
+                userIds = null;
             } else {
-                userIdArray = roleModel.getUserIds().split(",");
+                userIds = roleVO.getUserIds().split(",");
             }
-            roleService.updateUsers(roleEntity.getId(), userIdArray);
+            // 更新角色
+            roleService.updateUsers(roleEntity.getId(), userIds);
         } catch (InvocationTargetException | IllegalAccessException e) {
             logger.error(e.getMessage(), e);
         }
@@ -113,9 +118,9 @@ public class RoleController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "privileges/selected")
-    public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
-        return roleService.getSelectedPrivileges(roleId);
+    @RequestMapping(value = "privileges/target")
+    public List<PrivilegeEntity> listTargetPrivileges(Long roleId) {
+        return roleService.listTargetPrivileges(roleId);
     }
 
     /**
@@ -125,9 +130,9 @@ public class RoleController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "privileges/unselected")
-    public List<PrivilegeEntity> getUnselectedPrivileges(Long roleId) {
-        return roleService.getUnselectedPrivileges(roleId);
+    @RequestMapping(value = "privileges/source")
+    public List<PrivilegeEntity> listSourcePrivileges(Long roleId) {
+        return roleService.listSourcePrivileges(roleId);
     }
 
     /**
@@ -137,9 +142,10 @@ public class RoleController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "users/selected")
-    public List<Map<String, Object>> getSelectedUsers(Long roleId) {
-        return roleService.getSelectedUsers(roleId);
+    @RequestMapping(value = "users/target")
+    public List<Map<String, Object>> listTargetUsers(Long roleId) {
+        SqlFilter sqlFilter = new SqlFilter();
+        return roleService.listTargetUsers(roleId, sqlFilter);
     }
 
     /**
@@ -149,9 +155,17 @@ public class RoleController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "users/unselected")
-    public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
-        return roleService.getUnselectedUsers(roleId);
+    @RequestMapping(value = "users/source")
+    public List<Map<String, Object>> listSourceUsers(Long roleId, Long institutionId, HttpServletRequest request) {
+        SqlFilter sqlFilter = new SqlFilter();
+        if (institutionId != null) {
+            sqlFilter.addFilter("QUERY_u#institution_id_L_EQ", institutionId.toString());
+        } else {
+            sqlFilter.addFilter("QUERY_u#institution_id_L_EQNULL", "");
+        }
+        if (!StringUtils.isEmpty(request.getParameter("key"))) {
+            sqlFilter.addFilter("QUERY_u#name_S_LK", request.getParameter("key"));
+        }
+        return roleService.listSourceUsers(roleId, sqlFilter);
     }
-
 }

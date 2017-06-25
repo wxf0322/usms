@@ -5,7 +5,7 @@
  */
 package net.evecom.common.usms.entity;
 
-import net.evecom.common.usms.model.RoleModel;
+import net.evecom.common.usms.vo.RoleVO;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.*;
@@ -122,8 +122,8 @@ public class RoleEntity {
     public RoleEntity(){
 
     }
-    public  RoleEntity(RoleModel roleModel) throws InvocationTargetException, IllegalAccessException {
-        BeanUtils.copyProperties(this, roleModel);
+    public  RoleEntity(RoleVO roleVO) throws InvocationTargetException, IllegalAccessException {
+        BeanUtils.copyProperties(this, roleVO);
     }
 
     @Override

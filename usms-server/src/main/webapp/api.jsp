@@ -18,8 +18,8 @@
 ### 1.2 名词解释
 
 | 名词        | 解释                              |
-|-------------|----------------------------------------------------------------------------------------------------------------------|
-| USMS        | Unified User Management System，统一用户管理子系统，包含与用户相关的信息（如基础资料、角色、权限、组织机构）的管理。 |
+|------------|----------------------------------------------------------------------------------------------------------------------|
+| USMS       | Unified User Management System，统一用户管理子系统，包含与用户相关的信息（如基础资料、角色、权限、组织机构）的管理。 |
 | 接入子系统   | 指接入统一用户管理的其他各应用子系统。简称“子系统”。                                                             |
 | 认证服务器   | Authorization Server，统一用户管理系统中用于处理认证的服务器。                                                     |
 | 资源服务器   | Resource Server，统一用户管理系统提供的资源服务，调用资源服务时，需要提交用户认证信息（access_Token）。              |
@@ -80,7 +80,7 @@
 
 
 ### 2.2 认证服务
-#### 2.2.1 重定向到authorize
+#### 2.2.1 重定向到 authorize
 
 (1) 接口说明
 
@@ -93,29 +93,57 @@ http://192.168.200.209:8080/usms/authorize
 
 (3) 输入参数
 
-| 参数名         | 是否必填 | 说明                            |
-|----------------|-----------|----------------------------------|
-| client_id      |   是      | 填子系统在 USMS 注册的client_id |
-| response_type  |   是      | 固定值：code                     |
-| redirect_uri   |   是      | 子系统的回调地址                 |
+| 参数名          | 是否必填 | 说明                         |
+|----------------|--------|------------------------------|
+| client_id      |   是    | 填子系统在 USMS 注册的client_id |
+| response_type  |   是    | code: 授权码模式，token: 简化模式 |
+| redirect_uri   |   是    | 子系统的回调地址                 |
 
-(4) 输入样例
+##### 2.2.1.1 授权码模式
+
+(1) 输入样例
 
 ```
 http://192.168.200.209:8080/usms/authorize?client_id=0a626c2d-d0ac-45bd-9918-e66a4117cf4d&response_type=code&redirect_uri=http://www.baidu.com
 ```
 
-(5) 输出样例
+(2) 输出样例
 
 ```
 HTTP/1.1 302 Found
 Location: http://www.baidu.com/?code=27893fa79e38e449baf09fc2b066f1cc
 ```
-重定向到 http://www.baidu.com，以上样例中 code=27893fa79e38e449baf09fc2b066f1cc 即为临时授权码。
 
-(6) 备注
+重定向到 http://www.baidu.com，其中 code=27893fa79e38e449baf09fc2b066f1cc 即为临时授权码。
+
+(3) 备注
 
 该接口请求在浏览器端完成，code对用户可见，code仅可使用一次。
+
+##### 2.2.1.2 简化模式模式
+
+(1) 输入样例
+
+```
+http://192.168.200.209:8080/usms/authorize?client_id=0a626c2d-d0ac-45bd-9918-e66a4117cf4d&response_type=token&redirect_uri=http://www.baidu.com
+```
+
+(2) 输出样例
+
+```
+HTTP/1.1 302 Found
+Location: http://www.baidu.com/#access_token=27893fa79e38e449baf09fc2b066f1cc&expires_in=3600
+```
+
+重定向到 http://www.baidu.com
+
+其中 access_token=27893fa79e38e449baf09fc2b066f1cc 即为访问令牌。
+其中 expires_in=3600 为访问令牌有效时间。
+
+(3) 备注
+
+该接口请求在浏览器端完成，assess_token对用户可见，请在前端调用需要访问的api。
+
 
 #### 2.1.2 请求access_token
 
@@ -258,8 +286,8 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
 | loginName	  |  登录名     |
 | staff       |	关联员工的具体信息，具体参数详见 2.3.2 节 输出参数 |
 | application | 当前接入系统的应用信息，里面包含着操作信息 |
-| operations  | 该用户所拥有的操作信息，具体参数详见 2.3.10 节 输出参数（注意：不是所有的操作信息） |
-| institutions | 该用户所属的组织机构信息，具体参数详见 2.3.14 节 输出参数（注意：不是所有的组织机构信息） |
+| operations  | 该用户所拥有的操作信息，具体参数详见 2.3.10 节 输出参数 |
+| institutions | 该用户所属的组织机构信息，具体参数详见 2.3.14 节 输出参数 |
 
 
 (6) 输出样例
@@ -662,13 +690,13 @@ http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_N
 
 | 参数名      | 说明    |
 |------------|----------|
-| id         | 操作id                    |
-| parentId   | 父亲ID                    |
-| label      | 操作名称_中文             |
-| name       | 操作名称_英文             |
-| resUrl    | 操作URL                   |
-| iconPath  | 操作图标路径               |
-| optType   | 操作类型 (1:菜单 2:按钮)   |
+| id         | 操作id                |
+| parentId   | 父亲ID                |
+| label      | 操作名称_中文          |
+| name       | 操作名称_英文          |
+| resUrl    | 操作URL               |
+| iconPath  | 操作图标路径            |
+| optType   | 操作类型 (1:菜单 2:按钮 3: 系统)   |
 
 (6) 输出样例
 
@@ -786,8 +814,8 @@ http://192.168.200.209:8080/usms/v1/openapi/operation/exist?operation=OPERATION_
 
 (5) 输出参数
 
-| 参数名      | 说明    |
-|-------------|----------|
+| 参数名       | 说明    |
+|-------------|--------|
 | result      |   返回结果，true为是，false为否  |
 
 
@@ -1136,9 +1164,9 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名      | 是否必填     | 说明     |
-|-------------|-------------|----------|
-|login_names  |是           | 登入名集合，用 "," 连接 |
+| 参数名       | 是否必填     | 说明     |
+|-------------|------------|----------|
+|login_names  |是          | 登入名集合，用 "," 连接 |
 
 (4) 输入样例
 

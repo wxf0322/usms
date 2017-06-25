@@ -8,8 +8,9 @@ package net.evecom.common.usms.uma.dao;
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
+import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.OperationModel;
+import net.evecom.common.usms.vo.OperationVO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -27,23 +28,24 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param appName
      * @return
      */
-    List<PrivilegeEntity> findPrivilegesByAppName(String appName);
+    List<PrivilegeEntity> listPrivsByAppName(String appName);
 
     /**
      * 根据用户名获取权限列表
      *
-     * @param userID
+     * @param userId
      * @return
      */
-    List<PrivilegeEntity> findPrivilegesByUserId(long userID);
+    List<PrivilegeEntity> listPrivsByUserId(long userId);
 
     /**
      * 判断是否拥有次权限
      *
-     * @param userID,privilegeName
+     * @param userId
+     * @param privilegeName
      * @return
      */
-    boolean hasPrivilege(long userID, String privilegeName);
+    boolean hasPrivilege(long userId, String privName);
 
     /**
      * 根据权限编码查询用户列表
@@ -51,12 +53,12 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param privName
      * @return
      */
-    List<UserEntity> findUsersByPrivName(String privName);
+    List<UserEntity> listUsersByPrivName(String privName);
 
     /**
      * 查询权限列表
      */
-    Page<PrivilegeEntity> findByPage(int page, int size, SqlFilter sqlFilter);
+    Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter);
 
 
     /**
@@ -68,6 +70,18 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
     /**
      * 查找权限ID对应的操作列表
      */
-    List<OperationModel> findOperationsByPrivId(Long privilegeId);
+    List<OperationVO> listOpersByPrivId(Long privilegeId);
 
+    /**
+     * 获取该权限已选择的角色
+     */
+    List<RoleEntity> listTargetRoles(Long privilegeId );
+
+    /**
+     * 获取该权限未选择的角色
+     */
+    List<RoleEntity> listSourceRoles(Long privilegeId);
+
+
+    void updateRoles(Long privilegeId, String[] roleIds);
 }

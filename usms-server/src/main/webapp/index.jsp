@@ -14,12 +14,14 @@
 
 ### <font color="red">系统后台管理页面，见[此处](./index.html)</font>
 
+## 一、网页端接入流程说明
+
 ###1. 先在统一用户管理系统中注册对接应用
 
-统一用户管理系统会分配给对接系统 **client_id** 和 **client_secret** 这两个以后会用到
+统一用户管理系统会分配给对接系统 **client_id** 和 **client_secret**
 
-|   参数名      |   值                   | 参数说明              |
-|--------------|------------------------|---------------------|
+|   参数名       |   值                                | 参数说明   |
+|---------------|-------------------------------------|-----------|
 | client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
 | client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
 
@@ -33,32 +35,29 @@ http://192.168.200.209:8080/usms/authorize?client_id=6433ada9-de68-40ba-89a0-7aa
 
 ####2.2 参数说明
 
-|   参数名       |   值         |
+|   参数名       |   参数说明     |
 |---------------|--------------|
 | client_id     | 应用id        |
-| response_type | 返回授权码的标识 |
-| redirect_uri  | 回调地址        |
+| response_type | 返回授权码的标识，固定值code |
+| redirect_uri  | 回调地址       |
 
-上面的网站会打开Oauth Server的用户登录页面，用户输入正确的用户名和密码，并以POST方式提交后，会重定向到用户所填的回调地址并在地址，
-并在地址后方携带授权码。请求成功后会返回如下的页面：
+上面的网站会打开Oauth Server的用户登录页面，用户输入正确的用户名和密码，会重定向到用户所填的回调地址，并在地址后方携带授权码。请求成功后会返回如下的页面：
 
 ```
 http://www.baidu.com/?code=63910432da9186b22b1ad888d55ae8ae
 ```
 
-####2.3 备注
-
-这里 code=63910432da9186b22b1ad888d55ae8ae 即 **授权码**
+其中 code=63910432da9186b22b1ad888d55ae8ae 即 **授权码**
 
 ###3. 换取access_token (POST操作)
 
-####3.1 流程说明
+####3.1 请求地址
 
 ```
 http://192.168.200.209:8080/usms/access
 ```
 
-首先GET方式请求该页面，会打开一个表单在该表单中填入必填项，具体表单参数详见说明部分。
+首先GET方式请求该页面，会打开一个表单在该表单中填入必填项，具体表单参数，详见参数说明。
 
 表单将会以POST方式提交到 http://192.168.200.209:8080/usms/accessToken ，最终返回 access_token
 
@@ -66,11 +65,11 @@ http://192.168.200.209:8080/usms/access
 
 ####3.2 参数说明
 
-|   参数名        |   值               | 参数说明  |
-|---------------|--------------------|-----------------------------|
+|   参数名       |   值                                 | 参数说明    |
+|---------------|--------------------------------------|-----------|
 | client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
 | client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
-| grant_type    | authorization_code | 用于传递授权码的参数名authorization_code |
+| grant_type    | authorization_code                   | 用于传递授权码的参数，固定值 |
 | code          | 63910432da9186b22b1ad888d55ae8ae     | 用户登录授权后的授权码 |
 | redirect_uri  | http://www.baidu.com                 | 回调地址    |
 
@@ -90,9 +89,53 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
 
 测试成功的话可以返回当前用户名的详细信息，access_token=223ae05dfbb0794396fb60a0960c197e 为上一步获取的 **access_token**
 
-####4.2 备注
 
-参数名不要随意更改，固定写法。
+## 二、移动端接入流程说明
+
+###1. 先在统一用户管理系统中注册对接应用
+
+统一用户管理系统会分配给对接系统 **client_id** 和 **client_secret**
+
+|   参数名       |   值                                | 参数说明   |
+|---------------|-------------------------------------|-----------|
+| client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
+| client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
+
+###2. 请求授权码
+
+####2.1 请求地址
+
+```
+http://192.168.200.209:8080/usms/authorize?client_id=6433ada9-de68-40ba-89a0-7aa8ee9128df&response_type=token&redirect_uri=http://www.baidu.com
+```
+
+####2.2 参数说明
+
+|   参数名       |   值         |
+|---------------|--------------|
+| client_id     | 应用id        |
+| response_type | 返回授权码的标识，固定值token |
+| redirect_uri  | 回调地址       |
+
+上面的网站会打开Oauth Server的用户登录页面，用户输入正确的用户名和密码，会重定向到用户所填的回调地址，并在地址后方携带授权令牌。
+
+请求成功后会返回如下的页面：
+
+
+```
+HTTP/1.1 302 Found
+Location: http://www.baidu.com/#access_token=27893fa79e38e449baf09fc2b066f1cc&expires_in=3600
+```
+
+重定向到 http://www.baidu.com
+
+其中 access_token=27893fa79e38e449baf09fc2b066f1cc 即为访问令牌，expires_in=3600 为访问令牌有效时间。
+
+###2.3 备注
+
+该接口请求在浏览器端完成，assess_token对用户可见，请在前端调用需要访问的api。
+
+
 </xmp>
 
 <script src="${pageContext.request.contextPath}/static/plugins/strapdown/strapdown.js"></script>

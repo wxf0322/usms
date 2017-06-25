@@ -8,11 +8,10 @@ package net.evecom.common.usms.uma.dao;
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.vo.UserVO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述 UserDao
@@ -24,28 +23,35 @@ import java.util.Map;
 public interface UserDao extends BaseDao<UserEntity, Long> {
 
     /**
-     * @param page 当前页码
-     * @param size 页面数据量
+     * @param page          当前页码
+     * @param size          页面数据量
+     * @param institutionId 组织机构id
      * @return
      */
-    Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter);
+    Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter);
 
-    UserEntity findByLoginName(String loginName);
+    UserEntity getUserByLoginName(String loginName);
 
-    List<UserEntity> findByLoginNames(String[] loginNames);
+    List<UserEntity> listUsersByLoginNames(String[] loginNames);
 
-    List<RoleEntity> findRolesById(Long id);
+    List<RoleEntity> listRolesByUserId(Long userId);
 
-    List<OperationEntity> findOperationsById(Long id);
+    List<OperationEntity> listOpersByUserId(Long userId);
 
-    List<ApplicationEntity> findApplicationsById(Long id);
+    List<ApplicationEntity> listAppsByUserId(Long id);
 
-    List<GridEntity> findGridsByLoginName(String loginName);
+    List<GridEntity> listGridsByLoginName(String loginName);
 
-    void updateInstitutions(Long userId,String[] institutionIds);
+    void updateInstitutions(Long userId, String[] institutionIds);
 
-    List<InstitutionEntity> findInstByUserId(Long userId);
+    List<InstitutionEntity> listInstsByUserId(Long userId);
 
-    void createUserInstitution(Long userId,Long institutionId);
+    void createUserInstitution(Long userId, Long institutionId);
+
+    List<RoleEntity> listTargetRoles(Long userId);
+
+    List<RoleEntity> listSourceRoles(Long userId);
+
+    void updateRoles(Long userId, String[] roleIdArray);
 
 }

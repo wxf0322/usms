@@ -9,7 +9,7 @@ import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.dao.UserDao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,69 +45,74 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
      *
      * @param page 当前页码
      * @param size 页面数据量
+     * @param institutionId
+     * @param sqlFilter
      * @return
      */
     @Override
-    public Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select u.id, u.login_name, u.name, s.mobile, u.enabled\n")
-                .append(" from usms_users u  " )
-                .append(" left join usms_staffs s\n")
-                .append(" on u.staff_id = s.id "+sqlFilter.getWhereSql());
-        String sql = sb.toString();
-        Page<Map<String, Object>> pageBean = queryMapByPage(sql, sqlFilter.getParams().toArray(), page, size);
-        List<UserModel> list = new ArrayList<>();
-        for (Map<String, Object> var : pageBean.getContent()) {
-            UserModel userModel = new UserModel();
-            Long id = ((BigDecimal) var.get("ID")).longValue();
-            List<RoleEntity> roles = findRolesById(id);
-            // 构造角色字符串
-            List<String> roleNames = new ArrayList<>();
-            for (RoleEntity role : roles) {
-                roleNames.add(role.getLabel());
-            }
-            userModel.setId(id);
-            userModel.setLoginName((String) var.get("LOGIN_NAME"));
-            userModel.setName((String) var.get("NAME"));
-            userModel.setMobile((String) var.get("MOBILE"));
-            userModel.setEnabled(((BigDecimal) var.get("ENABLED")).longValue());
-            userModel.setRoleNames(roleNames);
-            list.add(userModel);
+    public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
+        String instCondition;
+        List params = new ArrayList();
+        if (institutionId == null) {
+            instCondition = "ui.institution_id is null";
+        } else {
+            instCondition = "ui.institution_id = ?";
+            params.add(institutionId);
         }
-        return new PageImpl<>(list, new PageRequest(page, size), pageBean.getTotalElements());
+        params.addAll(sqlFilter.getParams());
+        StringBuffer sb = new StringBuffer();
+        sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from (\n")
+                .append("select distinct u.id, u.login_name, u.name, u.staff_id, u.enabled, ui.institution_id \n")
+                .append("from usms_users u \n")
+                .append("left join usms_user_institution ui on u.id = ui.user_id\n")
+                .append("where ").append(instCondition).append(") u \n")
+                .append("left join usms_staffs s\n")
+                .append("on u.staff_id = s.id ")
+                .append(sqlFilter.getWhereSql());
+        String sql = sb.toString();
+        Page<Map<String, Object>> pageBean = queryForMap(sql, params.toArray(), page, size);
+        List<UserVO> results = new ArrayList<>();
+        for (Map<String, Object> var : pageBean.getContent()) {
+            UserVO userVO = new UserVO();
+            userVO.setId(((BigDecimal) var.get("ID")).longValue());
+            userVO.setLoginName((String) var.get("LOGIN_NAME"));
+            userVO.setName((String) var.get("NAME"));
+            userVO.setMobile((String) var.get("MOBILE"));
+            userVO.setEnabled(((BigDecimal) var.get("ENABLED")).longValue());
+            results.add(userVO);
+        }
+        return new PageImpl<>(results, new PageRequest(page, size), pageBean.getTotalElements());
     }
 
     @Override
-    public UserEntity findByLoginName(String loginName) {
+    public UserEntity getUserByLoginName(String loginName) {
         String sql = "select * from usms_users u where u.login_name = ?";
-        List<UserEntity> result = super.queryBySql(sql, new Object[]{loginName});
+        List<UserEntity> result = super.queryForClass(sql, new Object[]{loginName});
         return JpaUtil.getSingleResult(result);
     }
 
     @Override
-    public List<UserEntity> findByLoginNames(String[] loginNames) {
+    public List<UserEntity> listUsersByLoginNames(String[] loginNames) {
         String queryParams = JpaUtil.getQuestionMarks(loginNames);
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_users u where u.login_name in (")
-                .append(queryParams)
-                .append(")");
+                .append(queryParams).append(")");
         String sql = sb.toString();
-        return super.queryBySql(sql, loginNames);
+        return super.queryForClass(sql, loginNames);
     }
 
-
     @Override
-    public List<RoleEntity> findRolesById(Long id) {
+    public List<RoleEntity> listRolesByUserId(Long userId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_roles r where r.id in (\n")
                 .append("select ur.role_id from usms_user_role ur where ur.user_id = ?\n")
                 .append(") and r.enabled = 1");
         String sql = sb.toString();
-        return super.queryBySql(RoleEntity.class, sql, new Object[]{id});
+        return super.queryForClass(RoleEntity.class, sql, new Object[]{userId});
     }
 
     @Override
-    public List<OperationEntity> findOperationsById(Long id) {
+    public List<OperationEntity> listOpersByUserId(Long id) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_operations o\n")
                 .append(" where o.id in\n")
@@ -127,11 +132,11 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
                 .append(" and p.enabled = 1))\n")
                 .append(" and o.enabled = 1");
         String sql = sb.toString();
-        return super.queryBySql(OperationEntity.class, sql, new Object[]{id});
+        return super.queryForClass(OperationEntity.class, sql, new Object[]{id});
     }
 
     @Override
-    public List<ApplicationEntity> findApplicationsById(Long id) {
+    public List<ApplicationEntity> listAppsByUserId(Long id) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_applications a where a.id in (\n")
                 .append("select distinct o.application_id from usms_operations o\n")
@@ -146,11 +151,11 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
                 .append(" and pr.role_id = r.id and r.enabled = 1)\n")
                 .append(" and p.enabled = 1)) and o.enabled = 1 and o.application_id is not null)");
         String sql = sb.toString();
-        return super.queryBySql(ApplicationEntity.class, sql, new Object[]{id});
+        return super.queryForClass(ApplicationEntity.class, sql, new Object[]{id});
     }
 
     @Override
-    public List<GridEntity> findGridsByLoginName(String loginName) {
+    public List<GridEntity> listGridsByLoginName(String loginName) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from gsmp_loc_grids g\n")
                 .append(" where g.code in\n")
@@ -159,7 +164,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
                 .append(" where ug.user_id =\n")
                 .append(" (select u.id from usms_users u where u.login_name = ?))\n");
         String sql = sb.toString();
-        return super.queryBySql(GridEntity.class, sql, new Object[]{loginName});
+        return super.queryForClass(GridEntity.class, sql, new Object[]{loginName});
     }
 
     @Override
@@ -183,13 +188,13 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
     }
 
     @Override
-    public List<InstitutionEntity> findInstByUserId(Long userId) {
+    public List<InstitutionEntity> listInstsByUserId(Long userId) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_institutions i where i.id in ")
                 .append("(select ui.institution_id from usms_user_institution ui ")
                 .append(" where ui.user_id = ?)");
         String sql = sb.toString();
-        return super.queryBySql(InstitutionEntity.class, sql, new Object[]{userId});
+        return super.queryForClass(InstitutionEntity.class, sql, new Object[]{userId});
     }
 
     @Override
@@ -198,8 +203,65 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
         sb.append("insert into usms_user_institution values(:userId,:institutionId)");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql);
-        query.setParameter("userId",userId);
-        query.setParameter("institutionId",institutionId);
+        query.setParameter("userId", userId);
+        query.setParameter("institutionId", institutionId);
         query.executeUpdate();
     }
+
+    @Override
+    public List<RoleEntity> listTargetRoles(Long userId) {
+        StringBuffer sb = new StringBuffer();
+        if (userId == null) {
+            return new ArrayList<>();
+        } else {
+            sb.append("select * from usms_roles where id in  ")
+                    .append(" (select role_id from usms_user_role ")
+                    .append(" where user_id = ?) and enabled=1 ");
+            String sql = sb.toString();
+            return super.queryForClass(RoleEntity.class, sql, new Object[]{userId});
+        }
+    }
+
+    @Override
+    public List<RoleEntity> listSourceRoles(Long userId) {
+        StringBuffer sb = new StringBuffer();
+        if (userId != null) {
+            //编辑
+            sb.append("select * from usms_roles where id  not in  ")
+                    .append(" (select role_id from usms_user_role ")
+                    .append(" where user_id = :userId) and enabled=1");
+            String sql = sb.toString();
+            Query query = manager.createNativeQuery(sql, RoleEntity.class);
+            query.setParameter("userId", userId);
+            return query.getResultList();
+        } else {
+            //新增
+            sb.append("select * from usms_roles where enabled=1");
+            String sql = sb.toString();
+            Query query = manager.createNativeQuery(sql, RoleEntity.class);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public void updateRoles(Long userId, String[] roleIdArray) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("delete from usms_user_role where user_id =:userId");
+        String sql = sb.toString();
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+
+        if (roleIdArray != null) {
+            for (String id : roleIdArray) {
+                Long roleId = Long.valueOf(id);
+                sql = "insert into usms_user_role values(:roleId,:userId)";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("roleId", roleId);
+                query.setParameter("userId", userId);
+                query.executeUpdate();
+            }
+        }
+    }
+
 }

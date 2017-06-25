@@ -6,9 +6,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {TreeData} from '../../shared/util/tree-data';
 import {TreeUtil} from '../../shared/util/tree-util';
-import {User} from './user';
-
-
 
 @Component({
   selector: 'app-user',
@@ -21,9 +18,6 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
    */
   tree: TreeNode[];
 
-  sourceUsers: User[] = [];
-  targetUsers: User[] = [];
-
   /**
    * 选中的节点
    */
@@ -35,9 +29,12 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
   institutionId: string;
 
   /**
-   *移入用户相关的隐藏和显示
+   * 当前所属的机构名称
    */
-  userDisplay = false;
+  institutionName: string;
+
+
+  height: number;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -95,20 +92,20 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
 
   query() {
     const url = 'user/list?key=' + this.filter;
-    this.httpService.findByPage(url, 0, this.page.size, null).then(
+    let params = {institutionId: this.institutionId};
+    this.httpService.findByPage(url, 0, this.page.size, params).then(
       res => {
         return this.setData(res);
       }
     );
   }
 
-
-
   gotoUserDetail(type: string, id: string) {
     this.router.navigate(['user-detail', {
       type: type,
       id: id,
-      institutionId: this.institutionId
+      institutionId: this.institutionId,
+      institutionName: this.institutionName
     }], {relativeTo: this.route});
   }
 
@@ -117,19 +114,20 @@ export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
    * @param event
    */
   nodeSelect(event) {
-    this.institutionId = event.node.data.id;
-    const url = 'user/list?institutionName=' + event.node.data.name;
-    this.httpService.findByPage(url, 0, this.page.size, null).then(
-      res => {
-        return this.setData(res);
-      }
+    this.institutionName = event.node.label;
+    let url = 'user/list?key=' + this.filter;
+    if (event.node.data.parentId != 0) {
+      this.institutionId = event.node.data.id;
+    } else {
+      this.institutionId = null;
+    }
+    let params = {
+      institutionId: this.institutionId
+    };
+    this.httpService.findByPage(url, 0, this.page.size, params).then(
+      res => this.setData(res)
     );
   }
-
-  moveUsers() {
-    this.userDisplay = true;
-  }
-
 
 }
 

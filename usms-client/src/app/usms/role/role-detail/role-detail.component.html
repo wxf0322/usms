@@ -11,13 +11,13 @@
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="required control-label">角色名称</label>
+                <label class="required control-label">角色名称:</label>
                 <input pInputText [(ngModel)]="detailData.label"
                        name="label" #label="ngModel" required>
                 <div class="validation" *ngIf="label.errors?.required">该项必填</div>
               </div>
               <div class="ui-g-6">
-                <label class="required control-label">角色编码</label>
+                <label class="required control-label">角色编码:</label>
                 <input pInputText [(ngModel)]="detailData.name"
                        name="name" #name="ngModel" required>
                 <div class="validation" *ngIf="name.errors?.required">该项必填</div>
@@ -25,15 +25,15 @@
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="control-label">状态</label>
-                <p-radioButton name="enbled" value="1" label="激活"
+                <label class="control-label">状态:</label>
+                <p-radioButton name="enbled" value="1" label="正常"
                                [(ngModel)]="detailData.enabled"></p-radioButton>
                 &nbsp;
                 <p-radioButton name="enbled" value="0" label="冻结"
                                [(ngModel)]="detailData.enabled"></p-radioButton>
               </div>
               <div class="ui-g-6">
-                <label class=" control-label">备注</label>
+                <label class=" control-label">备注:</label>
                 <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}">
               </div>
             </div>
@@ -57,31 +57,14 @@
             </div>
           </p-tabPanel>
           <p-tabPanel header="分配用户">
-            <div class="ui-g">
-              <div class="ui-g-4">
-                <p-tree [value]="tree"></p-tree>
-              </div>
-              <div class="ui-g-8">
-                <p-pickList [source]="sourceUsers" [target]="targetUsers"
-                            sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"
-                            [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
-                  <ng-template let-user pTemplate="item">
-                    <div class="ui-helper-clearfix">
-                      <div style="font-size:14px;float:left;margin:15px 15px 0 15px">{{user.LOGIN_NAME}}</div>
-                      <div style="font-size:14px;float:right;margin:15px 15px 0 15px">{{user.NAME}}</div>
-                    </div>
-                  </ng-template>
-                </p-pickList>
-              </div>
-            </div>
+            <app-role-user-selector [(sourceUsers)]='sourceUsers'
+                               [(targetUsers)]='targetUsers'
+                               [tree]='tree' [roleId]="roleId">
+            </app-role-user-selector>
           </p-tabPanel>
         </p-tabView>
       </div>
     </div>
   </perfect-scrollbar>
-
 </div>
-
-
-
 

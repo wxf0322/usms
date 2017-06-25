@@ -5,13 +5,13 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.vo.ResultStatus;
+import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.model.OperationModel;
-import net.evecom.common.usms.core.model.TreeDataModel;
+import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.service.OperationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,29 +54,29 @@ public class OperationController {
 
     @ResponseBody
     @RequestMapping(value = "tree")
-    public List<TreeDataModel> findTreeData(HttpServletRequest request) {
+    public List<TreeData> listTreeData(HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
         if(!StringUtils.isEmpty(request.getParameter("applicationId"))){
             sqlFilter.addFilter("QUERY_o#application_id_L_EQ",request.getParameter("applicationId"));
         }
-        return treeService.findTreeData("usms_operations o",sqlFilter);
+        return treeService.listTreeData("usms_operations o",sqlFilter);
     }
 
     @ResponseBody
     @RequestMapping(value = "find")
-    public OperationModel findOne(Long id) {
+    public OperationVO findOne(Long id) {
         OperationEntity operationEntity = operationService.findOne(id);
-        OperationModel operationModel = new OperationModel(operationEntity);
-        return operationModel;
+        OperationVO operationVO = new OperationVO(operationEntity);
+        return operationVO;
     }
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody OperationModel operationModel) {
-        Long entityId = operationModel.getId();
-        Long parentId = operationModel.getParentId();
+    public ResultStatus saveOrUpdate(@RequestBody OperationVO operationVO) {
+        Long entityId = operationVO.getId();
+        Long parentId = operationVO.getParentId();
         try {
-            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationModel));
+            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
             treeService.saveOrUpdateTreeData(entityId, parentId, underlineMap,
                     "usms_operations", "usms_operations_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

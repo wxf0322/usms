@@ -5,7 +5,11 @@
  */
 package net.evecom.common.usms.entity;
 
+import net.evecom.common.usms.vo.PrivilegeVO;
+import org.apache.commons.beanutils.BeanUtils;
+
 import javax.persistence.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 描述
@@ -90,6 +94,13 @@ public class PrivilegeEntity {
         this.remarks = remarks;
     }
 
+
+    public PrivilegeEntity(){
+    }
+
+    public PrivilegeEntity(PrivilegeVO privilegeVO) throws InvocationTargetException, IllegalAccessException {
+        BeanUtils.copyProperties(this, privilegeVO);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,6 +125,9 @@ public class PrivilegeEntity {
         result = 31 * result + (remarks != null ? remarks.hashCode() : 0);
         return result;
     }
+
+
+
 
     @Override
     public String toString() {

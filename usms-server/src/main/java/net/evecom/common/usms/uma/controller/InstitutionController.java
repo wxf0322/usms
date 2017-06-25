@@ -5,12 +5,12 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.vo.ResultStatus;
+import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.model.InstitutionModel;
-import net.evecom.common.usms.core.model.TreeDataModel;
+import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.uma.service.InstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,26 +55,28 @@ public class InstitutionController {
 
     @ResponseBody
     @RequestMapping(value = "tree")
-    public List<TreeDataModel> findTreeData(HttpServletRequest request) {
-        return treeService.findTreeData("usms_institutions");
+    public List<TreeData> listTreeData(HttpServletRequest request) {
+        return treeService.listTreeData("usms_institutions");
     }
 
     @ResponseBody
     @RequestMapping(value = "find")
-    public InstitutionModel findOne(Long id) {
+    public InstitutionVO findOne(Long id) {
         InstitutionEntity institutionEntity = institutionService.findOne(id);
-        InstitutionModel institutionModel = new InstitutionModel(institutionEntity);
-        return institutionModel;
+        InstitutionVO institutionVO = new InstitutionVO(institutionEntity);
+        return institutionVO;
     }
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody InstitutionModel institutionModel) {
-        Long entityId = institutionModel.getId();
-        Long parentId = institutionModel.getParentId();
+    public ResultStatus saveOrUpdate(@RequestBody InstitutionVO institutionVO) {
+        Long entityId = institutionVO.getId();
+        Long parentId = institutionVO.getParentId();
         try {
-            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(institutionModel));
-            this.treeService.saveOrUpdateTreeData(entityId, parentId, underlineMap,
+            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(institutionVO));
+            this.treeService.saveOrUpdateTreeData(entityId,
+                    parentId,
+                    underlineMap,
                     "usms_institutions",
                     "usms_institutions_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

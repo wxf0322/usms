@@ -20,7 +20,11 @@
           </ng-template>
         </p-column>
         <p-column selectionMode="multiple" [style]="{'width':'38px'}"></p-column>
-        <p-column header="应用名称" field="label" [style]="{'width':'120px'}"></p-column>
+        <p-column header="应用名称" field="label" [style]="{'width':'120px'}">
+          <ng-template  let-application="rowData" pTemplate="body" >
+            <span (click)="gotoDetail('edit', application.id)">{{application.label}}</span>
+          </ng-template>
+        </p-column>
         <p-column header="应用编码" field="name"></p-column>
         <p-column header="应用描述" field="clientDesc"></p-column>
         <p-column header="状态">

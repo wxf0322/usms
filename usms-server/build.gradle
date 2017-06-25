@@ -85,7 +85,7 @@ dependencies {
     // Jackson 将response转化为json的依赖文件
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.2'
 
-    compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 def clientPath = '../usms-client/'

@@ -5,15 +5,13 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
-import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.OperationModel;
+import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.OperationService;
-import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -26,10 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -85,7 +81,7 @@ public class OperationAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得用户实体类
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
 
         JSONObject jsonObject = new JSONObject();
         if (operationService.hasOperation(user.getId(), operationName)) {
@@ -109,12 +105,12 @@ public class OperationAPI {
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        List<OperationEntity> operations = operationService.findOperationsByAppName(application);
+        List<OperationEntity> operations = operationService.listOpersByAppName(application);
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
         for (OperationEntity operation : operations) {
-            OperationModel operationModel = new OperationModel(operation);
-            JSONObject operJson = JSONObject.fromObject(operationModel);
+            OperationVO operationVO = new OperationVO(operation);
+            JSONObject operJson = JSONObject.fromObject(operationVO);
             operJson.remove("enabled");
             operJsonArr.add(operJson);
         }

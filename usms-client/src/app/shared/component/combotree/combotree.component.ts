@@ -14,8 +14,7 @@ export class CombotreeComponent implements OnInit {
   panelVisible: boolean; // 是否显示下拉面板
 
   selectedNames: string;//被选择的数据名称
-  selectedFiles: Array<any> = [];
-  selection: TreeNode[];
+
 
   documentClickListener: any;//监听
 
@@ -34,9 +33,7 @@ export class CombotreeComponent implements OnInit {
 
   @Input() data: TreeNode[];
   @Input() selectionMode: string = 'single';
-  @Input() propagateSelectionUp: boolean;
-  @Input() propagateSelectionDown: boolean;
-
+  @Input() selectedNodes: TreeNode[];
   @Output() selectedEvent = new EventEmitter();
 
   onMouseclick(e) {
@@ -47,8 +44,7 @@ export class CombotreeComponent implements OnInit {
 
     //点击树结点则隐藏
     if (this.treeItemClick) {
-      this.panelVisible = false;
-      this.treeItemClick=false;
+      this.treeItemClick = false;
     } else {
       this.panelVisible = true;
     }
@@ -60,47 +56,16 @@ export class CombotreeComponent implements OnInit {
 
   //添加选择项
   nodeSelect(event) {
-    if (this.selectionMode === 'single') {
-      this.selectedFiles = [];
-    }
-
-    let temp = {
-      gridId: event.node.gridId,
-      gridName: event.node.label
-    };
-    this.selectedFiles.push(temp);
-
     this.showResult();
-
     //发送
-    this.selectedEvent.emit(this.selectedFiles);
+    this.selectedEvent.emit(this.selectedNodes);
   }
 
-  //移除选择项
-  nodeUnselect(event) {
-
-    let temp = {
-      gridId: event.node.gridId,
-      gridName: event.node.label
-    };
-    this.selectedFiles.splice(this.selectedFiles.indexOf(temp), 1);
-
-    this.showResult();
-  }
 
   //显示选择结果
   showResult() {
     this.selectedNames = '';
-
-    if (this.selectionMode === 'single') {
-      if (this.selectedFiles.length > 0) {
-        this.selectedNames = this.selectedFiles[0].gridName;
-      }
-    } else {
-      this.selectedFiles.forEach(temp => {
-        this.selectedNames += temp.gridName + ';'
-      });
-    }
     this.hide();
   }
+
 }

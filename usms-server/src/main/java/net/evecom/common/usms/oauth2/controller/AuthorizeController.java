@@ -7,14 +7,12 @@ package net.evecom.common.usms.oauth2.controller;
 
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
-import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -23,17 +21,13 @@ import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,16 +46,16 @@ import java.net.URISyntaxException;
 public class AuthorizeController {
 
     /**
+     * 令牌有效时间
+     */
+    @Value("${accessToken.expires}")
+    private Long accessTokenExpires;
+
+    /**
      * 注入OAuthService
      */
     @Autowired
     private OAuthService oAuthService;
-
-    /**
-     * 注入ApplicationService
-     */
-    @Autowired
-    private ApplicationService applicationService;
 
     /**
      * 注入UserService
@@ -76,28 +70,27 @@ public class AuthorizeController {
     private PasswordHelper passwordHelper;
 
     /**
-     * 获得授权码
+     * 获得授权码，支持授权码模式，与密码模式
      * client_id错误或者失效，返回400
      * 重定向成功，返回302
      * redirect_url未空，返回404
      * 其他错误，返回400
      *
-     * @param model
      * @param request
      * @return
      * @throws URISyntaxException
      * @throws OAuthSystemException
      */
     @RequestMapping(value = "/authorize", produces = "application/json; charset=UTF-8")
-    public Object authorize(Model model, HttpServletRequest request) throws URISyntaxException, OAuthSystemException {
+    public Object authorize(HttpServletRequest request) throws URISyntaxException, OAuthSystemException {
         try {
             // 构建 OAuth 授权请求
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
 
-            // 获得授权码
+            // 获得clientId
             String clientId = oauthRequest.getClientId();
 
-            // 检查传入的客户端id是否正确
+            // 检查传入的clientId是否正确
             if (!oAuthService.checkClientId(clientId)) {
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_CLIENT)
@@ -106,64 +99,25 @@ public class AuthorizeController {
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            Subject subject = SecurityUtils.getSubject();
-            UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
+            // 获得相应类型
+            String responseType = oauthRequest.getResponseType();
 
-            // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
-            if (user == null && !login(request)) {
-                model.addAttribute("client", applicationService.findByClientId(clientId));
-                return "oauth2login";
-            }
-
-            // 获取用户名
-            String loginName;
-            if (user == null) {
-                loginName = request.getParameter("loginName");
-            } else {
-                loginName = user.getLoginName();
-            }
-
-            // 生成授权码
-            String authorizationCode = null;
-            // responseType目前仅支持CODE，另外还有TOKEN
-            String responseType = oauthRequest.getParam(OAuth.OAUTH_RESPONSE_TYPE);
             if (responseType.equals(ResponseType.CODE.toString())) {
-                if (user == null) {
-                    authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
-                } else {
-                    authorizationCode = oAuthService.getCurrentAuthCode(loginName, clientId);
-                    if (StringUtils.isEmpty(authorizationCode)) {
-                        authorizationCode = oAuthService.getNewAuthCode(loginName, clientId);
-                    }
-                }
+                return authCodeGrant(request);
+            } else if (responseType.equals(ResponseType.TOKEN.toString())) {
+                return implicitGrant(request);
             }
 
-            // 进行OAuth响应构建
-            OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
-                    OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
-
-            // 设置授权码
-            builder.setCode(authorizationCode);
-
-            // 得到到客户端重定向地址
-            String redirectURI = oauthRequest.getParam(OAuth.OAUTH_REDIRECT_URI);
-
-            // 构建响应
-            OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
-
-            // 如果响应构建成功，那么获得重定向地址，并存入Redis
-            String redirectUri = oauthRequest.getRedirectURI();
-            oAuthService.addRedirectUri(redirectUri, loginName, clientId);
-
-            // 根据OAuthResponse返回ResponseEntity响应
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(new URI(response.getLocationUri()));
-            return new ResponseEntity(headers, HttpStatus.valueOf(response.getResponseStatus()));
+            OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                    .setError(OAuthError.TokenResponse.INVALID_CLIENT)
+                    .setErrorDescription(Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
         } catch (OAuthProblemException e) {
-            //出错处理
+            // 无重定向出错
             String redirectUri = e.getRedirectUri();
             if (OAuthUtils.isEmpty(redirectUri)) {
-                //告诉客户端没有传入redirectUri直接报错
+                //告诉客户端没有传入redirectUri
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_REQUEST)
                         .setErrorDescription(Constants.INVALID_REDIRECT_URI)
@@ -171,9 +125,21 @@ public class AuthorizeController {
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
+            // 无相应类型出错
+            String responseType = e.get("response_type");
+            if (OAuthUtils.isEmpty(responseType)) {
+                //告诉客户端没有传入responseType
+                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                        .setError(OAuthError.TokenResponse.INVALID_REQUEST)
+                        .setErrorDescription(Constants.INVALID_RESPONSE_TYPE)
+                        .buildJSONMessage();
+                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
+            }
+
             // 返回错误消息（如?error=）
             OAuthResponse response = OAuthASResponse
-                    .errorResponse(HttpServletResponse.SC_BAD_REQUEST).error(e)
+                    .errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                    .error(e)
                     .location(redirectUri)
                     .buildQueryMessage();
             HttpHeaders headers = new HttpHeaders();
@@ -183,13 +149,126 @@ public class AuthorizeController {
     }
 
     /**
+     * 授权码模式
+     *
+     * @param request
+     * @return
+     * @throws OAuthSystemException
+     * @throws OAuthProblemException
+     * @throws URISyntaxException
+     */
+    private Object authCodeGrant(HttpServletRequest request)
+            throws OAuthSystemException, OAuthProblemException, URISyntaxException {
+        OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
+
+        Subject subject = SecurityUtils.getSubject();
+        UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
+
+        // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
+        if (user == null && !login(request)) {
+            return "oauth2login";
+        }
+
+        // 获取用户名
+        String loginName = (user == null) ?
+                request.getParameter("loginName") : user.getLoginName();
+
+        // 获得clientId
+        String clientId = oauthRequest.getClientId();
+
+        // 生成授权码
+        String authCode;
+        // 判断用户是否为空
+        if (user == null) {
+            // 如果用户为空则生成授权码
+            authCode = oAuthService.generateAuthCode(loginName, clientId);
+        } else {
+            // 判断该用户是否已经有授权码
+            authCode = oAuthService.getAuthCode(loginName, clientId);
+            // 如果该用户没有授权码，则生成新的授权码
+            if (StringUtils.isEmpty(authCode)) {
+                authCode = oAuthService.generateAuthCode(loginName, clientId);
+            }
+        }
+
+        // 进行OAuth响应构建
+        OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
+                OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
+
+        // 设置授权码
+        builder.setCode(authCode);
+
+        // 得到到客户端重定向地址
+        String redirectURI = oauthRequest.getRedirectURI();
+
+        // 构建响应
+        OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
+
+        // 如果响应构建成功，那么获得重定向地址，并存入Redis
+        String redirectUri = oauthRequest.getRedirectURI();
+        oAuthService.addRedirectUri(redirectUri, loginName, clientId);
+
+        // 根据OAuthResponse返回ResponseEntity响应
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(response.getLocationUri()));
+
+        return new ResponseEntity(headers, HttpStatus.valueOf(response.getResponseStatus()));
+    }
+
+    /**
+     * 简化模式
+     *
+     * @param request
+     * @return
+     */
+    private Object implicitGrant(HttpServletRequest request)
+            throws OAuthProblemException, OAuthSystemException, URISyntaxException {
+        OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
+
+        Subject subject = SecurityUtils.getSubject();
+        UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
+
+        // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
+        if (user == null && !login(request)) {
+            return "oauth2login";
+        }
+
+        // 获取用户名
+        String loginName = (user == null) ?
+                request.getParameter("loginName") : user.getLoginName();
+
+        // 获得clientId
+        String clientId = oauthRequest.getClientId();
+
+        // 获得redirectUri
+        String redirectUri = oauthRequest.getRedirectURI();
+
+        OAuthASResponse.OAuthTokenResponseBuilder builder =
+                OAuthASResponse.tokenResponse(HttpServletResponse.SC_FOUND);
+
+        String accessToken = oAuthService.generateAccessToken(loginName, clientId);
+
+        builder.setAccessToken(accessToken);
+        builder.setExpiresIn(accessTokenExpires.toString());
+
+        // 构建响应
+        OAuthResponse response = builder.location(redirectUri).buildQueryMessage();
+
+        // 根据OAuthResponse返回ResponseEntity响应
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(response.getLocationUri()));
+
+        return new ResponseEntity(headers, HttpStatus.valueOf(response.getResponseStatus()));
+    }
+
+    /**
      * 登入判断
      *
      * @param request
      * @return
      */
     private boolean login(HttpServletRequest request) {
-        // loginName与password只能用post请求提交
+        // loginName 与 password 只能用post请求提交
         if ("get".equalsIgnoreCase(request.getMethod())) {
             return false;
         }
@@ -202,7 +281,7 @@ public class AuthorizeController {
             return false;
         }
 
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
         if (user == null) {
             request.setAttribute("error", Constants.UNKNOWN_ACCOUNT);
             return false;
@@ -215,6 +294,7 @@ public class AuthorizeController {
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, encryptPwd);
         Subject subject = SecurityUtils.getSubject();
         String error = null;
+
         try {
             subject.login(token);
         } catch (IncorrectCredentialsException e) {
@@ -226,6 +306,7 @@ public class AuthorizeController {
         } catch (AuthenticationException e) {
             error = e.getMessage();
         }
+
         if (error != null) {
             request.setAttribute("error", error);
             return false;

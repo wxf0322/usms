@@ -21,12 +21,11 @@ import java.util.List;
 public interface StaffDao extends BaseDao<StaffEntity, Long> {
 
     /**
-     * 描述
      * 查询网格员列表
      *
      * @param officalPost
      * @return
      */
-    List<UserEntity> findUsersByOfficalPost(String officalPost);
+    List<UserEntity> listUsersByOfficalPost(String officalPost);
 
 }

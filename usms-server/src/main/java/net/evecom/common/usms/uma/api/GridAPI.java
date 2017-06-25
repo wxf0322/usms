@@ -6,7 +6,7 @@
 package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.model.GridModel;
+import net.evecom.common.usms.vo.GridVO;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.GridService;
 import net.evecom.common.usms.uma.service.UserService;
@@ -71,12 +71,12 @@ public class GridAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获取网格数据
-        List<GridEntity> grids = userService.findGridsByLoginName(loginName);
+        List<GridEntity> grids = userService.listGridsByLoginName(loginName);
         JSONArray gridJsonArr = new JSONArray();
         // 遍历网格数据
         for (GridEntity grid : grids) {
-            GridModel gridModel = new GridModel(grid);
-            JSONObject gridJson = JSONObject.fromObject(gridModel);
+            GridVO gridVO = new GridVO(grid);
+            JSONObject gridJson = JSONObject.fromObject(gridVO);
             gridJsonArr.add(gridJson);
         }
         JSONObject resultJson = new JSONObject();
@@ -94,8 +94,8 @@ public class GridAPI {
         List<GridEntity> grids = gridService.findAll();
         JSONArray gridJsonArr = new JSONArray();
         for (GridEntity grid : grids) {
-            GridModel gridModel = new GridModel(grid);
-            JSONObject gridJson = JSONObject.fromObject(gridModel);
+            GridVO gridVO = new GridVO(grid);
+            JSONObject gridJson = JSONObject.fromObject(gridVO);
             gridJsonArr.add(gridJson);
         }
         JSONObject resultJson = new JSONObject();

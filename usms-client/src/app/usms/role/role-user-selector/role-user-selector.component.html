@@ -1,0 +1,23 @@
+<div class="ui-g">
+  <div class="ui-g-4">
+    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)">
+      <ng-template let-node pTemplate="default">
+        <span>{{node.label}}</span>
+      </ng-template>
+    </p-tree>
+  </div>
+  <div class="ui-g-8">
+    <input type="text" pInputText placeholder="关键字" [(ngModel)]="key">
+    <button pButton type="button" icon="fa-search" (click)="queryForRole()" label="查询"></button>
+    &nbsp;&nbsp; 当前组织机构：{{institutionName}}
+    <p-pickList [source]="sourceUsers" [target]="targetUsers"
+                sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"
+                [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+      <ng-template let-user pTemplate="item">
+        <div class="ui-helper-clearfix">
+          <div style="font-size:14px;">{{user.NAME}}</div>
+        </div>
+      </ng-template>
+    </p-pickList>
+  </div>
+</div>

@@ -6358,7 +6358,7 @@ function getWidthOrHeight( elem, name, extra ) {
 	// Normalize "", auto, and prepare for extra
 	val = parseFloat( val ) || 0;
 
-	// Use the active box-sizing model to add/subtract irrelevant styles
+	// Use the active box-sizing vo to add/subtract irrelevant styles
 	return ( val +
 		augmentWidthOrHeight(
 			elem,

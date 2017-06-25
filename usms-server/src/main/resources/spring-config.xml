@@ -61,7 +61,12 @@
             </props>
         </property>
         <property name="persistenceUnitName" value="defaultPersistenceUnit"/>
-        <property name="mappingResources" value="db/entity-mappings.xml"/>
+        <property name="mappingResources" >
+            <list>
+                <value>mapper/entity-mappings.xml</value>
+                <value>mapper/application.xml</value>
+            </list>
+        </property>
     </bean>
 
     <!-- 指定jpa基于Hibernate实现 -->

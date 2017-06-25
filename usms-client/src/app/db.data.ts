@@ -6,26 +6,26 @@ export const usmsMenus = [
     children: [
       {
         title: '接入系统管理',
-        routerLink: '/usms/application',
+        routerLink: '/usms/application'
       }, {
         title: '机构部门管理',
         routerLink: '/usms/institution'
       }, {
         title: '用户管理',
-        routerLink: '/usms/user',
+        routerLink: '/usms/user'
       }, {
         title: '角色管理',
-        routerLink: '/usms/role',
+        routerLink: '/usms/role'
       }, {
         title: '权限管理',
-        routerLink: '/usms/privilege',
+        routerLink: '/usms/privilege'
       }, {
         title: '用户网格关系',
-        routerLink: '/usms/grid',
+        routerLink: '/usms/grid'
       },
       /* {
        title: '操作管理',
-       routerLink: '/usms/operation',
+       routerLink: '/usms/operation'
        } */
     ]
   }

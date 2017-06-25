@@ -5,7 +5,7 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.Constants;
@@ -76,7 +76,7 @@ public class RoleAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得用户实体类
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
         JSONObject jsonObject = new JSONObject();
         if (roleService.hasRole(user.getId(), roleName)) {
             jsonObject.put("result", true);

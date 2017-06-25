@@ -38,23 +38,22 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
     private EntityManager manager;
 
     @Override
-    public Page<ApplicationEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
+    public Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from usms_applications a " + sqlFilter.getWhereSql());
         String sql = sb.toString();
-        return super.queryByPage(sql, sqlFilter.getParams().toArray(), page, size);
+        return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     @Override
-    public ApplicationEntity findByClientId(String clientId) {
-        TypedQuery<ApplicationEntity> query = manager.createNamedQuery(ApplicationEntity.QUERY_BY_CLIENT_ID,
-                ApplicationEntity.class);
-        query.setParameter(ApplicationEntity.PARAM_CLIENT_ID, clientId);
-        return JpaUtil.getSingleResult(query.getResultList());
+    public ApplicationEntity getAppByClientId(String clientId) {
+        List<ApplicationEntity> result = super.namedQuery("ApplicationDao.getAppByClientId",
+                new Object[]{clientId});
+        return JpaUtil.getSingleResult(result);
     }
 
     @Override
-    public ApplicationEntity findByClientSecret(String clientSecret) {
+    public ApplicationEntity getAppByClientSecret(String clientSecret) {
         TypedQuery<ApplicationEntity> query = manager.createNamedQuery(ApplicationEntity.QUERY_BY_CLIENT_SECRET,
                 ApplicationEntity.class);
         query.setParameter(ApplicationEntity.PARAM_CLIENT_SECRET, clientSecret);
@@ -68,7 +67,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByAppName(String appName) {
+    public List<UserEntity> listUsersByAppName(String appName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u\n")
                 .append(" where u.id in (select ur.user_id from usms_user_role ur\n")
@@ -78,12 +77,10 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
                 .append(" where p.id in (select po.oper_id from usms_privilege_operation po\n")
                 .append(" where po.oper_id in (select o.id from usms_operations o\n")
                 .append(" where o.application_id in (select a.id from usms_applications a\n")
-                .append(" where a.name = :name) and o.enabled = 1))\n")
+                .append(" where a.name = ?) and o.enabled = 1))\n")
                 .append(" and p.enabled = 1)) and r.enabled = 1)) and u.enabled = 1");
         String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql, UserEntity.class);
-        query.setParameter("name", appName);
-        return query.getResultList();
+        return super.queryForClass(UserEntity.class, sql, new Object[]{appName});
     }
 
 }

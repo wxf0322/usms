@@ -6,9 +6,9 @@
 package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.model.InstitutionModel;
-import net.evecom.common.usms.model.OperationModel;
-import net.evecom.common.usms.model.StaffModel;
+import net.evecom.common.usms.vo.InstitutionVO;
+import net.evecom.common.usms.vo.OperationVO;
+import net.evecom.common.usms.vo.StaffVO;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.uma.service.OperationService;
@@ -81,8 +81,8 @@ public class UserAPI {
         StaffEntity staffEntity = staffService.findOne(staffId);
         if (staffEntity == null) return new JSONObject();
         // 获得用户model
-        StaffModel staffModel = new StaffModel(staffEntity);
-        JSONObject staffJson = JSONObject.fromObject(staffModel);
+        StaffVO staffVO = new StaffVO(staffEntity);
+        JSONObject staffJson = JSONObject.fromObject(staffVO);
         return staffJson;
     }
 
@@ -98,8 +98,8 @@ public class UserAPI {
         List<InstitutionEntity> institutions = userEntity.getInstitutions();
         JSONArray instJsonArr = new JSONArray();
         for (InstitutionEntity institution : institutions) {
-            InstitutionModel institutionModel = new InstitutionModel(institution);
-            JSONObject instJson = JSONObject.fromObject(institutionModel);
+            InstitutionVO institutionVO = new InstitutionVO(institution);
+            JSONObject instJson = JSONObject.fromObject(institutionVO);
             instJson.remove("enabled");
             instJsonArr.add(instJson);
         }
@@ -113,7 +113,7 @@ public class UserAPI {
      * @return
      */
     private JSONObject getApplicationJSONObject(String clientId) {
-        ApplicationEntity application = applicationService.findByClientId(clientId);
+        ApplicationEntity application = applicationService.getAppByClientId(clientId);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("id", application.getId());
@@ -123,13 +123,13 @@ public class UserAPI {
         resultJson.put("clientSecret", application.getClientSecret());
 
         String appName = application.getName();
-        List<OperationEntity> operations = operationService.findOperationsByAppName(appName);
+        List<OperationEntity> operations = operationService.listOpersByAppName(appName);
 
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
         for (OperationEntity operation : operations) {
-            OperationModel operationModel = new OperationModel(operation);
-            JSONObject operJson = JSONObject.fromObject(operationModel);
+            OperationVO operationVO = new OperationVO(operation);
+            JSONObject operJson = JSONObject.fromObject(operationVO);
             operJson.remove("enabled");
             operJson.remove("applicationId");
             operJsonArr.add(operJson);
@@ -159,7 +159,7 @@ public class UserAPI {
         String clientId = oAuthService.getClientIdByAccessToken(accessToken);
 
         // 获得用户实体类
-        UserEntity user = userService.findByLoginName(loginName);
+        UserEntity user = userService.getUserByLoginName(loginName);
         // 获得员工id
         Long staffId = (user.getStaffEntity() != null) ? user.getStaffEntity().getId() : null;
 

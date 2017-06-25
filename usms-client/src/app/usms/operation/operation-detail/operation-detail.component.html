@@ -10,30 +10,30 @@
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
-              <label class="required control-label">资源名称</label>
+              <label class="required control-label">资源名称:</label>
               <input pInputText [(ngModel)]="detailData.label" name="label" #label="ngModel" required>
               <div class="validation" *ngIf="label.errors?.required">该项必填</div>
             </div>
             <div class="ui-g-6">
-              <label class="required control-label">资源编码</label>
+              <label class="required control-label">资源编码:</label>
               <input pInputText [(ngModel)]="detailData.name" name="name" #name="ngModel" required>
               <div class="validation" *ngIf="name.errors?.required">该项必填</div>
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
-              <label class="control-label">资源URL</label>
+              <label class="control-label">资源URL:</label>
               <input pInputText [(ngModel)]="detailData.resUrl" [ngModelOptions]="{standalone:true}">
             </div>
             <div class="ui-g-6">
-              <label class="control-label">资源图片路径</label>
+              <label class="control-label">资源图片路径:</label>
               <input pInputText [(ngModel)]="detailData.iconPath" [ngModelOptions]="{standalone:true}">
 
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
-              <label class="required control-label">资源类型</label>
+              <label class="required control-label">资源类型:</label>
               <p-radioButton name="optType" value="1" label="菜单"
                              [(ngModel)]="detailData.optType"></p-radioButton>
               &nbsp;
@@ -42,8 +42,8 @@
 
             </div>
             <div class="ui-g-6">
-              <label class="control-label">状态</label>
-              <p-radioButton name="enbled" value="1" label="激活"
+              <label class="control-label">状态:</label>
+              <p-radioButton name="enbled" value="1" label="正常"
                              [(ngModel)]="detailData.enabled"></p-radioButton>
               &nbsp;
               <p-radioButton name="enbled" value="0" label="冻结"

@@ -12,7 +12,7 @@ import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.OperationModel;
+import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.ApplicationDao;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import org.slf4j.Logger;
@@ -61,8 +61,8 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     }
 
     @Override
-    public Page<ApplicationEntity> findByPage(int page, int size , SqlFilter sqlFilter) {
-        return applicationDao.findByPage(page, size ,sqlFilter);
+    public Page<ApplicationEntity> listAppsByPage(int page, int size , SqlFilter sqlFilter) {
+        return applicationDao.listAppsByPage(page, size ,sqlFilter);
     }
 
     @Override
@@ -70,13 +70,13 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
         applicationEntity.setClientId(UUID.randomUUID().toString());
         applicationEntity.setClientSecret(UUID.randomUUID().toString());
         applicationEntity = applicationDao.saveOrUpdate(applicationEntity);
-        OperationModel operationModel  = new OperationModel();
-        operationModel.setLabel(applicationEntity.getLabel());
-        operationModel.setName(applicationEntity.getName());
-        operationModel.setEnabled(applicationEntity.getEnabled());
-        operationModel.setOptType(3L);
+        OperationVO operationVO = new OperationVO();
+        operationVO.setLabel(applicationEntity.getLabel());
+        operationVO.setName(applicationEntity.getName());
+        operationVO.setEnabled(applicationEntity.getEnabled());
+        operationVO.setOptType(3L);
         try {
-            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationModel));
+            Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
             underlineMap.put("APPLICATION_ID", applicationEntity.getId());
             treeService.saveOrUpdateTreeData(null, 0L, underlineMap,
                     "usms_operations", "usms_operations_s");
@@ -93,13 +93,13 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     }
 
     @Override
-    public ApplicationEntity findByClientId(String clientId) {
-        return applicationDao.findByClientId(clientId);
+    public ApplicationEntity getAppByClientId(String clientId) {
+        return applicationDao.getAppByClientId(clientId);
     }
 
     @Override
-    public ApplicationEntity findByClientSecret(String clientSecret) {
-        return applicationDao.findByClientSecret(clientSecret);
+    public ApplicationEntity getAppByClientSecret(String clientSecret) {
+        return applicationDao.getAppByClientSecret(clientSecret);
     }
 
     /**
@@ -109,8 +109,8 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByAppName(String appName) {
-        return applicationDao.findUsersByAppName(appName);
+    public List<UserEntity> listUsersByAppName(String appName) {
+        return applicationDao.listUsersByAppName(appName);
     }
 
 }

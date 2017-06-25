@@ -26,7 +26,7 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
     /**
      * 查询应用列表
      */
-    Page<ApplicationEntity> findByPage(int page, int size, SqlFilter sqlFilter);
+    Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter);
 
     /**
      * 创建应用
@@ -50,7 +50,7 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
      * @param clientId
      * @return
      */
-    ApplicationEntity findByClientId(String clientId);
+    ApplicationEntity getAppByClientId(String clientId);
 
     /**
      * 根据ClientSecret查询单个
@@ -58,7 +58,7 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
      * @param clientSecret
      * @return
      */
-    ApplicationEntity findByClientSecret(String clientSecret);
+    ApplicationEntity getAppByClientSecret(String clientSecret);
 
     /**
      * 根据应用编码查询用户列表
@@ -66,6 +66,6 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
      * @param appName
      * @return
      */
-    List<UserEntity> findUsersByAppName(String appName);
+    List<UserEntity> listUsersByAppName(String appName);
 
 }

@@ -105,7 +105,7 @@ public class AccessTokenController {
             String clientId = oauthRequest.getClientId();
 
             // 检查重定向地址是否和上次的一样
-            String preRedirectUri = oAuthService.getRedirectUriByRelation(loginName, clientId);
+            String preRedirectUri = oAuthService.getRedirectUri(loginName, clientId);
 
             if (!preRedirectUri.equals(oauthRequest.getRedirectURI())) {
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
@@ -115,8 +115,8 @@ public class AccessTokenController {
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            // 获得新的Access Token
-            String accessToken = oAuthService.getNewAccessToken(loginName, clientId, authCode);
+            // 生成新的Access Token
+            String accessToken = oAuthService.generateAccessToken(loginName, clientId, authCode);
 
             // 生成OAuth响应
             OAuthResponse response = OAuthASResponse.tokenResponse(HttpServletResponse.SC_OK)

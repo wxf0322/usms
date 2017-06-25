@@ -5,9 +5,9 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.UserModel;
+import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.uma.service.*;
 import net.sf.json.JSONArray;
@@ -87,41 +87,41 @@ public class UsersAPI {
      * @return
      */
     @RequestMapping(value = "/v1/openapi/users", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getUsers(HttpServletRequest request) {
+    public ResponseEntity listUsers(HttpServletRequest request) {
         List<UserEntity> users = null;
         //获取管辖区域编码
         String gridCode = request.getParameter("grid");
         if (StringUtils.isNotEmpty(gridCode)) {
-            users = gridService.findUsersByGridCode(gridCode);
+            users = gridService.listUsersByGridCode(gridCode);
         }
         //获取组织机构编码
         String instName = request.getParameter("institution");
         if (StringUtils.isNotEmpty(instName)) {
-            users = institutionService.findUsersByInstName(instName);
+            users = institutionService.listUsersByInstName(instName);
         }
         //获取应用编码
         String appName = request.getParameter("application");
         if (StringUtils.isNotEmpty(appName)) {
-            users = applicationService.findUsersByAppName(appName);
+            users = applicationService.listUsersByAppName(appName);
         }
         //获取权限编码
         String privName = request.getParameter("privilege");
         if (StringUtils.isNotEmpty(privName)) {
-            users = privilegeService.findUsersByPrivName(privName);
+            users = privilegeService.listUsersByPrivName(privName);
         }
         //获取操作编码
         String operName = request.getParameter("operation");
         if (StringUtils.isNotEmpty(operName)) {
-            users = operationService.findUsersByOperName(operName);
+            users = operationService.listUsersByOperName(operName);
         }
         //获取角色编码
         String roleName = request.getParameter("role");
         if (StringUtils.isNotEmpty(roleName)) {
-            users = roleService.findUsersByRoleName(roleName);
+            users = roleService.listUsersByRoleName(roleName);
         }
         String officalPost = request.getParameter("offical_post");
         if (StringUtils.isNotEmpty(officalPost)) {
-            users = staffService.findUsersByOfficalPost(officalPost);
+            users = staffService.listUsersByOfficalPost(officalPost);
         }
         JSONObject usersJson = new JSONObject();
         if (users == null) {
@@ -146,15 +146,15 @@ public class UsersAPI {
         List<UserEntity> users = null;
         String loginNames = request.getParameter("login_names");
         if (StringUtils.isNotEmpty(loginNames)) {
-            users = userService.findByLoginNames(loginNames.split(","));
+            users = userService.listUsersByLoginNames(loginNames.split(","));
         }
         String roleNames = request.getParameter("roles");
         if (StringUtils.isNotEmpty(roleNames)) {
-            users = roleService.findUsersByRoleNames(roleNames.split(","));
+            users = roleService.listUsersByRoleNames(roleNames.split(","));
         }
         String instNames = request.getParameter("institutions");
         if (StringUtils.isNotEmpty(instNames)) {
-            users = institutionService.findUsersByInstNames(instNames.split(","));
+            users = institutionService.listUsersByInstNames(instNames.split(","));
         }
         JSONObject usersJson = new JSONObject();
         if (users == null) {
@@ -180,8 +180,8 @@ public class UsersAPI {
         } else {
             JSONArray usersJsonArr = new JSONArray();
             for (UserEntity user : users) {
-                UserModel userModel = new UserModel(user);
-                JSONObject userJson = JSONObject.fromObject(userModel);
+                UserVO userVO = new UserVO(user);
+                JSONObject userJson = JSONObject.fromObject(userVO);
                 userJson.remove("enabled");
                 userJson.remove("roleNames");
                 usersJsonArr.add(userJson);

@@ -24,10 +24,10 @@ import {SubmitDirective} from './validation/submit-directive';
 import {PerfectScrollbarModule} from 'angular2-perfect-scrollbar';
 import {PerfectScrollbarConfigInterface} from 'angular2-perfect-scrollbar';
 import {PaginatorComponent} from './component/paginator/paginator.component';
-import {CombotreeComponent} from './component/combotree/combotree.component';
 import {TopBarComponent} from './component/top-bar/top-bar.component';
 import {PipeModule} from './pipe/pipe.module';
 import {CustomFormsModule} from 'ng2-validation';
+import {CombotreeComponent} from "./component/combotree/combotree.component";
 
 
 /* directive */
@@ -76,8 +76,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ValidationRuleEngine, SubmitDirective,
     // 分页
     PaginatorComponent,
-    CombotreeComponent,
-    TopBarComponent,
+    TopBarComponent, CombotreeComponent,
     // ng2 validation
     CustomFormsModule
   ]

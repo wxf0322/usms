@@ -24,8 +24,13 @@ public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
 
     /**
      * 查询权限列表
+     *
+     * @param page
+     * @param size
+     * @param sqlFilter
+     * @return
      */
-    Page<ApplicationEntity> findByPage(int page, int size, SqlFilter sqlFilter);
+    Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter);
 
     /**
      * 根据ClientId查找对象
@@ -33,7 +38,7 @@ public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
      * @param clientId
      * @return
      */
-    ApplicationEntity findByClientId(String clientId);
+    ApplicationEntity getAppByClientId(String clientId);
 
     /**
      * 根据ClientSecret查找对象
@@ -41,7 +46,7 @@ public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
      * @param clientSecret
      * @return
      */
-    ApplicationEntity findByClientSecret(String clientSecret);
+    ApplicationEntity getAppByClientSecret(String clientSecret);
 
     /**
      * 根据应用编码查询用户列表
@@ -49,5 +54,5 @@ public interface ApplicationDao extends BaseDao<ApplicationEntity, Long> {
      * @param appName
      * @return
      */
-    List<UserEntity> findUsersByAppName(String appName);
+    List<UserEntity> listUsersByAppName(String appName);
 }

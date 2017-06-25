@@ -10,54 +10,54 @@
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="required control-label">标识码</label>
-                <input type="text" pInputText  [(ngModel)]="detailData.clientId"
+                <label class="required control-label">标识码:</label>
+                <input type="text" size="40" pInputText [(ngModel)]="detailData.clientId"
                        [ngModelOptions]="{standalone: true}" [disabled]="true">
               </div>
               <div class="ui-g-6">
-                <label class="required control-label">应用密码</label>
-                <input type="text" pInputText [(ngModel)]="detailData.clientSecret"
-                       [ngModelOptions]="{standalone: true}"  [disabled]="true">
+                <label class="required control-label">应用密码:</label>
+                <input type="text" size="40" pInputText [(ngModel)]="detailData.clientSecret"
+                       [ngModelOptions]="{standalone: true}" [disabled]="true">
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="required control-label">应用名称</label>
+                <label class="required control-label">应用名称:</label>
                 <input pInputText [(ngModel)]="detailData.label"
-                       name="label" #label="ngModel"  required >
+                       name="label" #label="ngModel" required>
                 <div class="validation" *ngIf="label.errors?.required">该项必填</div>
               </div>
               <div class="ui-g-6 ">
-                <label class=" required control-label">应用编码</label>
+                <label class=" required control-label">应用编码:</label>
                 <input pInputText [(ngModel)]="detailData.name"
-                       name="name" #name="ngModel"  required >
+                       name="name" #name="ngModel" required>
                 <div class="validation" *ngIf="name.errors?.required">该项必填</div>
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="control-label">首页地址</label>
+                <label class="control-label">首页地址:</label>
                 <input pInputText [(ngModel)]="detailData.clientUri" [ngModelOptions]="{standalone: true}">
               </div>
               <div class="ui-g-6">
-                <label class="control-label">回调地址</label>
+                <label class="control-label">回调地址:</label>
                 <input pInputText [(ngModel)]="detailData.redirectUri" [ngModelOptions]="{standalone: true}">
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="control-label">登出地址</label>
+                <label class="control-label">登出地址:</label>
                 <input pInputText [(ngModel)]="detailData.logoutUri" [ngModelOptions]="{standalone: true}">
               </div>
               <div class="ui-g-6">
-                <label class="control-label">图标地址</label>
+                <label class="control-label">图标地址:</label>
                 <input pInputText [(ngModel)]="detailData.logoUri" [ngModelOptions]="{standalone: true}">
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
-                <label class="control-label">状态</label>
-                <p-radioButton name="enbled" value="1" label="激活"
+                <label class="control-label">状态:</label>
+                <p-radioButton name="enbled" value="1" label="正常"
                                [(ngModel)]="detailData.enabled"></p-radioButton>
                 &nbsp;
                 <p-radioButton name="enbled" value="0" label="冻结"
@@ -65,9 +65,9 @@
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
-              <div class="ui-g-6">
-                <label class="control-label">应用描述</label>
-                <input pInputText style="width: 70%;height: 50%" [(ngModel)]="detailData.clientDesc"
+              <div class="ui-g-12">
+                <label class="control-label">应用描述:</label>
+                <input pInputText size="80" [(ngModel)]="detailData.clientDesc"
                        [ngModelOptions]="{standalone: true}">
               </div>
             </div>

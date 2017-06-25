@@ -8,10 +8,10 @@ package net.evecom.common.usms.oauth2.service;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 /**
- * 描述 OAuth Service层
+ * 描述 OAuthService
  *
  * @author Wash Wang
- * @version 1.0
+ * @version 2.0
  * @created 2017/4/25 8:50
  */
 public interface OAuthService {
@@ -49,8 +49,7 @@ public interface OAuthService {
      * @param clientId
      * @return
      */
-    String getRedirectUriByRelation(String loginName, String clientId);
-
+    String getRedirectUri(String loginName, String clientId);
 
     /**
      * 验证auth code是否有效
@@ -86,6 +85,7 @@ public interface OAuthService {
 
     /**
      * 根据accessToke获取ClientId
+     *
      * @param accessToken
      * @return
      */
@@ -146,11 +146,24 @@ public interface OAuthService {
     void deleteAccountByLoginName(String loginName);
 
     /**
-     * 获得新的AccessToken，并删除旧的AccessToken和已获得的AuthCode
+     * 获得新的AccessToken，并删除旧的AccessToken和AuthCode
      *
+     * @param loginName
+     * @param clientId
+     * @param authCode
+     * @return
+     * @throws OAuthSystemException
+     */
+    String generateAccessToken(String loginName, String clientId, String authCode) throws OAuthSystemException;
+
+    /**
+     * 获得新的AccessToken，并删除旧的AccessToken
+     *
+     * @param loginName
+     * @param clientId
      * @return
      */
-    String getNewAccessToken(String loginName, String clientId, String authCode) throws OAuthSystemException;
+    String generateAccessToken(String loginName, String clientId) throws OAuthSystemException;
 
     /**
      * 获得新的AuthCode，并删除旧的AuthCode
@@ -160,7 +173,7 @@ public interface OAuthService {
      * @return
      * @throws OAuthSystemException
      */
-    String getNewAuthCode(String loginName, String clientId) throws OAuthSystemException;
+    String generateAuthCode(String loginName, String clientId) throws OAuthSystemException;
 
     /**
      * 获得当前的授权码
@@ -169,6 +182,6 @@ public interface OAuthService {
      * @param clientId
      * @return
      */
-    String getCurrentAuthCode(String loginName, String clientId);
+    String getAuthCode(String loginName, String clientId);
 
 }

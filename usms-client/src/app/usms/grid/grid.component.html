@@ -1,13 +1,21 @@
 <p-tabView>
-
   <p-tabPanel header="用户角度">
     <div class="ui-g">
       <div class="ui-g-4">
-        <p-panel header="网格信息">
-          <p-tree [value]="tree"></p-tree>
+        <p-panel header="组织机构树">
+          <p-tree [value]="institutionTree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)">
+            <ng-template let-node pTemplate="default">
+          <span (mouseenter)="node['enter']=true" (mouseleave)="node['enter']=false">
+            <span>{{node.label}}</span>
+          </span>
+            </ng-template>
+          </p-tree>
+       <!--   <p-tree [value]="gridTree"></p-tree>-->
         </p-panel>
       </div>
       <div class="ui-g-8">
+        <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
+        <button pButton type="button" icon="fa-search" (click)="query()" label="查询"></button>
         <p-dataTable [value]="viewData" selectionMode="multiple">
           <p-column header="序号" [style]="{'width':'60px'}">
             <ng-template let-ri="rowIndex" pTemplate="body">
@@ -17,20 +25,23 @@
           <p-column selectionMode="multiple" [style]="{'width':'38px'} "></p-column>
           <p-column field="loginName" header="账号"></p-column>
           <p-column field="name" header="用户姓名"></p-column>
-          <p-column header="机构"></p-column>
+          <p-column header="关联网格"></p-column>
           <p-column header="操作">
-            <ng-template let-role="rowData" pTemplate="body">
-              <button type="button" pButton label="关联网格" icon="fa-edit"></button>
+            <ng-template let-grid="rowData" pTemplate="body">
+              <button type="button" pButton label="关联网格" icon="fa-edit" (click)="showDialog(grid.id)"></button>
             </ng-template>
           </p-column>
         </p-dataTable>
+        <eve-paginator [rows]="page.size" [totalRecords]="page.totalElements"
+                       [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
+                       (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
       </div>
     </div>
   </p-tabPanel>
 
   <p-tabPanel header="网格角度">
     <div class="ui-g">
-      <p-treeTable [value]="tree">
+      <p-treeTable [value]="tableTree">
         <p-header>Basic</p-header>
         <p-column field="label" header="网格名称"></p-column>
         <p-column field="code" header="网格编码"></p-column>
@@ -38,11 +49,19 @@
         <p-column field="descripiton" header="描述"></p-column>
         <p-column header="操作">
           <ng-template let-node="rowData" pTemplate="body">
-            <button type="button" pButton label="关联用户" icon="fa-edit"></button>
+            <button type="button" pButton label="关联用户" icon="fa-edit" (click)="gotoUserAssociate(node)"></button>
           </ng-template>
         </p-column>
       </p-treeTable>
     </div>
   </p-tabPanel>
-
 </p-tabView>
+
+<p-dialog header="关联网格" [width]="400" [height]="400" [(visible)]="display">
+  <p-tree [value]="dialogTree" selectionMode="checkbox" [(selection)]="selectedNodes">
+  </p-tree>
+  <div class="e-right">
+    <button type="button" pButton label="确定" (click)="save()"></button>
+    <button type="button" pButton label="取消" (click)="cancel()"></button>
+  </div>
+</p-dialog>

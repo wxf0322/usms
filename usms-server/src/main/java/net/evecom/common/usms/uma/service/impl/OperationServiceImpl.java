@@ -40,32 +40,36 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
 
     /**
      * 获取应用操作列表
+     *
      * @param appName
      * @return
      */
     @Override
-    public List<OperationEntity> findOperationsByAppName(String appName) {
-        return operationDao.findOperationsByAppName(appName);
+    public List<OperationEntity> listOpersByAppName(String appName) {
+        return operationDao.listOpersByAppName(appName);
     }
 
     /**
      * 根据操作编码查询用户列表
+     *
      * @param operName
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByOperName(String operName) {
-        return operationDao.findUsersByOperName(operName);
+    public List<UserEntity> listUsersByOperName(String operName) {
+        return operationDao.listUsersByOperName(operName);
     }
 
     /**
      * 判断是否拥有该操作
+     *
+     * @param userId
+     * @param operName
      * @return
-     * @param userID,operationName
      */
     @Override
-    public boolean hasOperation(long userID,String operName) {
-        return operationDao.hasOperation(userID,operName);
+    public boolean hasOperation(long userId, String operName) {
+        return operationDao.hasOperation(userId, operName);
     }
 
 }

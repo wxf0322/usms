@@ -9,8 +9,7 @@ import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.model.UserModel;
-import net.evecom.common.usms.uma.dao.StaffDao;
+import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述 用户Service实现
@@ -41,9 +39,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private StaffDao staffDao;
-
     /**
      * 注入密码工具类
      */
@@ -56,10 +51,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         return userDao;
     }
 
+    /**
+     * @param userVO
+     * @return
+     */
     @Override
-    public UserEntity createUser(UserModel userModel) {
+    public UserEntity createUser(UserVO userVO) {
         UserEntity userEntity = new UserEntity();
-        userEntity = userModel.mergeUserEntity(userEntity);
+        userEntity = userVO.mergeUserEntity(userEntity);
         userEntity.setPassword("123456");
         userEntity.setTimeCreated(new Date());
         //加密密码
@@ -67,10 +66,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         return userDao.saveOrUpdate(userEntity);
     }
 
+    /**
+     * @param userVO
+     * @return
+     */
     @Override
-    public UserEntity updateUser(UserModel userModel) {
-        UserEntity found = userDao.findOne(userModel.getId());
-        found = userModel.mergeUserEntity(found);
+    public UserEntity updateUser(UserVO userVO) {
+        UserEntity found = userDao.findOne(userVO.getId());
+        found = userVO.mergeUserEntity(found);
         return userDao.saveOrUpdate(found);
     }
 
@@ -88,9 +91,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         userDao.saveOrUpdate(user);
     }
 
+    /**
+     * @param page
+     * @param size
+     * @param sqlFilter
+     * @return
+     */
     @Override
-    public Page<UserModel> findModelsByPage(int page, int size, SqlFilter sqlFilter) {
-        return userDao.findModelsByPage(page, size,sqlFilter);
+    public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
+        return userDao.listUsersByPage(page, size, institutionId, sqlFilter);
     }
 
     /**
@@ -100,29 +109,29 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      * @return
      */
     @Override
-    public UserEntity findByLoginName(String loginName) {
-        return userDao.findByLoginName(loginName);
+    public UserEntity getUserByLoginName(String loginName) {
+        return userDao.getUserByLoginName(loginName);
     }
 
     @Override
-    public List<UserEntity> findByLoginNames(String[] loginNames) {
-        return userDao.findByLoginNames(loginNames);
+    public List<UserEntity> listUsersByLoginNames(String[] loginNames) {
+        return userDao.listUsersByLoginNames(loginNames);
     }
 
     /**
      * 通过id查找用户权限
      *
-     * @param id
+     * @param userId
      * @return
      */
     @Override
-    public List<OperationEntity> findOperationsById(Long id) {
-        return userDao.findOperationsById(id);
+    public List<OperationEntity> listOpersByUserId(Long userId) {
+        return userDao.listOpersByUserId(userId);
     }
 
     @Override
-    public List<ApplicationEntity> findApplicationsById(Long id) {
-        return userDao.findApplicationsById(id);
+    public List<ApplicationEntity> listAppsByUserId(Long userId) {
+        return userDao.listAppsByUserId(userId);
     }
 
     /**
@@ -142,27 +151,68 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
 
     /**
      * 根据登入名获取网格的数据
+     *
      * @param loginName
      * @return
      */
     @Override
-    public List<GridEntity> findGridsByLoginName(String loginName) {
-        return userDao.findGridsByLoginName(loginName);
+    public List<GridEntity> listGridsByLoginName(String loginName) {
+        return userDao.listGridsByLoginName(loginName);
     }
 
+
+    /**
+     * @param userId
+     * @param institutionIds
+     */
     @Override
     public void updateInstitutions(Long userId, String[] institutionIds) {
-        userDao.updateInstitutions(userId,institutionIds);
+        userDao.updateInstitutions(userId, institutionIds);
     }
 
+    /**
+     * @param userId
+     * @return
+     */
     @Override
-    public List<InstitutionEntity> findInstByUserId(Long userId) {
-        return userDao.findInstByUserId(userId);
+    public List<InstitutionEntity> listInstsByUserId(Long userId) {
+        return userDao.listInstsByUserId(userId);
     }
 
+    /**
+     * @param userId
+     * @param institutionId
+     */
     @Override
     public void createUserInstitution(Long userId, Long institutionId) {
-        userDao.createUserInstitution(userId,institutionId);
+        userDao.createUserInstitution(userId, institutionId);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<RoleEntity> listTargetRoles(Long userId) {
+        return userDao.listTargetRoles(userId);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<RoleEntity> listSourceRoles(Long userId) {
+        return userDao.listSourceRoles(userId);
+    }
+
+    /**
+     * @param userId
+     * @param roleIds
+     */
+    @Override
+    public void updateRoles(Long userId, String[] roleIds) {
+        userDao.updateRoles(userId, roleIds);
     }
 
 }

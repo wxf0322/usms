@@ -8,25 +8,25 @@
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="control-label">父机构名称</label>
+          <label class="control-label">父机构名称:</label>
           <span>{{parentLabel}}</span>
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="required control-label">中文名称</label>
+          <label class="required control-label">中文名称:</label>
           <input pInputText [(ngModel)]="detailData.label" name="label" #label="ngModel" required>
           <div class="validation" *ngIf="label.errors?.required">该项必填</div>
         </div>
         <div class="ui-g-6">
-          <label class="required control-label">英文编码</label>
+          <label class="required control-label">英文编码:</label>
           <input pInputText [(ngModel)]="detailData.name" name="name" #name="ngModel" required>
           <div class="validation" *ngIf="name.errors?.required">该项必填</div>
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class=" control-label">类型</label>
+          <label class=" control-label">类型:</label>
           <p-radioButton name="type" value="1" label="机构"
                          [(ngModel)]="detailData.type"></p-radioButton>
           &nbsp;
@@ -34,8 +34,8 @@
                          [(ngModel)]="detailData.type"></p-radioButton>
         </div>
         <div class="ui-g-6">
-          <label class="control-label">状态</label>
-          <p-radioButton name="enbled" value="1" label="激活"
+          <label class="control-label">状态:</label>
+          <p-radioButton name="enbled" value="1" label="正常"
                          [(ngModel)]="detailData.enabled"></p-radioButton>
           &nbsp;
           <p-radioButton name="enbled" value="0" label="冻结"
@@ -44,27 +44,27 @@
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="control-label">行政区划</label>
+          <label class="control-label">行政区划:</label>
           <input pInputText [(ngModel)]="detailData.adminDivision" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="ui-g-6">
-          <label class="control-label">行政区划代码</label>
+          <label class="control-label">行政区划代码:</label>
           <input pInputText [(ngModel)]="detailData.adminDivisionCode" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="control-label">社会信用代码</label>
+          <label class="control-label">社会信用代码:</label>
           <input pInputText [(ngModel)]="detailData.socialCreditUnicode" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="ui-g-6">
-          <label class="control-label">组织机构代码</label>
+          <label class="control-label">组织机构代码:</label>
           <input pInputText [(ngModel)]="detailData.orgCode" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="control-label">同级手动排序</label>
+          <label class="control-label">同级手动排序:</label>
           <input pInputText [(ngModel)]="detailData.manualSn" [ngModelOptions]="{standalone: true}">
         </div>
       </div>

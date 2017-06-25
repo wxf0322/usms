@@ -40,11 +40,11 @@ public class StaffDaoImpl extends BaseDaoImpl<StaffEntity, Long>
      * @param officalPost
      */
     @Override
-    public List<UserEntity> findUsersByOfficalPost(String officalPost) {
+    public List<UserEntity> listUsersByOfficalPost(String officalPost) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_users u where u.staff_id in\n")
                 .append(" (select s.id from usms_staffs s where s.offical_post = :officalPost)\n")
-                .append("  and u.enabled=1");
+                .append(" and u.enabled=1");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql, UserEntity.class);
         query.setParameter("officalPost", officalPost);

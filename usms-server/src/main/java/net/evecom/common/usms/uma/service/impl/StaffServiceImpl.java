@@ -48,8 +48,8 @@ public class StaffServiceImpl extends BaseServiceImpl<StaffEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByOfficalPost(String officalPost) {
-        return staffDao.findUsersByOfficalPost(officalPost);
+    public List<UserEntity> listUsersByOfficalPost(String officalPost) {
+        return staffDao.listUsersByOfficalPost(officalPost);
     }
 
 }

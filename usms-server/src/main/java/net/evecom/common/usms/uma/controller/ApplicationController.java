@@ -5,19 +5,12 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import net.evecom.common.usms.core.model.ResultStatus;
-import net.evecom.common.usms.core.service.TreeService;
-import net.evecom.common.usms.core.util.MapUtil;
+import net.evecom.common.usms.core.vo.ResultStatus;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.model.OperationModel;
 import net.evecom.common.usms.uma.service.ApplicationService;
-import net.evecom.common.usms.uma.service.OperationService;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.spi.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,13 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * 操作相关Service层
+ *
  * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-22 9:11
@@ -40,6 +32,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/application")
 public class ApplicationController {
+
     /**
      * 注入applicationService
      */
@@ -48,13 +41,13 @@ public class ApplicationController {
 
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<ApplicationEntity> list(Integer page, Integer size, HttpServletRequest request) {
+    public Page<ApplicationEntity> listAppsByPage(Integer page, Integer size, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
         if (!StringUtils.isEmpty(request.getParameter("key"))) {
             sqlFilter.addOrFilter("QUERY_a#label_S_LK", request.getParameter("key"));
             sqlFilter.addOrFilter("QUERY_a#name_S_LK", request.getParameter("key"));
         }
-        return applicationService.findByPage(page, size,sqlFilter);
+        return applicationService.listAppsByPage(page, size,sqlFilter);
     }
 
     @ResponseBody
@@ -84,6 +77,7 @@ public class ApplicationController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(String columns) {
+        // 多行删除写法
         if (StringUtils.isNotEmpty(columns)) {
             String[] ids = columns.split(",");
             long[] entityIds = Arrays.stream(ids).mapToLong(Long::valueOf).toArray();

@@ -5,18 +5,18 @@
  */
 package net.evecom.common.usms.uma.controller;
 
-import net.evecom.common.usms.core.model.ResultStatus;
+import net.evecom.common.usms.core.vo.ResultStatus;
 import net.evecom.common.usms.core.util.SqlFilter;
+import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.InstitutionEntity;
+import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.model.UserModel;
-import net.evecom.common.usms.uma.service.InstitutionService;
+import net.evecom.common.usms.vo.GridVO;
+import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,28 +40,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private InstitutionService institutionService;
-
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<UserModel> list(Integer page, Integer size, HttpServletRequest request) {
+    public Page<UserVO> listUsersByPage(Integer page, Integer size, Long institutionId, HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!StringUtils.isEmpty(request.getParameter("key"))) {
-            sqlFilter.addOrFilter("QUERY_u#login_name_S_LK", request.getParameter("key"));
-            sqlFilter.addOrFilter("QUERY_u#name_S_LK", request.getParameter("key"));
+        String key = request.getParameter("key");
+        if (!StringUtils.isEmpty(key)) {
+            sqlFilter.addOrFilter("QUERY_u#login_name_S_LK", key);
+            sqlFilter.addOrFilter("QUERY_u#name_S_LK", key);
         }
-        if (!StringUtils.isEmpty(request.getParameter("institutionName"))) {
-            List<UserEntity> entitiesList =
-                    institutionService.findUsersByInstName(request.getParameter("institutionName"));
-            List<UserModel> modelsList = new ArrayList<>();
-            for (UserEntity userEntity : entitiesList) {
-                UserModel userModel = new UserModel(userEntity);
-                modelsList.add(userModel);
-            }
-            return new PageImpl<>(modelsList, new PageRequest(page, size), modelsList.size());
-        }
-        return userService.findModelsByPage(page, size, sqlFilter);
+        return userService.listUsersByPage(page, size, institutionId, sqlFilter);
     }
 
     @ResponseBody
@@ -76,23 +64,31 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "find")
-    public UserModel findOne(Long id) {
+    public UserVO findOne(Long id) {
         UserEntity user = userService.findOne(id);
-        UserModel userModel = new UserModel(user);
-        return userModel;
+        UserVO userVO = new UserVO(user);
+        return userVO;
     }
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody UserModel userModel, HttpServletRequest request) {
+    public ResultStatus saveOrUpdate(@RequestBody UserVO userVO, HttpServletRequest request) {
         String institutionId = request.getParameter("institutionId");
-        if (userModel.getId() == null) {
-            UserEntity userEntity = userService.createUser(userModel);
+        String[] roleIdArray;
+        if (StringUtils.isEmpty(userVO.getRoleIds())) {
+            roleIdArray = null;
+        } else {
+            roleIdArray = userVO.getRoleIds().split(",");
+        }
+        if (userVO.getId() == null) {
+            UserEntity userEntity = userService.createUser(userVO);
             if (!StringUtils.isEmpty(institutionId)) {
                 userService.createUserInstitution(userEntity.getId(), Long.valueOf(institutionId));
             }
+            userService.updateRoles(userEntity.getId(), roleIdArray);
         } else {
-            userService.updateUser(userModel);
+            userService.updateUser(userVO);
+            userService.updateRoles(userVO.getId(), roleIdArray);
         }
         return new ResultStatus(true, "");
     }
@@ -111,20 +107,46 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "institutions/update")
     public ResultStatus updateInstitutions(Long userId, String institutionIds) {
-        String[] institutionIdArray;
+        String[] ids;
         if (StringUtils.isEmpty(institutionIds)) {
-            institutionIdArray = null;
+            ids = null;
         } else {
-            institutionIdArray = institutionIds.split(",");
+            ids = institutionIds.split(",");
         }
-        userService.updateInstitutions(userId, institutionIdArray);
+        userService.updateInstitutions(userId, ids);
         return new ResultStatus(true, "");
     }
 
     @ResponseBody
     @RequestMapping(value = "institutions")
     public List<InstitutionEntity> findInstByUserId(Long userId) {
-        return userService.findInstByUserId(userId);
+        return userService.listInstsByUserId(userId);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "grids")
+    public List<GridVO> listGridsByUserId(Long userId) {
+        UserEntity user = userService.findOne(userId);
+        String loginName = user.getLoginName();
+        List<GridEntity> grids = userService.listGridsByLoginName(loginName);
+        List<GridVO> result = new ArrayList<>();
+        for (GridEntity grid : grids) {
+            GridVO gridVO = new GridVO(grid);
+            result.add(gridVO);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "roles/target")
+    public List<RoleEntity> listTargetRoles(Long userId) {
+        return userService.listTargetRoles(userId);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "roles/source")
+    public List<RoleEntity> listSourceRoles(Long userId) {
+        return userService.listSourceRoles(userId);
     }
 
 }

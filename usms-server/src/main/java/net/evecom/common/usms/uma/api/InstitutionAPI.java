@@ -5,9 +5,9 @@
  */
 package net.evecom.common.usms.uma.api;
 
-import net.evecom.common.usms.core.model.ErrorStatus;
+import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.model.InstitutionModel;
+import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.InstitutionService;
@@ -65,7 +65,7 @@ public class InstitutionAPI {
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
-        InstitutionEntity inst = institutionService.findByName(instName);
+        InstitutionEntity inst = institutionService.getInstByInstName(instName);
         JSONObject instJson = getInstJSONObject(inst);
         return new ResponseEntity(instJson.toString(), HttpStatus.OK);
     }
@@ -79,7 +79,8 @@ public class InstitutionAPI {
      * @throws OAuthProblemException
      */
     @RequestMapping(value = "/institutions", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getInstitutions(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
+    public ResponseEntity getInstitutions(HttpServletRequest request)
+            throws OAuthProblemException, OAuthSystemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest
                 = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
@@ -88,7 +89,7 @@ public class InstitutionAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获得机构信息
-        List<InstitutionEntity> institutions = institutionService.findInstByLoginName(loginName);
+        List<InstitutionEntity> institutions = institutionService.listInstsByLoginName(loginName);
         // 返回数组
         JSONArray instJsonArr = new JSONArray();
         for (InstitutionEntity inst : institutions) {
@@ -102,14 +103,15 @@ public class InstitutionAPI {
 
     /**
      * 根据组织类型查询组织机构列表
+     * @return
      */
     @RequestMapping(value = "/institutions/all", produces = "application/json; charset=UTF-8")
     private ResponseEntity findAll() {
         List<InstitutionEntity> institutionEntities = institutionService.findAll();
         JSONArray jsonArray = new JSONArray();
         for (InstitutionEntity institutionEntity : institutionEntities) {
-            InstitutionModel institutionModel = new InstitutionModel(institutionEntity);
-            JSONObject jsonObject = JSONObject.fromObject(institutionModel);
+            InstitutionVO institutionVO = new InstitutionVO(institutionEntity);
+            JSONObject jsonObject = JSONObject.fromObject(institutionVO);
             jsonArray.add(jsonObject);
         }
         JSONObject resultJson = new JSONObject();
@@ -124,8 +126,8 @@ public class InstitutionAPI {
     private JSONObject getInstJSONObject(InstitutionEntity inst) {
         JSONObject instJson = new JSONObject();
         if (inst != null) {
-            InstitutionModel institutionModel = new InstitutionModel(inst);
-            instJson = JSONObject.fromObject(institutionModel);
+            InstitutionVO institutionVO = new InstitutionVO(inst);
+            instJson = JSONObject.fromObject(institutionVO);
             instJson.remove("enabled");
         }
         return instJson;

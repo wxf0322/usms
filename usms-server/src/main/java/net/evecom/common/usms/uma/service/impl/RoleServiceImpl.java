@@ -48,8 +48,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public Page<RoleEntity> findByPage(int page, int size, SqlFilter sqlFilter) {
-        return roleDao.findByPage(page, size,sqlFilter);
+    public Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter) {
+        return roleDao.listRolesByPage(page, size,sqlFilter);
     }
 
     /**
@@ -59,14 +59,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<RoleEntity> findRolesByUserId(long userId) {
-        return roleDao.findRolesByUserId(userId);
+    public List<RoleEntity> listRolesByUserId(long userId) {
+        return roleDao.listRolesByUserId(userId);
     }
 
     /**
      * 判断是否拥有该角色
      *
-     * @param userID
+     * @param userId
      * @param roleName
      * @return
      */
@@ -82,8 +82,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByRoleName(String roleName) {
-        return roleDao.findUsersByRoleName(roleName);
+    public List<UserEntity> listUsersByRoleName(String roleName) {
+        return roleDao.listUsersByRoleName(roleName);
     }
 
     /**
@@ -93,18 +93,18 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<UserEntity> findUsersByRoleNames(String[] roleNames) {
-        return roleDao.findUsersByRoleNames(roleNames);
+    public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
+        return roleDao.listUsersByRoleNames(roleNames);
     }
 
     @Override
-    public List<PrivilegeEntity> getSelectedPrivileges(Long roleId) {
-        return roleDao.getSelectedPrivileges(roleId);
+    public List<PrivilegeEntity> listTargetPrivileges(Long roleId) {
+        return roleDao.listTargetPrivileges(roleId);
     }
 
     @Override
-    public List<PrivilegeEntity> getUnselectedPrivileges(Long roleId) {
-        return roleDao.getUnselectedPrivileges(roleId);
+    public List<PrivilegeEntity> listSourcePrivileges(Long roleId) {
+        return roleDao.listSourcePrivileges(roleId);
     }
 
     @Override
@@ -115,8 +115,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     /**
      * 根据角色id查找用户列表
      */
-    public List<UserEntity> findUsersByRoleId(Long roleId) {
-        return roleDao.findUsersByRoleId(roleId);
+    public List<UserEntity> listUsersByRoleId(Long roleId) {
+        return roleDao.listUsersByRoleId(roleId);
     }
 
     /**
@@ -125,8 +125,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @param roleId
      * @return
      */
-    public List<Map<String, Object>> getSelectedUsers(Long roleId) {
-        return roleDao.getSelectedUsers(roleId);
+    public List<Map<String, Object>> listTargetUsers(Long roleId,SqlFilter sqlFilter) {
+        return roleDao.listTargetUsers(roleId,sqlFilter);
     }
 
     /**
@@ -136,8 +136,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     @Override
-    public List<Map<String, Object>> getUnselectedUsers(Long roleId) {
-        return roleDao.getUnselectedUsers(roleId);
+    public List<Map<String, Object>> listSourceUsers(Long roleId,SqlFilter sqlFilter) {
+        return roleDao.listSourceUsers(roleId,sqlFilter);
     }
 
     /**
