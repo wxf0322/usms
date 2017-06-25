@@ -3,9 +3,9 @@
 *.svn
 *.war
 *.iml
+*.DS_Store
 .settings
 .gradle
-.DS_Store
 build
 classes
 META-INF
