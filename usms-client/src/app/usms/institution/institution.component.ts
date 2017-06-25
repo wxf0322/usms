@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TreeNode} from 'primeng/primeng';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
-import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
+import {BaseTable} from '../../shared/util/base-table';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {TreeData} from '../../shared/util/tree-data';
 import {InstitutionService} from "./institution.service";
@@ -13,7 +13,7 @@ import {InstitutionService} from "./institution.service";
   templateUrl: './institution.component.html',
   styleUrls: ['./institution.component.css']
 })
-export class InstitutionComponent extends SimpleBaseUtil<any> implements OnInit {
+export class InstitutionComponent extends BaseTable<any> implements OnInit {
 
   tree: TreeNode[] = [];
 

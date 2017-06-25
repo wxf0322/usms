@@ -3,7 +3,7 @@ import {TreeNode} from "primeng/primeng";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService} from "primeng/components/common/api";
 import {HttpService} from "../../../core/service/http.service";
-import {SimpleBaseUtil} from "../../../shared/util/simple-base.util";
+import {BaseTable} from "../../../shared/util/base-table";
 
 
 @Component({
@@ -11,7 +11,7 @@ import {SimpleBaseUtil} from "../../../shared/util/simple-base.util";
   templateUrl: './grid-user-selector.component.html',
   styleUrls: ['./grid-user-selector.component.css']
 })
-export class GridUserSelectorComponent extends SimpleBaseUtil<any> implements OnInit {
+export class GridUserSelectorComponent extends BaseTable<any> implements OnInit {
 
   selectedNode: TreeNode[];
   /**

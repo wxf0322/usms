@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {SimpleBaseDetailUtil} from '../../../shared/util/simple-base-detail.util';
+import {BaseDetail} from '../../../shared/util/base-detail';
 import {HttpService} from '../../../core/service/http.service';
 import {User} from '../user';
 import {Role} from "../../role/role";
@@ -15,7 +15,7 @@ import {TreeNode} from "primeng/primeng";
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.css']
 })
-export class UserDetailComponent extends SimpleBaseDetailUtil<any> implements OnInit {
+export class UserDetailComponent extends BaseDetail<any> implements OnInit {
 
   // 表单验证
   @ViewChild('reForm') reForm: NgForm;

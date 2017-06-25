@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
+import {BaseDetail} from "../../../shared/util/base-detail";
 import {NgForm} from "@angular/forms";
 import {Location} from '@angular/common';
 import {HttpService} from "../../../core/service/http.service";
@@ -11,7 +11,7 @@ import {Privilege} from "../privilege";
   templateUrl: './privilege-detail.component.html',
   styleUrls: ['./privilege-detail.component.css']
 })
-export class PrivilegeDetailComponent extends SimpleBaseDetailUtil<Privilege> implements OnInit {
+export class PrivilegeDetailComponent extends BaseDetail<Privilege> implements OnInit {
   sourceRoles: any = [];
   targetRoles: any = [];
 

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
+import {BaseDetail} from "../../../shared/util/base-detail";
 import {HttpService} from "../../../core/service/http.service";
 import {TreeNode} from "primeng/components/common/api";
 import {TreeData} from "../../../shared/util/tree-data";
@@ -12,7 +12,7 @@ import {TreeUtil} from "../../../shared/util/tree-util";
   templateUrl: './user-associate.component.html',
   styleUrls: ['./user-associate.component.css']
 })
-export class UserAssociateComponent extends SimpleBaseDetailUtil<any> implements OnInit {
+export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
 
   constructor(private location: Location,
               protected httpService: HttpService,

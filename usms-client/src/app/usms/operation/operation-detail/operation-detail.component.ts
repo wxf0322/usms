@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
+import {BaseDetail} from "../../../shared/util/base-detail";
 import {NgForm} from "@angular/forms";
 import {HttpService} from "../../../core/service/http.service";
 import {ActivatedRoute} from "@angular/router";
@@ -11,7 +11,7 @@ import {Operation} from "../operation";
   templateUrl: "./operation-detail.component.html",
   styleUrls: ["./operation-detail.component.css"]
 })
-export class OperationDetailComponent extends SimpleBaseDetailUtil<Operation>
+export class OperationDetailComponent extends BaseDetail<Operation>
   implements OnInit {
 
   //表单验证

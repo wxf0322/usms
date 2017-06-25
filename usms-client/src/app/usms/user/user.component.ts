@@ -1,6 +1,6 @@
 import {Component, OnInit, Renderer} from '@angular/core';
 import {TreeNode} from 'primeng/primeng';
-import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
+import {BaseTable} from '../../shared/util/base-table';
 import {ConfirmationService} from 'primeng/primeng';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
@@ -12,7 +12,7 @@ import {TreeUtil} from '../../shared/util/tree-util';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent extends SimpleBaseUtil<any> implements OnInit {
+export class UserComponent extends BaseTable<any> implements OnInit {
   /**
    *组织机构树
    */

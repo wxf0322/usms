@@ -1,6 +1,6 @@
 import {Component, OnInit, Renderer} from '@angular/core';
 import {TreeNode, SelectItem} from 'primeng/primeng';
-import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
+import {BaseTable} from '../../shared/util/base-table';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
@@ -13,7 +13,7 @@ import {Operation} from './operation';
   templateUrl: './operation.component.html',
   styleUrls: ['./operation.component.css']
 })
-export class OperationComponent extends SimpleBaseUtil<any> implements OnInit {
+export class OperationComponent extends BaseTable<any> implements OnInit {
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,

@@ -1,8 +1,8 @@
 import {Component, OnInit, Renderer} from '@angular/core';
-import {SimpleBaseUtil} from '../../shared/util/simple-base.util';
+import {BaseTable} from '../../shared/util/base-table';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
-import {ConfirmationService, SelectItem} from 'primeng/components/common/api';
+import {ConfirmationService} from 'primeng/components/common/api';
 import {Application} from './application';
 
 @Component({
@@ -10,7 +10,7 @@ import {Application} from './application';
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.css']
 })
-export class ApplicationComponent extends SimpleBaseUtil<Application> implements OnInit {
+export class ApplicationComponent extends BaseTable<Application> implements OnInit {
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,

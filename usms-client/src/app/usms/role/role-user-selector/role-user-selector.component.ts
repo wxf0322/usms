@@ -2,7 +2,7 @@ import {Component, OnInit, Input, Renderer} from '@angular/core';
 import {TreeNode} from "primeng/primeng";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService} from "primeng/components/common/api";
-import {SimpleBaseUtil} from "../../../shared/util/simple-base.util";
+import {BaseTable} from "../../../shared/util/base-table";
 import {HttpService} from "../../../core/service/http.service";
 
 
@@ -11,7 +11,7 @@ import {HttpService} from "../../../core/service/http.service";
   templateUrl: './role-user-selector.component.html',
   styleUrls: ['./role-user-selector.component.css']
 })
-export class RoleUserSelectorComponent extends SimpleBaseUtil<any> implements OnInit {
+export class RoleUserSelectorComponent extends BaseTable<any> implements OnInit {
 
   selectedNode: TreeNode[];
   /**

@@ -5,7 +5,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
+import {BaseDetail} from "../../../shared/util/base-detail";
 import {HttpService} from "../../../core/service/http.service";
 import {Application} from "../application";
 
@@ -14,7 +14,7 @@ import {Application} from "../application";
   templateUrl: './application-detail.component.html',
   styleUrls: ['./application-detail.component.css']
 })
-export class ApplicationDetailComponent extends SimpleBaseDetailUtil<Application> implements OnInit {
+export class ApplicationDetailComponent extends BaseDetail<Application> implements OnInit {
   //表单验证
   @ViewChild('reForm') reForm: NgForm;
 

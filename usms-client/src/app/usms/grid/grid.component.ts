@@ -4,8 +4,7 @@ import {ConfirmationService, TreeNode} from 'primeng/primeng';
 import {TreeData} from "../../shared/util/tree-data";
 import {TreeUtil} from "../../shared/util/tree-util";
 import {HttpService} from "../../core/service/http.service";
-import {SimpleBaseUtil} from "../../shared/util/simple-base.util";
-import {User} from "../user/user";
+import {BaseTable} from "../../shared/util/base-table";
 import {BeanUtil} from "../../shared/util/bean-util";
 
 @Component({
@@ -13,7 +12,7 @@ import {BeanUtil} from "../../shared/util/bean-util";
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.css']
 })
-export class GridComponent extends SimpleBaseUtil<any> implements OnInit {
+export class GridComponent extends BaseTable<any> implements OnInit {
 
   /**
    * 组织机构名称

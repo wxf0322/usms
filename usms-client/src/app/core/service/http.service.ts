@@ -12,15 +12,32 @@ import * as $ from 'jquery';
 @Injectable()
 export class HttpService {
 
-  // 表单类型
+  /**
+   * 表单类型请求
+   * @type {Headers}
+   */
   private formHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
 
-  // json类型
+  /**
+   * json类型请求
+   * @type {Headers}
+   */
   private jsonHeaders = new Headers({'Content-Type': 'application/json'});
 
-  /* 消息提示 */
-  private messages = new Subject<Message[]>(); // Observable Message[] sources
-  messages$ = this.messages.asObservable(); // Observable Message[] streams
+  /**
+   * 消息提示
+   * @type {Subject<Message[]>}
+   */
+  private messages = new Subject<Message[]>();
+
+  /**
+   * 消息监听器
+   */
+  messages$ = this.messages.asObservable();
+
+  /**
+   * 消息显示
+   */
   private msgs: Message[];
 
   constructor(private http: Http) {

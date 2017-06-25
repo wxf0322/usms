@@ -1,6 +1,6 @@
 import {Pagination} from './pagination';
 
-export abstract class SimpleBase<T> extends Pagination<T> {
+export abstract class BasePaginator<T> extends Pagination<T> {
 
   filter: any; //封装查询条件
 
@@ -19,7 +19,7 @@ export abstract class SimpleBase<T> extends Pagination<T> {
   /**
    * 查询
    */
-  abstract search() ;
+  abstract search();
 
   /**
    * 双击查看详情事件

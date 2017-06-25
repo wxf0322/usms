@@ -2,12 +2,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
-import {SimpleBaseDetailUtil} from "../../../shared/util/simple-base-detail.util";
+import {BaseDetail} from "../../../shared/util/base-detail";
 import {HttpService} from "../../../core/service/http.service";
 import {Role} from "../role";
 import {Privilege} from "../../privilege/privilege";
 import {TreeNode} from "primeng/primeng";
-import {User} from "../../user/user";
 import {TreeData} from "../../../shared/util/tree-data";
 import {TreeUtil} from "../../../shared/util/tree-util";
 
@@ -17,7 +16,7 @@ import {TreeUtil} from "../../../shared/util/tree-util";
   styleUrls: ['./role-detail.component.css']
 })
 
-export class RoleDetailComponent extends SimpleBaseDetailUtil<Role> implements OnInit {
+export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
 
   //筛选框资源
   sourcePrivileges: Privilege[] = [];

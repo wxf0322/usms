@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {SimpleBaseDetailUtil} from '../../../shared/util/simple-base-detail.util';
+import {BaseDetail} from '../../../shared/util/base-detail';
 import {HttpService} from '../../../core/service/http.service';
 import {Institution} from '../institution';
 import {InstitutionService} from '../institution.service';
@@ -12,7 +12,7 @@ import {InstitutionService} from '../institution.service';
   templateUrl: './institution-detail.component.html',
   styleUrls: ['./institution-detail.component.css']
 })
-export class InstitutionDetailComponent extends SimpleBaseDetailUtil<Institution>
+export class InstitutionDetailComponent extends BaseDetail<Institution>
   implements OnInit {
 
   // 表单验证

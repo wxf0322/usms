@@ -1,8 +1,8 @@
 import {Component, OnInit, Renderer} from '@angular/core';
-import {SimpleBaseUtil} from "../../shared/util/simple-base.util";
+import {BaseTable} from "../../shared/util/base-table";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpService} from "../../core/service/http.service";
-import {ConfirmationService, MenuItem, SelectItem} from "primeng/primeng";
+import {ConfirmationService} from "primeng/primeng";
 import {Privilege} from "./privilege";
 
 @Component({
@@ -10,7 +10,7 @@ import {Privilege} from "./privilege";
   templateUrl: './privilege.component.html',
   styleUrls: ['./privilege.component.css']
 })
-export class PrivilegeComponent extends SimpleBaseUtil<Privilege> implements OnInit {
+export class PrivilegeComponent extends BaseTable<Privilege> implements OnInit {
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,

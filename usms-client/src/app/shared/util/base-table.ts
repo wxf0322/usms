@@ -1,10 +1,10 @@
 import {HttpService} from "../../core/service/http.service";
-import {ConfirmationService, MenuItem, TreeNode} from "primeng/primeng";
+import {ConfirmationService, MenuItem} from "primeng/primeng";
 import {ActivatedRoute, Router} from "@angular/router";
-import {SimpleBase} from "../filter/simple-base";
+import {BasePaginator} from "../filter/base-paginator";
 import {Renderer} from "@angular/core";
 
-export abstract class SimpleBaseUtil<T> extends SimpleBase<T> {
+export abstract class BaseTable<T> extends BasePaginator<T> {
 
   isDropPanelShow: boolean = false; // 显示高级查询面板
 
@@ -14,11 +14,9 @@ export abstract class SimpleBaseUtil<T> extends SimpleBase<T> {
 
   items: MenuItem[]; //右键操作
 
-  selectedData: Array<T> = [];//被选中的数据集合
+  selectedData: Array<T> = []; //被选中的数据集合
 
-  documentClickListener: any;//监听事件
-
-  gridData: TreeNode[] = [];//所属网格
+  documentClickListener: any; //监听事件
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,

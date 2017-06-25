@@ -1,7 +1,7 @@
 import {HttpService} from '../../core/service/http.service';
 import {ActivatedRoute} from '@angular/router';
 
-export abstract class SimpleBaseDetailUtil<T> {
+export abstract class BaseDetail<T> {
 
   operateType: string; // 操作类型
   detailData: T; // 详细数据
