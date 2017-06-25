@@ -16,36 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USMS_APPLICATIONS")
-@NamedQueries({
-        @NamedQuery(name = ApplicationEntity.QUERY_BY_CLIENT_ID,
-                query = "select a from ApplicationEntity a where a.clientId = :"
-                        + ApplicationEntity.PARAM_CLIENT_ID),
-        @NamedQuery(name = ApplicationEntity.QUERY_BY_CLIENT_SECRET,
-                query = "select a from ApplicationEntity a where a.clientSecret = :"
-                        + ApplicationEntity.PARAM_CLIENT_SECRET)
-})
 public class ApplicationEntity {
-
-    /**
-     * clientId参数
-     */
-    public static final String PARAM_CLIENT_ID = "clientId";
-
-    /**
-     * clientSecret参数
-     */
-    public static final String PARAM_CLIENT_SECRET = "clientSecret";
-
-    /**
-     * 根据Client查找对象
-     */
-    public static final String QUERY_BY_CLIENT_ID = "ApplicationEntity.getByClientId";
-
-    /**
-     * 根据ClientSecret查找对象
-     */
-    public static final String QUERY_BY_CLIENT_SECRET = "ApplicationEntity.getByClientSecret";
-
     /**
      *标识
      */

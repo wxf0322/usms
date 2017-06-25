@@ -177,19 +177,7 @@ public class AuthorizeController {
         String clientId = oauthRequest.getClientId();
 
         // 生成授权码
-        String authCode;
-        // 判断用户是否为空
-        if (user == null) {
-            // 如果用户为空则生成授权码
-            authCode = oAuthService.generateAuthCode(loginName, clientId);
-        } else {
-            // 判断该用户是否已经有授权码
-            authCode = oAuthService.getAuthCode(loginName, clientId);
-            // 如果该用户没有授权码，则生成新的授权码
-            if (StringUtils.isEmpty(authCode)) {
-                authCode = oAuthService.generateAuthCode(loginName, clientId);
-            }
-        }
+        String authCode = oAuthService.generateAuthCode(loginName, clientId);
 
         // 进行OAuth响应构建
         OAuthASResponse.OAuthAuthorizationResponseBuilder builder =

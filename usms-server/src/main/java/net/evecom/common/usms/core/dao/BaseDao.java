@@ -39,7 +39,20 @@ public interface BaseDao<T, ID extends Serializable> {
      * @param <M>
      * @return
      */
-    List namedQuery(String name, Object[] values);
+    <M> List<M> namedQueryForClass(String name, Object[] values);
+
+    /**
+     * 分页别名查询
+     *
+     * @param entityClass
+     * @param name
+     * @param values
+     * @param page
+     * @param pageSize
+     * @param <M>
+     * @return
+     */
+     <M> Page<M> namedQueryForClass(Class<M> entityClass, String name, Object[] values, int page, int pageSize);
 
     /**
      * 根据sql语句查询，返回List

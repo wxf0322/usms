@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     /**
-     * 日志管理器
+     * @see Logger
      */
     private static Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
 
@@ -64,7 +64,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
     }
 
     /**
-     * 描述： 根据语句去获取可执行的query对象
+     * 根据语句去获取可执行的query对象
      *
      * @param sqlString
      * @param values
@@ -75,6 +75,13 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
         return query;
     }
 
+    /**
+     * 设置SQL语句参数
+     *
+     * @param query
+     * @param values
+     * @return
+     */
     private Query setParameters(Query query, Object[] values) {
         if (values != null && values.length > 0) {
             for (int i = 0, j = 1; i < values.length; i++, j++) {
@@ -89,7 +96,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
     }
 
     /**
-     * 描述： 根据语句去获取可执行的query对象
+     * 根据语句去获取可执行的query对象
      *
      * @param sqlString
      * @param values
@@ -108,6 +115,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
     /**
      * 描述： 根据名称去获取可执行的query对象
      *
+     * @param entityClass
      * @param name
      * @param values
      * @return
@@ -139,9 +147,29 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
      * @param <M>
      * @return
      */
-    public List namedQuery(String name, Object[] values) {
+    @Override
+    public <M> List<M> namedQueryForClass(String name, Object[] values) {
         Query query = this.createNamedQuery(name, values);
         return query.getResultList();
+    }
+
+    /**
+     * 分页别名查询
+     *
+     * @param entityClass
+     * @param name
+     * @param values
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public <M> Page<M> namedQueryForClass(Class<M> entityClass,
+                                          String name, Object[] values,
+                                          int page, int pageSize) {
+        Query query = this.createNamedQuery(name, values);
+        String queryString = query.unwrap(org.hibernate.Query.class).getQueryString();
+        return this.queryForClass(entityClass, queryString, values, page, pageSize);
     }
 
     /**

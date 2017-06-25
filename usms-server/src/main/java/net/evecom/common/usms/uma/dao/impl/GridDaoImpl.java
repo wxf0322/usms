@@ -122,9 +122,9 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
     @Override
     public List<Map<String, Object>> listTargetUsers(Long gridCode, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select distinct u.id id ,u.name name from Usms_Users u  ")
-                .append("where u.enabled=1 and u.id  in (select user_id  from usms_user_grid ug ")
-                .append("  where ug.grid_code =?) ");
+        sb.append("select distinct u.id id ,u.name name from usms_users u")
+                .append(" where u.enabled=1 and u.id in (select user_id from usms_user_grid ug ")
+                .append(" where ug.grid_code =?)");
         String sql = sb.toString();
         return super.queryForMap(sql, new Object[]{gridCode});
     }
@@ -133,8 +133,8 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
     public List<Map<String, Object>> listSourceUsers(Long gridCode, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
         sb.append("select id ,name, institution_id from (")
-                .append("select distinct u.id id ,u.name name,ui.institution_id institution_id from Usms_Users u  ")
-                .append("left join Usms_User_Institution  ui on ui.user_id = u.id ")
+                .append("select distinct u.id id ,u.name name,ui.institution_id institution_id from usms_users u  ")
+                .append("left join usms_user_institution  ui on ui.user_id = u.id ")
                 .append("where u.enabled=1 and u.id not in ")
                 .append(" (select user_id  from usms_user_grid ug ")
                 .append(" where ug.grid_code =?)) uu "+sqlFilter.getWhereSql());

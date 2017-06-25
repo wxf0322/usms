@@ -5,12 +5,15 @@
  */
 
 import net.evecom.common.usms.entity.ApplicationEntity;
+import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.ApplicationDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * 描述 管辖区域管理相关Dao层
@@ -28,8 +31,15 @@ public class ApplicationTestCase {
 
     @Test
     public void test() {
-        ApplicationEntity application = applicationDao.getAppByClientId("6433ada9-de68-40ba-89a0-7aa8ee9128df");
+        // ApplicationEntity application = applicationDao.getAppByClientId("6b660090-0d50-45c3-b434-51fc1a10134f");
+        ApplicationEntity application = applicationDao.getAppByClientSecret("221b1adf-3d63-400b-91f4-cfecd5655f8d");
         System.out.printf(application.toString());
+    }
+
+    @Test
+    public void test2() {
+        List<UserEntity> list = applicationDao.listUsersByAppName("usms");
+        System.out.printf(list.toString());
     }
 
 }

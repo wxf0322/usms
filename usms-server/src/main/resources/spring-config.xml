@@ -60,11 +60,10 @@
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
             </props>
         </property>
-        <property name="persistenceUnitName" value="defaultPersistenceUnit"/>
-        <property name="mappingResources" >
+        <property name="mappingResources">
             <list>
-                <value>mapper/entity-mappings.xml</value>
-                <value>mapper/application.xml</value>
+
+                <value>jpa/application-orm.xml</value>
             </list>
         </property>
     </bean>
