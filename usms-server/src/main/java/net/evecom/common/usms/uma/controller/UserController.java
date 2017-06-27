@@ -34,8 +34,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     /**
-     * 注入UserService
+     * @see UserService
      */
     @Autowired
     private UserService userService;
@@ -72,33 +73,34 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
-    public ResultStatus saveOrUpdate(@RequestBody UserVO userVO, HttpServletRequest request) {
-        String institutionId = request.getParameter("institutionId");
-        String[] roleIdArray;
-        if (StringUtils.isEmpty(userVO.getRoleIds())) {
-            roleIdArray = null;
-        } else {
-            roleIdArray = userVO.getRoleIds().split(",");
-        }
+    public ResultStatus saveOrUpdate(@RequestBody UserVO userVO) {
+
+        String[] roleIds = StringUtils.isEmpty(userVO.getRoleIds()) ?
+                null : userVO.getRoleIds().split(",");
+
+        String[] institutionIds = StringUtils.isEmpty(userVO.getInstitutionIds()) ?
+                null : userVO.getInstitutionIds().split(",");
+
         if (userVO.getId() == null) {
+            // 新增
             UserEntity userEntity = userService.createUser(userVO);
-            if (!StringUtils.isEmpty(institutionId)) {
-                userService.createUserInstitution(userEntity.getId(), Long.valueOf(institutionId));
-            }
-            userService.updateRoles(userEntity.getId(), roleIdArray);
+            userService.updateRoles(userEntity.getId(), roleIds);
+            userService.updateInstitutions(userEntity.getId(), institutionIds);
         } else {
+            // 修改
             userService.updateUser(userVO);
-            userService.updateRoles(userVO.getId(), roleIdArray);
+            userService.updateRoles(userVO.getId(), roleIds);
+            userService.updateInstitutions(userVO.getId(), institutionIds);
         }
         return new ResultStatus(true, "");
     }
 
     @ResponseBody
     @RequestMapping(value = "password/reset", method = RequestMethod.POST)
-    public ResultStatus resetPassword(String ids) {
-        String[] idArray = ids.split(",");
+    public ResultStatus resetPassword(String userIds) {
+        String[] ids = userIds.split(",");
         String newPassword = "123456";
-        for (String id : idArray) {
+        for (String id : ids) {
             userService.changePassword(Long.valueOf(id), newPassword);
         }
         return new ResultStatus(true, "");
@@ -119,7 +121,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "institutions")
-    public List<InstitutionEntity> findInstByUserId(Long userId) {
+    public List<InstitutionEntity> listInstsByUserId(Long userId) {
         return userService.listInstsByUserId(userId);
     }
 

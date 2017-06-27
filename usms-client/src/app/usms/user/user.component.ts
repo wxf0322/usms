@@ -13,6 +13,7 @@ import {TreeUtil} from '../../shared/util/tree-util';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent extends BaseTable<any> implements OnInit {
+
   /**
    *组织机构树
    */
@@ -32,9 +33,6 @@ export class UserComponent extends BaseTable<any> implements OnInit {
    * 当前所属的机构名称
    */
   institutionName: string;
-
-
-  height: number;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -71,13 +69,14 @@ export class UserComponent extends BaseTable<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
+        this.tree[0].expanded = true;
       });
   }
 
   resetPassword() {
     const url = 'user/password/reset';
     const params = {
-      ids: this.selectedData.map(data => data['id']).join(',')
+      userIds: this.selectedData.map(data => data['id']).join(',')
     };
     this.httpService.executeByParams(url, params).then(
       res => {
@@ -104,7 +103,6 @@ export class UserComponent extends BaseTable<any> implements OnInit {
     this.router.navigate(['user-detail', {
       type: type,
       id: id,
-      institutionId: this.institutionId,
       institutionName: this.institutionName
     }], {relativeTo: this.route});
   }

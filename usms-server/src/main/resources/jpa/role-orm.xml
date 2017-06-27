@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_0.xsd"
+                 version="2.1">
+
+    <named-native-query name="Role.listRolesByUserId"
+                        result-class="net.evecom.common.usms.entity.RoleEntity">
+        <query>
+            select * from usms_roles r where r.id in(
+            select ur.role_id from usms_user_role ur
+            where ur.user_id = ?) and r.enabled = 1
+        </query>
+    </named-native-query>
+
+    <named-native-query name="Role.hasRole"
+                        result-class="net.evecom.common.usms.entity.RoleEntity">
+        <query>
+            select * from usms_roles r where r.id in(
+            select ur.role_id from usms_user_role ur
+            where ur.user_id = ?) and r.enabled=1 and r.name= ?
+        </query>
+    </named-native-query>
+
+    <named-native-query name="Role.listUsersByRoleName"
+                        result-class="net.evecom.common.usms.entity.UserEntity">
+        <query>
+            select * from usms_users u where u.id in
+            (select ur.user_id from usms_user_role ur where ur.role_id in
+            (select r.id from usms_roles r where r.name = ? and r.enabled = 1)
+            )and u.enabled = 1
+        </query>
+    </named-native-query>
+
+
+    <named-native-query name="Role.listUsersByRoleId"
+                        result-class="net.evecom.common.usms.entity.UserEntity">
+        <query>
+            select * from usms_users u where u.id in
+            (select ur.user_id from usms_user_role ur
+            where ur.role_id = ?)
+        </query>
+    </named-native-query>
+
+    <named-native-query name="Role.listTargetPrivileges"
+                        result-class="net.evecom.common.usms.entity.PrivilegeEntity">
+        <query>
+            select * from usms_privileges where id in(
+            select priv_id from usms_privilege_role t
+            where role_id=?) and enabled = 1
+        </query>
+    </named-native-query>
+
+    <named-native-query name="Role.listSourcePrivileges"
+                        result-class="net.evecom.common.usms.entity.PrivilegeEntity">
+        <query>
+            select * from usms_privileges where id not in(
+            select priv_id from usms_privilege_role t
+            where role_id=?) and enabled = 1
+        </query>
+    </named-native-query>
+
+</entity-mappings>

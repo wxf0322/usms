@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {EveMenuItem} from "../shared/component/side-menu/side-menu";
-import {usmsMenus} from "../db.data";
+import {EveMenuItem} from '../shared/component/side-menu/side-menu';
+import {usmsMenus} from '../db.data';
 
 /**
  * 统一用户管理

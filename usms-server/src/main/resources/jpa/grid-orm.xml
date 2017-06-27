@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_0.xsd"
+                 version="2.1">
+
+    <named-native-query name="Grid.listUsersByGridCode"
+                        result-class="net.evecom.common.usms.entity.UserEntity">
+        <query>
+            select * from usms_users u where u.id in
+            (select ug.user_id from usms_user_grid ug where ug.grid_code=?)
+        </query>
+    </named-native-query>
+
+</entity-mappings>

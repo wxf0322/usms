@@ -87,6 +87,7 @@ export class GridComponent extends BaseTable<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.institutionTree = TreeUtil.buildTrees(treeDataArr);
+        this.institutionTree[0].expanded = true;
       });
   }
 

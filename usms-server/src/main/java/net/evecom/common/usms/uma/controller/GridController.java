@@ -55,13 +55,11 @@ public class GridController {
      * @param page
      * @param size
      * @param gridCode
-     * @param request
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<UserVO> listUsersByPage(int page, int size,
-                                        String gridCode, HttpServletRequest request) {
+    public Page<UserVO> listUsersByPage(int page, int size, String gridCode) {
         SqlFilter sqlFilter = new SqlFilter();
         if (!StringUtils.isEmpty(gridCode)) {
             sqlFilter.addFilter("QUERY_ug#grid_code_S_EQ", gridCode);

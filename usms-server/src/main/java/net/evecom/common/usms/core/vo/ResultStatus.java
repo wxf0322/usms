@@ -14,8 +14,14 @@ package net.evecom.common.usms.core.vo;
  */
 public class ResultStatus {
 
-    private boolean success;
+    /**
+     * 是否成功
+     */
+    private boolean success = true;
 
+    /**
+     * 返回的提示信息
+     */
     private String msg;
 
     public boolean isSuccess() {
@@ -35,8 +41,6 @@ public class ResultStatus {
     }
 
     public ResultStatus() {
-        this.success = true;
-        this.msg = "";
     }
 
     public ResultStatus(boolean success, String msg) {

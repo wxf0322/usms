@@ -15,15 +15,6 @@ import {Operation} from './operation';
 })
 export class OperationComponent extends BaseTable<any> implements OnInit {
 
-  constructor(protected router: Router,
-              protected route: ActivatedRoute,
-              protected httpService: HttpService,
-              protected confirmationService: ConfirmationService,
-              protected renderer: Renderer) {
-    super(router, route, httpService, confirmationService, renderer);
-    this.detailData = new Operation();
-    this.applications.push({label: '请选择一个系统', value: ''});
-  }
 
   applications: SelectItem[] = [];
 
@@ -34,6 +25,16 @@ export class OperationComponent extends BaseTable<any> implements OnInit {
   tree: TreeNode[] = [];
 
   detailData: Operation;
+
+  constructor(protected router: Router,
+              protected route: ActivatedRoute,
+              protected httpService: HttpService,
+              protected confirmationService: ConfirmationService,
+              protected renderer: Renderer) {
+    super(router, route, httpService, confirmationService, renderer);
+    this.detailData = new Operation();
+    this.applications.push({label: '请选择一个系统', value: ''});
+  }
 
   refreshTree() {
     if (typeof (this.selectedApplication) === 'undefined') {

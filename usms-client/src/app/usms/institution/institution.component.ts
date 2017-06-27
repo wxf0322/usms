@@ -46,6 +46,7 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
+        this.tree[0].expanded = true;
       });
   }
 

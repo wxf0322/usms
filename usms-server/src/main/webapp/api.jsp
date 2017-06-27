@@ -48,12 +48,12 @@
 请求结果首先通过状态码进行判断成功或失败，然后再根据具体内容解析json值。
 
 | 状态码     | 说明                                    |
-|------------|-----------------------------------------|
-| 200        | 操作成功                                |
-| 302        | 回调成功                                |
-| 400        | 请求参数不完整或参数错误                 |
-| 401        | 未授权，code/accessToken错误或已经失效。 |
-| 403        | 禁止，例如要求post，却使用了get请求。    |
+|------------|---------------------------------------|
+| 200        | 操作成功                               |
+| 302        | 回调成功                               |
+| 400        | 请求参数不完整或参数错误                  |
+| 401        | 未授权，code/accessToken错误或已经失效。  |
+| 403        | 禁止，例如要求post，却使用了get请求。      |
 | 404        | 无法找到，没有该接口                     |
 
 #### 2.1.2 错误返回说明
@@ -159,10 +159,10 @@ http://192.168.200.209:8080/usms/accessToken
 
 | 参数名        | 是否必填    | 说明     |
 |---------------|-------------|----------|
-| client_id     | 是           | 填子系统在USMS注册的 client_id    |
-| client_secret | 是           | USMS给子系统生成的KEY             |
-| grant_type    | 是           | 固定值：authorization_code        |
-| code          | 是           | 上个步骤获取的临时授权码         |
+| client_id     | 是           | 填子系统在USMS注册的 client_id  |
+| client_secret | 是           | USMS给子系统生成的KEY           |
+| grant_type    | 是           | 固定值：authorization_code     |
+| code          | 是           | 上个步骤获取的临时授权码           |
 | redirect_uri  | 是           | 与第一步请求的 redirect_uri 相同  |
 
 (4) 输入样例
@@ -281,13 +281,14 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
 (5) 输出参数
 
 | 参数名      | 说明        |
-|-------------|-------------|
-| id          | 用户ID      |
-| loginName	  |  登录名     |
+|-------------|-----------|
+| id          | 用户ID    |
+| loginName	  |  登录名   |
+| name	      |  用户姓名  |
 | staff       |	关联员工的具体信息，具体参数详见 2.3.2 节 输出参数 |
-| application | 当前接入系统的应用信息，里面包含着操作信息 |
+| application | 当前接入系统的应用信息，里面包含着操作信息  |
 | operations  | 该用户所拥有的操作信息，具体参数详见 2.3.10 节 输出参数 |
-| institutions | 该用户所属的组织机构信息，具体参数详见 2.3.14 节 输出参数 |
+| institutions| 该用户所属的组织机构信息，具体参数详见 2.3.14 节 输出参数 |
 
 
 (6) 输出样例
@@ -296,14 +297,15 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
 {
     "id": 22,
     "loginName": "admin",
+    "name": "管理员",
     "staff": {
-        "name": "陈楠",
+        "name": "管理员",
         "tel": "0591-87666633",
         "mobile": "13806028806",
         "zipCode": "350000",
         "email": "cn@evecom.net",
         "extranetEmail": "test@qq.com",
-        "aliasNames": "陈楠",
+        "aliasNames": "管理员",
         "sex": 1,
         "professionalTitle": "主任工程师",
         "officalPost": "架构师",

@@ -52,9 +52,10 @@ public interface TreeService {
      * @param entityId
      * @param variables
      * @param entityName
-     * @return 主键id
      */
-    void updateData(Long entityId, Map<String, Object> variables, String entityName);
+    void updateData(Long entityId,
+                    Map<String, Object> variables,
+                    String entityName);
 
     /**
      * 根据map保存或更新数据
@@ -65,7 +66,10 @@ public interface TreeService {
      * @param seqName
      * @return 主键id
      */
-    Long saveOrUpdate(Long entityId, Map<String, Object> variables, String tableName, String seqName);
+    Long saveOrUpdate(Long entityId,
+                      Map<String, Object> variables,
+                      String tableName,
+                      String seqName);
 
     /**
      * 根据Map更新树形数据
@@ -77,7 +81,11 @@ public interface TreeService {
      * @param seqName
      * @return
      */
-    Long saveOrUpdateTreeData(Long entityId, Long parentId, Map<String, Object> treeData, String tableName, String seqName);
+    Long saveOrUpdateTreeData(Long entityId,
+                              Long parentId,
+                              Map<String, Object> treeData,
+                              String tableName,
+                              String seqName);
 
     /**
      * 获取最大的排序值

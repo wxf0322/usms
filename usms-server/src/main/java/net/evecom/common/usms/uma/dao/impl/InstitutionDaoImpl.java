@@ -7,9 +7,13 @@ package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
+import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.uma.dao.ApplicationJpa;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
+import net.evecom.common.usms.uma.dao.InstitutionJpa;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,6 +30,13 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
         implements InstitutionDao {
 
     /**
+     * @see ApplicationJpa
+     */
+    @Autowired
+    private InstitutionJpa institutionJpa;
+
+
+    /**
      * 根据登入名查询组织机构列表
      *
      * @param loginName
@@ -33,26 +44,20 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      */
     @Override
     public List<InstitutionEntity> listInstsByLoginName(String loginName) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_institutions i where i.id in \n")
-                .append("( select ui.institution_id from usms_user_institution ui ")
-                .append(" where ui.user_id in ")
-                .append(" (select u.id from usms_users u ")
-                .append(" where u.login_name = ?))");
-        String sql = sb.toString();
-        return super.queryForClass(sql, new Object[]{loginName});
+        List<InstitutionEntity> result = super.namedQueryForClass("Institution.listInstsByLoginName",
+                new Object[]{loginName});
+        return result;
     }
 
     /**
      * 根据编码查询组织机构信息
      *
-     * @param name
+     * @param instName
      * @return
      */
     @Override
     public InstitutionEntity getInstByInstName(String instName) {
-        String sql = "select * from usms_institutions where name = ?";
-        List<InstitutionEntity> result = super.queryForClass(InstitutionEntity.class, sql, new Object[]{instName});
+        List<InstitutionEntity> result = institutionJpa.findByName(instName);
         return JpaUtil.getSingleResult(result);
     }
 
@@ -64,13 +69,9 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByInstName(String instName) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_users u where u.id in(  ")
-                .append(" select ui.user_id from usms_user_institution ui ")
-                .append(" where ui.institution_id in( ")
-                .append(" select i.id from usms_institutions i where i.name =?)) ");
-        String sql = sb.toString();
-        return super.queryForClass(UserEntity.class, sql, new Object[]{instName});
+        List<UserEntity> result = super.namedQueryForClass("Institution.listUsersByInstName",
+                new Object[]{instName});
+        return result;
     }
 
     @Override
@@ -87,11 +88,8 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity, Long>
 
     @Override
     public List<InstitutionEntity> listInstsByType(Long type) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_institutions i ")
-                .append(" where i.type = ? and enabled = 1");
-        String sql = sb.toString();
-        return super.queryForClass(sql, new Object[]{type});
+        List<InstitutionEntity> result = institutionJpa.findByTypeAndEnabled(type,1L);
+        return result;
     }
 
     @Override

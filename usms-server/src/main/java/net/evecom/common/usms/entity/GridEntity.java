@@ -342,4 +342,29 @@ public class GridEntity {
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "GridEntity{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", lvl=" + lvl +
+                ", name='" + name + '\'' +
+                ", gridType='" + gridType + '\'' +
+                ", descripiton='" + descripiton + '\'' +
+                ", dutyPhone='" + dutyPhone + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", memberNum=" + memberNum +
+                ", householdeNum=" + householdeNum +
+                ", area=" + area +
+                ", parentId=" + parentId +
+                ", adminDivisionCode='" + adminDivisionCode + '\'' +
+                ", adminDivision='" + adminDivision + '\'' +
+                ", manualSn=" + manualSn +
+                ", geoOutlineId=" + geoOutlineId +
+                ", timeCreated=" + timeCreated +
+                ", lastModified=" + lastModified +
+                ", enabled=" + enabled +
+                '}';
+    }
 }

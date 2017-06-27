@@ -235,9 +235,9 @@ public class GridVO {
         try {
             BeanUtils.copyProperties(this, gridEntity);
         } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
     }
 

@@ -11,6 +11,8 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.ApplicationDao;
+import net.evecom.common.usms.uma.dao.ApplicationJpa;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +31,12 @@ import java.util.List;
 public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
         implements ApplicationDao {
 
+    /**
+     * @see ApplicationJpa
+     */
+    @Autowired
+    private ApplicationJpa applicationJpa;
+
     @Override
     public Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
@@ -39,15 +47,13 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity, Long>
 
     @Override
     public ApplicationEntity getAppByClientId(String clientId) {
-        List<ApplicationEntity> result = super.namedQueryForClass("Application.getAppByClientId",
-                new Object[]{clientId});
+        List<ApplicationEntity> result = applicationJpa.findByClientId(clientId);
         return JpaUtil.getSingleResult(result);
     }
 
     @Override
     public ApplicationEntity getAppByClientSecret(String clientSecret) {
-        List<ApplicationEntity> result = super.namedQueryForClass("Application.getAppByClientSecret",
-                new Object[]{clientSecret});
+        List<ApplicationEntity> result = applicationJpa.findByClientSecret(clientSecret);
         return JpaUtil.getSingleResult(result);
     }
 

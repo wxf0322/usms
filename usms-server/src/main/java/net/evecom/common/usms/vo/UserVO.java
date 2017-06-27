@@ -120,11 +120,15 @@ public class UserVO {
      * 照片路径
      */
     String pictureUrl;
-
     /**
      * 关联的角色id串
      */
     String roleIds;
+
+    /**
+     * 关联的组织机构id串
+     */
+    String institutionIds;
 
     public Long getId() {
         return id;
@@ -318,6 +322,14 @@ public class UserVO {
         this.roleIds = roleIds;
     }
 
+    public String getInstitutionIds() {
+        return institutionIds;
+    }
+
+    public void setInstitutionIds(String institutionIds) {
+        this.institutionIds = institutionIds;
+    }
+
     public UserEntity mergeUserEntity(UserEntity userEntity) {
         try {
             BeanUtils.copyProperties(userEntity, this);
@@ -380,6 +392,8 @@ public class UserVO {
                 ", citizenIdNumber='" + citizenIdNumber + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", roleIds='" + roleIds + '\'' +
+                ", institutionIds='" + institutionIds + '\'' +
                 '}';
     }
+
 }

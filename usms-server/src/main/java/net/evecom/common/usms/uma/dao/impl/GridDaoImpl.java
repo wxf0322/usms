@@ -51,11 +51,9 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByGridCode(String gridCode) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u where u.id in\n")
-                .append(" (select ug.user_id from usms_user_grid ug where ug.grid_code=?)");
-        String sql = sb.toString();
-        return super.queryForClass(UserEntity.class, sql, new Object[]{gridCode});
+        List<UserEntity> result = super.namedQueryForClass("Grid.listUsersByGridCode",
+                new Object[]{gridCode});
+        return result;
     }
 
     @Override
@@ -112,7 +110,6 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
             data.put("code", code);
             data.put("descripiton", descripiton);
             data.put("dutyPhone", dutyPhone);
-
             treeData.setData(data);
             result.add(treeData);
         }

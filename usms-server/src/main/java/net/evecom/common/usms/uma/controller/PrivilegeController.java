@@ -46,7 +46,6 @@ public class PrivilegeController {
     @Autowired
     private PrivilegeService privilegeService;
 
-
     @ResponseBody
     @RequestMapping(value = "list")
     public Page<PrivilegeEntity> listPrivsByPage(Integer page, Integer size, HttpServletRequest request) {

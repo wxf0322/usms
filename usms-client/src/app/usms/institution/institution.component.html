@@ -1,15 +1,18 @@
 <div class="ui-g-3">
-  <p-panel header="组织机构树">
-    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
-            (onNodeSelect)="nodeSelect($event)">
-      <ng-template let-node pTemplate="default">
-        <span>{{node.label}}</span>
-      </ng-template>
-    </p-tree>
-  </p-panel>
+  <div class="left-panel">
+    <p-panel header="组织机构树">
+      <p-tree [value]="tree"
+              selectionMode="single"
+              [(selection)]="selectedNode"
+              (onNodeSelect)="nodeSelect($event)">
+        <ng-template let-node pTemplate="default">
+          <span>{{node.label}}</span>
+        </ng-template>
+      </p-tree>
+    </p-panel>
+  </div>
 </div>
 
 <div class="ui-g-9">
   <router-outlet></router-outlet>
 </div>
-

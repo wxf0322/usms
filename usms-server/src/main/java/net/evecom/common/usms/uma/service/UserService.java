@@ -85,7 +85,7 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @param id
      * @return
      */
-    List<ApplicationEntity> listAppsByUserId(Long id);
+    List<ApplicationEntity> listAppsByUserId(Long userId);
 
     /**
      * 验证登录
@@ -121,14 +121,6 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @return
      */
     List<InstitutionEntity> listInstsByUserId(Long userId);
-
-    /**
-     * 建立用户和机构之间的关系
-     *
-     * @param userId
-     * @param institutionId
-     */
-    void createUserInstitution(Long userId, Long institutionId);
 
     /**
      * 获得当前用户已选中的用户

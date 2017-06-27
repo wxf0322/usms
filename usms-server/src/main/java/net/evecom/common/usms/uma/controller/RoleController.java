@@ -41,7 +41,7 @@ public class RoleController {
     private static Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     /**
-     * 注入roleService
+     * @see RoleService
      */
     @Autowired
     private RoleService roleService;
@@ -86,7 +86,6 @@ public class RoleController {
             // 将model转换为entity
             roleEntity = new RoleEntity(roleVO);
             roleEntity = roleService.saveOrUpdate(roleEntity);
-
             // 获得前端传来的集合
             String[] privilegeIds;
             if (StringUtils.isEmpty(roleVO.getPrivilegeIds())) {
@@ -168,4 +167,5 @@ public class RoleController {
         }
         return roleService.listSourceUsers(roleId, sqlFilter);
     }
+
 }

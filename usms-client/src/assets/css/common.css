@@ -255,6 +255,20 @@ perfect-scrollbar {
 }
 
 /*tree*/
+.left-panel .ui-tree {
+  width: auto;
+  height: 500px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.grid-left-panel .ui-tree {
+  width: auto;
+  height: 440px;
+  max-height: 440px;
+  overflow: auto;
+}
+
 .ui-tree {
   width: auto;
 }
@@ -270,6 +284,10 @@ perfect-scrollbar {
 
 .ui-datatable .ui-datatable-data > tr > td {
   text-align: center;
+}
+
+.ui-panel {
+  height: 100%;
 }
 
 

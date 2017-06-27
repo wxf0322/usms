@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_0.xsd"
+                 version="2.1">
+
+    <named-native-query name="Institution.listInstsByLoginName"
+                        result-class="net.evecom.common.usms.entity.InstitutionEntity">
+        <query>
+            select * from usms_institutions i where i.id in
+            (select ui.institution_id from usms_user_institution ui
+            where ui.user_id in
+            (select u.id from usms_users u
+            where u.login_name = ?))
+        </query>
+    </named-native-query>
+
+    <named-native-query name="Institution.listUsersByInstName"
+                        result-class="net.evecom.common.usms.entity.UserEntity">
+        <query>
+            select * from usms_users u where u.id in (
+            select ui.user_id from usms_user_institution ui
+            where ui.institution_id in(
+            select i.id from usms_institutions i where i.name =?))
+        </query>
+    </named-native-query>
+</entity-mappings>

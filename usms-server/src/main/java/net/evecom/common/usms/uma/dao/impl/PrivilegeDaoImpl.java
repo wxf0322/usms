@@ -11,10 +11,12 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.uma.dao.RoleJpa;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -49,6 +51,12 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
     private EntityManager manager;
 
     /**
+     * 注入PrivilegeJpa
+     */
+    @Autowired
+    private RoleJpa roleJpa;
+
+    /**
      * 根据应用编码获取权限列表
      *
      * @param appName
@@ -56,17 +64,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      */
     @Override
     public List<PrivilegeEntity> listPrivsByAppName(String appName) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges p ")
-                .append("where p.id in (select po.priv_id from usms_privilege_operation po ")
-                .append("where po.oper_id in (select o.id ")
-                .append("from usms_operations o ")
-                .append("where o.application_id in ")
-                .append(" (select a.id  from usms_applications a ")
-                .append("where a.name= ?)")
-                .append("and o.enabled = 1))");
-        String sql = sb.toString();
-        return super.queryForClass(sql, new Object[]{appName});
+        List<PrivilegeEntity> result = super.namedQueryForClass("Privilege.listPrivsByAppName",
+                new Object[]{appName});
+        return result;
     }
 
     /**
@@ -77,16 +77,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      */
     @Override
     public List<PrivilegeEntity> listPrivsByUserId(long userId) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges p ")
-                .append("where p.id in( ")
-                .append("select pr.priv_id from usms_privilege_role pr ")
-                .append("where pr.role_id in( ")
-                .append("select ur.role_id from usms_user_role ur ")
-                .append("where ur.user_id = ?) ")
-                .append(") and p.enabled = 1");
-        String sql = sb.toString();
-        return super.queryForClass(sql, new Object[]{userId});
+        List<PrivilegeEntity> result = super.namedQueryForClass("Privilege.listPrivsByUserId",
+                new Object[]{userId});
+        return result;
     }
 
     /**
@@ -98,17 +91,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      */
     @Override
     public boolean hasPrivilege(long userId, String privName) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges p ")
-                .append("where p.id in( ")
-                .append("select pr.priv_id from usms_privilege_role pr ")
-                .append("where pr.role_id in( ")
-                .append("select ur.role_id from usms_user_role ur ")
-                .append("where ur.user_id = ?) ")
-                .append(") and p.enabled = 1 and p.name= ?");
-        String sql = sb.toString();
-        List results = super.queryForClass(sql, new Object[]{userId, privName});
-        return results.size() != 0;
+        List<PrivilegeEntity> result = super.namedQueryForClass("Privilege.hasPrivilege",
+                new Object[]{userId,privName});
+        return result.size() != 0;
     }
 
     /**
@@ -119,15 +104,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByPrivName(String privName) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_users u\n")
-                .append(" where u.id in (select ur.user_id from usms_user_role ur\n")
-                .append(" where ur.role_id in (select r.id from usms_roles r\n")
-                .append(" where r.id in (select pr.role_id from usms_privilege_role pr\n")
-                .append(" where pr.priv_id in (select p.id from usms_privileges p\n")
-                .append(" where p.name = ?)) and r.enabled = 1)) and u.enabled = 1");
-        String sql = sb.toString();
-        return super.queryForClass(UserEntity.class, sql, new Object[]{privName});
+        List<UserEntity> result = super.namedQueryForClass("Privilege.listUsersByPrivName",
+                new Object[]{privName});
+        return  result;
     }
 
     /**
@@ -195,13 +174,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
             return new ArrayList<>();
         } else {
             //编辑时候
-            sb.append("select * from usms_roles r where r.id in ")
-                    .append(" ( select role_id from usms_privilege_role ")
-                    .append(" where priv_id =:privilegeId) and enabled=1");
-            String sql = sb.toString();
-            Query query = manager.createNativeQuery(sql, RoleEntity.class);
-            query.setParameter("privilegeId", privilegeId);
-            return query.getResultList();
+            List<RoleEntity> result = super.namedQueryForClass("Privilege.listTargetRoles",
+                    new Object[]{privilegeId});
+            return result;
         }
     }
 
@@ -210,19 +185,13 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity, Long>
         StringBuffer sb = new StringBuffer();
         if (privilegeId != null) {
             // 编辑
-            sb.append("select * from usms_roles r where r.id not in ")
-                    .append(" ( select role_id from usms_privilege_role ")
-                    .append(" where priv_id =?) and enabled=1");
-            String sql = sb.toString();
-            Query query = manager.createNativeQuery(sql, RoleEntity.class);
-            query.setParameter(1, privilegeId);
-            return query.getResultList();
+            List<RoleEntity> result = super.namedQueryForClass("Privilege.listSourceRoles",
+                    new Object[]{privilegeId});
+            return result;
         } else {
             // 新增
-            sb.append("select * from usms_roles where enabled=1");
-            String sql = sb.toString();
-            Query query = manager.createNativeQuery(sql, RoleEntity.class);
-            return query.getResultList();
+            List<RoleEntity> result = roleJpa.findByEnabled(1L);
+            return result;
         }
     }
 

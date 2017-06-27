@@ -62,8 +62,15 @@
         </property>
         <property name="mappingResources">
             <list>
-
+                <value>jpa/entity-mapping.xml</value>
                 <value>jpa/application-orm.xml</value>
+                <value>jpa/staff-orm.xml</value>
+                <value>jpa/grid-orm.xml</value>
+                <value>jpa/institution-orm.xml</value>
+                <value>jpa/operation-orm.xml</value>
+                <value>jpa/privilege-orm.xml</value>
+                <value>jpa/role-orm.xml</value>
+                <value>jpa/user-orm.xml</value>
             </list>
         </property>
     </bean>

@@ -1,4 +1,12 @@
 .ui-dropdown-label {
-  width: 180px;
+  width: 300px;
   height: 29px;
+}
+
+.ui-tree {
+  width: 300px;
+  max-width: 300px;
+  height: 400px;
+  max-height: 400px;
+  overflow: auto;
 }

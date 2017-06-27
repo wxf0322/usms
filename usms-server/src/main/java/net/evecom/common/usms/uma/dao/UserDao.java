@@ -38,7 +38,7 @@ public interface UserDao extends BaseDao<UserEntity, Long> {
 
     List<OperationEntity> listOpersByUserId(Long userId);
 
-    List<ApplicationEntity> listAppsByUserId(Long id);
+    List<ApplicationEntity> listAppsByUserId(Long userId);
 
     List<GridEntity> listGridsByLoginName(String loginName);
 
@@ -46,12 +46,10 @@ public interface UserDao extends BaseDao<UserEntity, Long> {
 
     List<InstitutionEntity> listInstsByUserId(Long userId);
 
-    void createUserInstitution(Long userId, Long institutionId);
-
     List<RoleEntity> listTargetRoles(Long userId);
 
     List<RoleEntity> listSourceRoles(Long userId);
 
-    void updateRoles(Long userId, String[] roleIdArray);
+    void updateRoles(Long userId, String[] roleIds);
 
 }

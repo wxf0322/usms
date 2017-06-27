@@ -119,11 +119,7 @@ task sourcesJar(type: Jar) {
 }
 
 /**
- * 1. 将 build/resources 下的配置文件(生产上的配置文件)拷贝到WEB-INF/classes目录
- *
- * 2. 将 build/resources 下面编译的文件拷贝到WEB-INF/classes目录中
- *
- * 3. clientPath 中生成的dist文件放入根目录中
+ * 将 clientPath 中生成的dist文件放入根目录中
  */
 war {
     archiveName = 'usms.war'

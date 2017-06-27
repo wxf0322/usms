@@ -14,16 +14,16 @@ import {TreeUtil} from "../../../shared/util/tree-util";
 })
 export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
 
+  tree: TreeNode[];
+  sourceUsers: any = [];
+  targetUsers: any = [];
+  gridCode: any;
+
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute) {
     super(httpService, route);
   }
-
-  tree: TreeNode[];
-  sourceUsers: any = [];
-  targetUsers: any = [];
-  gridCode: any;
 
   ngOnInit() {
     this.refreshTree();
@@ -36,10 +36,7 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
 
   save() {
     let url = "grid/updateUsers";
-    let userIds = '';
-    for (let i in this.targetUsers) {
-      userIds = userIds + this.targetUsers[i].ID + ',';
-    }
+    let userIds = this.targetUsers.map(user => user.ID).join(',');
     let params = {
       gridCode: this.gridCode,
       userIds: userIds

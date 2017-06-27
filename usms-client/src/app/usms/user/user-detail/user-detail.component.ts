@@ -5,10 +5,10 @@ import {ActivatedRoute} from '@angular/router';
 import {BaseDetail} from '../../../shared/util/base-detail';
 import {HttpService} from '../../../core/service/http.service';
 import {User} from '../user';
-import {Role} from "../../role/role";
-import {TreeData} from "../../../shared/util/tree-data";
-import {TreeUtil} from "../../../shared/util/tree-util";
-import {TreeNode} from "primeng/primeng";
+import {Role} from '../../role/role';
+import {TreeData} from '../../../shared/util/tree-data';
+import {TreeUtil} from '../../../shared/util/tree-util';
+import {TreeNode} from 'primeng/primeng';
 
 @Component({
   selector: 'app-user-detail',
@@ -29,7 +29,6 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
   institutionName: string;
 
   tree: TreeNode[] = [];
-
 
   /**
    * 回填机构树的数据
@@ -52,14 +51,15 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
-        this.showInstitutions();
+        this.tree[0].expanded = true;
+        this.setInstitutions();
       });
   }
 
   ngOnInit(): void {
     // 传入组织机构名称
     this.institutionName = this.route.snapshot.params['institutionName'];
-    if (this.institutionName == 'undefined') {
+    if (this.institutionName === 'undefined') {
       this.institutionName = '';
     }
     const url = 'user/find';
@@ -81,16 +81,10 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
 
   save() {
     this.detailData.birthday = this.date.getTime();
-    let institutionId = this.route.snapshot.params['institutionId'];
-    if (institutionId == 'undefined') {
-      institutionId = '';
-    }
-    this.detailData.roleIds = '';
-    for (let i in this.targetRoles) {
-      this.detailData.roleIds =
-        this.detailData.roleIds + this.targetRoles[i].id + ',';
-    }
-    const url = 'user/saveOrUpdate?institutionId=' + institutionId;
+    this.detailData.roleIds = this.targetRoles.map(role => role.id).join(',');
+    this.detailData.institutionIds = this.selectedNodes.map(node => node.data.id).join(',');
+
+    const url = 'user/saveOrUpdate';
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({
@@ -106,12 +100,10 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
     let id = this.route.snapshot.params['id'];
     let targetUrl = 'user/roles/target';
     let sourceUrl = 'user/roles/source';
-    if (id == 'null') {
+    if (id === 'null') {
       id = '';
     }
-    let params = {
-      userId: id
-    };
+    let params = {userId: id};
     this.httpService.executeByParams(sourceUrl, params).then(
       res => this.sourceRoles = res
     );
@@ -120,18 +112,15 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
     );
   }
 
-  showInstitutions() {
+  setInstitutions() {
     let userId = this.route.snapshot.params['id'];
     const url = 'user/institutions';
-    const params = {
-      userId: userId
-    };
+    const params = {userId: userId};
     this.httpService.findByParams(url, params)
       .then(res => {
-        //回填已选中的网格数据
+        // 回填已选中的网格数据
         TreeUtil.setSelection(this.tree, this.selectedNodes, res);
       });
   }
-
 
 }

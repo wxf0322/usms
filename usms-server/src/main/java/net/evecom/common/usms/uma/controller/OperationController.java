@@ -35,19 +35,20 @@ import java.util.Map;
 @Controller
 @RequestMapping("/operation")
 public class OperationController {
+
     /**
      * 注入日志管理器
      */
     private static Logger logger = LoggerFactory.getLogger(OperationController.class);
 
     /**
-     * 注入operationService
+     * @see OperationService
      */
     @Autowired
     private OperationService operationService;
 
     /**
-     * 注入TreeService
+     * @see TreeService
      */
     @Autowired
     private TreeService treeService;
@@ -56,10 +57,10 @@ public class OperationController {
     @RequestMapping(value = "tree")
     public List<TreeData> listTreeData(HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if(!StringUtils.isEmpty(request.getParameter("applicationId"))){
-            sqlFilter.addFilter("QUERY_o#application_id_L_EQ",request.getParameter("applicationId"));
+        if (!StringUtils.isEmpty(request.getParameter("applicationId"))) {
+            sqlFilter.addFilter("QUERY_o#application_id_L_EQ", request.getParameter("applicationId"));
         }
-        return treeService.listTreeData("usms_operations o",sqlFilter);
+        return treeService.listTreeData("usms_operations o", sqlFilter);
     }
 
     @ResponseBody
@@ -77,8 +78,11 @@ public class OperationController {
         Long parentId = operationVO.getParentId();
         try {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
-            treeService.saveOrUpdateTreeData(entityId, parentId, underlineMap,
-                    "usms_operations", "usms_operations_s");
+            treeService.saveOrUpdateTreeData(entityId,
+                    parentId,
+                    underlineMap,
+                    "usms_operations",
+                    "usms_operations_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage(), e);
             return new ResultStatus(false, "");

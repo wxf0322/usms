@@ -9,7 +9,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="UserEntitySequenceGenerator"/>
-                <sequence-generator name="UserEntitySequenceGenerator" sequence-name="USMS_USERS_S" allocation-size="1"/>
+                <sequence-generator name="UserEntitySequenceGenerator" sequence-name="USMS_USERS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -19,7 +20,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="ApplicationEntitySequenceGenerator"/>
-                <sequence-generator name="ApplicationEntitySequenceGenerator" sequence-name="USMS_APPLICATIONS_S" allocation-size="1"/>
+                <sequence-generator name="ApplicationEntitySequenceGenerator" sequence-name="USMS_APPLICATIONS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -29,7 +31,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="PrivilegeEntitySequenceGenerator"/>
-                <sequence-generator name="PrivilegeEntitySequenceGenerator" sequence-name="USMS_PRIVILEGES_S" allocation-size="1"/>
+                <sequence-generator name="PrivilegeEntitySequenceGenerator" sequence-name="USMS_PRIVILEGES_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -39,7 +42,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="RoleEntitySequenceGenerator"/>
-                <sequence-generator name="RoleEntitySequenceGenerator" sequence-name="USMS_ROLES_S" allocation-size="1"/>
+                <sequence-generator name="RoleEntitySequenceGenerator" sequence-name="USMS_ROLES_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -49,7 +53,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="OperationEntitySequenceGenerator"/>
-                <sequence-generator name="OperationEntitySequenceGenerator" sequence-name="USMS_OPERATIONS_S" allocation-size="1"/>
+                <sequence-generator name="OperationEntitySequenceGenerator" sequence-name="USMS_OPERATIONS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -59,7 +64,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="InstitutionEntitySequenceGenerator"/>
-                <sequence-generator name="InstitutionEntitySequenceGenerator" sequence-name="USMS_INSTITUTIONS_S" allocation-size="1"/>
+                <sequence-generator name="InstitutionEntitySequenceGenerator" sequence-name="USMS_INSTITUTIONS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -69,7 +75,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="GridEntitySequenceGenerator"/>
-                <sequence-generator name="GridEntitySequenceGenerator" sequence-name="GSMP_LOC_GRIDS_S" allocation-size="1"/>
+                <sequence-generator name="GridEntitySequenceGenerator" sequence-name="GSMP_LOC_GRIDS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -79,7 +86,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="GridTypeEntitySequenceGenerator"/>
-                <sequence-generator name="GridTypeEntitySequenceGenerator" sequence-name="GSMP_LOC_GRID_TYPES_S" allocation-size="1"/>
+                <sequence-generator name="GridTypeEntitySequenceGenerator" sequence-name="GSMP_LOC_GRID_TYPES_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>
@@ -89,7 +97,8 @@
             <id name="id">
                 <column name="id"/>
                 <generated-value strategy="SEQUENCE" generator="StaffEntitySequenceGenerator"/>
-                <sequence-generator name="StaffEntitySequenceGenerator" sequence-name="USMS_STAFFS_S" allocation-size="1"/>
+                <sequence-generator name="StaffEntitySequenceGenerator" sequence-name="USMS_STAFFS_S"
+                                    allocation-size="1"/>
             </id>
         </attributes>
     </entity>

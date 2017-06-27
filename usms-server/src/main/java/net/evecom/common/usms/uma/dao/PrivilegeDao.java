@@ -42,7 +42,7 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * 判断是否拥有次权限
      *
      * @param userId
-     * @param privilegeName
+     * @param
      * @return
      */
     boolean hasPrivilege(long userId, String privName);

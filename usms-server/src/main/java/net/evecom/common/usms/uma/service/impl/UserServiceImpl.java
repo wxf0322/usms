@@ -181,15 +181,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
 
     /**
      * @param userId
-     * @param institutionId
-     */
-    @Override
-    public void createUserInstitution(Long userId, Long institutionId) {
-        userDao.createUserInstitution(userId, institutionId);
-    }
-
-    /**
-     * @param userId
      * @return
      */
     @Override

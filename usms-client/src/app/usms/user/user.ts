@@ -45,7 +45,8 @@ export class User {
   citizenIdNumber: string;
   // 照片路径
   pictureUrl: string;
-  //关联的角色id
-  roleIds:string;
-
+  // 关联的角色id
+  roleIds: string;
+  // 关联的组织机构id
+  institutionIds: string;
 }

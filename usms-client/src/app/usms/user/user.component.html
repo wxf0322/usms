@@ -1,13 +1,18 @@
 <div class="ui-g-3">
-  <p-panel header="组织机构树">
-    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)">
-      <ng-template let-node pTemplate="default">
+  <div class="left-panel">
+    <p-panel header="组织机构树">
+      <p-tree [value]="tree"
+              selectionMode="single"
+              [(selection)]="selectedNode"
+              (onNodeSelect)="nodeSelect($event)">
+        <ng-template let-node pTemplate="default">
           <span (mouseenter)="node['enter']=true" (mouseleave)="node['enter']=false">
             <span>{{node.label}}</span>
           </span>
-      </ng-template>
-    </p-tree>
-  </p-panel>
+        </ng-template>
+      </p-tree>
+    </p-panel>
+  </div>
 </div>
 <div class="ui-g-9">
   <div class="toolkit">
@@ -16,9 +21,6 @@
         <button pButton type="button" icon="fa-plus" label="新增" (click)="gotoUserDetail('add',null)"></button>
         <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
         <button pButton type="button" icon="fa-refresh" label="重置密码" (click)="resetPassword()"></button>
-        <!--
-        <button pButton type="button" icon="fa-plus" label="移入用户" (click)="moveUsers()"></button>
-        -->
       </li>
       <li class="toolkit-item e-right">
         <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
@@ -27,6 +29,7 @@
     </ul>
   </div>
   <div class="ui-g-9 content-right">
+    <perfect-scrollbar>
       <div class="ui-g-12">
         <p-dataTable [value]="viewData" scrollable="true"
                      [(selection)]="selectedData"
@@ -38,16 +41,19 @@
           </p-column>
           <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
           <p-column field="loginName" header="账号"></p-column>
-          <p-column  header="用户姓名" >
-            <ng-template  let-user="rowData" pTemplate="body" >
-              <span (click)="gotoUserDetail('edit',user.id)">{{user.name}}</span>
+          <p-column header="用户姓名">
+            <ng-template let-user="rowData" pTemplate="body">
+              <span onmouseover="this.style.color='#00F';this.style.textDecoration='underline'"
+                    onmouseout="this.style.color='#000000';this.style.textDecoration='none'"
+                    (click)="gotoUserDetail('edit',user.id)">{{user.name}}</span>
             </ng-template>
           </p-column>
           <p-column field="mobile" header="手机号码" [style]="{'width':'14%'}"></p-column>
           <p-column header="机构"></p-column>
           <p-column field="enabled" header="状态">
             <ng-template let-user="rowData" pTemplate="body">
-              {{user.enabled | enabledPipe}}</ng-template>
+              {{user.enabled | enabledPipe}}
+            </ng-template>
           </p-column>
           <p-column [style]="{'width':'18%'}" header="操作">
             <ng-template let-user="rowData" pTemplate="body">
@@ -59,28 +65,6 @@
                        [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
                        (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
       </div>
+    </perfect-scrollbar>
   </div>
 </div>
-
-<!--
-<p-dialog header="用户列表" [(visible)]="userDisplay">
-  <p-pickList [source]="sourceUsers" [target]="targetUsers"
-              sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"
-              [sourceStyle]="{'height':'400px'}" [targetStyle]="{'height':'400px'}">
-    <ng-template let-user pTemplate="item">
-      <div class="ui-helper-clearfix">
-        <div style="font-size:14px;float:left;margin:15px 6px 0 80px">
-          {{user.loginName}}
-        </div>
-        <div style="font-size:14px;float:right;margin:15px 80px 0 6px">
-          {{user.name}}
-        </div>
-      </div>
-    </ng-template>
-  </p-pickList>
-  <div class="e-right">
-    <button type="button" pButton label="确定"></button>
-    <button type="button" pButton label="取消"></button>
-  </div>
-</p-dialog>
--->

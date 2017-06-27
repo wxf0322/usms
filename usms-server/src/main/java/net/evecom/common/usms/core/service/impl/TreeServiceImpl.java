@@ -176,7 +176,10 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public Long saveOrUpdate(Long entityId, Map<String, Object> variables, String tableName, String seqName) {
+    public Long saveOrUpdate(Long entityId,
+                             Map<String, Object> variables,
+                             String tableName,
+                             String seqName) {
         if (this.isExisted(entityId, tableName)) {
             this.updateData(entityId, variables, tableName);
             return entityId;
@@ -242,7 +245,11 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public Long saveOrUpdateTreeData(Long entityId, Long parentId, Map<String, Object> treeData, String tableName, String seqName) {
+    public Long saveOrUpdateTreeData(Long entityId,
+                                     Long parentId,
+                                     Map<String, Object> treeData,
+                                     String tableName,
+                                     String seqName) {
         String path;
         int level = 0;
         //获取私有主键名称
