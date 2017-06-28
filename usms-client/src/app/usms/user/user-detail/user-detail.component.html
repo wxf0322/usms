@@ -12,14 +12,12 @@
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-8">
                 <div class="ui-g-12 ui-g-nopad control-group">
-                  <div class="ui-g-6">
+                  <div class="ui-g-12">
                     <label class="control-label">所属机构:</label>
-                    <span>{{institutionName}}</span>
-                  </div>
-                  <div class="ui-g-6">
-                    <label class="control-label">添加机构:</label>
 
                     <eve-combotree [(value)]="tree"
+                                   [size]="50"
+                                   [selectedNames]="selectedNames"
                                    [(selection)]="selectedNodes">
                     </eve-combotree>
 
@@ -38,13 +36,13 @@
                   </div>
                 </div>
                 <div class="ui-g-12 ui-g-nopad control-group">
-                  <div class="ui-g-6 ">
+                  <div class="ui-g-6">
                     <label class="control-label">手机电话:</label>
                     <input pInputText [(ngModel)]="detailData.mobile"
                            name="mobile" #mobile="ngModel" phone="CN">
                     <div class="validation" *ngIf="mobile.errors?.phone">格式有误</div>
                   </div>
-                  <div class="ui-g-6 ">
+                  <div class="ui-g-6">
                     <label class="control-label">固定电话:</label>
                     <input pInputText [(ngModel)]="detailData.tel" [ngModelOptions]="{standalone: true}">
                   </div>
@@ -61,13 +59,18 @@
                     <p-radioButton name="sex" value="1" label="男" [(ngModel)]="detailData.sex"></p-radioButton>
                     &nbsp;
                     <p-radioButton name="sex" value="2" label="女" [(ngModel)]="detailData.sex"></p-radioButton>
-
                   </div>
                 </div>
               </div>
               <div class="ui-g-4">
-                <label class=" control-textarea-label">照片:</label>
-                <img #img src="../../../../assets/img/photo.png">
+                <label class="control-textarea-label">照片:</label>
+                <img  [(src)]="detailData.pictureUrl" style="height: 99px;width: 71px"
+                      onerror="this.src='/static/images/null.png'">
+                <a href=
+                     "javascript:;" class="file">选择文件
+                  <input type="file" name="imageFile" id="imageFile" (change)="fileSelected()"/>
+                </a>
+
               </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">

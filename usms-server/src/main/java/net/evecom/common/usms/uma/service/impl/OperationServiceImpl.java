@@ -33,11 +33,6 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
     @Autowired
     private OperationDao operationDao;
 
-    @Override
-    public BaseDao<OperationEntity, Long> getBaseDao() {
-        return operationDao;
-    }
-
     /**
      * 获取应用操作列表
      *
@@ -69,7 +64,8 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      */
     @Override
     public boolean hasOperation(long userId, String operName) {
-        return operationDao.hasOperation(userId, operName);
+        List<OperationEntity> result = operationDao.listUserOperations(userId, operName);
+        return result.size() != 0;
     }
 
 }

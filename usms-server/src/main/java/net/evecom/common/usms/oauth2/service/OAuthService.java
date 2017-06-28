@@ -184,4 +184,13 @@ public interface OAuthService {
      */
     String getAuthCode(String loginName, String clientId);
 
+    /**
+     * 获得当前的令牌
+     *
+     * @param loginName
+     * @param clientId
+     * @return
+     */
+    String getAccessToken(String loginName, String clientId);
+
 }

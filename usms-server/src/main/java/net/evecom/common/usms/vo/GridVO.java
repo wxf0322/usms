@@ -93,7 +93,10 @@ public class GridVO {
      * 可用状态
      */
     private Long enabled;
-
+    /**
+     * 关联的用户名称
+     */
+    private String[] userNames;
 
     public long getId() {
         return id;

@@ -6,12 +6,14 @@
 package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
-import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.util.SqlFilter;
+import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.dao.GridDao;
+import net.evecom.common.usms.uma.dao.custom.GridDaoCustom;
+import net.evecom.common.usms.vo.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,46 +29,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 描述 管辖区域管理相关Dao层
+ * 描述
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/5/8 15:58
+ * @created 2017/6/28 下午5:14
  */
 @Repository
-public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
-        implements GridDao {
+public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCustom  {
 
-    /**
-     * 注入实体管理器
-     */
-    @PersistenceContext
-    private EntityManager manager;
-
-    /**
-     * 根据管辖区域编码查询用户列表
-     *
-     * @param gridCode
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByGridCode(String gridCode) {
-        List<UserEntity> result = super.namedQueryForClass("Grid.listUsersByGridCode",
-                new Object[]{gridCode});
-        return result;
-    }
+    @Autowired
+    private GridDao gridDao;
 
     @Override
     public Page<UserVO> listUsersByPage(int page, int size, String gridCode, SqlFilter sqlFilter) {
         StringBuffer sb = new StringBuffer();
-        sb.append("select u.*, s.mobile from (\n")
-                .append(" select u.id, u.login_name, u.name, u.enabled, u.staff_id, ug.grid_code \n")
-                .append(" from usms_users u left join usms_user_grid ug on u.id = ug.user_id\n")
+        sb.append("select u.*, s.mobile from ( ")
+                .append(" select u.id, u.login_name, u.name, u.enabled, u.staff_id, ug.grid_code ")
+                .append(" from usms_users u left join usms_user_grid ug on u.id = ug.user_id ")
                 .append(sqlFilter.getWhereSql())
-                .append("  ) u\n")
+                .append("  ) u ")
                 .append(" left join usms_staffs s on u.staff_id = s.id ");
         String sql = sb.toString();
-        Page<Map<String, Object>> pageBean = queryForMap(sql,sqlFilter.getParams().toArray() , page, size);
+        Page<Map<String, Object>> pageBean = queryForMap(sql, sqlFilter.getParams().toArray(), page, size);
         List<UserVO> results = new ArrayList<>();
         for (Map<String, Object> var : pageBean.getContent()) {
             UserVO userVO = new UserVO();
@@ -107,9 +92,18 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
             String code = (String) variable.get("CODE");
             String descripiton = (String) variable.get("DESCRIPITON");
             String dutyPhone = (String) variable.get("DUTY_PHONE");
+
+            List<UserEntity> users = gridDao.listUsersByGridCode(code);
+            List<String> userNames = new ArrayList<>();
+            if (users != null) {
+                for (UserEntity user : users) {
+                    userNames.add(user.getName());
+                }
+            }
             data.put("code", code);
             data.put("descripiton", descripiton);
             data.put("dutyPhone", dutyPhone);
+            data.put("userNames", userNames.toArray());
             treeData.setData(data);
             result.add(treeData);
         }
@@ -134,7 +128,7 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
                 .append("left join usms_user_institution  ui on ui.user_id = u.id ")
                 .append("where u.enabled=1 and u.id not in ")
                 .append(" (select user_id  from usms_user_grid ug ")
-                .append(" where ug.grid_code =?)) uu "+sqlFilter.getWhereSql());
+                .append(" where ug.grid_code =?)) uu " + sqlFilter.getWhereSql());
         String sql = sb.toString();
         List params = new ArrayList();
         params.add(gridCode);
@@ -146,9 +140,7 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
 
     @Override
     public void updateUsers(String gridCode, String[] userIds) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("delete from usms_user_grid where grid_code =:gridCode");
-        String sql = sb.toString();
+        String sql = "delete from usms_user_grid where grid_code =:gridCode";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("gridCode", gridCode);
         query.executeUpdate();
@@ -166,9 +158,7 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
 
     @Override
     public void updateGrids(Long userId, String[] gridCodes) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("delete from usms_user_grid where USER_ID =:userId");
-        String sql = sb.toString();
+        String sql = "delete from usms_user_grid where user_id =:userId";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("userId", userId);
         query.executeUpdate();
@@ -182,5 +172,4 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity, Long>
             }
         }
     }
-
 }

@@ -1,10 +1,13 @@
 <div class="ui-g">
   <div class="ui-g-4">
-    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)">
+    <div class="grid-user-left-panel">
+    <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
+            (onNodeSelect)="nodeSelect($event)">
       <ng-template let-node pTemplate="default">
         <span>{{node.label}}</span>
       </ng-template>
     </p-tree>
+    </div>
   </div>
   <div class="ui-g-8">
     <input type="text" pInputText placeholder="关键字" [(ngModel)]="key">

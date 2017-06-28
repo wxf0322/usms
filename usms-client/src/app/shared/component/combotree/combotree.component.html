@@ -1,8 +1,8 @@
 <div id="combotreeContain" (click)="onMouseclick($event)"
-     class="ui-dropdown ui-widget ui-state-default ui-corner-all ui-helper-clearfix ui-dropdown-open">
-  <!--选择后数据-->
+     class="ui-dropdown ui-widget ui-dropdown-open">
 
-  <input class="ui-inputtext" pInputText [(ngModel)]="selectedNames">
+  <!--选择后数据-->
+  <input class="ui-inputtext" pInputText [size]="size" [(ngModel)]="selectedNames">
 
   <!--下拉操作-->
   <div class="ui-dropdown-trigger ui-corner-right">
@@ -15,8 +15,8 @@
       <p-tree selectionMode="checkbox"
               [(value)]="value"
               [(selection)]="selection"
-              (onNodeSelect)="nodeSelect($event)"></p-tree>
+              (onNodeSelect)="nodeSelect($event)"
+              (onNodeUnselect)="nodeUnSelect($event)"></p-tree>
     </div>
   </div>
 </div>
-

@@ -11,6 +11,7 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,15 +34,16 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
         implements PrivilegeService {
 
     /**
-     * privilegeDao的注入
+     * @see PrivilegeDao
      */
     @Autowired
     private PrivilegeDao privilegeDao;
 
-    @Override
-    public BaseDao<PrivilegeEntity, Long> getBaseDao() {
-        return privilegeDao;
-    }
+    /**
+     * @see RoleDao
+     */
+    @Autowired
+    private RoleDao roleDao;
 
     /**
      * 根据app名称来获取权限列表
@@ -73,7 +76,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      */
     @Override
     public boolean hasPrivilege(long userId, String privName) {
-        return privilegeDao.hasPrivilege(userId, privName);
+        List<PrivilegeEntity> result = privilegeDao.listUserPrivileges(userId, privName);
+        return result.size() != 0;
     }
 
     /**
@@ -112,12 +116,20 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
 
     @Override
     public List<RoleEntity> listTargetRoles(Long privilegeId) {
-        return privilegeDao.listTargetRoles(privilegeId);
+        if (privilegeId == null) {
+            return new ArrayList<>();
+        } else {
+            return privilegeDao.listTargetRoles(privilegeId);
+        }
     }
 
     @Override
     public List<RoleEntity> listSourceRoles(Long privilegeId) {
-        return privilegeDao.listSourceRoles(privilegeId);
+        if (privilegeId != null) {
+            return privilegeDao.listSourceRoles(privilegeId);
+        } else {
+            return roleDao.findByEnabled(1L);
+        }
     }
 
     @Override

@@ -49,4 +49,8 @@ export class User {
   roleIds: string;
   // 关联的组织机构id
   institutionIds: string;
+  // 关联的组织机构名称
+  institutionNames: string[];
+  // 关联的网格名称
+  gridNames: string[];
 }

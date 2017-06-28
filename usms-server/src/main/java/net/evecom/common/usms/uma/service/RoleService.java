@@ -98,9 +98,11 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * 根据角色ID查找未选用户列表
      *
      * @param roleId
+     * @param institutionId
+     * @param key
      * @return
      */
-    List<Map<String, Object>> listSourceUsers(Long roleId,SqlFilter sqlFilter);
+    List<Map<String, Object>> listSourceUsers(Long roleId, Long institutionId, String key);
 
     /**
      * 更新用户列表

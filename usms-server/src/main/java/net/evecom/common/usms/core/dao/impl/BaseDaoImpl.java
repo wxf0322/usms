@@ -25,7 +25,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <P><B>描述: </B> 数据层基础类  </P>
@@ -37,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @created 2017/06/24 12:00:00
  */
 @Repository("baseDao")
-public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
+public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
     /**
      * @see Logger
@@ -48,7 +47,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
      * @see EntityManager
      */
     @PersistenceContext
-    private EntityManager manager;
+    protected EntityManager manager;
 
     /**
      * 泛型类
@@ -115,7 +114,6 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
     /**
      * 描述： 根据名称去获取可执行的query对象
      *
-     * @param entityClass
      * @param name
      * @param values
      * @return
@@ -347,104 +345,6 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
     public int executeSql(String sqlString, Object[] values) throws Exception {
         Query query = this.createNativeQuery(sqlString, values);
         return query.executeUpdate();
-    }
-
-    /**
-     * 保存或者更新
-     *
-     * @param entity
-     * @return
-     */
-    @Override
-    public T saveOrUpdate(T entity) {
-        T tmp = manager.merge(entity);
-        manager.flush();
-        return tmp;
-    }
-
-    /**
-     * 查询全部
-     *
-     * @return
-     */
-    @Override
-    public List<T> findAll() {
-        String sql = "from " + this.clazz.getSimpleName();
-        Query query = manager.createQuery(sql);
-        return query.getResultList();
-    }
-
-    /**
-     * 根据ID查询实体
-     *
-     * @param entityClass
-     * @param entityId
-     * @param <M>
-     * @return
-     */
-    @Override
-    public <M> M findOne(Class<M> entityClass, Object entityId) {
-        return manager.find(entityClass, entityId);
-    }
-
-    /**
-     * 查询单个数据
-     *
-     * @param entityId
-     * @return
-     */
-    @Override
-    public T findOne(ID entityId) {
-        return findOne(this.clazz, entityId);
-    }
-
-    /**
-     * 单行删除
-     *
-     * @param entityClass
-     * @param entityId
-     * @param <M>
-     */
-    @Override
-    public <M> void delete(Class<M> entityClass, Object entityId) {
-        delete(entityClass, new Object[]{entityId});
-    }
-
-    /**
-     * @param entityClass
-     * @param entityIds
-     * @param <M>
-     */
-    @Override
-    public <M> void delete(Class<M> entityClass, Object[] entityIds) {
-        for (Object id : entityIds) {
-            M found = findOne(entityClass, id);
-            if (found != null) {
-                manager.remove(found);
-            } else {
-                throw new IllegalArgumentException(entityClass.getName() + " not found: This vo ID is " + id);
-            }
-        }
-    }
-
-    /**
-     * 单行删除
-     *
-     * @param entityId
-     */
-    @Override
-    public void delete(ID entityId) {
-        this.delete(this.clazz, entityId);
-    }
-
-    /**
-     * 多行删除
-     *
-     * @param entityIds
-     */
-    @Override
-    public void delete(ID[] entityIds) {
-        this.delete(this.clazz, entityIds);
     }
 
 }

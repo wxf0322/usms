@@ -41,7 +41,7 @@ public class PrivilegeController {
     private static Logger logger = LoggerFactory.getLogger(PrivilegeController.class);
 
     /**
-     * 注入privilegeService
+     * @see PrivilegeService
      */
     @Autowired
     private PrivilegeService privilegeService;

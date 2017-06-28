@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-config.xml")
-public class InstitutionTest {
+public class InstitutionTestCase {
 
     /**
      * @see InstitutionService
@@ -28,10 +28,5 @@ public class InstitutionTest {
 
     @Test
     public void test(){
-        System.out.println("--------------------------------------------");
-        //System.out.println(institutionService.listInstsByLoginName("admin"));
-        //System.out.println(institutionService.getInstByInstName("平潭综合实验区文学艺术界联合会"));
-        //System.out.println(institutionService.listUsersByInstName("平潭综合实验区文学艺术界联合会"));
-        System.out.println(institutionService.listInstsByType(1L));
     }
 }

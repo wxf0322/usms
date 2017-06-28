@@ -5,9 +5,7 @@
  */
 
 import net.evecom.common.usms.uma.dao.UserDao;
-import net.evecom.common.usms.uma.dao.UserJpa;
 import net.evecom.common.usms.uma.service.UserService;
-import org.hibernate.engine.jdbc.connections.internal.UserSuppliedConnectionProviderImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-config.xml")
-public class UserTest {
+class UserTestCase {
 
     /**
      * @see UserService

@@ -36,7 +36,7 @@
                            onblur="if (value=='') {value='密码'}" data-role="none">
                 </div>
                 <div class="chose">
-                    <a href="#" class="login">授权并登陆</a>
+                    <a href="#" class="login">授权并登录</a>
                 </div>
             </div>
         </div>

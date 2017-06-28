@@ -7,6 +7,8 @@ package net.evecom.common.usms.core.service.impl;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,8 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      *
      * @return
      */
-    public abstract BaseDao<T, ID> getBaseDao();
+    @Autowired
+    public JpaRepository<T, ID> jpaRepository;
 
     /**
      * 保存或者更新
@@ -38,7 +41,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      * @return
      */
     public T saveOrUpdate(T entity) {
-        return getBaseDao().saveOrUpdate(entity);
+        return jpaRepository.save(entity);
     }
 
     /**
@@ -49,7 +52,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      */
     public T findOne(ID entityId) {
         if (entityId == null) return null;
-        return getBaseDao().findOne(entityId);
+        return jpaRepository.findOne(entityId);
     }
 
     /**
@@ -58,7 +61,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      * @return
      */
     public List<T> findAll() {
-        return getBaseDao().findAll();
+        return jpaRepository.findAll();
     }
 
     /**
@@ -67,7 +70,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      * @param entityId
      */
     public void delete(ID entityId) {
-        getBaseDao().delete(entityId);
+        jpaRepository.delete(entityId);
     }
 
     /**
@@ -76,7 +79,11 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
      * @param entityIds
      */
     public void delete(ID[] entityIds) {
-        getBaseDao().delete(entityIds);
+        if (entityIds != null) {
+            for (ID id : entityIds) {
+                jpaRepository.delete(id);
+            }
+        }
     }
 
 }

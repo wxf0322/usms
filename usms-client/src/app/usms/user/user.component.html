@@ -1,5 +1,5 @@
 <div class="ui-g-3">
-  <div class="left-panel">
+  <div class="user-left-panel">
     <p-panel header="组织机构树">
       <p-tree [value]="tree"
               selectionMode="single"
@@ -48,8 +48,8 @@
                     (click)="gotoUserDetail('edit',user.id)">{{user.name}}</span>
             </ng-template>
           </p-column>
-          <p-column field="mobile" header="手机号码" [style]="{'width':'14%'}"></p-column>
-          <p-column header="机构"></p-column>
+          <p-column field="institutionNames" header="已关联机构">
+          </p-column>
           <p-column field="enabled" header="状态">
             <ng-template let-user="rowData" pTemplate="body">
               {{user.enabled | enabledPipe}}

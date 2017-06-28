@@ -12,6 +12,7 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
 import net.evecom.common.usms.uma.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +35,6 @@ public class StaffServiceImpl extends BaseServiceImpl<StaffEntity, Long>
      */
     @Autowired
     private StaffDao staffDao;
-
-    @Override
-    public BaseDao<StaffEntity, Long> getBaseDao() {
-        return staffDao;
-    }
 
     /**
      * 描述

@@ -40,11 +40,6 @@ public class GridServiceImpl extends BaseServiceImpl<GridEntity, Long>
     @Autowired
     private GridDao gridDao;
 
-    @Override
-    public BaseDao<GridEntity, Long> getBaseDao() {
-        return gridDao;
-    }
-
     /**
      * 根据管辖区域编码查询用户列表
      *

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
@@ -9,6 +9,8 @@ import {Role} from '../../role/role';
 import {TreeData} from '../../../shared/util/tree-data';
 import {TreeUtil} from '../../../shared/util/tree-util';
 import {TreeNode} from 'primeng/primeng';
+import {RequestOptions, Http, Headers} from '@angular/http';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-user-detail',
@@ -26,18 +28,25 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
 
   targetRoles: Role[] = [];
 
-  institutionName: string;
-
   tree: TreeNode[] = [];
+
+  nullPicture = '/static/images/null.png';
 
   /**
    * 回填机构树的数据
    */
   selectedNodes: TreeNode[] = [];
 
+  /**
+   * 回填的名称
+   */
+  selectedNames: string;
+
   constructor(private location: Location,
               protected httpService: HttpService,
-              protected route: ActivatedRoute) {
+              protected route: ActivatedRoute,
+              protected elementRef: ElementRef,
+              protected http: Http) {
     super(httpService, route);
     this.detailData = new User();
     this.detailData.enabled = 1;
@@ -57,11 +66,7 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
   }
 
   ngOnInit(): void {
-    // 传入组织机构名称
-    this.institutionName = this.route.snapshot.params['institutionName'];
-    if (this.institutionName === 'undefined') {
-      this.institutionName = '';
-    }
+    this.detailData.pictureUrl = this.nullPicture;
     const url = 'user/find';
     this.init(url).then(
       res => {
@@ -69,6 +74,9 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
           this.date = new Date(this.detailData.birthday);
         } else {
           this.date = new Date();
+        }
+        if (this.detailData.pictureUrl == null) {
+          this.detailData.pictureUrl = this.nullPicture;
         }
       });
     this.refreshTree();
@@ -81,9 +89,9 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
 
   save() {
     this.detailData.birthday = this.date.getTime();
+    this.detailData.roleIds = '';
     this.detailData.roleIds = this.targetRoles.map(role => role.id).join(',');
     this.detailData.institutionIds = this.selectedNodes.map(node => node.data.id).join(',');
-
     const url = 'user/saveOrUpdate';
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
@@ -118,9 +126,29 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
     const params = {userId: userId};
     this.httpService.findByParams(url, params)
       .then(res => {
+        this.selectedNames = res.map(node => node.label).join(',');
         // 回填已选中的网格数据
         TreeUtil.setSelection(this.tree, this.selectedNodes, res);
       });
+  }
+
+
+  fileSelected() {
+    let url = 'file/upload';
+    var oFile = this.elementRef.nativeElement.querySelector('#imageFile').files[0];
+    let formData: FormData = new FormData();
+    formData.append('uploadFile', oFile, oFile.name);
+    let headers = new Headers({'Accept': 'application/json'});
+    let options = new RequestOptions({headers});
+    this.http.post(url, formData, options)
+      .map(res => res.json())
+      .catch(error => Observable.throw(error))
+      .subscribe(
+        data => {
+          this.detailData.pictureUrl = data['filename'];
+        },
+        error => console.log(error)
+      );
   }
 
 }

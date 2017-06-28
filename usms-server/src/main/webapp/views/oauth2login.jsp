@@ -100,7 +100,7 @@
             </div>
         </div>
         <div class="eui-login-sub animated-long">
-            <a href="javascript:ssoLogin();">授权并登入</a>
+            <a href="javascript:ssoLogin();">授权并登录</a>
         </div>
     </div>
 </form>

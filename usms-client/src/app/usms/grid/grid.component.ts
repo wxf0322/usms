@@ -70,7 +70,7 @@ export class GridComponent extends BaseTable<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tableTree = TreeUtil.buildTrees(treeDataArr);
-        // this.tableTree = BeanUtil.arrayDeepCopy(this.gridTree);
+        this.tableTree[0].expanded = true;
         this.dialogTree = BeanUtil.arrayDeepCopy(this.tableTree);
       });
     this.filter = '';

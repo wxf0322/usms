@@ -5,13 +5,13 @@
  */
 package net.evecom.common.usms.uma.dao;
 
-import net.evecom.common.usms.core.dao.BaseDao;
-import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.vo.OperationVO;
-import org.springframework.data.domain.Page;
+import net.evecom.common.usms.uma.dao.custom.PrivilegeDaoCustom;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -20,7 +20,10 @@ import java.util.List;
  * @version 1.0
  * @created 2017-5-8 17:26
  */
-public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
+@Repository
+public interface PrivilegeDao extends JpaRepository<PrivilegeEntity, Long>, PrivilegeDaoCustom {
+
+    List<PrivilegeEntity> findByEnabled(Long enabled);
 
     /**
      * 根据app名字获取权限列表
@@ -28,6 +31,14 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param appName
      * @return
      */
+    @Query(value = "select * from usms_privileges p " +
+            "where p.id in (select po.priv_id from usms_privilege_operation po " +
+            "where po.oper_id in (select o.id " +
+            "from usms_operations o " +
+            "where o.application_id in " +
+            "(select a.id from usms_applications a " +
+            "where a.name= ?1) " +
+            "and o.enabled = 1)) ", nativeQuery = true)
     List<PrivilegeEntity> listPrivsByAppName(String appName);
 
     /**
@@ -36,16 +47,30 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param userId
      * @return
      */
+    @Query(value = "select * from usms_privileges p " +
+            "where p.id in( " +
+            "select pr.priv_id from usms_privilege_role pr " +
+            "where pr.role_id in( " +
+            "select ur.role_id from usms_user_role ur " +
+            "where ur.user_id = ?1) " +
+            ") and p.enabled = 1", nativeQuery = true)
     List<PrivilegeEntity> listPrivsByUserId(long userId);
 
     /**
      * 判断是否拥有次权限
      *
      * @param userId
-     * @param
+     * @param privName
      * @return
      */
-    boolean hasPrivilege(long userId, String privName);
+    @Query(value = "select * from usms_privileges p " +
+            "where p.id in( " +
+            "select pr.priv_id from usms_privilege_role pr " +
+            "where pr.role_id in( " +
+            "select ur.role_id from usms_user_role ur " +
+            "where ur.user_id = ?1) " +
+            ") and p.enabled = 1 and p.name= ?2", nativeQuery = true)
+    List<PrivilegeEntity> listUserPrivileges(long userId, String privName);
 
     /**
      * 根据权限编码查询用户列表
@@ -53,35 +78,28 @@ public interface PrivilegeDao extends BaseDao<PrivilegeEntity, Long> {
      * @param privName
      * @return
      */
+    @Query(value = "select * from usms_users u " +
+            "where u.id in (select ur.user_id from usms_user_role ur " +
+            "where ur.role_id in (select r.id from usms_roles r " +
+            "where r.id in (select pr.role_id from usms_privilege_role pr " +
+            "where pr.priv_id in (select p.id from usms_privileges p " +
+            "where p.name = ?1)) and r.enabled = 1)) and u.enabled = 1 ", nativeQuery = true)
     List<UserEntity> listUsersByPrivName(String privName);
-
-    /**
-     * 查询权限列表
-     */
-    Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter);
-
-
-    /**
-     * 根据权限ID，更新对应操作的关系
-     */
-    void updateOperations(Long privilegeId, String[] operationIds);
-
-
-    /**
-     * 查找权限ID对应的操作列表
-     */
-    List<OperationVO> listOpersByPrivId(Long privilegeId);
 
     /**
      * 获取该权限已选择的角色
      */
-    List<RoleEntity> listTargetRoles(Long privilegeId );
+    @Query(value = "select * from usms_roles r where r.id in " +
+            "(select role_id from usms_privilege_role " +
+            "where priv_id =?1) and enabled=1 ", nativeQuery = true)
+    List<RoleEntity> listTargetRoles(Long privilegeId);
 
     /**
      * 获取该权限未选择的角色
      */
+    @Query(value = "select * from usms_roles r where r.id not in " +
+            "(select role_id from usms_privilege_role " +
+            "where priv_id =?1) and enabled=1", nativeQuery = true)
     List<RoleEntity> listSourceRoles(Long privilegeId);
 
-
-    void updateRoles(Long privilegeId, String[] roleIds);
 }

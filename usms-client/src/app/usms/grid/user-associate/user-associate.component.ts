@@ -60,6 +60,7 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
+        this.tree[0].expanded = true;
       });
   }
 

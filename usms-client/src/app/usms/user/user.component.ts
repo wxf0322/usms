@@ -102,8 +102,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   gotoUserDetail(type: string, id: string) {
     this.router.navigate(['user-detail', {
       type: type,
-      id: id,
-      institutionName: this.institutionName
+      id: id
     }], {relativeTo: this.route});
   }
 
@@ -114,14 +113,12 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   nodeSelect(event) {
     this.institutionName = event.node.label;
     let url = 'user/list?key=' + this.filter;
-    if (event.node.data.parentId != 0) {
+    if (event.node.data.parentId !== 0) {
       this.institutionId = event.node.data.id;
     } else {
       this.institutionId = null;
     }
-    let params = {
-      institutionId: this.institutionId
-    };
+    let params = {institutionId: this.institutionId};
     this.httpService.findByPage(url, 0, this.page.size, params).then(
       res => this.setData(res)
     );

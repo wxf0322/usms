@@ -9,6 +9,7 @@ import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
+import net.evecom.common.usms.uma.dao.RoleDao;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.PasswordHelper;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,22 +36,22 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         implements UserService {
 
     /**
-     * 注入UserDao
+     * @see UserDao
      */
     @Autowired
     private UserDao userDao;
 
     /**
-     * 注入密码工具类
+     * @see RoleDao
+     */
+    @Autowired
+    private RoleDao roleDao;
+
+    /**
+     * @see PasswordHelper
      */
     @Autowired
     private PasswordHelper passwordHelper;
-
-
-    @Override
-    public BaseDao<UserEntity, Long> getBaseDao() {
-        return userDao;
-    }
 
     /**
      * @param userVO
@@ -63,7 +65,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         userEntity.setTimeCreated(new Date());
         //加密密码
         passwordHelper.encryptPassword(userEntity);
-        return userDao.saveOrUpdate(userEntity);
+        return userDao.save(userEntity);
     }
 
     /**
@@ -74,7 +76,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     public UserEntity updateUser(UserVO userVO) {
         UserEntity found = userDao.findOne(userVO.getId());
         found = userVO.mergeUserEntity(found);
-        return userDao.saveOrUpdate(found);
+        return userDao.save(found);
     }
 
     /**
@@ -88,7 +90,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         UserEntity user = userDao.findOne(id);
         user.setPassword(newPassword);
         passwordHelper.encryptPassword(user);
-        userDao.saveOrUpdate(user);
+        userDao.save(user);
     }
 
     /**
@@ -110,7 +112,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public UserEntity getUserByLoginName(String loginName) {
-        return userDao.getUserByLoginName(loginName);
+        return userDao.findFirstByLoginName(loginName);
     }
 
     @Override
@@ -185,7 +187,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public List<RoleEntity> listTargetRoles(Long userId) {
-        return userDao.listTargetRoles(userId);
+        if (userId == null) {
+            return new ArrayList<>();
+        } else {
+            return userDao.listTargetRoles(userId);
+        }
     }
 
     /**
@@ -194,7 +200,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public List<RoleEntity> listSourceRoles(Long userId) {
-        return userDao.listSourceRoles(userId);
+        if (userId != null) {
+            return userDao.listSourceRoles(userId);
+        } else {
+            return roleDao.findByEnabled(1L);
+        }
     }
 
     /**

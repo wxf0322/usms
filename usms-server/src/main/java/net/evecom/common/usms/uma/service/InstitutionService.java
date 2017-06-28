@@ -53,14 +53,6 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
     List<UserEntity> listUsersByInstNames(String[] instNames);
 
     /**
-     * 根据组织机构类型获取组织机构列表
-     *
-     * @param type
-     * @return
-     */
-    List<InstitutionEntity> listInstsByType(Long type);
-
-    /**
      * 检查该节点是否能被删除
      *
      * @param id

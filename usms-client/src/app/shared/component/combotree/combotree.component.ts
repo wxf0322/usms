@@ -9,6 +9,7 @@ import {TreeNode} from 'primeng/primeng';
 })
 export class CombotreeComponent implements OnInit {
 
+
   disabled: boolean; // 是否禁用
 
   readonly: boolean; // 是否只读
@@ -17,7 +18,9 @@ export class CombotreeComponent implements OnInit {
 
   panelVisible: boolean; // 是否显示下拉面板
 
-  selectedNames: string; // 被选择的数据名称
+  @Input() size: number;
+
+  @Input() selectedNames: string; // 被选择的数据名称
 
   documentClickListener: any; // 监听
 
@@ -56,7 +59,6 @@ export class CombotreeComponent implements OnInit {
     if (this.disabled || this.readonly) {
       return;
     }
-
     this.selfClick = true;
     this.panelVisible = true;
   }
@@ -66,7 +68,10 @@ export class CombotreeComponent implements OnInit {
     this.showResult();
   }
 
-  // 显示选择结果
+  nodeUnSelect(event) {
+    this.showResult();
+  }
+
   showResult() {
     this.selectedNames = this.selectionValue.map(node => node.label).join(',');
   }

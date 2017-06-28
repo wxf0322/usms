@@ -35,11 +35,6 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     @Autowired
     private InstitutionDao institutionDao;
 
-    @Override
-    public BaseDao<InstitutionEntity, Long> getBaseDao() {
-        return institutionDao;
-    }
-
     /**
      * 根据登入名查询组织机构
      *
@@ -59,7 +54,7 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      */
     @Override
     public InstitutionEntity getInstByInstName(String instName) {
-        return institutionDao.getInstByInstName(instName);
+        return institutionDao.findFirstByName(instName);
     }
 
     /**
@@ -82,17 +77,6 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     @Override
     public List<UserEntity> listUsersByInstNames(String[] instNames) {
         return institutionDao.listUsersByInstNames(instNames);
-    }
-
-    /**
-     * 根据类型查找组织机构信息
-     *
-     * @param type
-     * @return
-     */
-    @Override
-    public List<InstitutionEntity> listInstsByType(Long type) {
-        return institutionDao.listInstsByType(type);
     }
 
     /**

@@ -30,9 +30,6 @@ export class RoleUserSelectorComponent extends BaseTable<any> implements OnInit 
 
   @Input() targetUsers: any[] = [];
 
-
-  @Input() gridCode:any;
-
   @Input() roleId: any;
 
   //关键字
@@ -60,12 +57,12 @@ export class RoleUserSelectorComponent extends BaseTable<any> implements OnInit 
   }
 
   queryForRole() {
-    let unSelectedUrl = 'role/users/unselected?key=' + this.key;
+    let sourceUrl = 'role/users/source?key=' + this.key;
     let params = {
       roleId: this.roleId,
       institutionId: this.institutionId
     };
-    this.httpService.executeByParams(unSelectedUrl, params).then(
+    this.httpService.executeByParams(sourceUrl, params).then(
       res => {
         this.sourceUsers = res;
       }

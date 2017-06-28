@@ -155,17 +155,8 @@ public class RoleController {
      */
     @ResponseBody
     @RequestMapping(value = "users/source")
-    public List<Map<String, Object>> listSourceUsers(Long roleId, Long institutionId, HttpServletRequest request) {
-        SqlFilter sqlFilter = new SqlFilter();
-        if (institutionId != null) {
-            sqlFilter.addFilter("QUERY_u#institution_id_L_EQ", institutionId.toString());
-        } else {
-            sqlFilter.addFilter("QUERY_u#institution_id_L_EQNULL", "");
-        }
-        if (!StringUtils.isEmpty(request.getParameter("key"))) {
-            sqlFilter.addFilter("QUERY_u#name_S_LK", request.getParameter("key"));
-        }
-        return roleService.listSourceUsers(roleId, sqlFilter);
+    public List<Map<String, Object>> listSourceUsers(Long roleId, Long institutionId, String key) {
+        return roleService.listSourceUsers(roleId, institutionId, key);
     }
 
 }

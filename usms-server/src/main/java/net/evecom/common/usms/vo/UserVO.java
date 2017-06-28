@@ -130,6 +130,16 @@ public class UserVO {
      */
     String institutionIds;
 
+    /**
+     * 关联的组织机构名称
+     */
+    String[] institutionNames;
+
+    /**
+     * 关联的网格名称
+     */
+    String[] gridNames;
+
     public Long getId() {
         return id;
     }
@@ -330,6 +340,22 @@ public class UserVO {
         this.institutionIds = institutionIds;
     }
 
+    public String[] getInstitutionNames() {
+        return institutionNames;
+    }
+
+    public void setInstitutionNames(String[] institutionNames) {
+        this.institutionNames = institutionNames;
+    }
+
+    public String[] getGridNames() {
+        return gridNames;
+    }
+
+    public void setGridNames(String[] gridNames) {
+        this.gridNames = gridNames;
+    }
+
     public UserEntity mergeUserEntity(UserEntity userEntity) {
         try {
             BeanUtils.copyProperties(userEntity, this);
@@ -393,7 +419,7 @@ public class UserVO {
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", roleIds='" + roleIds + '\'' +
                 ", institutionIds='" + institutionIds + '\'' +
+                ", institutionNames='" + institutionNames + '\'' +
                 '}';
     }
-
 }

@@ -1,14 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
-import {ActivatedRoute} from "@angular/router";
-import {BaseDetail} from "../../../shared/util/base-detail";
-import {HttpService} from "../../../core/service/http.service";
-import {Role} from "../role";
-import {Privilege} from "../../privilege/privilege";
-import {TreeNode} from "primeng/primeng";
-import {TreeData} from "../../../shared/util/tree-data";
-import {TreeUtil} from "../../../shared/util/tree-util";
+import {ActivatedRoute} from '@angular/router';
+import {BaseDetail} from '../../../shared/util/base-detail';
+import {HttpService} from '../../../core/service/http.service';
+import {Role} from '../role';
+import {Privilege} from '../../privilege/privilege';
+import {TreeNode} from 'primeng/primeng';
+import {TreeData} from '../../../shared/util/tree-data';
+import {TreeUtil} from '../../../shared/util/tree-util';
 
 @Component({
   selector: 'app-role-detail',
@@ -59,22 +59,14 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
       .then(res => {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
+        this.tree[0].expanded = true;
       });
   }
 
   save() {
-    let url = 'role/saveOrUpdate';
-    this.detailData.privilegeIds = '';
-    for (let i in this.targetPrivileges) {
-      this.detailData.privilegeIds =
-        this.detailData.privilegeIds + this.targetPrivileges[i].id + ',';
-    }
-
-    this.detailData.userIds = '';
-    for (let i in this.targetUsers) {
-      this.detailData.userIds =
-        this.detailData.userIds + this.targetUsers[i].ID + ',';
-    }
+    const url = 'role/saveOrUpdate';
+    this.detailData.privilegeIds = this.targetPrivileges.map(priv => priv.id).join(',');
+    this.detailData.userIds = this.targetUsers.map(user => user.ID).join(',');
 
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
@@ -88,10 +80,10 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
   }
 
   privilegesInit() {
-    let id = this.route.snapshot.params['id'];
-    let targetUrl = 'role/privileges/target';
-    let sourceUrl = 'role/privileges/source';
-    let params = {roleId: id};
+    const id = this.route.snapshot.params['id'];
+    const targetUrl = 'role/privileges/target';
+    const sourceUrl = 'role/privileges/source';
+    const params = {roleId: id};
     this.httpService.executeByParams(sourceUrl, params).then(
       res => this.sourcePrivileges = res
     );
@@ -101,10 +93,10 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
   }
 
   usersInit() {
-    let id = this.route.snapshot.params['id'];
-    let targetUrl = 'role/users/target';
-    let sourceUrl = 'role/users/source';
-    let params = {roleId: id};
+    const id = this.route.snapshot.params['id'];
+    const targetUrl = 'role/users/target';
+    const sourceUrl = 'role/users/source';
+    const params = {roleId: id};
     this.httpService.executeByParams(sourceUrl, params).then(
       res => this.sourceUsers = res
     );

@@ -20,7 +20,7 @@ import java.util.Map;
  * @version 3.0
  * @created 2017/06/24 12:00:00
  */
-public interface BaseDao<T, ID extends Serializable> {
+public interface BaseDao<T> {
 
     /**
      * 查询数据总量
@@ -167,70 +167,5 @@ public interface BaseDao<T, ID extends Serializable> {
      * @throws Exception the exception
      */
     int executeSql(String sqlString, Object[] values) throws Exception;
-
-    /**
-     * 保存或者更新
-     *
-     * @param entity
-     * @return
-     */
-    T saveOrUpdate(T entity);
-
-    /**
-     * 查询全部
-     *
-     * @return
-     */
-    List<T> findAll();
-
-    /**
-     * 单行查询
-     *
-     * @param entityClass
-     * @param entityId
-     * @param <M>
-     * @return
-     */
-    <M> M findOne(Class<M> entityClass, Object entityId);
-
-    /**
-     * 查询单个
-     *
-     * @param entityId
-     * @return
-     */
-    T findOne(ID entityId);
-
-    /**
-     * 单行删除
-     *
-     * @param entityClass
-     * @param entityId
-     * @param <M>
-     */
-    <M> void delete(Class<M> entityClass, Object entityId);
-
-    /**
-     * 多行删除
-     *
-     * @param entityClass
-     * @param entityIds
-     * @param <M>
-     */
-    <M> void delete(Class<M> entityClass, Object[] entityIds);
-
-    /**
-     * 单行删除
-     *
-     * @param entityId
-     */
-    void delete(ID entityId);
-
-    /**
-     * 多行删除
-     *
-     * @param entityIds
-     */
-    void delete(ID[] entityIds);
 
 }

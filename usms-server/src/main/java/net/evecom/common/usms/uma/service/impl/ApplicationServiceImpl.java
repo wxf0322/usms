@@ -18,6 +18,7 @@ import net.evecom.common.usms.uma.service.ApplicationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,11 +57,6 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     private TreeService treeService;
 
     @Override
-    public BaseDao<ApplicationEntity, Long> getBaseDao() {
-        return applicationDao;
-    }
-
-    @Override
     public Page<ApplicationEntity> listAppsByPage(int page, int size , SqlFilter sqlFilter) {
         return applicationDao.listAppsByPage(page, size ,sqlFilter);
     }
@@ -69,7 +65,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     public ApplicationEntity createApplication(ApplicationEntity applicationEntity) {
         applicationEntity.setClientId(UUID.randomUUID().toString());
         applicationEntity.setClientSecret(UUID.randomUUID().toString());
-        applicationEntity = applicationDao.saveOrUpdate(applicationEntity);
+        applicationEntity = applicationDao.save(applicationEntity);
         OperationVO operationVO = new OperationVO();
         operationVO.setLabel(applicationEntity.getLabel());
         operationVO.setName(applicationEntity.getName());
@@ -89,17 +85,17 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
 
     @Override
     public ApplicationEntity updateApplication(ApplicationEntity application) {
-        return applicationDao.saveOrUpdate(application);
+        return applicationDao.save(application);
     }
 
     @Override
     public ApplicationEntity getAppByClientId(String clientId) {
-        return applicationDao.getAppByClientId(clientId);
+        return applicationDao.findFirstByClientId(clientId);
     }
 
     @Override
     public ApplicationEntity getAppByClientSecret(String clientSecret) {
-        return applicationDao.getAppByClientSecret(clientSecret);
+        return applicationDao.findFirstByClientSecret(clientSecret);
     }
 
     /**

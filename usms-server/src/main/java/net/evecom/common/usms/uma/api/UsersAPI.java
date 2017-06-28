@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.uma.service.*;
@@ -81,6 +82,12 @@ public class UsersAPI {
     private UserService userService;
 
     /**
+     * 注入OAuthService
+     */
+    @Autowired
+    private OAuthService oAuthService;
+
+    /**
      * 获取用户列表
      *
      * @param request
@@ -142,7 +149,7 @@ public class UsersAPI {
      * @return
      */
     @RequestMapping(value = "/v1/internalapi/users", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getUsersToMessageCenter(HttpServletRequest request) {
+    public ResponseEntity listUsersForMessageCenter(HttpServletRequest request) {
         List<UserEntity> users = null;
         String loginNames = request.getParameter("login_names");
         if (StringUtils.isNotEmpty(loginNames)) {
@@ -168,6 +175,36 @@ public class UsersAPI {
         }
     }
 
+
+    @RequestMapping(value = "/v1/internalapi/user", produces = "application/json; charset=UTF-8")
+    public ResponseEntity getUserForTaskCenter(HttpServletRequest request) {
+        String clientId = request.getParameter("client_id");
+        String loginName = request.getParameter("login_name");
+
+        if (!oAuthService.checkClientId(clientId)) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+
+        String accessToken = oAuthService.getAccessToken(loginName, clientId);
+        UserEntity user = userService.getUserByLoginName(loginName);
+
+        if(user == null) {
+             ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        } else {
+            JSONObject resultJson = new JSONObject();
+            JSONObject userJson = getUserJSONObject(user);
+            userJson.put("accessToken", accessToken);
+            resultJson.put("user", userJson);
+            return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
+        }
+    }
+
     /**
      * 转换用户数据为JSONArray
      *
@@ -180,14 +217,25 @@ public class UsersAPI {
         } else {
             JSONArray usersJsonArr = new JSONArray();
             for (UserEntity user : users) {
-                UserVO userVO = new UserVO(user);
-                JSONObject userJson = JSONObject.fromObject(userVO);
-                userJson.remove("enabled");
-                userJson.remove("roleNames");
+                JSONObject userJson = getUserJSONObject(user);
                 usersJsonArr.add(userJson);
             }
             return usersJsonArr;
         }
+    }
+
+    /**
+     * 获得单个用户json数据
+     *
+     * @param user
+     * @return
+     */
+    private JSONObject getUserJSONObject(UserEntity user) {
+        UserVO userVO = new UserVO(user);
+        JSONObject userJson = JSONObject.fromObject(userVO);
+        userJson.remove("enabled");
+        userJson.remove("roleNames");
+        return userJson;
     }
 
 }

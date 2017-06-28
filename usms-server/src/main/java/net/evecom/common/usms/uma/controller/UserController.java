@@ -14,15 +14,21 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.vo.GridVO;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.service.UserService;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 描述 user控制器
@@ -33,6 +39,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/user")
+@MultipartConfig
 public class UserController {
 
     /**
@@ -150,5 +157,7 @@ public class UserController {
     public List<RoleEntity> listSourceRoles(Long userId) {
         return userService.listSourceRoles(userId);
     }
+
+
 
 }

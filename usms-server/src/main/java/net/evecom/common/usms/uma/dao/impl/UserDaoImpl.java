@@ -8,11 +8,12 @@ package net.evecom.common.usms.uma.dao.impl;
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
 import net.evecom.common.usms.core.util.JpaUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
-import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.uma.dao.RoleJpa;
-import net.evecom.common.usms.uma.dao.UserJpa;
-import net.evecom.common.usms.vo.UserVO;
+import net.evecom.common.usms.entity.GridEntity;
+import net.evecom.common.usms.entity.InstitutionEntity;
+import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.UserDao;
+import net.evecom.common.usms.uma.dao.custom.UserDaoCustom;
+import net.evecom.common.usms.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,32 +29,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 描述 UserDao实现
+ * 描述
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/4/24 15:46
+ * @created 2017/6/28 下午6:33
  */
 @Repository
-public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDao {
+public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCustom {
 
-    /**
-     * 注入实体管理器
-     */
-    @PersistenceContext
-    private EntityManager manager;
-
-    /**
-     * 注入UserJpa
-     */
     @Autowired
-    private UserJpa userJpa;
-
-    /**
-     * 注入RoleJpa
-     */
-    @Autowired
-    private RoleJpa roleJpa;
+    private UserDao userDao;
 
     /**
      * 根据分页查询用户Model
@@ -66,142 +52,92 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
      */
     @Override
     public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
-        String instCondition;
         List params = new ArrayList();
+        StringBuffer sb = new StringBuffer();
         if (institutionId == null) {
-            instCondition = "ui.institution_id is null";
+            sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from usms_users u ")
+                    .append("left join usms_staffs s on u.staff_id = s.id ")
+                    .append(sqlFilter.getWhereSql());
         } else {
-            instCondition = "ui.institution_id = ?";
+            sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from ( ")
+                    .append("select distinct u.id, u.login_name, u.name, u.staff_id, u.enabled, ui.institution_id ")
+                    .append("from usms_users u left join usms_user_institution ui on u.id = ui.user_id ")
+                    .append("where ui.institution_id = ?) u ")
+                    .append("left join usms_staffs s ")
+                    .append("on u.staff_id = s.id ")
+                    .append(sqlFilter.getWhereSql());
             params.add(institutionId);
         }
         params.addAll(sqlFilter.getParams());
-        StringBuffer sb = new StringBuffer();
-        sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from (\n")
-                .append("select distinct u.id, u.login_name, u.name, u.staff_id, u.enabled, ui.institution_id \n")
-                .append("from usms_users u \n")
-                .append("left join usms_user_institution ui on u.id = ui.user_id\n")
-                .append("where ").append(instCondition).append(") u \n")
-                .append("left join usms_staffs s\n")
-                .append("on u.staff_id = s.id ")
-                .append(sqlFilter.getWhereSql());
         String sql = sb.toString();
         Page<Map<String, Object>> pageBean = queryForMap(sql, params.toArray(), page, size);
         List<UserVO> results = new ArrayList<>();
+
         for (Map<String, Object> var : pageBean.getContent()) {
             UserVO userVO = new UserVO();
-            userVO.setId(((BigDecimal) var.get("ID")).longValue());
-            userVO.setLoginName((String) var.get("LOGIN_NAME"));
+
+            // 获得用户id
+            Long userId = ((BigDecimal) var.get("ID")).longValue();
+
+            // 获得登入名
+            String loginName = (String) var.get("LOGIN_NAME");
+
+            // 获得组织机构列表
+            List<InstitutionEntity> insts = userDao.listInstsByUserId(userId);
+
+            // 获得组织机构名
+            List<String> instNames = new ArrayList<>();
+            if (insts != null) {
+                Long minLevel = Long.MAX_VALUE;
+                for (InstitutionEntity inst : insts) {
+                    minLevel = Math.min(minLevel, inst.getTreeLevel());
+                }
+                for (InstitutionEntity inst : insts) {
+                    if (inst.getTreeLevel().equals(minLevel)) {
+                        instNames.add(inst.getName());
+                    }
+                }
+            }
+
+            List<String> gridNames = new ArrayList<>();
+            List<GridEntity> grids = userDao.listGridsByLoginName(loginName);
+            if (grids != null) {
+                Long minLevel = Long.MAX_VALUE;
+                for (GridEntity grid : grids) {
+                    minLevel = Math.min(minLevel, grid.getLvl());
+                }
+                for (GridEntity grid : grids) {
+                    if (grid.getLvl().equals(minLevel)) {
+                        gridNames.add(grid.getName());
+                    }
+                }
+            }
+            // 设置变量
+            userVO.setId(userId);
+            userVO.setLoginName(loginName);
             userVO.setName((String) var.get("NAME"));
             userVO.setMobile((String) var.get("MOBILE"));
             userVO.setEnabled(((BigDecimal) var.get("ENABLED")).longValue());
+            userVO.setInstitutionNames(instNames.toArray(new String[instNames.size()]));
+            userVO.setGridNames(gridNames.toArray(new String[gridNames.size()]));
             results.add(userVO);
         }
         return new PageImpl<>(results, new PageRequest(page, size), pageBean.getTotalElements());
     }
 
     @Override
-    public UserEntity getUserByLoginName(String loginName) {
-        List<UserEntity> result = userJpa.findByLoginName(loginName);
-        return JpaUtil.getSingleResult(result);
-    }
-
-    @Override
     public List<UserEntity> listUsersByLoginNames(String[] loginNames) {
         String queryParams = JpaUtil.getQuestionMarks(loginNames);
         StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u where u.login_name in (")
-                .append(queryParams).append(")");
+        sb.append("select * from usms_users u where u.login_name in (").append(queryParams).append(")");
         String sql = sb.toString();
         return super.queryForClass(sql, loginNames);
     }
 
-    @Override
-    public List<RoleEntity> listRolesByUserId(Long userId) {
-        List<RoleEntity> result = super.namedQueryForClass("User.listRolesByUserId",
-                new Object[]{userId});
-        return result;
-    }
-
-    @Override
-    public List<OperationEntity> listOpersByUserId(Long userId) {
-        List<OperationEntity> result = super.namedQueryForClass("User.listOpersByUserId",
-                new Object[]{userId});
-        return result;
-    }
-
-    @Override
-    public List<ApplicationEntity> listAppsByUserId(Long userId) {
-        List<ApplicationEntity> result = super.namedQueryForClass("User.listAppsByUserId",
-                new Object[]{userId});
-        return result;
-    }
-
-    @Override
-    public List<GridEntity> listGridsByLoginName(String loginName) {
-        List<GridEntity> result = super.namedQueryForClass("User.listGridsByLoginName",
-                new Object[]{loginName});
-        return result;
-
-    }
-
-    @Override
-    public void updateInstitutions(Long userId, String[] institutionIds) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("delete from usms_user_institution ui where user_id=:userId");
-        String sql = sb.toString();
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("userId", userId);
-        query.executeUpdate();
-
-        if (institutionIds != null) {
-            for (String id : institutionIds) {
-                Long institutionId = Long.valueOf(id);
-                sql = "insert into usms_user_institution values(:userId, :institutionId)";
-                query = manager.createNativeQuery(sql);
-                query.setParameter("userId", userId);
-                query.setParameter("institutionId", institutionId);
-                query.executeUpdate();
-            }
-        }
-    }
-
-    @Override
-    public List<InstitutionEntity> listInstsByUserId(Long userId) {
-        List<InstitutionEntity> result = super.namedQueryForClass("User.listInstsByUserId",
-                new Object[]{userId});
-        return result;
-    }
-
-    @Override
-    public List<RoleEntity> listTargetRoles(Long userId) {
-        if (userId == null) {
-            return new ArrayList<>();
-        } else {
-            List<RoleEntity> result = super.namedQueryForClass("User.listTargetRoles",
-                    new Object[]{userId});
-            return result;
-        }
-    }
-
-    @Override
-    public List<RoleEntity> listSourceRoles(Long userId) {
-        if (userId != null) {
-            //编辑
-            List<RoleEntity> result = super.namedQueryForClass("User.listSourceRoles",
-                    new Object[]{userId});
-            return result;
-        } else {
-            //新增
-            List<RoleEntity> result = roleJpa.findByEnabled(1L);
-            return result;
-        }
-    }
 
     @Override
     public void updateRoles(Long userId, String[] roleIds) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("delete from usms_user_role where user_id =:userId");
-        String sql = sb.toString();
+        String sql = "delete from usms_user_role where user_id =:userId";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("userId", userId);
         query.executeUpdate();
@@ -212,6 +148,25 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity, Long> implements UserDa
                 query = manager.createNativeQuery(sql);
                 query.setParameter("roleId", roleId);
                 query.setParameter("userId", userId);
+                query.executeUpdate();
+            }
+        }
+
+    }
+
+    @Override
+    public void updateInstitutions(Long userId, String[] institutionIds) {
+        String sql = "delete from usms_user_institution ui where user_id=:userId";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("userId", userId);
+        query.executeUpdate();
+        if (institutionIds != null) {
+            for (String id : institutionIds) {
+                Long institutionId = Long.valueOf(id);
+                sql = "insert into usms_user_institution values(:userId, :institutionId)";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("userId", userId);
+                query.setParameter("institutionId", institutionId);
                 query.executeUpdate();
             }
         }

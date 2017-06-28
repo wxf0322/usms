@@ -15,7 +15,6 @@ import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -379,6 +378,20 @@ public class OAuthServiceImpl implements OAuthService {
         String relationKey = getRelationKey(OAuth.OAUTH_CODE, loginName, clientId);
         String authCode = valueOperations.get(relationKey);
         return authCode;
+    }
+
+    /**
+     * 获得当前的令牌
+     *
+     * @param loginName
+     * @param clientId
+     * @return
+     */
+    @Override
+    public String getAccessToken(String loginName, String clientId) {
+        String relationKey = getRelationKey(OAuth.OAUTH_ACCESS_TOKEN, loginName, clientId);
+        String accessToken = valueOperations.get(relationKey);
+        return accessToken;
     }
 }
 
