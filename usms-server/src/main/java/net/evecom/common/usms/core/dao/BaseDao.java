@@ -15,9 +15,8 @@ import java.util.Map;
  * <P><B>描述: </B> 数据层基础类接口  </P>
  *
  * @param <T>  实体类
- * @param <ID> 主键ID
  * @author Wash Wang
- * @version 3.0
+ * @version 4.0
  * @created 2017/06/24 12:00:00
  */
 public interface BaseDao<T> {

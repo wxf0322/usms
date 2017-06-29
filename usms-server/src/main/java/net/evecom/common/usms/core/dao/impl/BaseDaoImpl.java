@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.core.dao.impl;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +28,9 @@ import org.springframework.stereotype.Repository;
 /**
  * <P><B>描述: </B> 数据层基础类  </P>
  *
- * @param <T>  实体类
- * @param <ID> 主键ID
+ * @param <T> 实体类
  * @author Wash Wang
- * @version 3.0
+ * @version 4.0
  * @created 2017/06/24 12:00:00
  */
 @Repository("baseDao")
@@ -193,7 +191,9 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
      * @return
      */
     @Override
-    public Page<Object> queryForObject(String sqlString, Object[] values, int page, int pageSize) {
+    public Page<Object> queryForObject(String sqlString,
+                                       Object[] values,
+                                       int page, int pageSize) {
         Query query = this.createNativeQuery(sqlString, values);
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
@@ -226,7 +226,9 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
      * @return
      */
     @Override
-    public Page<Map<String, Object>> queryForMap(String sqlString, Object[] values, int page, int pageSize) {
+    public Page<Map<String, Object>> queryForMap(String sqlString,
+                                                 Object[] values,
+                                                 int page, int pageSize) {
         Query query = this.createNativeQuery(sqlString, values);
 
         query.setFirstResult(page * pageSize);
@@ -277,7 +279,10 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
      * @return
      */
     @Override
-    public <M> Page<M> queryForClass(Class<M> entityClass, String sqlString, Object[] values, int page, int pageSize) {
+    public <M> Page<M> queryForClass(Class<M> entityClass,
+                                     String sqlString,
+                                     Object[] values,
+                                     int page, int pageSize) {
         Query query = this.createNativeQuery(entityClass, sqlString, values);
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);

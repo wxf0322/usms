@@ -31,7 +31,8 @@ public interface GridDao extends JpaRepository<GridEntity, Long>, GridDaoCustom 
      * @return
      */
     @Query(value = "select * from usms_users u where u.id in " +
-            "(select ug.user_id from usms_user_grid ug where ug.grid_code=?1)", nativeQuery = true)
+            "(select ug.user_id from usms_user_grid ug where ug.grid_code=?1)",
+            nativeQuery = true)
     List<UserEntity> listUsersByGridCode(String gridCode);
 
 }

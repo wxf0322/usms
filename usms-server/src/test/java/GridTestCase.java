@@ -4,7 +4,7 @@
  *
  */
 
-import net.evecom.common.usms.uma.service.RoleService;
+import net.evecom.common.usms.uma.service.GridService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +14,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  * @author Pisces Lu
  * @version 1.0
- * @created 2017-6-26 15:27
+ * @created 2017-6-26 10:14
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-config.xml")
-public class RoleTest {
-
+public class GridTestCase {
     /**
-     * @see RoleService
+     * @see GridService
      */
     @Autowired
-    private RoleService roleService;
+    private GridService gridService;
+
     @Test
-    public void test(){
-        System.out.println("-------------------------------");
-        //System.out.println(roleService.listRolesByUserId(77L));
-       // System.out.println(roleService.hasRole(77L,"gridmember"));
-        //System.out.println(roleService.listUsersByRoleName("gridmember"));
-        //System.out.println(roleService.listUsersByRoleId(111L));
-        System.out.println(roleService.listSourcePrivileges(111L));
+    public void test() {
+        String code = "351011";
+        System.out.println(gridService.listUsersByGridCode(code));
     }
 }
