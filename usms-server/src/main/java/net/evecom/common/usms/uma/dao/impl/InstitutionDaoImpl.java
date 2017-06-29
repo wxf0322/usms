@@ -25,18 +25,6 @@ import java.util.List;
 public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity> implements InstitutionDaoCustom {
 
     @Override
-    public List<UserEntity> listUsersByInstNames(String[] instNames) {
-        String queryParams = JpaUtil.getQuestionMarks(instNames);
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u where u.id in ( \n")
-                .append("select distinct ui.user_id from usms_user_institution ui where ui.institution_id in (\n")
-                .append("select i.id from usms_institutions i where i.name in (")
-                .append(queryParams).append(") and i.enabled = 1 ))");
-        String sql = sb.toString();
-        return super.queryForClass(UserEntity.class, sql, instNames);
-    }
-
-    @Override
     public boolean canBeDeleted(Long id) {
         String sql = "select i.id from usms_institutions i where i.parent_id = ?";
         List<Object> children = super.queryForObject(sql, new Object[]{id});

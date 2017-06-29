@@ -123,9 +123,9 @@ public class SqlUtil {
         final String MARK = "?";
         final int NOT_TABLE_LETNTH = 2;
         final int HAVE_TABLE_LETNTH = 3;
-        StringBuffer sb = new StringBuffer();
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        ArrayList<Object> valueList = new ArrayList<Object>();
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> resultMap = new HashMap<>();
+        ArrayList<Object> valueList = new ArrayList<>();
         boolean flag = false;
         // 对resultMap中的数据进行处理。
         Set<Entry<String, Object>> querySet = queryMap.entrySet();

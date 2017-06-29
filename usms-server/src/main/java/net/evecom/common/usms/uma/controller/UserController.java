@@ -50,7 +50,8 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "list")
-    public Page<UserVO> listUsersByPage(Integer page, Integer size, Long institutionId, HttpServletRequest request) {
+    public Page<UserVO> listUsersByPage(Integer page, Integer size, Long institutionId,
+                                        HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
         String key = request.getParameter("key");
         if (!StringUtils.isEmpty(key)) {

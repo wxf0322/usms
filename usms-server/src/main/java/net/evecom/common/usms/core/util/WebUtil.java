@@ -56,7 +56,7 @@ public class WebUtil {
      * @return
      */
     public static String getBasePath(HttpServletRequest request) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String path = request.getContextPath();
         String basePath = sb.append(request.getScheme())
                 .append("://")

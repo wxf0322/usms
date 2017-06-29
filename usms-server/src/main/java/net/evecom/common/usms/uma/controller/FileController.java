@@ -27,6 +27,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/file")
 public class FileController {
+
     @ResponseBody
     @RequestMapping(value = "upload")
     public JSONObject upload(HttpServletRequest request) {
@@ -35,22 +36,24 @@ public class FileController {
         try {
             part = request.getPart("uploadFile");
             String root = request.getServletContext().getRealPath("/attachment");
+
+            // 判断文件夹是否存在，如果不存在创建一个文件夹
             File file = new File(root);
             if(!file.exists()){
                file.mkdirs();
             }
-            String headname = part.getHeader("content-disposition");
-            String ext = headname.substring(headname.lastIndexOf("."), headname.length() - 1);
+
+            String headName = part.getHeader("content-disposition");
+            String ext = headName.substring(headName.lastIndexOf("."), headName.length() - 1);
             String ranString = UUID.randomUUID().toString();
-            System.out.println(root);
             String filename = root + "/" + ranString + ext;
-            System.out.println(filename);
             part.write(filename);
             filename = "/attachment/"+ranString + ext;
             jsonObject.put("filename", filename);
         } catch (IOException | ServletException e) {
-            jsonObject.put("fail","error");
+            jsonObject.put("error", "invalid_request");
         }
         return jsonObject;
     }
+
 }

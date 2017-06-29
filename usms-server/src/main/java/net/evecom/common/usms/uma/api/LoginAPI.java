@@ -94,7 +94,7 @@ public class LoginAPI {
         // 获取basePath
         String basePath = WebUtil.getBasePath(request);
         // 构造请求地址
-        StringBuffer loginUrl = new StringBuffer();
+        StringBuilder loginUrl = new StringBuilder();
         loginUrl.append(basePath)
                 .append("authorize?client_id=")
                 .append(clientId)

@@ -37,17 +37,10 @@ public interface InstitutionDao extends JpaRepository<InstitutionEntity, Long>, 
             " where u.login_name = ?1))", nativeQuery = true)
     List<InstitutionEntity> listInstsByLoginName(String loginName);
 
-    /**
-     * 根据组织机构编码构查询用户列表
-     *
-     * @param instName
-     * @return
-     */
-    @Query(value = " select * from usms_users u where u.id in ( " +
-            " select ui.user_id from usms_user_institution ui " +
-            " where ui.institution_id in( " +
-            " select i.id from usms_institutions i where i.name =?1))", nativeQuery = true)
-    List<UserEntity> listUsersByInstName(String instName);
+    @Query(value = "select * from usms_institutions i where i.id in " +
+            "(select ui.institution_id from usms_user_institution ui where ui.user_id = ?1) ",
+            nativeQuery = true)
+    List<InstitutionEntity> listInstsByUserId(Long userId);
 
     /**
      *

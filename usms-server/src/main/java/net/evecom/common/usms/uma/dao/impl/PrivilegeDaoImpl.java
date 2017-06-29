@@ -49,8 +49,8 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements Pr
      */
     @Override
     public Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_privileges p "+sqlFilter.getWhereSql());
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_privileges p ").append(sqlFilter.getWhereSql());
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }
@@ -75,9 +75,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements Pr
 
     @Override
     public List<OperationVO> listOpersByPrivId(Long privilegeId) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_operations where id in(\n")
-                .append(" select oper_id from usms_privilege_operation t\n")
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_operations where id in( ")
+                .append("select oper_id from usms_privilege_operation t ")
                 .append("where priv_id=?) and enabled=1");
         String sql = sb.toString();
         List<Map<String, Object>> rows = super.queryForMap(sql, new Object[]{privilegeId});

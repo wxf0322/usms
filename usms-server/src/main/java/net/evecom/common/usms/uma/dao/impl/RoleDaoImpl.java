@@ -48,22 +48,8 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity> implements RoleDaoCusto
     }
 
     @Override
-    public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
-        String queryParams = JpaUtil.getQuestionMarks(roleNames);
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u where u.id in")
-                .append(" (select ur.user_id from usms_user_role ur")
-                .append(" where ur.role_id in")
-                .append(" (select r.id from usms_roles r where r.name in (")
-                .append(queryParams).append(") and r.enabled = 1 ))")
-                .append(" and u.enabled = 1");
-        String sql = sb.toString();
-        return super.queryForClass(UserEntity.class, sql, roleNames);
-    }
-
-    @Override
     public Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_roles r ").append(sqlFilter.getWhereSql());
         String sql = sb.toString();
         return queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
@@ -71,7 +57,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity> implements RoleDaoCusto
 
     @Override
     public List<Map<String, Object>> listTargetUsers(Long roleId, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (roleId == null) {
             return new ArrayList<>();
         } else {
@@ -85,7 +71,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity> implements RoleDaoCusto
 
     @Override
     public List<Map<String, Object>> listSourceUsers(Long roleId, Long institutionId, String key) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         List<Object> params = new ArrayList<>();
         String searchWord = "%" + key + "%";
         String sql;

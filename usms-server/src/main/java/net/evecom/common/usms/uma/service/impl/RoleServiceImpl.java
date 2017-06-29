@@ -12,6 +12,7 @@ import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.dao.RoleDao;
+import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,12 +39,17 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     @Autowired
     private RoleDao roleDao;
 
-
     /**
      * @see PrivilegeDao
      */
     @Autowired
     private PrivilegeDao privilegeDao;
+
+    /**
+     * @see UserDao
+     */
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 查找所有角色列表
@@ -87,7 +93,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByRoleName(String roleName) {
-        return roleDao.listUsersByRoleName(roleName);
+        return userDao.listUsersByRoleName(roleName);
     }
 
     /**
@@ -98,7 +104,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
-        return roleDao.listUsersByRoleNames(roleNames);
+        return userDao.listUsersByRoleNames(roleNames);
     }
 
     @Override
@@ -106,7 +112,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
         if (roleId == null) {
             return new ArrayList<>();
         } else {
-            List<PrivilegeEntity> result = roleDao.listTargetPrivileges(roleId);
+            List<PrivilegeEntity> result = privilegeDao.listTargetPrivileges(roleId);
             return result;
         }
     }
@@ -114,7 +120,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     @Override
     public List<PrivilegeEntity> listSourcePrivileges(Long roleId) {
         if (roleId != null) {
-            List<PrivilegeEntity> result = roleDao.listSourcePrivileges(roleId);
+            List<PrivilegeEntity> result = privilegeDao.listSourcePrivileges(roleId);
             return result;
         } else {
             List<PrivilegeEntity> result = privilegeDao.findByEnabled(1L);
@@ -134,7 +140,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
      * @return
      */
     public List<UserEntity> listUsersByRoleId(Long roleId) {
-        return roleDao.listUsersByRoleId(roleId);
+        return userDao.listUsersByRoleId(roleId);
     }
 
     /**

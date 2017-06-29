@@ -24,7 +24,6 @@ import java.util.List;
 public interface RoleDao extends JpaRepository<RoleEntity, Long>, RoleDaoCustom {
 
     /**
-     *
      * @param enabled
      * @return
      */
@@ -41,6 +40,35 @@ public interface RoleDao extends JpaRepository<RoleEntity, Long>, RoleDaoCustom 
             "where ur.user_id = ?1) and r.enabled = 1", nativeQuery = true)
     List<RoleEntity> listRolesByUserId(long userId);
 
+    @Query(value = "select * from usms_roles r where r.id in " +
+            "(select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
+            "and r.enabled = 1 ", nativeQuery = true)
+    List<RoleEntity> listRolesByUserId(Long userId);
+
+    @Query(value = "select * from usms_roles where id in " +
+            "(select role_id from usms_user_role where user_id = ?1) and enabled=1 ", nativeQuery = true)
+    List<RoleEntity> listTargetRolesByUserId(Long userId);
+
+    @Query(value = "select * from usms_roles where id not in " +
+            "(select role_id from usms_user_role where user_id = ?1) and enabled=1 ", nativeQuery = true)
+    List<RoleEntity> listSourceRolesByUserId(Long userId);
+
+    /**
+     * 获取该权限已选择的角色
+     */
+    @Query(value = "select * from usms_roles r where r.id in " +
+            "(select role_id from usms_privilege_role " +
+            "where priv_id =?1) and enabled=1 ", nativeQuery = true)
+    List<RoleEntity> listTargetRolesByPrivId(Long privilegeId);
+
+    /**
+     * 获取该权限未选择的角色
+     */
+    @Query(value = "select * from usms_roles r where r.id not in " +
+            "(select role_id from usms_privilege_role " +
+            "where priv_id =?1) and enabled=1", nativeQuery = true)
+    List<RoleEntity> listSourceRolesByPrivId(Long privilegeId);
+
     /**
      * 判断是否拥有此角色
      *
@@ -52,49 +80,5 @@ public interface RoleDao extends JpaRepository<RoleEntity, Long>, RoleDaoCustom 
             "where ur.user_id = ?1) and r.enabled=1 and r.name= ?2", nativeQuery = true)
     List<RoleEntity> listUserRoles(long userId, String roleName);
 
-    /**
-     * 根据权限角色查询用户列表
-     *
-     * @param roleName
-     * @return
-     */
-    @Query(value = "select * from usms_users u where u.id in " +
-            "(select ur.user_id from usms_user_role ur where ur.role_id in " +
-            "(select r.id from usms_roles r where r.name = ?1 and r.enabled = 1) " +
-            ")and u.enabled = 1", nativeQuery = true)
-    List<UserEntity> listUsersByRoleName(String roleName);
-
-    /**
-     * 查找角色Id对应的权限列表
-     *
-     * @param roleId
-     * @return
-     */
-    @Query(value = " select * from usms_privileges where id in( " +
-            "select priv_id from usms_privilege_role t " +
-            "where role_id=?1) and enabled = 1", nativeQuery = true)
-    List<PrivilegeEntity> listTargetPrivileges(Long roleId);
-
-    /**
-     * 查找角色Id对应的未选择权限列表
-     *
-     * @param roleId
-     * @return
-     */
-    @Query(value = "select * from usms_privileges where id not in( " +
-            "select priv_id from usms_privilege_role t " +
-            "where role_id=?1) and enabled = 1", nativeQuery = true)
-    List<PrivilegeEntity> listSourcePrivileges(Long roleId);
-
-    /**
-     * 根据角色id查找用户列表
-     *
-     * @param roleId
-     * @return
-     */
-    @Query(value = "select * from usms_users u where u.id in " +
-            "(select ur.user_id from usms_user_role ur " +
-            "where ur.role_id = ?1)", nativeQuery = true)
-    List<UserEntity> listUsersByRoleId(Long roleId);
 
 }

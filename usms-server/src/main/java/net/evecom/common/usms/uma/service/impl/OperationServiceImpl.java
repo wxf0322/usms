@@ -10,6 +10,7 @@ import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
+import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,16 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
         implements OperationService {
 
     /**
-     * OperationDao的注入
+     * @see OperationDao
      */
     @Autowired
     private OperationDao operationDao;
+
+    /**
+     * @see UserDao
+     */
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 获取应用操作列表
@@ -52,7 +59,7 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByOperName(String operName) {
-        return operationDao.listUsersByOperName(operName);
+        return userDao.listUsersByOperName(operName);
     }
 
     /**

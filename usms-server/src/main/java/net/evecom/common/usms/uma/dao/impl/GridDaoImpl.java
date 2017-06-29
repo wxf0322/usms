@@ -11,6 +11,7 @@ import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.GridDao;
+import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.dao.custom.GridDaoCustom;
 import net.evecom.common.usms.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,17 +37,25 @@ import java.util.Map;
 @Repository
 public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCustom  {
 
+    /**
+     * @see GridDao
+     */
     @Autowired
     private GridDao gridDao;
 
+    /**
+     * @see UserDao
+     */
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public Page<UserVO> listUsersByPage(int page, int size, String gridCode, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("select u.*, s.mobile from ( ")
                 .append(" select u.id, u.login_name, u.name, u.enabled, u.staff_id, ug.grid_code ")
                 .append(" from usms_users u left join usms_user_grid ug on u.id = ug.user_id ")
-                .append(sqlFilter.getWhereSql())
-                .append("  ) u ")
+                .append(sqlFilter.getWhereSql()).append(" ) u ")
                 .append(" left join usms_staffs s on u.staff_id = s.id ");
         String sql = sb.toString();
         Page<Map<String, Object>> pageBean = queryForMap(sql, sqlFilter.getParams().toArray(), page, size);
@@ -64,7 +71,6 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
         }
         return new PageImpl<>(results, new PageRequest(page, size), pageBean.getTotalElements());
     }
-
 
     /**
      * 查询所有网格树形节点
@@ -93,7 +99,7 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
             String descripiton = (String) variable.get("DESCRIPITON");
             String dutyPhone = (String) variable.get("DUTY_PHONE");
 
-            List<UserEntity> users = gridDao.listUsersByGridCode(code);
+            List<UserEntity> users = userDao.listUsersByGridCode(code);
             List<String> userNames = new ArrayList<>();
             if (users != null) {
                 for (UserEntity user : users) {
@@ -112,8 +118,8 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
 
     @Override
     public List<Map<String, Object>> listTargetUsers(Long gridCode, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select distinct u.id id ,u.name name from usms_users u")
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct u.id, u.name from usms_users u ")
                 .append(" where u.enabled=1 and u.id in (select user_id from usms_user_grid ug ")
                 .append(" where ug.grid_code =?)");
         String sql = sb.toString();
@@ -122,13 +128,13 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
 
     @Override
     public List<Map<String, Object>> listSourceUsers(Long gridCode, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("select id ,name, institution_id from (")
-                .append("select distinct u.id id ,u.name name,ui.institution_id institution_id from usms_users u  ")
-                .append("left join usms_user_institution  ui on ui.user_id = u.id ")
+        StringBuilder sb = new StringBuilder();
+        sb.append("select id, name, institution_id from ( ")
+                .append("select distinct u.id, u.name, ui.institution_id from usms_users u ")
+                .append("left join usms_user_institution ui on ui.user_id = u.id ")
                 .append("where u.enabled=1 and u.id not in ")
-                .append(" (select user_id  from usms_user_grid ug ")
-                .append(" where ug.grid_code =?)) uu " + sqlFilter.getWhereSql());
+                .append("(select user_id from usms_user_grid ug ")
+                .append("where ug.grid_code =?)) uu " + sqlFilter.getWhereSql());
         String sql = sb.toString();
         List params = new ArrayList();
         params.add(gridCode);
@@ -172,4 +178,5 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
             }
         }
     }
+
 }

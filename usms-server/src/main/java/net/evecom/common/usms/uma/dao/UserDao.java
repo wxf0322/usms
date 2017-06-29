@@ -25,56 +25,102 @@ public interface UserDao extends JpaRepository<UserEntity, Long>, UserDaoCustom 
 
     UserEntity findFirstByLoginName(String loginName);
 
+    /**
+     * 根据权限角色查询用户列表
+     *
+     * @param roleName
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.id in " +
+            "(select ur.user_id from usms_user_role ur where ur.role_id in " +
+            "(select r.id from usms_roles r where r.name = ?1 and r.enabled = 1) " +
+            ")and u.enabled = 1", nativeQuery = true)
+    List<UserEntity> listUsersByRoleName(String roleName);
 
-    @Query(value = "select * from usms_roles r where r.id in " +
-            "(select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
-            "and r.enabled = 1 ", nativeQuery = true)
-    List<RoleEntity> listRolesByUserId(Long userId);
+    /**
+     * 根据组织机构编码构查询用户列表
+     *
+     * @param instName
+     * @return
+     */
+    @Query(value = " select * from usms_users u where u.id in ( " +
+            " select ui.user_id from usms_user_institution ui " +
+            " where ui.institution_id in( " +
+            " select i.id from usms_institutions i where i.name =?1))", nativeQuery = true)
+    List<UserEntity> listUsersByInstName(String instName);
 
-    @Query(value = "select * from usms_operations o where o.id in " +
-            "(select po.oper_id from usms_privilege_operation po " +
-            " where po.priv_id in " +
+    /**
+     * 根据管辖区域编码查询用户列表
+     *
+     * @param gridCode
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.id in " +
+            "(select ug.user_id from usms_user_grid ug where ug.grid_code=?1)",
+            nativeQuery = true)
+    List<UserEntity> listUsersByGridCode(String gridCode);
+
+    /**
+     * 根据应用编码查询用户列表
+     *
+     * @param appName
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.id in " +
+            "(select ur.user_id from usms_user_role ur where ur.role_id in " +
+            "(select r.id from usms_roles r " +
+            "where r.id in (select pr.role_id from usms_privilege_role pr where pr.priv_id in " +
             "(select p.id from usms_privileges p where p.id in " +
-            "(select pr.priv_id from usms_privilege_role pr, usms_roles r " +
-            "where pr.role_id in " +
-            "(select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
-            "and pr.role_id = r.id and r.enabled = 1) " +
-            "and p.enabled = 1)) " +
-            "and o.enabled = 1", nativeQuery = true)
-    List<OperationEntity> listOpersByUserId(Long userId);
+            "(select po.oper_id from usms_privilege_operation po " +
+            "where po.oper_id in " +
+            "(select o.id from usms_operations o where o.application_id in " +
+            "(select a.id from usms_applications a where a.name = ?1) " +
+            "and o.enabled = 1)) " +
+            "and p.enabled = 1)) and r.enabled = 1)) and u.enabled = 1", nativeQuery = true)
+    List<UserEntity> listUsersByAppName(String appName);
 
-    @Query(value = "select * from usms_applications a where a.id in ( " +
-            "select distinct o.application_id from usms_operations o " +
-            "where o.id in (select po.oper_id " +
-            "from usms_privilege_operation po " +
-            "where po.priv_id in " +
-            "(select p.id from usms_privileges p " +
-            "where p.id in (select pr.priv_id " +
-            "from usms_privilege_role pr, usms_roles r " +
-            "where pr.role_id in " +
-            "(select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
-            "and pr.role_id = r.id and r.enabled = 1) " +
-            " and p.enabled = 1)) and o.enabled = 1 and o.application_id is not null) ", nativeQuery = true)
-    List<ApplicationEntity> listAppsByUserId(Long userId);
-
-    @Query(value = " select * from gsmp_loc_grids g " +
-            "where g.code in " +
-            "(select ug.grid_code from usms_user_grid ug " +
-            "where ug.user_id = " +
-            "(select u.id from usms_users u where u.login_name = ?1)) ", nativeQuery = true)
-    List<GridEntity> listGridsByLoginName(String loginName);
+    /**
+     * 根据角色id查找用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.id in " +
+            "(select ur.user_id from usms_user_role ur " +
+            "where ur.role_id = ?1)", nativeQuery = true)
+    List<UserEntity> listUsersByRoleId(Long roleId);
 
 
-    @Query(value = "select * from usms_institutions i where i.id in " +
-            "(select ui.institution_id from usms_user_institution ui where ui.user_id = ?1) ", nativeQuery = true)
-    List<InstitutionEntity> listInstsByUserId(Long userId);
+    /**
+     * 根据权限编码查询用户列表
+     *
+     * @param privName
+     * @return
+     */
+    @Query(value = "select * from usms_users u " +
+            "where u.id in (select ur.user_id from usms_user_role ur " +
+            "where ur.role_id in (select r.id from usms_roles r " +
+            "where r.id in (select pr.role_id from usms_privilege_role pr " +
+            "where pr.priv_id in (select p.id from usms_privileges p " +
+            "where p.name = ?1)) and r.enabled = 1)) and u.enabled = 1 ", nativeQuery = true)
+    List<UserEntity> listUsersByPrivName(String privName);
 
-    @Query(value = "select * from usms_roles where id in " +
-            "(select role_id from usms_user_role where user_id = ?1) and enabled=1 ", nativeQuery = true)
-    List<RoleEntity> listTargetRoles(Long userId);
-
-    @Query(value = "select * from usms_roles where id not in " +
-            "(select role_id from usms_user_role where user_id = ?1) and enabled=1 ", nativeQuery = true)
-    List<RoleEntity> listSourceRoles(Long userId);
+    /**
+     * 根据操作编码查询用户列表
+     *
+     * @param operName
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.id in " +
+            "(select ur.user_id from usms_user_role ur " +
+            "where ur.role_id in (select r.id from usms_roles r " +
+            "where r.id in (select pr.role_id from usms_privilege_role pr " +
+            "where pr.priv_id in (select p.id from usms_privileges p " +
+            "where p.id in (select po.priv_id from usms_privilege_operation po " +
+            "where po.oper_id in (select o.id from usms_operations o " +
+            "where o.name = ?1)) and p.enabled = 1)) " +
+            "and r.enabled = 1)) and u.enabled = 1"
+            , nativeQuery = true)
+    List<UserEntity> listUsersByOperName(String operName);
 
 }

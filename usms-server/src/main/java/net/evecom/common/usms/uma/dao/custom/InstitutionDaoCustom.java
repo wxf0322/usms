@@ -22,14 +22,6 @@ public interface InstitutionDaoCustom extends BaseDao<InstitutionEntity> {
 
 
     /**
-     * 根据组织机构集合查询用户列表
-     *
-     * @param instNames
-     * @return
-     */
-    List<UserEntity> listUsersByInstNames(String[] instNames);
-
-    /**
      * 检查是否能被删除
      *
      * @param id

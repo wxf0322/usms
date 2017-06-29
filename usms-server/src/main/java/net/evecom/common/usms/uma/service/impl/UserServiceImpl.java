@@ -9,9 +9,8 @@ import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.uma.dao.RoleDao;
+import net.evecom.common.usms.uma.dao.*;
 import net.evecom.common.usms.vo.UserVO;
-import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      * @see UserDao
      */
     @Autowired
-    private UserDao userDao;
+    private OperationDao operationDao;
 
     /**
      * @see RoleDao
@@ -52,6 +51,29 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Autowired
     private PasswordHelper passwordHelper;
+
+    /**
+     * @see UserDao
+     */
+    @Autowired
+    private UserDao userDao;
+
+    /**
+     * @see ApplicationDao
+     */
+    @Autowired
+    private ApplicationDao applicationDao;
+
+    /**
+     * @see GridDao
+     */
+    @Autowired
+    private GridDao gridDao;
+
+    /**
+     * @see InstitutionDao
+     */
+    private InstitutionDao institutionDao;
 
     /**
      * @param userVO
@@ -128,12 +150,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public List<OperationEntity> listOpersByUserId(Long userId) {
-        return userDao.listOpersByUserId(userId);
+        return operationDao.listOpersByUserId(userId);
     }
 
     @Override
     public List<ApplicationEntity> listAppsByUserId(Long userId) {
-        return userDao.listAppsByUserId(userId);
+        return applicationDao.listAppsByUserId(userId);
     }
 
     /**
@@ -159,7 +181,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public List<GridEntity> listGridsByLoginName(String loginName) {
-        return userDao.listGridsByLoginName(loginName);
+        return gridDao.listGridsByLoginName(loginName);
     }
 
 
@@ -178,7 +200,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Override
     public List<InstitutionEntity> listInstsByUserId(Long userId) {
-        return userDao.listInstsByUserId(userId);
+        return institutionDao.listInstsByUserId(userId);
     }
 
     /**
@@ -190,7 +212,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         if (userId == null) {
             return new ArrayList<>();
         } else {
-            return userDao.listTargetRoles(userId);
+            return roleDao.listTargetRolesByUserId(userId);
         }
     }
 
@@ -201,7 +223,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public List<RoleEntity> listSourceRoles(Long userId) {
         if (userId != null) {
-            return userDao.listSourceRoles(userId);
+            return roleDao.listSourceRolesByUserId(userId);
         } else {
             return roleDao.findByEnabled(1L);
         }

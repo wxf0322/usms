@@ -53,7 +53,7 @@ public class SqlFilter {
     /**
      * 为了获取request里面传过来的动态参数
      */
-    private StringBuffer sql = new StringBuffer();
+    private StringBuilder sql = new StringBuilder();
 
     /**
      * 为了获取request里面传过来的动态参数
@@ -235,7 +235,7 @@ public class SqlFilter {
             if (name.startsWith("QUERY_")) {// 如果有需要过滤的字段
                 String[] filterParams = StringUtils.split(name, "_");
                 if (filterParams.length >= 4) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     sb.append(filterParams[1]);
                     for (int i = 2; i < filterParams.length - 2; i++) {
                         sb.append("_").append(filterParams[i]);
@@ -277,7 +277,7 @@ public class SqlFilter {
             if (name.startsWith("QUERY_")) {// 如果有需要过滤的字段
                 String[] filterParams = StringUtils.split(name, "_");
                 if (filterParams.length >= 4) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     sb.append(filterParams[1]);
                     for (int i = 2; i < filterParams.length - 2; i++) {
                         sb.append("_").append(filterParams[i]);

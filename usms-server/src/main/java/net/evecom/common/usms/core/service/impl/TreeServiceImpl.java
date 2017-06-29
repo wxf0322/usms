@@ -85,7 +85,7 @@ public class TreeServiceImpl implements TreeService {
      */
     @Override
     public List<String> getPrimaryKeyName(String tableName) {
-        StringBuffer sql = new StringBuffer(
+        StringBuilder sql = new StringBuilder(
                 "select cu.column_name from user_cons_columns cu, ")
                 .append("user_constraints au where cu.constraint_name = au.constraint_name ")
                 .append("and au.constraint_type = 'P' and au.table_name=?");
@@ -98,7 +98,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public boolean isExisted(Long entityId, String tableName) {
         String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
-        StringBuffer sql = new StringBuffer("select count(*) from ");
+        StringBuilder sql = new StringBuilder("select count(*) from ");
         sql.append(tableName).append(" where ").append(primaryKeyName).append("=? ");
         if (entityId == null) {
             entityId = 0L;
@@ -118,7 +118,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public Set<String> getColumnNameByTableName(String tableName) {
         Set<String> set = new HashSet<>();
-        StringBuffer sql = new StringBuffer("select t.column_name from ")
+        StringBuilder sql = new StringBuilder("select t.column_name from ")
                 .append("user_tab_columns t where t.table_name=?");
         Query query = manager.createNativeQuery(sql.toString());
         query.setParameter(1, tableName.toUpperCase());
@@ -141,7 +141,7 @@ public class TreeServiceImpl implements TreeService {
             String tableName = entityName.toUpperCase();
             // 获取私有主键名称
             String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
-            StringBuffer sql = new StringBuffer("update ");
+            StringBuilder sql = new StringBuilder("update ");
             sql.append(tableName).append(" set ");
             // 获取业务表的列名称
             Set<String> columns = this.getColumnNameByTableName(tableName);
@@ -206,7 +206,7 @@ public class TreeServiceImpl implements TreeService {
                     }
                 }
             }
-            StringBuffer sql = new StringBuffer("insert into ")
+            StringBuilder sql = new StringBuilder("insert into ")
                     .append(tableName.toUpperCase())
                     .append("(");
             // 定义目标columns
@@ -255,7 +255,7 @@ public class TreeServiceImpl implements TreeService {
         //获取私有主键名称
         String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
         if (parentId != null && parentId != 0L) {
-            StringBuffer sql = new StringBuffer("select * from ")
+            StringBuilder sql = new StringBuilder("select * from ")
                     .append(tableName)
                     .append(" where ")
                     .append(primaryKeyName)
@@ -292,7 +292,7 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public Long getMaxManualSortNumber(String tableName, Long parentId) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("select max(manual_sn) from ").append(tableName).append(" where parent_id = ?");
         String sql = sb.toString();
         Query query = manager.createNativeQuery(sql);

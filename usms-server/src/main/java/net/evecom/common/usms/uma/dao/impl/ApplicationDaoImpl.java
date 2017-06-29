@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity> implements ApplicationDaoCustom {
     @Override
     public Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_applications a ").append(sqlFilter.getWhereSql());
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);

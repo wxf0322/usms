@@ -88,7 +88,7 @@ public class OAuthServiceImpl implements OAuthService {
      * @return
      */
     private String getRelationKey(String paramName, String loginName, String clientId) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String relation = sb.append(paramName).append(":")
                 .append(loginName).append(":").append(clientId)
                 .toString();

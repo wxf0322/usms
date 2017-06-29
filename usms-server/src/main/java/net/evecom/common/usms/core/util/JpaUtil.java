@@ -60,7 +60,7 @@ public class JpaUtil {
      * @return
      */
     public static String getQuestionMarks(Object[] params) {
-        StringBuffer queryParams = new StringBuffer();
+        StringBuilder queryParams = new StringBuilder();
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
                 if (i == 0) queryParams.append("?");

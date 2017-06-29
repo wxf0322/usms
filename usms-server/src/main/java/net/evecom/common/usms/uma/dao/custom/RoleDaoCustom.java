@@ -29,14 +29,6 @@ public interface RoleDaoCustom extends BaseDao<RoleEntity> {
     void updatePrivileges(Long roleId, String[] privilegeIds);
 
     /**
-     * 根据权限角色查询列表用户列表
-     *
-     * @param roleNames
-     * @return
-     */
-    List<UserEntity> listUsersByRoleNames(String[] roleNames);
-
-    /**
      * 所有角色列表
      *
      * @param page

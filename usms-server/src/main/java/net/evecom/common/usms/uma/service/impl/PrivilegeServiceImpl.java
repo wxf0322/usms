@@ -12,6 +12,7 @@ import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.RoleDao;
+import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.PrivilegeService;
@@ -44,6 +45,12 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      */
     @Autowired
     private RoleDao roleDao;
+
+    /**
+     * @see UserDao
+     */
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 根据app名称来获取权限列表
@@ -88,7 +95,7 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
      */
     @Override
     public List<UserEntity> listUsersByPrivName(String privName) {
-        return privilegeDao.listUsersByPrivName(privName);
+        return userDao.listUsersByPrivName(privName);
     }
 
     /**
@@ -119,14 +126,14 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
         if (privilegeId == null) {
             return new ArrayList<>();
         } else {
-            return privilegeDao.listTargetRoles(privilegeId);
+            return roleDao.listTargetRolesByPrivId(privilegeId);
         }
     }
 
     @Override
     public List<RoleEntity> listSourceRoles(Long privilegeId) {
         if (privilegeId != null) {
-            return privilegeDao.listSourceRoles(privilegeId);
+            return roleDao.listSourceRolesByPrivId(privilegeId);
         } else {
             return roleDao.findByEnabled(1L);
         }

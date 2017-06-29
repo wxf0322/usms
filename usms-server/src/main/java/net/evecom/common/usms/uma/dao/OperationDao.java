@@ -33,23 +33,18 @@ public interface OperationDao extends JpaRepository<OperationEntity, Long> {
             , nativeQuery = true)
     List<OperationEntity> listOpersByAppName(String appName);
 
-    /**
-     * 根据操作编码查询用户列表
-     *
-     * @param operName
-     * @return
-     */
-    @Query(value = "select * from usms_users u where u.id in " +
-            "(select ur.user_id from usms_user_role ur " +
-            "where ur.role_id in (select r.id from usms_roles r " +
-            "where r.id in (select pr.role_id from usms_privilege_role pr " +
-            "where pr.priv_id in (select p.id from usms_privileges p " +
-            "where p.id in (select po.priv_id from usms_privilege_operation po " +
-            "where po.oper_id in (select o.id from usms_operations o " +
-            "where o.name = ?1)) and p.enabled = 1)) " +
-            "and r.enabled = 1)) and u.enabled = 1"
-            , nativeQuery = true)
-    List<UserEntity> listUsersByOperName(String operName);
+    @Query(value = "select * from usms_operations o where o.id in " +
+            "(select po.oper_id from usms_privilege_operation po " +
+            " where po.priv_id in " +
+            "(select p.id from usms_privileges p where p.id in " +
+            "(select pr.priv_id from usms_privilege_role pr, usms_roles r " +
+            "where pr.role_id in " +
+            "(select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
+            "and pr.role_id = r.id and r.enabled = 1) " +
+            "and p.enabled = 1)) " +
+            "and o.enabled = 1", nativeQuery = true)
+    List<OperationEntity> listOpersByUserId(Long userId);
+
 
     /**
      * 判断是否拥有该操作

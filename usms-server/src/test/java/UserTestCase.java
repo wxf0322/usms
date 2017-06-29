@@ -4,6 +4,7 @@
  *
  */
 
+import net.evecom.common.usms.uma.dao.GridDao;
 import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.UserService;
 import org.junit.Test;
@@ -30,18 +31,10 @@ public class UserTestCase {
      * @see UserDao
      */
     @Autowired
-    private UserDao userDao;
+    private GridDao gridDao;
 
     @Test
     public void test(){
-        System.out.println("____________________________");
-       // System.out.println(userService.getUserByLoginName("ptwg08"));
-       // System.out.println(userDao.listRolesByUserId(77L));
-       // System.out.println(userService.listOpersByUserId(77L));
-        //System.out.println(userService.listAppsByUserId(77L));
-        //System.out.println(userService.listGridsByLoginName("rr6"));
-        //System.out.println(userService.listInstsByUserId(22L));
-       // System.out.println(userService.listTargetRoles(77L));
-        System.out.println(userService.listSourceRoles(22L));
+        System.out.println(gridDao.listGridsByLoginName("admin"));
     }
 }

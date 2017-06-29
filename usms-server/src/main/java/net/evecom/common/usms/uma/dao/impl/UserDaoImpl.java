@@ -11,6 +11,8 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.GridEntity;
 import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.uma.dao.GridDao;
+import net.evecom.common.usms.uma.dao.InstitutionDao;
 import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.dao.custom.UserDaoCustom;
 import net.evecom.common.usms.vo.UserVO;
@@ -20,8 +22,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,8 +38,17 @@ import java.util.Map;
 @Repository
 public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCustom {
 
+    /**
+     * @see InstitutionDao
+     */
     @Autowired
-    private UserDao userDao;
+    private InstitutionDao institutionDao;
+
+    /**
+     * @see GridDao
+     */
+    @Autowired
+    private GridDao gridDao;
 
     /**
      * 根据分页查询用户Model
@@ -53,14 +62,15 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
     @Override
     public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
         List params = new ArrayList();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (institutionId == null) {
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from usms_users u ")
                     .append("left join usms_staffs s on u.staff_id = s.id ")
                     .append(sqlFilter.getWhereSql());
         } else {
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from ( ")
-                    .append("select distinct u.id, u.login_name, u.name, u.staff_id, u.enabled, ui.institution_id ")
+                    .append("select distinct u.id, u.login_name, u.name, u.staff_id, ")
+                    .append("u.enabled, ui.institution_id ")
                     .append("from usms_users u left join usms_user_institution ui on u.id = ui.user_id ")
                     .append("where ui.institution_id = ?) u ")
                     .append("left join usms_staffs s ")
@@ -83,7 +93,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
             String loginName = (String) var.get("LOGIN_NAME");
 
             // 获得组织机构列表
-            List<InstitutionEntity> insts = userDao.listInstsByUserId(userId);
+            List<InstitutionEntity> insts = institutionDao.listInstsByUserId(userId);
 
             // 获得组织机构名
             List<String> instNames = new ArrayList<>();
@@ -100,7 +110,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
             }
 
             List<String> gridNames = new ArrayList<>();
-            List<GridEntity> grids = userDao.listGridsByLoginName(loginName);
+            List<GridEntity> grids = gridDao.listGridsByLoginName(loginName);
             if (grids != null) {
                 Long minLevel = Long.MAX_VALUE;
                 for (GridEntity grid : grids) {
@@ -125,11 +135,13 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
         return new PageImpl<>(results, new PageRequest(page, size), pageBean.getTotalElements());
     }
 
+
     @Override
     public List<UserEntity> listUsersByLoginNames(String[] loginNames) {
         String queryParams = JpaUtil.getQuestionMarks(loginNames);
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from usms_users u where u.login_name in (").append(queryParams).append(")");
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_users u where u.login_name in (")
+                .append(queryParams).append(")");
         String sql = sb.toString();
         return super.queryForClass(sql, loginNames);
     }
@@ -171,5 +183,32 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
             }
         }
     }
+
+    @Override
+    public List<UserEntity> listUsersByInstNames(String[] instNames) {
+        String queryParams = JpaUtil.getQuestionMarks(instNames);
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_users u where u.id in ( \n")
+                .append("select distinct ui.user_id from usms_user_institution ui where ui.institution_id in (\n")
+                .append("select i.id from usms_institutions i where i.name in (")
+                .append(queryParams).append(") and i.enabled = 1 ))");
+        String sql = sb.toString();
+        return super.queryForClass(UserEntity.class, sql, instNames);
+    }
+
+    @Override
+    public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
+        String queryParams = JpaUtil.getQuestionMarks(roleNames);
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from usms_users u where u.id in")
+                .append(" (select ur.user_id from usms_user_role ur")
+                .append(" where ur.role_id in")
+                .append(" (select r.id from usms_roles r where r.name in (")
+                .append(queryParams).append(") and r.enabled = 1 ))")
+                .append(" and u.enabled = 1");
+        String sql = sb.toString();
+        return super.queryForClass(UserEntity.class, sql, roleNames);
+    }
+
 
 }

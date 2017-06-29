@@ -43,7 +43,7 @@ public class MD5Util {
         md.update(msg.getBytes());
         byte[] bytes = md.digest();
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (byte b : bytes) {
             // byte转换成16进制
             result.append(String.format("%02x", b));
