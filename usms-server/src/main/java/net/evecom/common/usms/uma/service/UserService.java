@@ -36,7 +36,6 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
     UserEntity updateUser(UserVO userVO);
 
-
     /**
      * 修改密码
      *
@@ -71,21 +70,78 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
     List<UserEntity> listUsersByLoginNames(String[] loginNames);
 
-    /**
-     * 通过 userId 查找操作
-     *
-     * @param userId
-     * @return
-     */
-    List<OperationEntity> listOpersByUserId(Long userId);
 
     /**
-     * 通过 Id 查找应用
+     * 根据角色编码查询用户列表
      *
-     * @param id
+     * @param roleName
      * @return
      */
-    List<ApplicationEntity> listAppsByUserId(Long userId);
+    List<UserEntity> listUsersByRoleName(String roleName);
+
+    /**
+     * 根据权限角色查询列表用户列表
+     *
+     * @param roleNames
+     * @return
+     */
+    List<UserEntity> listUsersByRoleNames(String[] roleNames);
+
+    /**
+     * 根据组织机构编码构查询用户列表
+     *
+     * @param instName
+     * @return
+     */
+    List<UserEntity> listUsersByInstName(String instName);
+
+    /**
+     * 根据组织机构编码列表查询
+     *
+     * @param instNames
+     * @return
+     */
+    List<UserEntity> listUsersByInstNames(String[] instNames);
+
+    /**
+     * 查询网格员列表
+     *
+     * @param officalPost
+     * @return
+     */
+    List<UserEntity> listUsersByOfficalPost(String officalPost);
+
+    /**
+     * 根据应用编码查询用户列表
+     *
+     * @param appName
+     * @return
+     */
+    List<UserEntity> listUsersByAppName(String appName);
+
+    /**
+     * 根据管辖区域编码查询用户列表
+     *
+     * @param gridCode
+     * @return
+     */
+    List<UserEntity> listUsersByGridCode(String gridCode);
+
+    /**
+     * 根据操作编码查询用户列表
+     *
+     * @param operName
+     * @return
+     */
+    List<UserEntity> listUsersByOperName(String operName);
+
+    /**
+     * 根据权限编码查询用户列表
+     *
+     * @param privName
+     * @return
+     */
+    List<UserEntity> listUsersByPrivName(String privName);
 
     /**
      * 验证登录
@@ -98,13 +154,6 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
     boolean checkUser(String loginName, String password, String salt, String encryptpwd);
 
-    /**
-     * 根据登入名获取网格数据
-     *
-     * @param loginName
-     * @return
-     */
-    List<GridEntity> listGridsByLoginName(String loginName);
 
     /**
      * 更新用户与组织机构的关系
@@ -114,13 +163,6 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
     void updateInstitutions(Long userId, String[] institutionIds);
 
-    /**
-     * 获取用户相关的组织机构列表
-     *
-     * @param userId
-     * @return
-     */
-    List<InstitutionEntity> listInstsByUserId(Long userId);
 
     /**
      * 获得当前用户已选中的用户

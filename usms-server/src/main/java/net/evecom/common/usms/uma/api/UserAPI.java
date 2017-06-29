@@ -6,13 +6,13 @@
 package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.entity.*;
+import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.vo.StaffVO;
 import net.evecom.common.usms.oauth2.service.OAuthService;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import net.evecom.common.usms.uma.service.OperationService;
-import net.evecom.common.usms.uma.service.StaffService;
 import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -59,16 +59,16 @@ public class UserAPI {
     private ApplicationService applicationService;
 
     /**
-     * 注入StaffService
-     */
-    @Autowired
-    private StaffService staffService;
-
-    /**
      * 注入OperationService
      */
     @Autowired
     private OperationService operationService;
+
+    /**
+     * @see StaffService
+     */
+    @Autowired
+    private StaffService staffService;
 
     /**
      * 获得员工JSON对象

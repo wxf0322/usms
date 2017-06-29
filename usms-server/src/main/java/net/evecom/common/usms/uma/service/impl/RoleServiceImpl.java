@@ -85,28 +85,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
         return result.size() != 0;
     }
 
-    /**
-     * 根据角色编码查询用户列表
-     *
-     * @param roleName
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByRoleName(String roleName) {
-        return userDao.listUsersByRoleName(roleName);
-    }
-
-    /**
-     * 根据角色编码列表查询用户列表
-     *
-     * @param roleNames
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
-        return userDao.listUsersByRoleNames(roleNames);
-    }
-
     @Override
     public List<PrivilegeEntity> listTargetPrivileges(Long roleId) {
         if (roleId == null) {

@@ -27,12 +27,12 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
     List<OperationEntity> listOpersByAppName(String appName);
 
     /**
-     * 根据操作编码查询用户列表
+     * 通过 userId 查找操作
      *
-     * @param operName
+     * @param userId
      * @return
      */
-    List<UserEntity> listUsersByOperName(String operName);
+    List<OperationEntity> listOpersByUserId(Long userId);
 
     /**
      * 判断是否拥有该操作

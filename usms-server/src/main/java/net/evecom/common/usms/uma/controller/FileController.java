@@ -48,7 +48,7 @@ public class FileController {
             String ranString = UUID.randomUUID().toString();
             String filename = root + "/" + ranString + ext;
             part.write(filename);
-            filename = "/attachment/"+ranString + ext;
+            filename = "attachment/"+ranString + ext;
             jsonObject.put("filename", filename);
         } catch (IOException | ServletException e) {
             jsonObject.put("error", "invalid_request");

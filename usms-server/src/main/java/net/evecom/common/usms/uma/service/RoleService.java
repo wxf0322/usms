@@ -40,22 +40,6 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
     boolean hasRole(long userId, String roleName);
 
     /**
-     * 根据角色编码查询用户列表
-     *
-     * @param roleName
-     * @return
-     */
-    List<UserEntity> listUsersByRoleName(String roleName);
-
-    /**
-     * 根据权限角色查询列表用户列表
-     *
-     * @param roleNames
-     * @return
-     */
-    List<UserEntity> listUsersByRoleNames(String[] roleNames);
-
-    /**
      * 查询所有角色列表
      *
      * @param page
@@ -65,24 +49,35 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      */
     Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter);
 
-
     /**
      * 查找角色Id对应的权限列表
+     *
+     * @param roleId
+     * @return
      */
     List<PrivilegeEntity> listTargetPrivileges(Long roleId);
 
     /**
      * 查找角色Id对应的未选择权限列表
+     *
+     * @param roleId
+     * @return
      */
     List<PrivilegeEntity> listSourcePrivileges(Long roleId);
 
     /**
      * 更新角色对应的权限列表
+     *
+     * @param roleId
+     * @param privileges
      */
     void updatePrivileges(Long roleId, String[] privileges);
 
     /**
      * 根据角色id查找用户列表
+     *
+     * @param roleId
+     * @return
      */
     List<UserEntity> listUsersByRoleId(Long roleId);
 
@@ -92,7 +87,7 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
      * @param roleId
      * @return
      */
-    List<Map<String, Object>> listTargetUsers(Long roleId,SqlFilter sqlFilter);
+    List<Map<String, Object>> listTargetUsers(Long roleId, SqlFilter sqlFilter);
 
     /**
      * 根据角色ID查找未选用户列表

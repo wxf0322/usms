@@ -48,14 +48,14 @@ public class GridServiceImpl extends BaseServiceImpl<GridEntity, Long>
     private UserDao userDao;
 
     /**
-     * 根据管辖区域编码查询用户列表
+     * 根据登入名获取网格的数据
      *
-     * @param gridCode
+     * @param loginName
      * @return
      */
     @Override
-    public List<UserEntity> listUsersByGridCode(String gridCode) {
-        return userDao.listUsersByGridCode(gridCode);
+    public List<GridEntity> listGridsByLoginName(String loginName) {
+        return gridDao.listGridsByLoginName(loginName);
     }
 
     /**

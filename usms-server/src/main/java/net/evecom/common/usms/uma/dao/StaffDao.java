@@ -23,15 +23,4 @@ import java.util.List;
 @Repository
 public interface StaffDao extends JpaRepository<StaffEntity, Long> {
 
-    /**
-     * 查询网格员列表
-     *
-     * @param officalPost
-     * @return
-     */
-    @Query(value = "select * from usms_users u where u.staff_id in " +
-            "(select s.id from usms_staffs s where s.offical_post = ?1) " +
-            "and u.enabled=1", nativeQuery = true)
-    List<UserEntity> listUsersByOfficalPost(String officalPost);
-
 }

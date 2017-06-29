@@ -43,12 +43,6 @@ public class GridAPI {
     private OAuthService oAuthService;
 
     /**
-     * 注入UserService
-     */
-    @Autowired
-    private UserService userService;
-
-    /**
      * 注入GridService
      */
     @Autowired
@@ -71,7 +65,7 @@ public class GridAPI {
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获取网格数据
-        List<GridEntity> grids = userService.listGridsByLoginName(loginName);
+        List<GridEntity> grids = gridService.listGridsByLoginName(loginName);
         JSONArray gridJsonArr = new JSONArray();
         // 遍历网格数据
         for (GridEntity grid : grids) {

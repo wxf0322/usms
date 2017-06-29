@@ -7,7 +7,6 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.entity.UserEntity;
 
 import java.util.List;
 
@@ -29,6 +28,15 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
     List<InstitutionEntity> listInstsByLoginName(String loginName);
 
     /**
+     * 获取用户相关的组织机构列表
+     *
+     * @param userId
+     * @return
+     */
+    List<InstitutionEntity> listInstsByUserId(Long userId);
+
+
+    /**
      * 根据登陆名获取机构列表
      *
      * @param name
@@ -37,23 +45,7 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
     InstitutionEntity getInstByInstName(String instName);
 
     /**
-     * 根据组织机构编码构查询用户列表
-     *
-     * @param instName
-     * @return
-     */
-    List<UserEntity> listUsersByInstName(String instName);
-
-    /**
-     * 根据组织机构编码列表查询
-     *
-     * @param instNames
-     * @return
-     */
-    List<UserEntity> listUsersByInstNames(String[] instNames);
-
-    /**
-     * 检查该节点是否能被删除
+     * 检查该组织机构节点是否能被删除
      *
      * @param id
      * @return

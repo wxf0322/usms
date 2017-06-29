@@ -123,4 +123,16 @@ public interface UserDao extends JpaRepository<UserEntity, Long>, UserDaoCustom 
             , nativeQuery = true)
     List<UserEntity> listUsersByOperName(String operName);
 
+
+    /**
+     * 查询网格员列表
+     *
+     * @param officalPost
+     * @return
+     */
+    @Query(value = "select * from usms_users u where u.staff_id in " +
+            "(select s.id from usms_staffs s where s.offical_post = ?1) " +
+            "and u.enabled=1", nativeQuery = true)
+    List<UserEntity> listUsersByOfficalPost(String officalPost);
+
 }

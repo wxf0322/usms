@@ -48,14 +48,6 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
     boolean hasPrivilege(long userId, String privName);
 
     /**
-     * 根据权限编码查询用户列表
-     *
-     * @param privName
-     * @return
-     */
-    List<UserEntity> listUsersByPrivName(String privName);
-
-    /**
      * 查询权限列表
      */
     Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter);

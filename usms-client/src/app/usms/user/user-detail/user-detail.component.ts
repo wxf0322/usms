@@ -30,7 +30,7 @@ export class UserDetailComponent extends BaseDetail<any> implements OnInit {
 
   tree: TreeNode[] = [];
 
-  nullPicture = '/static/images/null.png';
+  nullPicture = 'static/images/null.png';
 
   /**
    * 回填机构树的数据

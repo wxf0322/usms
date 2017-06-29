@@ -40,6 +40,12 @@ public interface UserDaoCustom extends BaseDao<UserEntity> {
      */
     List<UserEntity> listUsersByInstNames(String[] instNames);
 
+    /**
+     * 根据登入名集合查询用户列表
+     *
+     * @param loginNames
+     * @return
+     */
     List<UserEntity> listUsersByLoginNames(String[] loginNames);
 
     /**

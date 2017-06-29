@@ -61,11 +61,11 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
     ApplicationEntity getAppByClientSecret(String clientSecret);
 
     /**
-     * 根据应用编码查询用户列表
+     * 通过 Id 查找应用
      *
-     * @param appName
+     * @param id
      * @return
      */
-    List<UserEntity> listUsersByAppName(String appName);
+    List<ApplicationEntity> listAppsByUserId(Long userId);
 
 }

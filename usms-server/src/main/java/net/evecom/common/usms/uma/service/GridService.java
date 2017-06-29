@@ -26,12 +26,12 @@ import java.util.Map;
 public interface GridService extends BaseService<GridEntity, Long> {
 
     /**
-     * 根据管辖区域编码查询用户列表
+     * 根据登入名获取网格数据
      *
-     * @param gridCode
+     * @param loginName
      * @return
      */
-    List<UserEntity> listUsersByGridCode(String gridCode);
+    List<GridEntity> listGridsByLoginName(String loginName);
 
     /**
      * 返回所有的树形数据
@@ -51,11 +51,37 @@ public interface GridService extends BaseService<GridEntity, Long> {
      */
     Page<UserVO> listUsersByPage(int page, int size, String gridCode, SqlFilter sqlFilter);
 
+    /**
+     * 查询未选中的用户
+     *
+     * @param gridCode
+     * @param sqlFilter
+     * @return
+     */
     List<Map<String, Object>> listSourceUsers(Long gridCode, SqlFilter sqlFilter);
 
+    /**
+     * 查询已经选中的用户
+     *
+     * @param gridCode
+     * @param sqlFilter
+     * @return
+     */
     List<Map<String, Object>> listTargetUsers(Long gridCode, SqlFilter sqlFilter);
 
+    /**
+     * 更新用户
+     *
+     * @param gridCode
+     * @param userIds
+     */
     void updateUsers(String gridCode, String[] userIds);
 
+    /**
+     * 更新网格
+     *
+     * @param userId
+     * @param gridCodes
+     */
     void updateGrids(Long userId, String[] gridCodes);
 }

@@ -52,14 +52,14 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
     }
 
     /**
-     * 根据操作编码查询用户列表
+     * 通过id查找用户权限
      *
-     * @param operName
+     * @param userId
      * @return
      */
     @Override
-    public List<UserEntity> listUsersByOperName(String operName) {
-        return userDao.listUsersByOperName(operName);
+    public List<OperationEntity> listOpersByUserId(Long userId) {
+        return operationDao.listOpersByUserId(userId);
     }
 
     /**

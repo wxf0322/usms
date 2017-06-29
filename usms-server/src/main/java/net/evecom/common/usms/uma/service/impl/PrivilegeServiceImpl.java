@@ -88,17 +88,6 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
     }
 
     /**
-     * 根据权限编码查询用户列表
-     *
-     * @param privName
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByPrivName(String privName) {
-        return userDao.listUsersByPrivName(privName);
-    }
-
-    /**
      * 查询权限列表
      *
      * @param page

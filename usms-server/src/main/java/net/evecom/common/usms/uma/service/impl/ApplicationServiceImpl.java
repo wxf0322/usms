@@ -5,21 +5,18 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.uma.dao.UserDao;
+import net.evecom.common.usms.uma.constant.OperationTypeEnum;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.uma.dao.ApplicationDao;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,12 +49,6 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     private ApplicationDao applicationDao;
 
     /**
-     * @see UserDao
-     */
-    @Autowired
-    private UserDao userDao;
-
-    /**
      * @see TreeService
      */
     @Autowired
@@ -77,7 +68,7 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
         operationVO.setLabel(applicationEntity.getLabel());
         operationVO.setName(applicationEntity.getName());
         operationVO.setEnabled(applicationEntity.getEnabled());
-        operationVO.setOptType(3L);
+        operationVO.setOptType(OperationTypeEnum.SYSTEM.getValue());
         try {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
             underlineMap.put("APPLICATION_ID", applicationEntity.getId());
@@ -105,15 +96,9 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
         return applicationDao.findFirstByClientSecret(clientSecret);
     }
 
-    /**
-     * 根据应用编码查询用户列表
-     *
-     * @param appName
-     * @return
-     */
     @Override
-    public List<UserEntity> listUsersByAppName(String appName) {
-        return userDao.listUsersByAppName(appName);
+    public List<ApplicationEntity> listAppsByUserId(Long userId) {
+        return applicationDao.listAppsByUserId(userId);
     }
 
 }

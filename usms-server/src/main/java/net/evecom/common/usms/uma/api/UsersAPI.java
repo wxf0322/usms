@@ -34,55 +34,13 @@ import java.util.List;
 public class UsersAPI {
 
     /**
-     * 注入GridService
-     */
-    @Autowired
-    private GridService gridService;
-
-    /**
-     * 注入InstitutionService
-     */
-    @Autowired
-    private InstitutionService institutionService;
-
-    /**
-     * 注入ApplicationService
-     */
-    @Autowired
-    private ApplicationService applicationService;
-
-    /**
-     * 注入PrivilegeService
-     */
-    @Autowired
-    private PrivilegeService privilegeService;
-
-    /**
-     * 注入OperationService
-     */
-    @Autowired
-    private OperationService operationService;
-
-    /**
-     * 注入RoleService
-     */
-    @Autowired
-    private RoleService roleService;
-
-    /**
-     * 注入StaffService
-     */
-    @Autowired
-    private StaffService staffService;
-
-    /**
-     * 注入UserService
+     * @see UserService
      */
     @Autowired
     private UserService userService;
 
     /**
-     * 注入OAuthService
+     * @see OAuthService
      */
     @Autowired
     private OAuthService oAuthService;
@@ -99,36 +57,36 @@ public class UsersAPI {
         //获取管辖区域编码
         String gridCode = request.getParameter("grid");
         if (StringUtils.isNotEmpty(gridCode)) {
-            users = gridService.listUsersByGridCode(gridCode);
+            users = userService.listUsersByGridCode(gridCode);
         }
         //获取组织机构编码
         String instName = request.getParameter("institution");
         if (StringUtils.isNotEmpty(instName)) {
-            users = institutionService.listUsersByInstName(instName);
+            users = userService.listUsersByInstName(instName);
         }
         //获取应用编码
         String appName = request.getParameter("application");
         if (StringUtils.isNotEmpty(appName)) {
-            users = applicationService.listUsersByAppName(appName);
+            users = userService.listUsersByAppName(appName);
         }
         //获取权限编码
         String privName = request.getParameter("privilege");
         if (StringUtils.isNotEmpty(privName)) {
-            users = privilegeService.listUsersByPrivName(privName);
+            users = userService.listUsersByPrivName(privName);
         }
         //获取操作编码
         String operName = request.getParameter("operation");
         if (StringUtils.isNotEmpty(operName)) {
-            users = operationService.listUsersByOperName(operName);
+            users = userService.listUsersByOperName(operName);
         }
         //获取角色编码
         String roleName = request.getParameter("role");
         if (StringUtils.isNotEmpty(roleName)) {
-            users = roleService.listUsersByRoleName(roleName);
+            users = userService.listUsersByRoleName(roleName);
         }
         String officalPost = request.getParameter("offical_post");
         if (StringUtils.isNotEmpty(officalPost)) {
-            users = staffService.listUsersByOfficalPost(officalPost);
+            users = userService.listUsersByOfficalPost(officalPost);
         }
         JSONObject usersJson = new JSONObject();
         if (users == null) {
@@ -157,11 +115,11 @@ public class UsersAPI {
         }
         String roleNames = request.getParameter("roles");
         if (StringUtils.isNotEmpty(roleNames)) {
-            users = roleService.listUsersByRoleNames(roleNames.split(","));
+            users = userService.listUsersByRoleNames(roleNames.split(","));
         }
         String instNames = request.getParameter("institutions");
         if (StringUtils.isNotEmpty(instNames)) {
-            users = institutionService.listUsersByInstNames(instNames.split(","));
+            users = userService.listUsersByInstNames(instNames.split(","));
         }
         JSONObject usersJson = new JSONObject();
         if (users == null) {

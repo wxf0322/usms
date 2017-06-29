@@ -54,6 +54,16 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     }
 
     /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<InstitutionEntity> listInstsByUserId(Long userId) {
+        return institutionDao.listInstsByUserId(userId);
+    }
+
+
+    /**
      * 根据编码查找组织机构
      *
      * @param name
@@ -62,28 +72,6 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     @Override
     public InstitutionEntity getInstByInstName(String instName) {
         return institutionDao.findFirstByName(instName);
-    }
-
-    /**
-     * 根据组织机构编码构查询用户列表
-     *
-     * @param instName
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByInstName(String instName) {
-        return userDao.listUsersByInstName(instName);
-    }
-
-    /**
-     * 根据组织机构集合查找员工
-     *
-     * @param instNames
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByInstNames(String[] instNames) {
-        return userDao.listUsersByInstNames(instNames);
     }
 
     /**

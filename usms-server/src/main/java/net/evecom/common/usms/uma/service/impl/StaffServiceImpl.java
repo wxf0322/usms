@@ -5,47 +5,27 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.StaffEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.StaffDao;
 import net.evecom.common.usms.uma.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
- * 描述
+ * 描述员工相关Service
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/4/26 10:31
+ * @created 2017/6/29 下午1:05
  */
-@Transactional
-@Service
 public class StaffServiceImpl extends BaseServiceImpl<StaffEntity, Long>
-        implements StaffService {
+        implements StaffService{
 
     /**
-     * 注入StaffDao
+     * 该类被上层Controller类调用，勿删
+     * @see StaffDao
      */
     @Autowired
     private StaffDao staffDao;
-
-    /**
-     * 描述
-     * 查询网格员列表
-     *
-     * @param officalPost
-     * @return
-     */
-    @Override
-    public List<UserEntity> listUsersByOfficalPost(String officalPost) {
-        return staffDao.listUsersByOfficalPost(officalPost);
-    }
 
 }

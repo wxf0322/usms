@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.*;
@@ -35,12 +34,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         implements UserService {
 
     /**
-     * @see UserDao
-     */
-    @Autowired
-    private OperationDao operationDao;
-
-    /**
      * @see RoleDao
      */
     @Autowired
@@ -57,23 +50,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
      */
     @Autowired
     private UserDao userDao;
-
-    /**
-     * @see ApplicationDao
-     */
-    @Autowired
-    private ApplicationDao applicationDao;
-
-    /**
-     * @see GridDao
-     */
-    @Autowired
-    private GridDao gridDao;
-
-    /**
-     * @see InstitutionDao
-     */
-    private InstitutionDao institutionDao;
 
     /**
      * @param userVO
@@ -143,19 +119,47 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     }
 
     /**
-     * 通过id查找用户权限
+     * 根据角色编码查询用户列表
      *
-     * @param userId
+     * @param roleName
      * @return
      */
     @Override
-    public List<OperationEntity> listOpersByUserId(Long userId) {
-        return operationDao.listOpersByUserId(userId);
+    public List<UserEntity> listUsersByRoleName(String roleName) {
+        return userDao.listUsersByRoleName(roleName);
     }
 
+    /**
+     * 根据角色编码列表查询用户列表
+     *
+     * @param roleNames
+     * @return
+     */
     @Override
-    public List<ApplicationEntity> listAppsByUserId(Long userId) {
-        return applicationDao.listAppsByUserId(userId);
+    public List<UserEntity> listUsersByRoleNames(String[] roleNames) {
+        return userDao.listUsersByRoleNames(roleNames);
+    }
+
+    /**
+     * 根据组织机构编码构查询用户列表
+     *
+     * @param instName
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByInstName(String instName) {
+        return userDao.listUsersByInstName(instName);
+    }
+
+    /**
+     * 根据组织机构集合查找员工
+     *
+     * @param instNames
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByInstNames(String[] instNames) {
+        return userDao.listUsersByInstNames(instNames);
     }
 
     /**
@@ -173,17 +177,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         return pwd.equals(encryptpwd);
     }
 
-    /**
-     * 根据登入名获取网格的数据
-     *
-     * @param loginName
-     * @return
-     */
-    @Override
-    public List<GridEntity> listGridsByLoginName(String loginName) {
-        return gridDao.listGridsByLoginName(loginName);
-    }
-
 
     /**
      * @param userId
@@ -192,15 +185,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public void updateInstitutions(Long userId, String[] institutionIds) {
         userDao.updateInstitutions(userId, institutionIds);
-    }
-
-    /**
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<InstitutionEntity> listInstsByUserId(Long userId) {
-        return institutionDao.listInstsByUserId(userId);
     }
 
     /**
@@ -236,6 +220,62 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public void updateRoles(Long userId, String[] roleIds) {
         userDao.updateRoles(userId, roleIds);
+    }
+
+    /**
+     * 描述
+     * 查询网格员列表
+     *
+     * @param officalPost
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByOfficalPost(String officalPost) {
+        return userDao.listUsersByOfficalPost(officalPost);
+    }
+
+    /**
+     * 根据应用编码查询用户列表
+     *
+     * @param appName
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByAppName(String appName) {
+        return userDao.listUsersByAppName(appName);
+    }
+
+    /**
+     * 根据管辖区域编码查询用户列表
+     *
+     * @param gridCode
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByGridCode(String gridCode) {
+        return userDao.listUsersByGridCode(gridCode);
+    }
+
+    /**
+     * 根据操作编码查询用户列表
+     *
+     * @param operName
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByOperName(String operName) {
+        return userDao.listUsersByOperName(operName);
+    }
+
+    /**
+     * 根据权限编码查询用户列表
+     *
+     * @param privName
+     * @return
+     */
+    @Override
+    public List<UserEntity> listUsersByPrivName(String privName) {
+        return userDao.listUsersByPrivName(privName);
     }
 
 }

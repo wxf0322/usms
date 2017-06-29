@@ -18,57 +18,56 @@ import javax.persistence.*;
 @Table(name = "USMS_APPLICATIONS")
 public class ApplicationEntity {
     /**
-     *标识
+     * 标识
      */
     private Long id;
 
     /**
-     *唯一标识码
+     * 唯一标识码
      */
     private String clientId;
 
     /**
-     *接入应用密码
+     * 接入应用密码
      */
     private String clientSecret;
 
     /**
-     *接入应用编码
+     * 接入应用编码
      */
     private String label;
 
     /**
-     *接入应用名称
+     * 接入应用名称
      */
     private String name;
 
     /**
-     *接入应用首页地址
+     * 接入应用首页地址
      */
     private String clientUri;
 
     /**
-     *接入应用验证回调地址
+     * 接入应用验证回调地址
      */
     private String redirectUri;
-
     /**
-     *接入应用登出地址，用于单点登出
+     * 接入应用登出地址，用于单点登出
      */
     private String logoutUri;
 
     /**
-     *接入应用图标地址
+     * 接入应用图标地址
      */
     private String logoUri;
 
     /**
-     *接入应用描述
+     * 接入应用描述
      */
     private String clientDesc;
 
     /**
-     *可用状态(1;正常 0:冻结)
+     * 可用状态(1;正常 0:冻结)
      */
     private Long enabled;
 

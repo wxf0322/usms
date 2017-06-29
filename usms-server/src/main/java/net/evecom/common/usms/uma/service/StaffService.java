@@ -7,26 +7,13 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.StaffEntity;
-import net.evecom.common.usms.entity.UserEntity;
-
-import java.util.List;
 
 /**
  * 描述
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/4/26 10:31
+ * @created 2017/6/29 下午1:04
  */
 public interface StaffService extends BaseService<StaffEntity, Long> {
-
-    /**
-     * 描述
-     * 查询网格员列表
-     * @return
-     * @param officalPost
-     */
-    List<UserEntity> listUsersByOfficalPost(String officalPost);
-
-
 }
