@@ -5,7 +5,6 @@
  */
 package net.evecom.common.usms.core.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;

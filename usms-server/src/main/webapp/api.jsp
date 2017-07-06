@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>《统一用户管理系统API文档_v20170608_1》</title>
+    <title>《统一用户管理系统API文档_v20170705_1》</title>
 </head>
 <body style="display:none">
 <xmp theme="cerulean">
@@ -18,12 +18,12 @@
 ### 1.2 名词解释
 
 | 名词        | 解释                              |
-|------------|----------------------------------------------------------------------------------------------------------------------|
+|------------|-----------------------------------------------------------------------------------------------------|
 | USMS       | Unified User Management System，统一用户管理子系统，包含与用户相关的信息（如基础资料、角色、权限、组织机构）的管理。 |
-| 接入子系统   | 指接入统一用户管理的其他各应用子系统。简称“子系统”。                                                             |
-| 认证服务器   | Authorization Server，统一用户管理系统中用于处理认证的服务器。                                                     |
-| 资源服务器   | Resource Server，统一用户管理系统提供的资源服务，调用资源服务时，需要提交用户认证信息（access_Token）。              |
-| Access Token | 令牌，在OAuth2协议中，子系统使用令牌代替用户密码作为认证信息，来获取资源服务。                                       |
+| 接入子系统   | 指接入统一用户管理的其他各应用子系统。简称“子系统”。                                                          |
+| 认证服务器   | Authorization Server，统一用户管理系统中用于处理认证的服务器。                                              |
+| 资源服务器   | Resource Server，统一用户管理系统提供的资源服务，调用资源服务时，需要提交用户认证信息（access_Token）。            |
+| Access Token | 令牌，在OAuth2协议中，子系统使用令牌代替用户密码作为认证信息，来获取资源服务。                                  |
 
 ### 1.3 逻辑设计
 #### 1.3.1 OAuth2认证过程
@@ -204,25 +204,24 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 (2) 接口地址
 
-重定向至 http://192.168.200.209:8080/usms/v1/openapi/loginOut ，进行退出
+重定向至 http://192.168.200.209:8080/usms/v1/openapi/logout ，进行退出
 
 (3) 输入参数
 
 | 参数名        |   说明   |
-|---------------|-----------|
+|---------------|---------|
 | access_token  | 访问令牌  |
-| client_id     | 填子系统在USMS注册的 client_id |
-| redirect_uri  | 重定向到登入页面之后，登入页面需要跳转的地址 |
 
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/loginOut?access_token=ACCESS_TOKEN&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI
+http://192.168.200.209:8080/usms/v1/openapi/logout?access_token=ACCESS_TOKEN
 ```
 
 (5) 输出结果
+
 ```
-重定向到登入页面，输入用户名和密码之后，重定向至redirect_uri参数所填写的页面。
+{"success": true, "msg": ""}
 ```
 
 #### 2.1.4 判断accessToken是否有效
@@ -238,8 +237,8 @@ http://192.168.200.209:8080/usms/checkAccessToken
 (3) 输入参数
 
 | 参数名        | 是否必填      | 说明     |
-|---------------|--------------|----------|
-| access_token  | 是           | 访问令牌  |
+|--------------|-------------|----------|
+| access_token | 是          | 访问令牌  |
 
 (4) 输入样例
 
@@ -377,24 +376,24 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 | 参数名       | 是否必填   | 说明      |
 |--------------|-----------|-----------|
-|grid          |是         | 网格编码，注意该输入参数对应数据库中的 **name** 字段 |
+|grid          |是         | 网格编码，注意该输入参数对应数据库中的 **code** 字段 |
 |access_token  |是         | 访问令牌 |
 
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?grid=GRID_NAME&access_token=ACCESS_TOKEN
+http://192.168.200.209:8080/usms/v1/openapi/users?grid=GRID_CODE&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
 
-| 参数名       |   说明       |
+| 参数名            |   说明       |
 |------------------|---------------|
 | id                 | 用户ID        |
-| loginName          | 登录名            |
-| name               | 姓名              |
+| loginName          | 登录名          |
+| name               | 姓名             |
 | tel                | 固定电话          |
-| zipCode            | 邮编              |
+| zipCode            | 邮编             |
 | mobile             | 手机电话          |
 | email              | 内网邮箱          |
 | extranetEmail      | 外网邮箱          |
@@ -408,10 +407,10 @@ http://192.168.200.209:8080/usms/v1/openapi/users?grid=GRID_NAME&access_token=AC
 | birthday           | 出生日期，注意：这里返回的日期为数值类型的时间戳，需要通过代码转化为日期类型 |
 | adminDivisionCode  | 居住地行政区划编号 |
 | adminDivision      | 居住地行政区划    |
-| curResidence       | 现居住地址        |
-| remarks            | 备注说明          |
-| citizenIdNumber    | 身份证号码        |
-| pictureUrl         | 照片路径          |
+| curResidence       | 现居住地址       |
+| remarks            | 备注说明         |
+| citizenIdNumber    | 身份证号码       |
+| pictureUrl         | 照片路径         |
 
 (6) 输出样例
 
@@ -489,13 +488,13 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 | 参数名       | 是否必填    | 说明    |
 |-------------|-------------|----------|
-|operation    | 是          | 应用编码，注意该输入参数对应表：**usms_operations** 的 **name** 字段  |
+|application    | 是          | 应用编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段  |
 |access_token | 是          | 访问令牌 |
 
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/users?operation=OPERATION_NAME&access_token=ACCESS_TOKEN
+http://192.168.200.209:8080/usms/v1/openapi/users?application=OPERATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -926,7 +925,7 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions
 (3) 输入参数
 
 | 参数名       | 是否必填     | 说明    |
-|--------------|-------------|----------|
+|--------------|---------|----------|
 | institution  | 是      | 组织机构编码，注意该输入参数对应表：**usms_institutions** 的 **name** 字段 |
 | access_token | 是      | 访问令牌 |
 
@@ -993,24 +992,24 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 (5) 输出参数
 
 | 参数名                | 说明                     |
-|-----------------------|---------------------------|
-| id                    | 网格id                    |
-| code                  | 网格编码                  |
-| lvl                   | 网格层级                  |
-| name                  | 网格名称                  |
-| gridType              | 网格类型                  |
-| descripiton           | 描述                      |
-| dutyPhone             | 值班电话                  |
-| photoUrl              | 网格图片                  |
-| memberNum             | 网格员数量                |
-| householdeNum         | 网格户数                  |
-| area                  | 网格面积（平方米）        |
-| parentId              | 上级网格ID                |
-| adminDivisionCode     | 隶属行政区划编码          |
-| adminDivision         | 隶属行政区划              |
-| manualSn              | 手动排序                  |
-| geoOutlineId          | 轮廓ID                    |
-| enabled               | 可用状态（0: 冻结 1: 正常）|
+|----------------------|-------------------------|
+| id                   | 网格id                   |
+| code                 | 网格编码                  |
+| lvl                  | 网格层级                  |
+| name                 | 网格名称                  |
+| gridType             | 网格类型                  |
+| descripiton          | 描述                     |
+| dutyPhone            | 值班电话                  |
+| photoUrl             | 网格图片                  |
+| memberNum            | 网格员数量                |
+| householdeNum        | 网格户数                  |
+| area                 | 网格面积（平方米）          |
+| parentId             | 上级网格ID                |
+| adminDivisionCode    | 隶属行政区划编码           |
+| adminDivision        | 隶属行政区划              |
+| manualSn             | 手动排序                 |
+| geoOutlineId         | 轮廓ID                  |
+| enabled              | 可用状态（0: 冻结 1: 正常）|
 
 (6) 输出样例
 
@@ -1070,7 +1069,6 @@ http://192.168.200.209:8080/usms/v1/openapi/grids/all?access_token=ACCESS_TOKEN
 
 同 2.3.17 输出样例
 
-
 ### 2.3.19 角色列表，需access_token鉴权
 
 (1) 接口说明
@@ -1105,8 +1103,8 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明     |
-|--------------|-------------|----------|
+| 参数名        | 是否必填     | 说明     |
+|--------------|------------|----------|
 |institutions  |是           | 组织机构编码集合，用 "," 连接 |
 
 (4) 输入样例
@@ -1136,8 +1134,8 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 (3) 输入参数
 
 | 参数名 | 是否必填  | 说明     |
-|--------|-----------|----------|
-| roles  | 是        | 角色编码集合，用 "," 连接 |
+|--------|--------|---------|
+| roles  | 是     | 角色编码集合，用 "," 连接 |
 
 (4) 输入样例
 
@@ -1183,6 +1181,106 @@ http://192.168.200.209:8080/usms/v1/internalapi/users?login_names=admin,vance
 (6) 输出样例
 
 同 2.3.2 节 输出样例
+
+
+### 2.3.23 用户列表，根据用户姓名模糊查询，需access_token鉴权
+
+(1) 接口说明
+
+返回用户列表，根据用户姓名模糊查询，需access_token鉴权。
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/openapi/users/like
+
+(3) 输入参数
+
+| 参数名        | 是否必填   | 说明    |
+|--------------|----------|---------|
+| name         | 是       | 用户姓名 |
+| access_token | 是       | 访问令牌 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/openapi/users/like?name=USER_NAME&access_token=ACCESS_TOKEN
+```
+
+(5) 输出参数
+
+| 参数名              |   说明       |
+|--------------------|--------------|
+| id                 | 用户ID        |
+| loginName          | 登录名          |
+| name               | 姓名             |
+| tel                | 固定电话          |
+| zipCode            | 邮编             |
+| mobile             | 手机电话          |
+| email              | 内网邮箱          |
+| extranetEmail      | 外网邮箱          |
+| aliasNames         | 别名              |
+| sex                | 性别              |
+| professionalTitle  | 职称              |
+| officalPost        | 职责              |
+| officalDuty        | 职务              |
+| employeeType       | 员工类型          |
+| employeeNo         | 员工工号          |
+| birthday           | 出生日期，注意：这里返回的日期为数值类型的时间戳，需要通过代码转化为日期类型 |
+| adminDivisionCode  | 居住地行政区划编号  |
+| adminDivision      | 居住地行政区划     |
+| curResidence       | 现居住地址        |
+| remarks            | 备注说明         |
+| citizenIdNumber    | 身份证号码       |
+| pictureUrl         | 照片路径         |
+| institutions       | 组织机构信息，同2.3.14节，输出参数 |
+
+(6) 输出样例
+
+```
+{
+    "users": [
+        {
+            "id": "",
+            "loginName": "",
+            "name": "",
+            "tel": "",
+            "zipCode": "",
+            "mobile": "",
+            "email": "",
+            "extranetEmail": "",
+            "aliasNames": "",
+            "sex": "",
+            "professionalTitle": "",
+            "officalPost": "",
+            "officalDuty": "",
+            "employeeType": "",
+            "employeeNo": "",
+            "birthday": "",
+            "adminDivisionCode": "",
+            "adminDivision": "",
+            "curResidence": "",
+            "remarks": "",
+            "citizenIdNumber": "",
+            "pictureUrl": ""
+            "institutions": [
+                {
+                    "id": 1,
+                    "label": "消防网格",
+                    "name": "net.evecom.gsmp.fr",
+                    "treeLevel": "2",
+                    "parentId": "",
+                    "type": "1",
+                    "manualSn": "2",
+                    "adminDivisionCode": "",
+                    "adminDivision": "",
+                    "socialCreditUnicode": "",
+                    "orgCode": ""
+                }
+            ]
+        }
+    ]
+}
+```
 
 </xmp>
 

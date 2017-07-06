@@ -51,10 +51,12 @@
 
     <!-- 配置Session DAO的操作处理 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-        <!-- 设置session缓存的名字，这个名字可以任意 -->
-        <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
         <!-- 定义该Session DAO操作中所使用的ID生成器 -->
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
+
+    <bean id="shiroSecurityHelper" class="net.evecom.common.usms.oauth2.shiro.ShiroSecurityHelper">
+        <property name="sessionDAO" ref="sessionDAO"></property>
     </bean>
 
     <!-- 配置需要向Cookie中保存数据的配置模版 -->

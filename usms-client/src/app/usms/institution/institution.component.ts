@@ -6,7 +6,8 @@ import {ConfirmationService} from 'primeng/primeng';
 import {BaseTable} from '../../shared/util/base-table';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {TreeData} from '../../shared/util/tree-data';
-import {InstitutionService} from "./institution.service";
+import {InstitutionService} from './institution.service';
+import {StringUtil} from "../../shared/util/string-util";
 
 @Component({
   selector: 'app-institution',
@@ -15,9 +16,18 @@ import {InstitutionService} from "./institution.service";
 })
 export class InstitutionComponent extends BaseTable<any> implements OnInit {
 
+  /**
+   * 树形数据
+   * @type {Array}
+   */
   tree: TreeNode[] = [];
 
+  /**
+   * 已选中的节点
+   */
   selectedNode: TreeNode;
+
+  queryWord: string;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -28,6 +38,9 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
     super(router, route, httpService, confirmationService, renderer);
   }
 
+  /**
+   * 初始化操作
+   */
   ngOnInit(): void {
     this.refreshTree();
     this.institutionService.message$.subscribe(
@@ -39,6 +52,9 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
     );
   }
 
+  /**
+   * 刷新树形数据
+   */
   refreshTree() {
     const url = 'institution/tree';
     let treeDataArr: TreeData[];
@@ -48,6 +64,17 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
         this.tree = TreeUtil.buildTrees(treeDataArr);
         this.tree[0].expanded = true;
       });
+  }
+
+  queryNode() {
+    this.selectedNode = TreeUtil.findNodesByLabel(this.tree, StringUtil.trim(this.queryWord));
+    const id = this.selectedNode.data.id;
+    const parentLabel = '';
+    this.router.navigate(['panel',
+      {id: id, parentLabel: parentLabel}], {
+      relativeTo: this.route,
+      skipLocationChange: true
+    });
   }
 
   /**
@@ -62,7 +89,8 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
     } else {
       parentLabel = event.node.parent.label;
     }
-    this.router.navigate(['panel', {id: id, parentLabel: parentLabel}], {
+    this.router.navigate(['panel',
+      {id: id, parentLabel: parentLabel}], {
       relativeTo: this.route,
       skipLocationChange: true
     });
@@ -70,7 +98,11 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
 
   deleteSelected() {
   }
-
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
   }
+  showDialog(type: string, id: string) {
+  }
+  query() {
+  }
+
 }

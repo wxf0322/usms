@@ -1,7 +1,7 @@
 <div class="toolkit">
   <ul>
     <li class="toolkit-item e-left">
-      <button pButton type="button" icon="fa-plus" label="新增" (click)="gotoDetail('add',null)"></button>
+      <button pButton type="button" icon="fa-plus" label="新增" (click)="showDialog('add',null)"></button>
       <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteSelected()"></button>
     </li>
     <li class="toolkit-item e-right">
@@ -11,9 +11,11 @@
   </ul>
 </div>
 <div class="ui-g content">
-  <perfect-scrollbar>
-    <div class="ui-g-12">
-      <p-dataTable [value]="viewData" [(selection)]="selectedData" selectionMode="multiple">
+    <div class="ui-g-12" appAutoHeight="content" >
+      <p-dataTable [value]="viewData"  [(selection)]="selectedData"
+                   scrollable="true"
+                   scrollHeight="420px"
+                   selectionMode="multiple">
         <p-column [style]="{'width':'60px'}">
           <ng-template let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>
@@ -24,7 +26,7 @@
           <ng-template let-privilege="rowData" pTemplate="body">
             <span onmouseover="this.style.color='#00F';this.style.textDecoration='underline'"
                   onmouseout="this.style.color='#000000';this.style.textDecoration='none'"
-              (click)="gotoDetail('edit', privilege.id)">{{privilege.label}}</span>
+              (click)="showDialog('edit', privilege.id)">{{privilege.label}}</span>
           </ng-template>
         </p-column>
         <p-column header="权限编码" field="name"></p-column>
@@ -34,10 +36,9 @@
           </ng-template>
         </p-column>
         <p-column header="备注" field="remarks"></p-column>
-
         <p-column header="操作" field="operation">
           <ng-template let-privilege="rowData" pTemplate="body">
-            <button type="button" pButton icon="fa-edit" label="编辑" (click)="gotoDetail('edit', privilege.id)"></button>
+            <button type="button" pButton icon="fa-edit" label="编辑" (click)="showDialog('edit', privilege.id)"></button>
           </ng-template>
         </p-column>
       </p-dataTable>
@@ -45,5 +46,6 @@
                      [rowsPerPageOptions]="[10,20,30]" [pageLinkSize]="5" [first]="firstIndex"
                      (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
     </div>
-  </perfect-scrollbar>
 </div>
+
+<app-privilege-dialog (onSaved)="onSaved($event)" ></app-privilege-dialog>

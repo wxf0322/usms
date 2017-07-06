@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
@@ -11,25 +11,26 @@ import {TreeData} from '../../../shared/util/tree-data';
 import {TreeUtil} from '../../../shared/util/tree-util';
 
 @Component({
-  selector: 'app-role-detail',
-  templateUrl: './role-detail.component.html',
-  styleUrls: ['./role-detail.component.css']
+  selector: 'app-role-dialog',
+  templateUrl: './role-dialog.component.html',
+  styleUrls: ['./role-dialog.component.css']
 })
+export class RoleDialogComponent extends BaseDetail<Role> implements OnInit {
 
-export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
-
-  //筛选框资源
+  // 筛选框资源
   sourcePrivileges: Privilege[] = [];
   targetPrivileges: Privilege[] = [];
   sourceUsers: any = [];
   targetUsers: any = [];
-
-  //树资源
+  // 树资源
   tree: TreeNode[];
 
-  //角色id
-  roleId: any = this.route.snapshot.params['id'];
-  //表单验证
+  roleId: any;
+
+  // 双向绑定 onSaved
+  @Output() onSaved = new EventEmitter();
+
+  // 表单验证
   @ViewChild('reForm') reForm: NgForm;
 
   constructor(private location: Location,
@@ -37,19 +38,29 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
               protected route: ActivatedRoute) {
     super(httpService, route);
     this.detailData = new Role();
-    this.detailData.enabled = 1;
+
   }
 
   ngOnInit() {
+  }
+
+  showDialog(type: string, roleId: string) {
+    this.roleId = roleId;
+    this.display = true;
+    this.privilegesInit(roleId);
     this.refreshTree();
-    this.privilegesInit();
-    this.usersInit();
+    this.usersInit(roleId);
     const url = 'role/find';
-    this.init(url);
+    this.initDialog(url, type, roleId).then(res => {
+      if (res == false) {
+        this.detailData = new Role();
+        this.detailData.enabled = 1;
+      }
+    });
   }
 
   goBack() {
-    this.location.back();
+    this.display = false;
   }
 
   refreshTree() {
@@ -64,10 +75,10 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
   }
 
   save() {
+    this.display = false;
     const url = 'role/saveOrUpdate';
     this.detailData.privilegeIds = this.targetPrivileges.map(priv => priv.id).join(',');
     this.detailData.userIds = this.targetUsers.map(user => user.ID).join(',');
-
     this.httpService.saveOrUpdate(url, this.detailData).then(
       res => {
         this.httpService.setMessage({
@@ -75,15 +86,14 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
           summary: '操作成功',
           detail: '成功更新' + this.detailData.name
         });
-        this.goBack();
+        this.onSaved.emit('refreshTable');
       });
   }
 
-  privilegesInit() {
-    const id = this.route.snapshot.params['id'];
+  privilegesInit(roleId: string) {
     const targetUrl = 'role/privileges/target';
     const sourceUrl = 'role/privileges/source';
-    const params = {roleId: id};
+    const params = {roleId: roleId};
     this.httpService.executeByParams(sourceUrl, params).then(
       res => this.sourcePrivileges = res
     );
@@ -92,17 +102,16 @@ export class RoleDetailComponent extends BaseDetail<Role> implements OnInit {
     );
   }
 
-  usersInit() {
-    const id = this.route.snapshot.params['id'];
+  usersInit(roleId: string) {
     const targetUrl = 'role/users/target';
     const sourceUrl = 'role/users/source';
-    const params = {roleId: id};
-    this.httpService.executeByParams(sourceUrl, params).then(
+    const targetParams = {roleId: roleId};
+    const sourceParams = {roleId: roleId, institutionId: null, key: ''};
+    this.httpService.findByParams(sourceUrl, sourceParams).then(
       res => this.sourceUsers = res
     );
-    this.httpService.executeByParams(targetUrl, params).then(
+    this.httpService.findByParams(targetUrl, targetParams).then(
       res => this.targetUsers = res
     );
   }
-
 }

@@ -1,4 +1,10 @@
-<eve-top-bar title="已关联用户" (execute)="doExecute($event)" [display]="false"></eve-top-bar>
-
-<app-grid-user-selector [tree]="tree" [(sourceUsers)]="sourceUsers"
+<p-dialog header="角色信息" [(visible)]="dialogDisplay"  modal="modal"   width="800"  [responsive]="true">
+  <app-grid-user-selector [tree]="tree" [(sourceUsers)]="sourceUsers"
                    [(targetUsers)]="targetUsers" [gridCode]="gridCode"></app-grid-user-selector>
+  <p-footer>
+    <div class="ui-dialog-buttonpane  ui-helper-clearfix">
+      <button type="button" pButton icon="fa-close" (click)="dialogDisplay=false" label="取消"></button>
+      <button type="button" pButton icon="fa-check" (click)="save()" label="确定"></button>
+    </div>
+  </p-footer>
+</p-dialog>

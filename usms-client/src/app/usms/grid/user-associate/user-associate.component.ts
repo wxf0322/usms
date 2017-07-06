@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Output,EventEmitter} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {BaseDetail} from "../../../shared/util/base-detail";
@@ -19,6 +19,10 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
   targetUsers: any = [];
   gridCode: any;
 
+  dialogDisplay:boolean =false;
+  // 双向绑定 dialogDisplay
+  @Output() onSaved = new EventEmitter();
+
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute) {
@@ -26,8 +30,6 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
   }
 
   ngOnInit() {
-    this.refreshTree();
-    this.usersInit();
   }
 
   goBack() {
@@ -35,6 +37,7 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
   }
 
   save() {
+    this.dialogDisplay = false;
     let url = "grid/updateUsers";
     let userIds = this.targetUsers.map(user => user.ID).join(',');
     let params = {
@@ -48,7 +51,7 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
           summary: '操作成功',
           detail: '成功更新'
         });
-        this.goBack();
+        this.onSaved.emit("refreshTable");
       }
     );
   }
@@ -64,12 +67,11 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
       });
   }
 
-  usersInit() {
-    this.gridCode = this.route.snapshot.params['code'];
+  usersInit(gridCode:string) {
     let targetUrl = 'grid/users/target';
     let sourceUrl = 'grid/users/source';
     let params = {
-      gridCode: this.gridCode
+      gridCode: gridCode
     };
     this.httpService.executeByParams(sourceUrl, params).then(
       res => this.sourceUsers = res
@@ -77,5 +79,12 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
     this.httpService.executeByParams(targetUrl, params).then(
       res => this.targetUsers = res
     );
+  }
+
+  showDialog(code:string){
+    this.gridCode = code;
+    this.dialogDisplay = true;
+    this.refreshTree();
+    this.usersInit(code);
   }
 }

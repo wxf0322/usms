@@ -6,7 +6,6 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.ApplicationEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.custom.ApplicationDaoCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

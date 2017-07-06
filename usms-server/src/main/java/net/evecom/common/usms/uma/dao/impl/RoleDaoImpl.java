@@ -50,17 +50,18 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity> implements RoleDaoCusto
     @Override
     public Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_roles r ").append(sqlFilter.getWhereSql());
+        sb.append("select * from usms_roles r  ").append(sqlFilter.getWhereSql())
+                .append(" order by r.id ");
         String sql = sb.toString();
         return queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }
 
     @Override
     public List<Map<String, Object>> listTargetUsers(Long roleId, SqlFilter sqlFilter) {
-        StringBuilder sb = new StringBuilder();
         if (roleId == null) {
             return new ArrayList<>();
         } else {
+            StringBuilder sb = new StringBuilder();
             sb.append("select id, login_name, name from usms_users where id in(")
                     .append(" select user_id from usms_user_role t")
                     .append(" where role_id=?) and enabled=1");

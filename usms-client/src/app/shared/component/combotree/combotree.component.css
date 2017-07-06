@@ -3,9 +3,9 @@
   height: 29px;
 }
 
-.ui-tree {
-  width: 500px;
-  max-width: 500px;
+.ui-dropdown-items-wrapper .ui-tree {
+  width: 100%;
+  max-width: 100%;
   height: 400px;
   max-height: 400px;
   overflow: auto;

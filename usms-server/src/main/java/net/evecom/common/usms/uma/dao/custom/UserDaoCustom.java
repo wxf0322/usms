@@ -7,8 +7,6 @@ package net.evecom.common.usms.uma.dao.custom;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.util.SqlFilter;
-import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.vo.UserVO;
 import org.springframework.data.domain.Page;
@@ -56,7 +54,19 @@ public interface UserDaoCustom extends BaseDao<UserEntity> {
      */
     List<UserEntity> listUsersByRoleNames(String[] roleNames);
 
+    /**
+     * 更新用户与角色之间的关系
+     *
+     * @param userId
+     * @param roleIds
+     */
     void updateRoles(Long userId, String[] roleIds);
 
+    /**
+     * 更新用户与组织机构之间的关系
+     *
+     * @param userId
+     * @param institutionIds
+     */
     void updateInstitutions(Long userId, String[] institutionIds);
 }

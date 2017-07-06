@@ -1,22 +1,22 @@
-import {HttpService} from "../../core/service/http.service";
-import {ConfirmationService, MenuItem} from "primeng/primeng";
-import {ActivatedRoute, Router} from "@angular/router";
-import {BasePaginator} from "../filter/base-paginator";
-import {Renderer} from "@angular/core";
+import {HttpService} from '../../core/service/http.service';
+import {ConfirmationService, MenuItem} from 'primeng/primeng';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BasePaginator} from '../filter/base-paginator';
+import {Renderer} from '@angular/core';
 
 export abstract class BaseTable<T> extends BasePaginator<T> {
 
-  isDropPanelShow: boolean = false; // 显示高级查询面板
+  isDropPanelShow = false; // 显示高级查询面板
 
   selfClick: boolean; // 标记点击是组件自身，而不是其他区域
 
   btnItems: MenuItem[]; // split按钮
 
-  items: MenuItem[]; //右键操作
+  items: MenuItem[]; // 右键操作
 
-  selectedData: Array<T> = []; //被选中的数据集合
+  selectedData: Array<T> = []; // 被选中的数据集合
 
-  documentClickListener: any; //监听事件
+  documentClickListener: any; // 监听事件
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -32,7 +32,7 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
 
     // 监听body的点击事件
     this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {
-      if (event.target.id !== 'advancedQuery' && this.selfClick == false) {
+      if (event.target.id !== 'advancedQuery' && this.selfClick === false) {
         this.isDropPanelShow = false;
       }
       this.selfClick = false;
@@ -47,6 +47,7 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
   gotoDetail(type: string, id: string) {
     this.router.navigate(['detail', {type: type, id: id}], {relativeTo: this.route});
   }
+
 
   /**
    * 双击查看详情事件
@@ -78,6 +79,16 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
   abstract deleteSelected();
 
   /**
+   * 页面弹框的显示效果
+   */
+  abstract showDialog(type: string, id: string);
+
+  /**
+   * 页面的查询方法
+   */
+  abstract query();
+
+  /**
    * 删除
    * @param url
    */
@@ -87,20 +98,20 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
       header: '删除',
       icon: 'fa fa-question-circle',
       accept: () => {
-        let colNames = this.selectedData.map(data => data[colName]);
+        const colNames = this.selectedData.map(data => data[colName]);
         this.httpService.deleteByColNames(url, colNames)
           .then(res => {
-            //刷新页面列表
+            // 刷新页面列表
             if (this.page.numberOfElements <= this.selectedData.length && this.page.number > 0) {
               this.page.number--;
             }
-            //消息提示
+            // 消息提示
             this.httpService.setMessage({
               severity: 'success',
               summary: '操作成功',
               detail: '成功删除' + this.selectedData.length + '条数据'
             });
-            //删除成功，清空选中数据
+            // 删除成功，清空选中数据
             this.selectedData = [];
             this.getDataByPage(this.page.number, this.page.size, this.filter);
           });

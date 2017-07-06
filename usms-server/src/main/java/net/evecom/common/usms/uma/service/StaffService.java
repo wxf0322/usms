@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.StaffEntity;
+import org.springframework.stereotype.Service;
 
 /**
  * 描述

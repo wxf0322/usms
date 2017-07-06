@@ -386,6 +386,7 @@ public class UserVO {
                 this.birthday = (staffEntity.getBirthday() != null) ?
                         staffEntity.getBirthday().getTime() : null;
             }
+            this.setName(userEntity.getName());
         } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error(e.getMessage(), e);
         }

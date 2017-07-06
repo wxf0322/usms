@@ -8,6 +8,7 @@ package net.evecom.common.usms.oauth2.controller;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.oauth2.shiro.ShiroSecurityHelper;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,15 @@ import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.UnknownSessionException;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 /**
  * 描述 权限Controller层
@@ -46,25 +56,30 @@ import java.net.URISyntaxException;
 public class AuthorizeController {
 
     /**
+     * @see Logger
+     */
+    private static Logger logger = LoggerFactory.getLogger(AuthorizeController.class);
+
+    /**
      * 令牌有效时间
      */
     @Value("${accessToken.expires}")
     private Long accessTokenExpires;
 
     /**
-     * 注入OAuthService
+     * @see OAuthService
      */
     @Autowired
     private OAuthService oAuthService;
 
     /**
-     * 注入UserService
+     * @see UserService
      */
     @Autowired
     private UserService userService;
 
     /**
-     * 注入密码加密工具类
+     * @see PasswordHelper
      */
     @Autowired
     private PasswordHelper passwordHelper;
@@ -288,7 +303,7 @@ public class AuthorizeController {
         } catch (IncorrectCredentialsException e) {
             error = Constants.INCORRECT_CREDENTIALS;
         } catch (UnknownAccountException e) {
-            error = Constants.UNKNOWN_ACCOUNT;
+            error = Constants.INCORRECT_CREDENTIALS;
         } catch (LockedAccountException e) {
             error = Constants.LOCKED_ACCOUNT;
         } catch (AuthenticationException e) {
@@ -299,6 +314,10 @@ public class AuthorizeController {
             request.setAttribute("error", error);
             return false;
         } else {
+            // 设置session
+            Session session = subject.getSession();
+            session.setAttribute("user", user);
+            logger.info("[{}]用户登入成功！", loginName);
             return true;
         }
     }

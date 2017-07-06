@@ -1,6 +1,5 @@
-<eve-top-bar title="权限信息" (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-top-bar>
-<div class="content">
-  <perfect-scrollbar>
+<p-dialog header="角色信息" [(visible)]="display" modal="modal" width="1000" [responsive]="true">
+<perfect-scrollbar>
     <div class="ui-g">
       <div class="ui-g-12">
         <div class="detail-layout">
@@ -12,15 +11,16 @@
               <div class="ui-g-6">
                 <label class="required control-label">权限名称:</label>
                 <input pInputText [(ngModel)]="detailData.label"
-                       name="label" #label="ngModel" required>
+                       name="label" #label="ngModel" [rangeLength]="[1,30]" required>
                 <div class="validation" *ngIf="label.errors?.required">该项必填</div>
+                <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
               </div>
               <div class="ui-g-6">
                 <label class="required control-label">权限编码:</label>
                 <input pInputText [(ngModel)]="detailData.name"
-                       name="name" #name="ngModel" required>
+                       name="name" #name="ngModel" [rangeLength]="[1,30]" required>
                 <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-              </div>
+                <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>              </div>
             </div>
             <div class="ui-g-12 ui-g-nopad control-group">
               <div class="ui-g-6">
@@ -33,7 +33,9 @@
               </div>
               <div class="ui-g-6">
                 <label class=" control-label">备注:</label>
-                <input pInputText [(ngModel)]="detailData.remarks" [ngModelOptions]="{standalone: true}">
+                <input pInputText [(ngModel)]="detailData.remarks"
+                       name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
+                <div class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
               </div>
             </div>
 
@@ -47,10 +49,10 @@
                           [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
                 <ng-template let-role pTemplate="item">
                   <div class="ui-helper-clearfix">
-                    <div style="font-size:14px;float:left;margin:15px 6px 0 80px">
+                    <div class="left-picklist">
                       {{role.label}}
                     </div>
-                    <div style="font-size:14px;float:right;margin:15px 80px 0 6px">
+                    <div class="right-picklist">
                       {{role.name}}
                     </div>
                   </div>
@@ -62,4 +64,7 @@
       </div>
     </div>
   </perfect-scrollbar>
-</div>
+  <p-footer>
+    <eve-dialog-bar  (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
+  </p-footer>
+</p-dialog>

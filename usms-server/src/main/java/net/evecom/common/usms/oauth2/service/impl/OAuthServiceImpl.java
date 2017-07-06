@@ -108,12 +108,8 @@ public class OAuthServiceImpl implements OAuthService {
         String relationKey = getRelationKey(OAuth.OAUTH_CODE, loginName, clientId);
 
         // 设置authCode
-        valueOperations.set(relationKey, authCode);
-        valueOperations.set(authCode, loginName);
-
-        // 设置超时时间
-        redisTemplate.expire(relationKey, authCodeExpires, TimeUnit.SECONDS);
-        redisTemplate.expire(authCode, authCodeExpires, TimeUnit.SECONDS);
+        valueOperations.set(relationKey, authCode, authCodeExpires, TimeUnit.SECONDS);
+        valueOperations.set(authCode, loginName, authCodeExpires, TimeUnit.SECONDS);
     }
 
     /**
@@ -129,14 +125,11 @@ public class OAuthServiceImpl implements OAuthService {
         String relationKey = getRelationKey(OAuth.OAUTH_ACCESS_TOKEN, loginName, clientId);
 
         // 设置Access Token
-        valueOperations.set(relationKey, accessToken);
+        valueOperations.set(relationKey, accessToken, accessTokenExpires, TimeUnit.SECONDS);
 
         // 存入与Access Token相关的值
         hashOperations.put(accessToken, "loginName", loginName);
         hashOperations.put(accessToken, "clientId", clientId);
-
-        // 设置超时时间
-        redisTemplate.expire(relationKey, accessTokenExpires, TimeUnit.SECONDS);
         redisTemplate.expire(accessToken, accessTokenExpires, TimeUnit.SECONDS);
     }
 
@@ -145,9 +138,7 @@ public class OAuthServiceImpl implements OAuthService {
         // 获得关联关系KEY
         String relationKey = getRelationKey(OAuth.OAUTH_REDIRECT_URI, loginName, clientId);
         // 设置重定向地址
-        valueOperations.set(relationKey, redirectUrl);
-        // 设置超时时间
-        redisTemplate.expire(relationKey, authCodeExpires, TimeUnit.SECONDS);
+        valueOperations.set(relationKey, redirectUrl, authCodeExpires, TimeUnit.SECONDS);
     }
 
     @Override
@@ -175,7 +166,7 @@ public class OAuthServiceImpl implements OAuthService {
      */
     @Override
     public String getLoginNameByAccessToken(String accessToken) {
-        return hashOperations.get(accessToken,"loginName");
+        return hashOperations.get(accessToken, "loginName");
     }
 
     /**
@@ -340,7 +331,7 @@ public class OAuthServiceImpl implements OAuthService {
     public String generateAccessToken(String loginName, String clientId) throws OAuthSystemException {
         OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
         String accessToken = oAuthIssuer.accessToken();
-         // 删除旧的Access Token
+        // 删除旧的Access Token
         deleteAccessToken(loginName, clientId);
         // 生成新的Access Token
         addAccessToken(accessToken, loginName, clientId);

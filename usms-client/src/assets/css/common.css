@@ -18,24 +18,6 @@
 .content {
   position: absolute;
   top: 40px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: auto;
-}
-
-.content-left {
-  position: absolute;
-  width: 25%;
-  top: 50px;
-  left: 0;
-  bottom: 0;
-  overflow: auto;
-}
-
-.content-right {
-  position: absolute;
-  top: 45px;
   right: 0;
   bottom: 0;
   overflow: auto;
@@ -139,7 +121,7 @@
   color: #999;
 }
 
-/* 高级查询 */
+/* 高级查询面板 */
 .drop-panel {
   width: 285px;
   background: white;
@@ -172,12 +154,9 @@
 /************* primeNG样式重写 **************/
 /*base*/
 .ui-widget {
-
 }
 
 .ui-widget-header {
-  /*border: 1px solid #d4d4d4;
-  background: #fff;*/
 }
 
 .ui-widget-content {
@@ -185,11 +164,9 @@
 }
 
 .ui-state-default {
-
 }
 
 .ui-state-hover {
-
 }
 
 .ui-state-active {
@@ -201,26 +178,16 @@
 .ui-state-disabled {
 }
 
-/*base*/
-.ui-state-highlight,
-.ui-widget-content .ui-state-highlight {
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {
   background: #ebf1de;
 }
 
-/* split button */
-.ui-splitbutton .ui-splitbutton-menubutton {
-  font-family: sans-serif;
-}
-
 /* data table */
-.ui-datatable-even,
-.ui-datatable-odd,
-.ui-column-title {
+.ui-datatable-even, .ui-datatable-odd, .ui-column-title {
   height: 38px;
 }
 
 .ui-datatable-odd {
-
 }
 
 .ui-datatable thead th {
@@ -254,42 +221,29 @@
   top: 35px;
 }
 
-/*tree*/
+/* 自定义树形组件样式 */
+.max-height-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.max-height-panel .ui-tree {
+  overflow: auto;
+}
+
 .left-panel .ui-tree {
-  width: auto;
-  height: 500px;
-  max-height: 500px;
+  height: 360px;
+  max-height: 360px;
   overflow: auto;
 }
 
-.grid-left-panel .ui-tree {
-  width: auto;
-  height: 440px;
-  max-height: 440px;
-  overflow: auto;
-}
-
-.grid-user-left-panel .ui-tree{
-  width: auto;
-  height: 370px;
-  max-height: 370px;
-  overflow: auto;
-}
-
-.user-left-panel .ui-tree{
-  width: auto;
-  height: 470px;
-  max-height: 470px;
-  overflow: auto;
-}
-
+/* ui-tree */
 .ui-tree {
   width: 100%;
   max-width: 100%;
-  height: 400px;
-  max-height: 400px;
   overflow: auto;
-
 }
 
 .ui-picklist-source-controls.ui-picklist-buttons,
@@ -305,10 +259,36 @@
   text-align: center;
 }
 
-.ui-panel {
-  height: 100%;
+.ui-tabview-selected {
+  color: firebrick;
 }
 
+.ui-tabview-nav {
+  color: forestgreen;
+}
+
+.ui-dialog .ui-dialog-content {
+  position: relative;
+  border: 0;
+  padding: .5em .75em;
+  background: 0;
+  height: 500px;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  zoom: 1;
+}
+
+.ui-confirmdialog .ui-dialog-content {
+  position: relative;
+  border: 0;
+  padding: .5em .75em;
+  background: 0;
+  height: auto;
+  zoom: 1;
+}
+
+/* 文件上传组件相关样式 */
 .file {
   position: relative;
   display: inline-block;
@@ -322,6 +302,7 @@
   text-indent: 0;
   line-height: 20px;
 }
+
 .file input {
   position: absolute;
   font-size: 100px;
@@ -329,6 +310,7 @@
   top: 0;
   opacity: 0;
 }
+
 .file:hover {
   background: #AADFFD;
   border-color: #78C3F3;
@@ -336,11 +318,14 @@
   text-decoration: none;
 }
 
-.ui-tabview-selected{
-  color: firebrick;
-}
-.ui-tabview-nav{
-  color:forestgreen;
+.left-picklist {
+  font-size: 14px;
+  float: left;
+  margin-left: 20px;
 }
 
-
+.right-picklist {
+  font-size: 14px;
+  float: right;
+  margin-right: 20px;
+}

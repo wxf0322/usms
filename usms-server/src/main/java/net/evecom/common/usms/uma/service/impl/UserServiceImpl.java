@@ -40,16 +40,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     private RoleDao roleDao;
 
     /**
-     * @see PasswordHelper
-     */
-    @Autowired
-    private PasswordHelper passwordHelper;
-
-    /**
      * @see UserDao
      */
     @Autowired
     private UserDao userDao;
+
+    /**
+     * @see PasswordHelper
+     */
+    @Autowired
+    private PasswordHelper passwordHelper;
 
     /**
      * @param userVO
@@ -92,17 +92,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     }
 
     /**
-     * @param page
-     * @param size
-     * @param sqlFilter
-     * @return
-     */
-    @Override
-    public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
-        return userDao.listUsersByPage(page, size, institutionId, sqlFilter);
-    }
-
-    /**
      * 根据用户名查找用户
      *
      * @param loginName
@@ -111,6 +100,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public UserEntity getUserByLoginName(String loginName) {
         return userDao.findFirstByLoginName(loginName);
+    }
+
+    /**
+     * @param page
+     * @param size
+     * @param sqlFilter
+     * @return
+     */
+    @Override
+    public Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter) {
+        return userDao.listUsersByPage(page, size, institutionId, sqlFilter);
     }
 
     @Override
@@ -222,6 +222,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
         userDao.updateRoles(userId, roleIds);
     }
 
+
+
     /**
      * 描述
      * 查询网格员列表
@@ -276,6 +278,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     @Override
     public List<UserEntity> listUsersByPrivName(String privName) {
         return userDao.listUsersByPrivName(privName);
+    }
+
+
+    @Override
+    public List<UserEntity> listUsersByNameLike(String name) {
+        return userDao.findByNameLike(name);
     }
 
 }

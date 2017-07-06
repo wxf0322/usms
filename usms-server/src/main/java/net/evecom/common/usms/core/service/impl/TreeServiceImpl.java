@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.core.service.impl;
 
+import net.evecom.common.usms.core.util.MapUtil;
 import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.TreeService;
 import net.evecom.common.usms.core.util.SqlFilter;
@@ -85,8 +86,7 @@ public class TreeServiceImpl implements TreeService {
      */
     @Override
     public List<String> getPrimaryKeyName(String tableName) {
-        StringBuilder sql = new StringBuilder(
-                "select cu.column_name from user_cons_columns cu, ")
+        StringBuilder sql = new StringBuilder("select cu.column_name from user_cons_columns cu, ")
                 .append("user_constraints au where cu.constraint_name = au.constraint_name ")
                 .append("and au.constraint_type = 'P' and au.table_name=?");
         Query query = manager.createNativeQuery(sql.toString());
@@ -141,8 +141,8 @@ public class TreeServiceImpl implements TreeService {
             String tableName = entityName.toUpperCase();
             // 获取私有主键名称
             String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
-            StringBuilder sql = new StringBuilder("update ");
-            sql.append(tableName).append(" set ");
+            StringBuilder sql = new StringBuilder("update ")
+                    .append(tableName).append(" set ");
             // 获取业务表的列名称
             Set<String> columns = this.getColumnNameByTableName(tableName);
             // 设置更新目标列
@@ -256,11 +256,8 @@ public class TreeServiceImpl implements TreeService {
         String primaryKeyName = this.getPrimaryKeyName(tableName).get(0);
         if (parentId != null && parentId != 0L) {
             StringBuilder sql = new StringBuilder("select * from ")
-                    .append(tableName)
-                    .append(" where ")
-                    .append(primaryKeyName)
-                    .append(" =?");
-
+                    .append(tableName).append(" where ")
+                    .append(primaryKeyName).append(" =?");
             Map<String, Object> parentData = this.queryForMap(sql.toString(), new Object[]{parentId});
             path = (String) parentData.get("PATH");
             level = Integer.parseInt(parentData.get("TREE_LEVEL").toString());
@@ -313,31 +310,21 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public List<TreeData> listTreeData(String tableName, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select id, parent_id, label, name, manual_sn from ")
-                .append(tableName).append(sqlFilter.getWhereSql());
+        sb.append("select * from ").append(tableName).append(sqlFilter.getWhereSql());
         Query query = this.createNativeQuery(sb.toString(), sqlFilter.getParams().toArray());
-        List<Object> list = query.getResultList();
-        List<TreeData> trees = new ArrayList<>();
-        for (Object row : list) {
-            Object[] col = (Object[]) row;
-            TreeData treeNodeModel = new TreeData();
-            treeNodeModel.setId(((BigDecimal) col[0]).longValue());
-            treeNodeModel.setParentId(((BigDecimal) col[1]).longValue());
-            treeNodeModel.setLabel((String) col[2]);
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map<String,Object>> rows = query.getResultList();
 
+        List<TreeData> trees = new ArrayList<>();
+        for (Map<String, Object> row : rows) {
+            TreeData treeData = new TreeData();
+            treeData.setId(((BigDecimal) row.get("ID")).longValue());
+            treeData.setParentId(((BigDecimal) row.get("PARENT_ID")).longValue());
+            treeData.setLabel((String) row.get("LABEL"));
             // 设置树形节点上的数据
-            Map<String, Object> data = new HashMap<>();
-            String name = (String) col[3];
-            Long manualSn;
-            if (col[4] != null) {
-                manualSn = ((BigDecimal) col[4]).longValue();
-            }else {
-                manualSn = 0L;
-            }
-            data.put("name", name);
-            data.put("manualSn", manualSn);
-            treeNodeModel.setData(data);
-            trees.add(treeNodeModel);
+            Map<String, Object> data = MapUtil.toCamelCaseMap(row);
+            treeData.setData(data);
+            trees.add(treeData);
         }
         return trees;
     }

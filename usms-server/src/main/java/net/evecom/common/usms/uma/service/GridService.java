@@ -9,7 +9,6 @@ import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.vo.UserVO;
 import org.springframework.data.domain.Page;
 

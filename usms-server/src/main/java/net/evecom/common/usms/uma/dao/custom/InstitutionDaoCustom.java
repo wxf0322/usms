@@ -7,9 +7,6 @@ package net.evecom.common.usms.uma.dao.custom;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.entity.UserEntity;
-
-import java.util.List;
 
 /**
  * 描述

@@ -6,6 +6,7 @@
 package net.evecom.common.usms.core.util;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -35,15 +36,15 @@ import org.apache.commons.lang.time.DateUtils;
  * // LLK 左模糊 TLK 树本级和下级 TCLK 树下级
  * // QUERY_t#id_EQNULL 表示 is null
  *
- * @author Fandy Liu
- * @created 2014/10/5 11:36
+ * @author Wash Wang
+ * @created 2017/6/30 12:00
  */
 public class SqlFilter {
 
     /**
      * 为了获取request里面传过来的动态参数
      */
-    private HttpServletRequest request; // 为了获取request里面传过来的动态参数
+    private HttpServletRequest request;
 
     /**
      * 为了获取request里面传过来的动态参数
@@ -67,9 +68,6 @@ public class SqlFilter {
 
     /**
      * 默认构造
-     *
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public SqlFilter() {
     }
@@ -78,21 +76,16 @@ public class SqlFilter {
      * 带参构造
      *
      * @param request
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public SqlFilter(HttpServletRequest request) {
         this.request = request;
         addFilter(request);
     }
 
-
     /**
      * 添加排序字段
      *
      * @param sort
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public void addSort(String sort) {
         this.sort = sort;
@@ -102,8 +95,6 @@ public class SqlFilter {
      * 添加排序方法，默认asc升序
      *
      * @param order
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public void addOrder(String order) {
         this.order = order;
@@ -114,8 +105,6 @@ public class SqlFilter {
      *
      * @param operator
      * @return
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     private String getSqlOperator(String operator) {
         if (StringUtils.equalsIgnoreCase(operator, "EQ")) {
@@ -147,8 +136,6 @@ public class SqlFilter {
      * 获得添加过滤字段后的SQL
      *
      * @return
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public String getWhereSql() {
         return sql.toString();
@@ -158,8 +145,6 @@ public class SqlFilter {
      * 获得添加过滤字段后加上排序字段的SQL
      *
      * @return
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public String getWhereAndOrderSql() {
         if (!StringUtils.isBlank(sort) && !StringUtils.isBlank(order)) {
@@ -192,8 +177,6 @@ public class SqlFilter {
      * 获得过滤字段参数和值
      *
      * @return
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public List<Object> getParams() {
         return params;
@@ -227,8 +210,6 @@ public class SqlFilter {
      *
      * @param name
      * @param value
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     public void addFilter(String name, String value) {
         if (name != null && value != null) {
@@ -255,6 +236,7 @@ public class SqlFilter {
                         params.add(value);
                         params.add(value + ".%");
                     }
+
                     // TCLK 树下级
                     else if (StringUtils.equalsIgnoreCase(operator, "TCLK")) {
                         sql.append(" and " + columnName + " like ? ");
@@ -318,8 +300,6 @@ public class SqlFilter {
      * @param ids
      * @return
      * @discription 把11, 22, 33...转成'11','22','33'...
-     * @author Fandy Liu
-     * @created 2014年10月4日 下午3:50:28
      */
     private String toSql(String ids) {
         if (null == ids || ids.isEmpty()) {
@@ -346,8 +326,6 @@ public class SqlFilter {
      * @param operator
      * @param value
      * @return
-     * @author Fandy Liu
-     * @created 2014年10月5日 下午11:36:54
      */
     private Object getObjValue(String columnType, String operator, String value) {
         if (StringUtils.equalsIgnoreCase(columnType, "S")) {
@@ -368,7 +346,7 @@ public class SqlFilter {
         }
         if (StringUtils.equalsIgnoreCase(columnType, "D")) {
             try {
-                return new java.sql.Timestamp(DateUtils.parseDate(value,
+                return new Timestamp(DateUtils.parseDate(value,
                         new String[]{"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd", "yyyy/MM/dd"})
                         .getTime());
             } catch (ParseException e) {

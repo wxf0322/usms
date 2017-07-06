@@ -76,6 +76,7 @@ public class OperationController {
     public ResultStatus saveOrUpdate(@RequestBody OperationVO operationVO) {
         Long entityId = operationVO.getId();
         Long parentId = operationVO.getParentId();
+        System.out.printf(operationVO.toString());
         try {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
             treeService.saveOrUpdateTreeData(entityId,
@@ -96,6 +97,5 @@ public class OperationController {
         operationService.delete(id);
         return new ResultStatus(true, "");
     }
-
 
 }

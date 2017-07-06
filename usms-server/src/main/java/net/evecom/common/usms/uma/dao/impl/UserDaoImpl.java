@@ -66,7 +66,8 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
         if (institutionId == null) {
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from usms_users u ")
                     .append("left join usms_staffs s on u.staff_id = s.id ")
-                    .append(sqlFilter.getWhereSql());
+                    .append(sqlFilter.getWhereSql())
+                    .append(" order by u.id");
         } else {
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from ( ")
                     .append("select distinct u.id, u.login_name, u.name, u.staff_id, ")
@@ -83,6 +84,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
         Page<Map<String, Object>> pageBean = queryForMap(sql, params.toArray(), page, size);
         List<UserVO> results = new ArrayList<>();
 
+        // 遍历map
         for (Map<String, Object> var : pageBean.getContent()) {
             UserVO userVO = new UserVO();
 

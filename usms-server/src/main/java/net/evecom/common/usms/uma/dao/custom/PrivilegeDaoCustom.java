@@ -49,6 +49,7 @@ public interface PrivilegeDaoCustom extends BaseDao<PrivilegeEntity> {
     List<OperationVO> listOpersByPrivId(Long privilegeId);
 
     /**
+     * 更新权限与用户之间的关系
      *
      * @param privilegeId
      * @param roleIds

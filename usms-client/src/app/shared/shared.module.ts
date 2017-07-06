@@ -27,7 +27,10 @@ import {PaginatorComponent} from './component/paginator/paginator.component';
 import {TopBarComponent} from './component/top-bar/top-bar.component';
 import {PipeModule} from './pipe/pipe.module';
 import {CustomFormsModule} from 'ng2-validation';
-import {CombotreeComponent} from "./component/combotree/combotree.component";
+import {CombotreeComponent} from './component/combotree/combotree.component';
+import {AppAutoHeightDirective} from './attribute-directive/auto-height.directive';
+import {DialogBarComponent} from './component/dialog-bar/dialog-bar.component';
+import {AppAutoPanelHeightDirective} from './attribute-directive/auto-panel-height.directive';
 
 
 /* directive */
@@ -43,7 +46,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule, TreeTableModule,
     PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, InplaceModule,
     // 管道
-    PipeModule
+    PipeModule,
   ],
   declarations: [
     EveHighlightDirective,
@@ -53,7 +56,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ValidationRuleEngine, SubmitDirective,
     // 分页
     PaginatorComponent, CombotreeComponent,
-    TopBarComponent,
+    TopBarComponent, AppAutoHeightDirective, DialogBarComponent,
+    AppAutoPanelHeightDirective
   ],
   exports: [
     // module：导出共享模块，导入本模块的模块无需重复导入这些模块，包括一些常用的第三方模块
@@ -76,9 +80,11 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ValidationRuleEngine, SubmitDirective,
     // 分页
     PaginatorComponent,
-    TopBarComponent, CombotreeComponent,
+    TopBarComponent, CombotreeComponent, DialogBarComponent,
     // ng2 validation
-    CustomFormsModule
+    CustomFormsModule,
+    AppAutoHeightDirective,
+    AppAutoPanelHeightDirective
   ]
 })
 export class SharedModule {

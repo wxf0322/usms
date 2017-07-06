@@ -16,13 +16,23 @@ export class HttpService {
    * 表单类型请求
    * @type {Headers}
    */
-  private formHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
+  private formHeaders = new Headers({
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+    'Content-Type': 'application/x-www-form-urlencoded'
+  });
 
   /**
    * json类型请求
    * @type {Headers}
    */
-  private jsonHeaders = new Headers({'Content-Type': 'application/json'});
+  private jsonHeaders = new Headers({
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+    'Content-Type': 'application/json'
+  });
 
   /**
    * 消息提示
@@ -125,11 +135,8 @@ export class HttpService {
    * @returns {any}
    */
   findById(url: string, id: string) {
-    url += '?id=' + id;
-    return this.http.get(url)
-      .toPromise()
-      .then(res => res.json())
-      .catch(this.handleError);
+    let params = {id: id};
+    return this.findByParams(url, params);
   }
 
   /**

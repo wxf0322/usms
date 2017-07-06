@@ -111,6 +111,7 @@ export class InstitutionPanelComponent implements OnInit {
         this.httpService.executeByParams(url, param).then(
           res => {
             if (res['success'] === true) {
+              this.detailData = new Institution();
               this.httpService.setMessage({
                 severity: 'success',
                 summary: '操作成功',

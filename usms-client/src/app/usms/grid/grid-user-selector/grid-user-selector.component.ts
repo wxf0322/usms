@@ -3,17 +3,18 @@ import {TreeNode} from 'primeng/primeng';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationService} from 'primeng/components/common/api';
 import {HttpService} from '../../../core/service/http.service';
-import {BaseTable} from '../../../shared/util/base-table';
-
+import {TreeUtil} from "../../../shared/util/tree-util";
 
 @Component({
   selector: 'app-grid-user-selector',
   templateUrl: './grid-user-selector.component.html',
   styleUrls: ['./grid-user-selector.component.css']
 })
-export class GridUserSelectorComponent extends BaseTable<any> implements OnInit {
+export class GridUserSelectorComponent implements OnInit {
 
-  selectedNode: TreeNode[];
+  queryWord: string;
+
+  selectedNode: TreeNode;
   /**
    * 用户所选的机构id
    */
@@ -32,16 +33,14 @@ export class GridUserSelectorComponent extends BaseTable<any> implements OnInit 
 
   @Input() gridCode: any;
 
-  //关键字
-  key: string = '';
-
+  // 关键字
+  key = '';
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
-    super(router, route, httpService, confirmationService, renderer);
   }
 
   ngOnInit() {
@@ -49,17 +48,16 @@ export class GridUserSelectorComponent extends BaseTable<any> implements OnInit 
 
   nodeSelect(event) {
     this.institutionId = event.node.data.id;
-    if (event.node.data.parentId == 0) {
+    if (event.node.data.parentId === 0) {
       this.institutionId = null;
     }
     this.institutionName = event.node.data.label;
     this.queryForGrid();
   }
 
-
   queryForGrid() {
-    let sourceUrl = 'grid/users/source?key=' + this.key;
-    let params = {
+    const sourceUrl = 'grid/users/source?key=' + this.key;
+    const params = {
       gridCode: this.gridCode,
       institutionId: this.institutionId
     };
@@ -70,10 +68,16 @@ export class GridUserSelectorComponent extends BaseTable<any> implements OnInit 
     );
   }
 
-
-  deleteSelected() {
+  queryNode() {
+    this.key = '';
+    this.selectedNode = TreeUtil.findNodesByLabel(this.tree, this.queryWord);
+    this.institutionId = this.selectedNode.data.id;
+    if (this.selectedNode.data.parentId === 0) {
+      this.institutionId = null;
+    }
+    this.institutionName = this.selectedNode.data.label;
+    this.queryForGrid();
   }
 
-  getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-  }
+
 }

@@ -83,8 +83,6 @@ public class UserEntity {
      * 创建人
      */
     private String creator;
-
-
     /**
      * 该用户所属组织机构信息
      */

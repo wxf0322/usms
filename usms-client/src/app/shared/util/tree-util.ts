@@ -85,4 +85,27 @@ export class TreeUtil {
     }
   }
 
+  /**
+   * 模糊匹配树形节点
+   * @param treeNodes
+   * @param word
+   * @returns {TreeNode}
+   */
+  static findNodesByLabel(treeNodes: TreeNode[], word: string): TreeNode {
+    if (treeNodes == null || treeNodes.length === 0) {
+      return null;
+    }
+    for (let i = 0; i < treeNodes.length; i++) {
+      if (treeNodes[i].label.indexOf(word) >= 0) {
+        return treeNodes[i];
+      }
+      const selectedNode = this.findNodesByLabel(treeNodes[i].children, word);
+      if (selectedNode != null) {
+        treeNodes[i].expanded = true;
+        return selectedNode;
+      }
+    }
+    return null;
+  }
+
 }

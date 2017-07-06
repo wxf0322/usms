@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -50,7 +48,9 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements Pr
     @Override
     public Page<PrivilegeEntity> listPrivsByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_privileges p ").append(sqlFilter.getWhereSql());
+        sb.append("select * from usms_privileges p ")
+                .append(sqlFilter.getWhereSql())
+                .append(" order by p.id");
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }

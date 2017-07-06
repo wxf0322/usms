@@ -29,7 +29,8 @@ public class MapUtil extends MapUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T, V> T toObject(Class<T> clazz, Map<String, V> map) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static <T, V> T toObject(Class<T> clazz, Map<String, V> map)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         T object = clazz.newInstance();
         return toObject(object, map);
     }
@@ -45,7 +46,8 @@ public class MapUtil extends MapUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T, V> T toObject(Class<T> clazz, Map<String, V> map, boolean toCamelCase) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static <T, V> T toObject(Class<T> clazz, Map<String, V> map, boolean toCamelCase)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         T object = clazz.newInstance();
         return toObject(object, map, toCamelCase);
     }
@@ -60,7 +62,8 @@ public class MapUtil extends MapUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T, V> T toObject(T object, Map<String, V> map) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static <T, V> T toObject(T object, Map<String, V> map)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         return toObject(object, map, false);
     }
 
@@ -77,7 +80,8 @@ public class MapUtil extends MapUtils {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static <T, V> T toObject(T object, Map<String, V> map, boolean toCamelCase) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static <T, V> T toObject(T object, Map<String, V> map, boolean toCamelCase)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         if (toCamelCase)
             map = toCamelCaseMap(map);
         BeanUtils.populate(object, map);
@@ -93,7 +97,8 @@ public class MapUtil extends MapUtils {
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
-    public static Map<String, Object> toMap(Object object) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public static Map<String, Object> toMap(Object object)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         return BeanUtils.describe(object);
     }
 
@@ -106,7 +111,8 @@ public class MapUtil extends MapUtils {
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
-    public static <T> Collection<Map<String, Object>> toMapList(Collection<T> collection) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public static <T> Collection<Map<String, Object>> toMapList(Collection<T> collection)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         List<Map<String, Object>> retList = new ArrayList<>();
         if (collection != null && !collection.isEmpty()) {
             for (Object object : collection) {
@@ -126,7 +132,8 @@ public class MapUtil extends MapUtils {
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
-    public static <T> Collection<Map<String, Object>> toMapListForFlat(Collection<T> collection) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public static <T> Collection<Map<String, Object>> toMapListForFlat(Collection<T> collection)
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         List<Map<String, Object>> retList = new ArrayList<>();
         if (collection != null && !collection.isEmpty()) {
             for (Object object : collection) {

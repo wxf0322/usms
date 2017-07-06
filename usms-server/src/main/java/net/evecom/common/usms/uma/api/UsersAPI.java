@@ -6,8 +6,10 @@
 package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.core.vo.ErrorStatus;
+import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.uma.service.*;
@@ -28,7 +30,7 @@ import java.util.List;
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/5/8 9:58
+ * @created 2017/5/8 9:00
  */
 @Controller
 public class UsersAPI {
@@ -38,6 +40,12 @@ public class UsersAPI {
      */
     @Autowired
     private UserService userService;
+
+    /**
+     * @see InstitutionService
+     */
+    @Autowired
+    private InstitutionService institutionService;
 
     /**
      * @see OAuthService
@@ -133,7 +141,12 @@ public class UsersAPI {
         }
     }
 
-
+    /**
+     * 查询用户基本信息
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/v1/internalapi/user", produces = "application/json; charset=UTF-8")
     public ResponseEntity getUserForTaskCenter(HttpServletRequest request) {
         String clientId = request.getParameter("client_id");
@@ -149,8 +162,8 @@ public class UsersAPI {
         String accessToken = oAuthService.getAccessToken(loginName, clientId);
         UserEntity user = userService.getUserByLoginName(loginName);
 
-        if(user == null) {
-             ErrorStatus errorStatus = new ErrorStatus
+        if (user == null) {
+            ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
@@ -193,7 +206,48 @@ public class UsersAPI {
         JSONObject userJson = JSONObject.fromObject(userVO);
         userJson.remove("enabled");
         userJson.remove("roleNames");
+        userJson.remove("institutionNames");
+        userJson.remove("institutionIds");
         return userJson;
+    }
+
+    /**
+     * 根据用户名模糊查找，获取用户列表
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/v1/openapi/users/like", produces = "application/json; charset=UTF-8")
+    public ResponseEntity listUsersByNameLike(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        if (StringUtils.isEmpty(name)) {
+            name = "";
+        }
+        //获取名字关键字
+        name = "%" + name + "%";
+        List<UserEntity> users = userService.listUsersByNameLike(name);
+
+        // 构建用户json数据
+        JSONArray userJsonArr = new JSONArray();
+        for (UserEntity user : users) {
+            // 获得userVO的json数据
+            JSONObject userJson = getUserJSONObject(user);
+            // 获得组织机构的json数据
+            Long userId = user.getId();
+            List<InstitutionEntity> insts = institutionService.listInstsByUserId(userId);
+            JSONArray instJsonArr = new JSONArray();
+            for (InstitutionEntity inst : insts) {
+                InstitutionVO instVO = new InstitutionVO(inst);
+                instJsonArr.add(JSONObject.fromObject(instVO));
+            }
+            // 将组织机构json数据存入userVO之中
+            userJson.put("institutions", instJsonArr);
+            userJsonArr.add(userJson);
+        }
+
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("users", userJsonArr);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
 }

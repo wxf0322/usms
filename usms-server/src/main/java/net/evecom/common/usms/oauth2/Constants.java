@@ -51,7 +51,7 @@ public interface Constants {
     /**
      * 用户密码错误
      */
-    String INCORRECT_CREDENTIALS = "用户密码错误";
+    String INCORRECT_CREDENTIALS = "用户名或密码错误";
 
     /**
      * 账号不存在

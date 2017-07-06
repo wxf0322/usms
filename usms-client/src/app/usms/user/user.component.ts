@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer} from '@angular/core';
+import {Component, OnInit, ViewChild, Renderer} from '@angular/core';
 import {TreeNode} from 'primeng/primeng';
 import {BaseTable} from '../../shared/util/base-table';
 import {ConfirmationService} from 'primeng/primeng';
@@ -6,6 +6,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {TreeData} from '../../shared/util/tree-data';
 import {TreeUtil} from '../../shared/util/tree-util';
+import {UserDialogComponent} from './user-dialog/user-dialog.component';
+import {StringUtil} from "../../shared/util/string-util";
 
 @Component({
   selector: 'app-user',
@@ -22,7 +24,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   /**
    * 选中的节点
    */
-  selectedNode: TreeNode[];
+  selectedNode: TreeNode;
 
   /**
    * 用户所选的机构id
@@ -34,6 +36,14 @@ export class UserComponent extends BaseTable<any> implements OnInit {
    */
   institutionName: string;
 
+  @ViewChild(UserDialogComponent)
+  userDialog: UserDialogComponent;
+
+  /**
+   * 树形节点查询关键字
+   */
+  queryWord: string;
+
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
@@ -43,8 +53,8 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.refreshTree();
     this.filter = '';
+    this.refreshTree();
     this.getDataByPage(this.page.number, this.page.size, this.filter);
   }
 
@@ -53,12 +63,27 @@ export class UserComponent extends BaseTable<any> implements OnInit {
     this.delete(url, 'id');
   }
 
-  getDataByPage(currentPage: any, rowsPerPage: any, filter: string) {
-    const url = 'user/list?key=' + this.filter;
+  getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
     this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
-      res => {
-        return this.setData(res);
-      }
+      res => this.setData(res)
+    );
+  }
+
+  queryNode() {
+    this.selectedNode = TreeUtil.findNodesByLabel(this.tree, StringUtil.trim(this.queryWord));
+    this.institutionName = this.selectedNode.label;
+    const url = 'user/list?key=' + this.filter;
+    if (this.selectedNode.data.parentId !== 0) {
+      this.institutionId = this.selectedNode.data.id;
+    } else {
+      this.institutionId = null;
+    }
+    this.page.number = 0;
+    this.page.size = 10;
+    const params = {institutionId: this.institutionId};
+    this.httpService.findByPage(url, this.page.number, this.page.size, params).then(
+      res => this.setData(res)
     );
   }
 
@@ -89,21 +114,13 @@ export class UserComponent extends BaseTable<any> implements OnInit {
     );
   }
 
-  query() {
-    const url = 'user/list?key=' + this.filter;
-    let params = {institutionId: this.institutionId};
-    this.httpService.findByPage(url, 0, this.page.size, params).then(
-      res => {
-        return this.setData(res);
-      }
-    );
+  showDialog(type: string, id: string) {
+    this.userDialog.showDialog(type, id);
   }
 
-  gotoUserDetail(type: string, id: string) {
-    this.router.navigate(['user-detail', {
-      type: type,
-      id: id
-    }], {relativeTo: this.route});
+  query() {
+    const params = {institutionId: this.institutionId};
+    this.getDataByPage(0, this.page.size, params);
   }
 
   /**
@@ -112,16 +129,23 @@ export class UserComponent extends BaseTable<any> implements OnInit {
    */
   nodeSelect(event) {
     this.institutionName = event.node.label;
-    let url = 'user/list?key=' + this.filter;
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
     if (event.node.data.parentId !== 0) {
       this.institutionId = event.node.data.id;
     } else {
       this.institutionId = null;
     }
-    let params = {institutionId: this.institutionId};
-    this.httpService.findByPage(url, 0, this.page.size, params).then(
+    this.page.number = 0;
+    this.page.size = 10;
+    const params = {institutionId: this.institutionId};
+    this.httpService.findByPage(url, this.page.number, this.page.size, params).then(
       res => this.setData(res)
     );
+  }
+
+  onSaved(event) {
+    const params = {institutionId: this.institutionId};
+    this.getDataByPage(this.page.number, this.page.size, params);
   }
 
 }

@@ -45,6 +45,14 @@ public interface UserService extends BaseService<UserEntity, Long> {
     void changePassword(Long id, String newPassword);
 
     /**
+     * 根据登入名查找用户
+     *
+     * @param loginName
+     * @return
+     */
+    UserEntity getUserByLoginName(String loginName);
+
+    /**
      * 分页查询
      *
      * @param page
@@ -53,14 +61,6 @@ public interface UserService extends BaseService<UserEntity, Long> {
      * @return
      */
     Page<UserVO> listUsersByPage(int page, int size, Long institutionId, SqlFilter sqlFilter);
-
-    /**
-     * 根据登入名查找用户
-     *
-     * @param loginName
-     * @return
-     */
-    UserEntity getUserByLoginName(String loginName);
 
     /**
      * 根据登入名列表查找用户
@@ -188,4 +188,12 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
     void updateRoles(Long userId, String[] roleIds);
 
+
+    /**
+     * 描述 根据用户姓名模糊查询，返回用户列表
+     *
+     * @param name
+     * @return
+     */
+    List<UserEntity> listUsersByNameLike(String name);
 }

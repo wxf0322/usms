@@ -1,9 +1,11 @@
-import {Component, OnInit, Renderer} from '@angular/core';
+import {Component, OnInit, ViewChild, Renderer} from '@angular/core';
 import {BaseTable} from '../../shared/util/base-table';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/components/common/api';
 import {Application} from './application';
+import {ApplicationDialogComponent} from './application-dialog/application-dialog.component';
+import {StringUtil} from "../../shared/util/string-util";
 
 @Component({
   selector: 'app-application',
@@ -11,6 +13,9 @@ import {Application} from './application';
   styleUrls: ['./application.component.css']
 })
 export class ApplicationComponent extends BaseTable<Application> implements OnInit {
+
+  @ViewChild(ApplicationDialogComponent)
+  applicationDialog: ApplicationDialogComponent;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -26,10 +31,14 @@ export class ApplicationComponent extends BaseTable<Application> implements OnIn
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = 'application/list?key='+this.filter;
+    const url = 'application/list?key=' + StringUtil.trim(this.filter);
     this.httpService.findByPage(url, currentPage, rowsPerPage, this.filter).then(
       res => this.setData(res)
     );
+  }
+
+  showDialog(type: string, id: string) {
+    this.applicationDialog.showDialog(type, id);
   }
 
   ngOnInit(): void {
@@ -38,11 +47,11 @@ export class ApplicationComponent extends BaseTable<Application> implements OnIn
   }
 
   query() {
-    let url = 'application/list?key='+this.filter;
-    this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
-      res => {
-        return this.setData(res);
-      }
-    );
+    this.getDataByPage(0, this.page.size, this.filter);
   }
+
+  onSaved(event) {
+    this.getDataByPage(this.page.number, this.page.size, this.filter);
+  }
+
 }

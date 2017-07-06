@@ -1,11 +1,13 @@
-import {Component, OnInit, Renderer} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, OnInit, Renderer, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationService, TreeNode} from 'primeng/primeng';
-import {TreeData} from "../../shared/util/tree-data";
-import {TreeUtil} from "../../shared/util/tree-util";
-import {HttpService} from "../../core/service/http.service";
-import {BaseTable} from "../../shared/util/base-table";
-import {BeanUtil} from "../../shared/util/bean-util";
+import {TreeData} from '../../shared/util/tree-data';
+import {TreeUtil} from '../../shared/util/tree-util';
+import {HttpService} from '../../core/service/http.service';
+import {BaseTable} from '../../shared/util/base-table';
+import {BeanUtil} from '../../shared/util/bean-util';
+import {UserAssociateComponent} from './user-associate/user-associate.component';
+import {StringUtil} from "../../shared/util/string-util";
 
 @Component({
   selector: 'app-grid',
@@ -14,6 +16,14 @@ import {BeanUtil} from "../../shared/util/bean-util";
 })
 export class GridComponent extends BaseTable<any> implements OnInit {
 
+  /**
+   * 组织机构树查询的关键字
+   */
+  instQueryWord: string;
+  /**
+   * 树形表查询关键字
+   */
+  tableQueryWord: string;
   /**
    * 组织机构名称
    */
@@ -26,33 +36,37 @@ export class GridComponent extends BaseTable<any> implements OnInit {
    * 树形节点
    */
   institutionTree: TreeNode[];
-
   /**
    * 用户id
    */
   userId: string;
-
   /**
    * 关联网格树的回填资源
    */
   selectedNodes: TreeNode[] = [];
-
-  selectedNode: TreeNode[];
+  /**
+   * 选中的节点
+   */
+  tableSelectedNode: TreeNode;
+  /**
+   * 选中的组织机构节点
+   */
+  instSelectedNode: TreeNode;
   /**
    * 弹框树
    */
   dialogTree: TreeNode[];
-
   /**
    * 树形表
    */
   tableTree: TreeNode[];
-
-  display: boolean;
   /**
-   * 选中的网格编号
+   * 是否显示弹框
    */
-  gridCode: string = '';
+  display: boolean;
+
+  @ViewChild(UserAssociateComponent)
+  userAssociate: UserAssociateComponent;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -64,6 +78,12 @@ export class GridComponent extends BaseTable<any> implements OnInit {
 
   ngOnInit(): void {
     this.refreshTree();
+    this.refreshGridTree();
+    this.filter = '';
+    this.getDataByPage(0, this.page.size, this.filter);
+  }
+
+  refreshGridTree() {
     const url = 'grid/tree';
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
@@ -73,8 +93,6 @@ export class GridComponent extends BaseTable<any> implements OnInit {
         this.tableTree[0].expanded = true;
         this.dialogTree = BeanUtil.arrayDeepCopy(this.tableTree);
       });
-    this.filter = '';
-    this.getDataByPage(0, this.page.size, this.filter);
   }
 
   /**
@@ -95,43 +113,51 @@ export class GridComponent extends BaseTable<any> implements OnInit {
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = 'grid/list?gridCode=' + this.gridCode;
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
     this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
-      res => {
-        return this.setData(res);
-      }
+      res => this.setData(res)
     );
   }
 
-  gotoUserAssociate(node: any) {
-    this.router.navigate(['user-associate', {code: node.data.code}], {relativeTo: this.route});
+  showUserDialog(node: any) {
+    this.userAssociate.showDialog(node.data.code);
   }
-
 
   nodeSelect(event) {
     this.institutionName = event.node.label;
-    let url = 'user/list?key=' + this.filter;
-    if (event.node.data.parentId != 0) {
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
+    if (event.node.data.parentId !== 0) {
       this.institutionId = event.node.data.id;
     } else {
       this.institutionId = null;
     }
-    let params = {
-      institutionId: this.institutionId
-    };
+    const params = {institutionId: this.institutionId};
     this.httpService.findByPage(url, 0, this.page.size, params).then(
       res => this.setData(res)
     );
   }
 
   query() {
-    const url = 'user/list?key=' + this.filter;
-    let params = {institutionId: this.institutionId};
+    this.getDataByPage(0, this.page.size, this.filter);
+  }
+
+  queryInstitution() {
+    this.instSelectedNode = TreeUtil.findNodesByLabel(this.institutionTree, StringUtil.trim(this.instQueryWord));
+    this.institutionName = this.instSelectedNode.label;
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
+    if (this.instSelectedNode.data.parentId !== 0) {
+      this.institutionId = this.instSelectedNode.data.id;
+    } else {
+      this.institutionId = null;
+    }
+    const params = {institutionId: this.institutionId};
     this.httpService.findByPage(url, 0, this.page.size, params).then(
-      res => {
-        return this.setData(res);
-      }
+      res => this.setData(res)
     );
+  }
+
+  queryTreeTable() {
+    this.tableSelectedNode = TreeUtil.findNodesByLabel(this.tableTree, StringUtil.trim(this.tableQueryWord));
   }
 
   showDialog(id: string) {
@@ -148,18 +174,14 @@ export class GridComponent extends BaseTable<any> implements OnInit {
     };
     this.httpService.findByParams(url, params)
       .then(res => {
-        //回填已选中的网格数据
+        // 回填已选中的网格数据
         TreeUtil.setSelection(this.dialogTree, this.selectedNodes, res);
       });
   }
 
   save() {
-    let gridCodes = '';
-    for (let i in this.selectedNodes) {
-      gridCodes =
-        gridCodes + this.selectedNodes[i].data.code + ',';
-    }
-    let params = {
+    const gridCodes = this.selectedNodes.map(node => node.data.code).join(',');
+    const params = {
       userId: this.userId,
       gridCodes: gridCodes
     };
@@ -172,6 +194,7 @@ export class GridComponent extends BaseTable<any> implements OnInit {
           detail: '成功更新'
         });
         this.display = false;
+        this.getDataByPage(this.page.number, this.page.size, this.filter)
       });
   }
 
@@ -179,6 +202,9 @@ export class GridComponent extends BaseTable<any> implements OnInit {
     this.display = false;
   }
 
-}
+  onSaved(event) {
+    this.refreshGridTree();
+  }
 
+}
 

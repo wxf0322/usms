@@ -5,6 +5,7 @@ export abstract class BaseDetail<T> {
 
   operateType: string; // 操作类型
   detailData: T; // 详细数据
+  display: boolean;
 
   constructor(protected httpService: HttpService,
               protected route: ActivatedRoute) {
@@ -53,5 +54,22 @@ export abstract class BaseDetail<T> {
       this.save();
     }
   }
+
+  initDialog(url: string,type:string,id:any): Promise<boolean> {
+    this.operateType = type;
+    // 不是新增操作，获取详细数据
+    if (this.operateType !== 'add') {
+      const dataId = id;
+      return this.httpService
+        .findById(url, dataId)
+        .then(res => {
+          this.detailData = res;
+          return true;
+        });
+    } else {
+      return Promise.resolve(false);
+    }
+  }
+
 
 }

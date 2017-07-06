@@ -15,10 +15,9 @@ import {Operation} from './operation';
 })
 export class OperationComponent extends BaseTable<any> implements OnInit {
 
-
   applications: SelectItem[] = [];
 
-  selectedApplication: string;
+  applicationId: string;
 
   selectedNode: TreeNode;
 
@@ -37,10 +36,8 @@ export class OperationComponent extends BaseTable<any> implements OnInit {
   }
 
   refreshTree() {
-    if (typeof (this.selectedApplication) === 'undefined') {
-      this.selectedApplication = '';
-    }
-    const url = 'operation/tree?applicationId=' + this.selectedApplication;
+    this.applicationId = '';
+    const url = 'operation/tree?applicationId=' + this.applicationId;
     let treeDataArr: TreeData[];
     this.httpService.findByParams(url)
       .then(res => {
@@ -63,6 +60,7 @@ export class OperationComponent extends BaseTable<any> implements OnInit {
 
   nodeSelect(event) {
     const id = event.node.data.id;
+    this.applicationId = event.node.data.applicationId;
     const url = 'operation/find';
     this.httpService.findById(url, id).then(
       res => {
@@ -134,6 +132,12 @@ export class OperationComponent extends BaseTable<any> implements OnInit {
 
   selectChange() {
     this.refreshTree();
+  }
+
+  showDialog(type: string, id: string) {
+  }
+
+  query() {
   }
 
 }

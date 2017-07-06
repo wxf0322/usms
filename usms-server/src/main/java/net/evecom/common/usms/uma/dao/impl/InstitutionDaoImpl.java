@@ -6,9 +6,7 @@
 package net.evecom.common.usms.uma.dao.impl;
 
 import net.evecom.common.usms.core.dao.impl.BaseDaoImpl;
-import net.evecom.common.usms.core.util.JpaUtil;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.custom.InstitutionDaoCustom;
 import org.springframework.stereotype.Repository;
 

@@ -7,16 +7,11 @@ import {OperationComponent} from './operation/operation.component';
 import {PrivilegeComponent} from './privilege/privilege.component';
 import {GridComponent} from './grid/grid.component';
 import {ApplicationComponent} from './application/application.component';
-import {UserDetailComponent} from './user/user-detail/user-detail.component';
-import {PrivilegeDetailComponent} from './privilege/privilege-detail/privilege-detail.component';
-import {RoleDetailComponent} from './role/role-detail/role-detail.component';
-import {ApplicationDetailComponent} from './application/application-detail/application-detail.component';
 import {OperationDetailComponent} from './operation/operation-detail/operation-detail.component';
 import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
-import {InstitutionPanelComponent} from "./institution/institution-panel/institution-panel.component";
-import {UserAssociateComponent} from "./grid/user-associate/user-associate.component";
-
+import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
+import {UserAssociateComponent} from './grid/user-associate/user-associate.component';
 /**
  * 页面组件路由
  */
@@ -25,24 +20,21 @@ const childrenRoutes: Routes = [
   {
     path: 'user',
     children: [
-      {path: '', component: UserComponent},
-      {path: 'user-detail', component: UserDetailComponent},
-      {path: 'institution-detail', component: InstitutionDetailComponent}
+      {path: '', component: UserComponent}
     ]
   }, {
     path: 'institution',
     component: InstitutionComponent,
     children: [
       {path: '', redirectTo: 'panel', pathMatch: 'full'},
-      {path: 'panel', component: InstitutionPanelComponent },
-      {path: 'detail', component: InstitutionDetailComponent},
+      {path: 'panel', component: InstitutionPanelComponent},
+      {path: 'detail', component: InstitutionDetailComponent}
     ]
   },
   {
     path: 'role',
     children: [
-      {path: '', component: RoleComponent},
-      {path: 'detail', component: RoleDetailComponent},
+      {path: '', component: RoleComponent}
     ]
   }, {
     path: 'operation',
@@ -53,8 +45,7 @@ const childrenRoutes: Routes = [
   }, {
     path: 'privilege',
     children: [
-      {path: '', component: PrivilegeComponent},
-      {path: 'detail', component: PrivilegeDetailComponent},
+      {path: '', component: PrivilegeComponent}
     ]
   }, {
     path: 'grid',
@@ -65,8 +56,7 @@ const childrenRoutes: Routes = [
   }, {
     path: 'application',
     children: [
-      {path: '', component: ApplicationComponent},
-      {path: 'detail', component: ApplicationDetailComponent}
+      {path: '', component: ApplicationComponent}
     ]
   }
 ];

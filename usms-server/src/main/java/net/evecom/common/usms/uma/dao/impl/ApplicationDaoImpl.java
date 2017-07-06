@@ -24,7 +24,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity> implement
     @Override
     public Page<ApplicationEntity> listAppsByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_applications a ").append(sqlFilter.getWhereSql());
+        sb.append("select * from usms_applications a ")
+                .append(sqlFilter.getWhereSql())
+                .append(" order by id");
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }

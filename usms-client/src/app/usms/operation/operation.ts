@@ -7,5 +7,5 @@ export class Operation {
   iconPath: string;
   optType: number;
   enabled: number;
-  applicationId:number;
+  applicationId: number;
 }

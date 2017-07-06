@@ -9,7 +9,6 @@ import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.vo.OperationVO;
 import org.springframework.data.domain.Page;
 

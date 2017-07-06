@@ -78,23 +78,33 @@
                 return;
             }
         }
+
+        function keyDown() {
+            if (event.keyCode == 13)
+            {
+                event.returnValue=false;
+                event.cancel = true;
+                ssoLogin();
+            }
+        }
+
     </script>
 </head>
 
-<body class="eui-login-bg animated">
+<body class="eui-login-bg animated" onkeydown="keyDown();">>
 <form action="" method="post" id="ssoLoginForm">
     <div class="eui-login-box">
         <h3 class="animated-long"></h3>
         <div class="eui-login-input animated-long">
             <div class="eui-login-user">
                 <input type="text" placeholder="用户名……" name="loginName" autocomplete="off"
-                       onblur="validate('loginName','请填写用户名！')"/>
+                       onblur="validate('loginName','请填写用户名！')" />
                 <div class="eui-login-bubble" id="loginNameDiv" style="display:none;"><i></i><span id="loginNameSpan">请填写用户名！</span>
                 </div>
             </div>
             <div class="eui-login-password">
                 <input type="password" placeholder="密码……" name="password" autocomplete="off"
-                       onblur="validate('password','请填写密码！')"/>
+                       onblur="validate('password','请填写密码！')"  />
                 <div class="eui-login-bubble" id="passwordDiv" style="display:none;"><i></i><span id="passwordSpan">请填写密码！</span>
                 </div>
             </div>

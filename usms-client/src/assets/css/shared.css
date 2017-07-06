@@ -24,8 +24,10 @@
 }
 
 .validation{
-  float: right!important;
+  float :right!important;
   color: red;
   font-size: 15px;
   margin: 5px 120px 0 0;
 }
+
+

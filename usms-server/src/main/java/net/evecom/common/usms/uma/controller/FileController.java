@@ -6,6 +6,7 @@
 package net.evecom.common.usms.uma.controller;
 
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,12 @@ import java.util.UUID;
 @RequestMapping("/file")
 public class FileController {
 
+    /**
+     * 图片存储路径
+     */
+    @Value("${file.images}")
+    private String imagesPath;
+
     @ResponseBody
     @RequestMapping(value = "upload")
     public JSONObject upload(HttpServletRequest request) {
@@ -35,14 +42,14 @@ public class FileController {
         JSONObject jsonObject = new JSONObject();
         try {
             part = request.getPart("uploadFile");
-            String root = request.getServletContext().getRealPath("/attachment");
-
+           /* String root = request.getServletContext().getRealPath("/attachment");
+           */
+            String root = imagesPath;
             // 判断文件夹是否存在，如果不存在创建一个文件夹
             File file = new File(root);
             if(!file.exists()){
-               file.mkdirs();
+                file.mkdirs();
             }
-
             String headName = part.getHeader("content-disposition");
             String ext = headName.substring(headName.lastIndexOf("."), headName.length() - 1);
             String ranString = UUID.randomUUID().toString();
@@ -55,5 +62,4 @@ public class FileController {
         }
         return jsonObject;
     }
-
 }

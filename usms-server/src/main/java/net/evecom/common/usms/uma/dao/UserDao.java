@@ -135,4 +135,11 @@ public interface UserDao extends JpaRepository<UserEntity, Long>, UserDaoCustom 
             "and u.enabled=1", nativeQuery = true)
     List<UserEntity> listUsersByOfficalPost(String officalPost);
 
+
+    /**
+     * 根据用户姓名查找用户列表
+     * @param name
+     * @return
+     */
+    List<UserEntity> findByNameLike(String name);
 }

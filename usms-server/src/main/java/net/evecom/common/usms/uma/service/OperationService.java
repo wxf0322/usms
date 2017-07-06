@@ -7,7 +7,6 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
 
 import java.util.List;
 

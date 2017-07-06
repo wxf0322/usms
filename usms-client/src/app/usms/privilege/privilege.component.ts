@@ -1,9 +1,11 @@
-import {Component, OnInit, Renderer} from '@angular/core';
-import {BaseTable} from "../../shared/util/base-table";
-import {ActivatedRoute, Router} from "@angular/router";
-import {HttpService} from "../../core/service/http.service";
-import {ConfirmationService} from "primeng/primeng";
-import {Privilege} from "./privilege";
+import {Component, OnInit, Renderer, ViewChild} from '@angular/core';
+import {BaseTable} from '../../shared/util/base-table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HttpService} from '../../core/service/http.service';
+import {ConfirmationService} from 'primeng/primeng';
+import {Privilege} from './privilege';
+import {PrivilegeDialogComponent} from './privilege-dialog/privilege-dialog.component';
+import {StringUtil} from "../../shared/util/string-util";
 
 @Component({
   selector: 'app-privilege',
@@ -11,6 +13,9 @@ import {Privilege} from "./privilege";
   styleUrls: ['./privilege.component.css']
 })
 export class PrivilegeComponent extends BaseTable<Privilege> implements OnInit {
+
+  @ViewChild(PrivilegeDialogComponent)
+  privilegeDialog: PrivilegeDialogComponent;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -26,32 +31,27 @@ export class PrivilegeComponent extends BaseTable<Privilege> implements OnInit {
   }
 
   deleteSelected() {
-    let url = 'privilege/delete';
+    const url = 'privilege/delete';
     this.delete(url, 'id');
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    let url = 'privilege/list?key=' + this.filter;
+    const url = 'privilege/list?key=' + StringUtil.trim(this.filter);
     this.httpService.findByPage(url, currentPage, rowsPerPage, null).then(
       res => this.setData(res)
     );
   }
 
-  /**
-   * 授权操作
-   * @param id
-   */
-  gotoOperAllocation(id: string) {
-    this.router.navigate(['operation-allocation', {id: id}], {relativeTo: this.route});
+  query() {
+    this.getDataByPage(0, this.page.size, this.filter);
   }
 
-  query() {
-    let url = 'privilege/list?key=' + this.filter;
-    this.httpService.findByPage(url, 0, this.page.size, this.filter).then(
-      res => {
-        return this.setData(res);
-      }
-    );
+  showDialog(type: string, id: string) {
+    this.privilegeDialog.showDialog(type, id);
+  }
+
+  onSaved(event) {
+    this.getDataByPage(this.page.number, this.page.size, this.filter);
   }
 
 }

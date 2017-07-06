@@ -7,21 +7,29 @@ package net.evecom.common.usms.uma.api;
 
 import net.evecom.common.usms.core.vo.ErrorStatus;
 import net.evecom.common.usms.core.util.WebUtil;
+import net.evecom.common.usms.core.vo.ResultStatus;
 import net.evecom.common.usms.oauth2.Constants;
 import net.evecom.common.usms.oauth2.service.OAuthService;
+import net.evecom.common.usms.oauth2.shiro.ShiroSecurityHelper;
 import net.evecom.common.usms.uma.service.ApplicationService;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
 import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,16 +45,21 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginAPI {
 
     /**
-     * 注入OAuthService
+     * @see Logger
+     */
+    private static Logger logger = LoggerFactory.getLogger(LoginAPI.class);
+
+    /**
+     * @see OAuthService
      */
     @Autowired
     private OAuthService oAuthService;
 
     /**
-     * 注入ApplicationService
+     * @see ShiroSecurityHelper
      */
     @Autowired
-    private ApplicationService applicationService;
+    private ShiroSecurityHelper shiroSecurityHelper;
 
     /**
      * 登出接口
@@ -56,52 +69,35 @@ public class LoginAPI {
      * @throws OAuthProblemException
      * @throws OAuthSystemException
      */
-    @RequestMapping(value = "loginOut")
-    public Object loginOut(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
+    @ResponseBody
+    @RequestMapping(value = "logout")
+    public ResponseEntity logout(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
-        // 重定向地址
-        String redirectUri = request.getParameter("redirect_uri");
-
-        // 获得Client id
-        String clientId = request.getParameter("client_id");
-
-        if (StringUtils.isEmpty(redirectUri) || StringUtils.isEmpty(clientId)) {
-            ErrorStatus errorStatus = new ErrorStatus
-                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
-                    .buildJSONMessage();
-            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
-        }
-
-        if (applicationService.getAppByClientId(clientId) == null) {
-             ErrorStatus errorStatus = new ErrorStatus
-                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_CLIENT_ID)
-                    .buildJSONMessage();
-            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
-        }
 
         // 获取Access Token
         String accessToken = oauthRequest.getAccessToken();
+
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
-        // 获得安全管理器
-        Subject subject = SecurityUtils.getSubject();
-        // 删除该用户所有的accessToken
-        oAuthService.deleteAccountByLoginName(loginName);
-        // 停用该用户的session
-        subject.getSession().stop();
 
-        // 获取basePath
-        String basePath = WebUtil.getBasePath(request);
-        // 构造请求地址
-        StringBuilder loginUrl = new StringBuilder();
-        loginUrl.append(basePath)
-                .append("authorize?client_id=")
-                .append(clientId)
-                .append("&response_type=code&redirect_uri=")
-                .append(redirectUri);
+        // 获得session与sessionDAO
+        Session session = shiroSecurityHelper.getSessionByLoginName(loginName);
+        SessionDAO sessionDAO = shiroSecurityHelper.getSessionDAO();
 
-        return "redirect:" + loginUrl.toString();
+        try {
+            sessionDAO.delete(session);
+            oAuthService.deleteAccountByLoginName(loginName);
+            logger.info("[{}] 登出系统成功！", loginName);
+            ResultStatus resultStatus = new ResultStatus(true, "");
+            JSONObject resultJson = JSONObject.fromObject(resultStatus);
+            return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info("[{}] 登出系统失败！", loginName);
+            ResultStatus resultStatus = new ResultStatus(false, "");
+            JSONObject resultJson = JSONObject.fromObject(resultStatus);
+            return new ResponseEntity(resultJson.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
 

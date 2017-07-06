@@ -56,7 +56,7 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
                 .append(" select u.id, u.login_name, u.name, u.enabled, u.staff_id, ug.grid_code ")
                 .append(" from usms_users u left join usms_user_grid ug on u.id = ug.user_id ")
                 .append(sqlFilter.getWhereSql()).append(" ) u ")
-                .append(" left join usms_staffs s on u.staff_id = s.id ");
+                .append(" left join usms_staffs s on u.staff_id = s.id order by u.id");
         String sql = sb.toString();
         Page<Map<String, Object>> pageBean = queryForMap(sql, sqlFilter.getParams().toArray(), page, size);
         List<UserVO> results = new ArrayList<>();
