@@ -1,13 +1,13 @@
 <div class="ui-g">
   <div class="ui-g-4 left-panel">
-    <input type="text" [(ngModel)]="queryWord" pInputText>
+    <input type="text" pInputText placeholder="组织机构名称" [(ngModel)]="queryWord" >
     <button pButton type="button" icon="fa-search" (click)="queryNode()"></button>
     <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)">
     </p-tree>
   </div>
   <div class="ui-g-8">
     &nbsp;&nbsp;当前组织机构：{{institutionName}}<br>
-    &nbsp;&nbsp;<input type="text" pInputText placeholder="关键字" [(ngModel)]="key">
+    &nbsp;&nbsp;<input type="text" pInputText placeholder="姓名" [(ngModel)]="key">
     <button pButton type="button" icon="fa-search" (click)="queryForRole()"></button>
     <p-pickList [source]="sourceUsers" [target]="targetUsers"
                 sourceHeader="可选用户列表" targetHeader="已选用户列表" [responsive]="true"

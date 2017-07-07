@@ -1,10 +1,10 @@
-<div style="top: 0px;">
+<div style="top: 0;">
   <p-tabView>
     <p-tabPanel header="用户角度">
       <div class="ui-g">
         <div class="ui-g-3 left-panel">
           <p-panel header="组织机构树">
-            <input pInputText type="text" size="15" [(ngModel)]="instQueryWord"/>
+            <input pInputText type="text" placeholder="组织机构名称" size="15" [(ngModel)]="instQueryWord"/>
             <button pButton type="button" icon="fa-search" (click)="queryInstitution()"></button>
             <p-tree [value]="institutionTree" selectionMode="single"
                     [(selection)]="instSelectedNode"
@@ -13,7 +13,7 @@
           </p-panel>
         </div>
         <div class="ui-g-9">
-          <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
+          <input type="text" pInputText placeholder="账号或姓名" [(ngModel)]="filter">
           <button pButton type="button" icon="fa-search" (click)="query()" label="查询"></button>
           <p-dataTable [value]="viewData" selectionMode="multiple">
             <p-column header="序号" [style]="{'width':'60px'}">
@@ -23,7 +23,7 @@
             </p-column>
             <p-column selectionMode="multiple" [style]="{'width':'38px'} "></p-column>
             <p-column field="loginName" header="账号"></p-column>
-            <p-column field="name" header="用户姓名"></p-column>
+            <p-column field="name" header="姓名"></p-column>
             <p-column field="gridNames" header="已关联网格"></p-column>
             <p-column header="操作">
               <ng-template let-grid="rowData" pTemplate="body">

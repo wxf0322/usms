@@ -55,11 +55,12 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   /**
    * 时间相关汉化
    */
-  en:any;
+  en: any;
 
-  // 双向绑定 onSaved
+  /**
+   * 双向绑定 onSaved
+   */
   @Output() onSaved = new EventEmitter();
-
 
   constructor(private location: Location,
               protected httpService: HttpService,
@@ -69,9 +70,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
     super(httpService, route);
     this.detailData = new User();
     this.detailData.pictureUrl = this.nullPicture;
-
   }
-
 
   refreshTree() {
     const url = 'institution/tree';
@@ -91,8 +90,8 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
       dayNames: ["日", "一", "二", "三", "四", "五", "六"],
       dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-      monthNames: [ "一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月" ],
-      monthNamesShort: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
+      monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     };
   }
 
@@ -185,15 +184,9 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
       .map(res => res.json())
       .catch(error => Observable.throw(error))
       .subscribe(
-        data => {
-          this.detailData.pictureUrl = data['filename'];
-        },
+        data => this.detailData.pictureUrl = data['filename'],
         error => console.log(error)
       );
   }
-
-
-
-
 
 }

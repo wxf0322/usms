@@ -5,7 +5,7 @@
       <button pButton type="button" label="删除" icon="fa-trash" (click)="deleteSelected()"></button>
     </li>
     <li class="toolkit-item e-right">
-      <input type="text" pInputText placeholder="关键字" [(ngModel)]="filter">
+      <input type="text" pInputText placeholder="角色名称或角色编码" [(ngModel)]="filter">
       <button pButton icon="fa-search" (click)="query()" label="查询"></button>
     </li>
   </ul>
@@ -13,7 +13,6 @@
 <div class="ui-g content">
     <div class="ui-g-12" appAutoHeight="content" >
       <p-dataTable [value]="viewData" scrollable="true"
-                   scrollHeight="420px"
                    [(selection)]="selectedData"
                    selectionMode="multiple">
         <p-column header="序号" [style]="{'width':'60px'}">
@@ -47,6 +46,5 @@
                      (onSizeChange)="onSizeChange($event)" (onPageChange)="onPageChange($event)"></eve-paginator>
     </div>
 </div>
-
 
 <app-role-dialog (onSaved)="onSaved($event)"></app-role-dialog>
