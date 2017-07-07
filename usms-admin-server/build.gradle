@@ -17,7 +17,6 @@ dependencies {
 }
 
 def clientPath = '../usms-admin-front/'
-def serverPath = './'
 
 /**
  * 将 clientPath 中生成的dist文件放入根目录中

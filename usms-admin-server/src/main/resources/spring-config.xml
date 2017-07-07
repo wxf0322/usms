@@ -81,6 +81,5 @@
     <jpa:repositories base-package="net.evecom.common.usms"/>
 
     <import resource="classpath:spring-cache.xml"/>
-    <import resource="classpath:spring-shiro.xml"/>
 
 </beans>

@@ -25,20 +25,6 @@
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
 
-    <!-- Shiro过滤器 -->
-    <filter>
-        <filter-name>shiroFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>shiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <!-- 字符集过滤器 -->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
@@ -66,14 +52,6 @@
             <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
-
-        <multipart-config>
-            <max-file-size>52428800</max-file-size>
-            <max-request-size>52428800</max-request-size>
-            <file-size-threshold>0</file-size-threshold>
-        </multipart-config>
-
-        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
@@ -81,6 +59,7 @@
     </servlet-mapping>
 
     <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
         <welcome-file>/index.html</welcome-file>
     </welcome-file-list>
 
