@@ -3,7 +3,7 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.core.filter;
+package net.evecom.common.usms.uma.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
@@ -29,7 +29,7 @@ import java.net.URL;
  * @version 1.0
  * @created 2017/7/6 下午4:38
  */
-public class OAuthFilter implements Filter {
+public class ClientFilter implements Filter {
 
     /**
      * clientId

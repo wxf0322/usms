@@ -1,11 +1,11 @@
-*.idea
-*.git
-*.svn
+.idea
+.git
+.svn
+.settings
+.gradle
 *.war
 *.iml
 *.DS_Store
-.settings
-.gradle
 build
 classes
 META-INF

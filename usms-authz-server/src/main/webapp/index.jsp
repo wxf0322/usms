@@ -12,8 +12,6 @@
 
 ### <font color="red">《统一用户管理系统API文档》，见[此处](./api.jsp)</font>
 
-### <font color="red">系统后台管理页面，见[此处](./index.html)</font>
-
 ## 一、网页端接入流程说明
 
 ###1. 先在统一用户管理系统中注册对接应用
