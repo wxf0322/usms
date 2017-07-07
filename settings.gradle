@@ -2,6 +2,6 @@ rootProject.name = 'usms'
 
 include 'usms-admin-front',
         'usms-admin-server',
-        'usms-authz-server',
+        'usms-oauth-server',
         'usms-core',
         'usms-service'

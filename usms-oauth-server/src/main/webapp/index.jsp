@@ -10,7 +10,7 @@
 # 统一用户管理系统OAuth2.0认证流程说明文档
 --------
 
-### <font color="red">《统一用户管理系统API文档》，见[此处](./api.jsp)</font>
+### <font color="red">《统一用户管理系统API文档》，见[此处](./views/api.jsp)</font>
 
 ## 一、网页端接入流程说明
 

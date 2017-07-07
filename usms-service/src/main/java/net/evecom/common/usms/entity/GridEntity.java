@@ -86,10 +86,27 @@ public class GridEntity {
      * 创建时间
      */
     private Date timeCreated;
+
     /**
-     * 最后变更时间
+     * 创建人id
      */
-    private Date lastModified;
+    private Long creatorId;
+
+    /**
+     * 创建ORG的ID
+     */
+    private Long createOrgId;
+
+    /**
+     * 变更人id
+     */
+    private Long modifierId;
+
+    /**
+     * 修改时间
+     */
+    private Date timeModified;
+
     /**
      * 可用状态
      */
@@ -266,13 +283,42 @@ public class GridEntity {
     }
 
     @Basic
-    @Column(name = "LAST_MODIFIED")
-    public Date getLastModified() {
-        return lastModified;
+    @Column(name = "creator_id")
+    public Long getCreatorId() {
+        return creatorId;
     }
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+    @Basic
+    @Column(name = "create_org_id")
+    public Long getCreateOrgId() {
+        return createOrgId;
+    }
+
+    public void setCreateOrgId(Long createOrgId) {
+        this.createOrgId = createOrgId;
+    }
+
+    @Basic
+    @Column(name = "modifier_id")
+    public Long getModifierId() {
+        return modifierId;
+    }
+
+    public void setModifierId(Long modifierId) {
+        this.modifierId = modifierId;
+    }
+
+    @Basic
+    @Column(name = "time_modified")
+    public Date getTimeModified() {
+        return timeModified;
+    }
+
+    public void setTimeModified(Date timeModified) {
+        this.timeModified = timeModified;
     }
 
     @Basic
@@ -305,18 +351,20 @@ public class GridEntity {
             return false;
         if (area != null ? !area.equals(that.area) : that.area != null) return false;
         if (parentId != null ? !parentId.equals(that.parentId) : that.parentId != null) return false;
-        if (adminDivisionCode != null ? !adminDivisionCode.equals(that.adminDivisionCode)
-                : that.adminDivisionCode != null)
+        if (adminDivisionCode != null ?
+                !adminDivisionCode.equals(that.adminDivisionCode) : that.adminDivisionCode != null)
             return false;
         if (adminDivision != null ? !adminDivision.equals(that.adminDivision) : that.adminDivision != null)
             return false;
         if (manualSn != null ? !manualSn.equals(that.manualSn) : that.manualSn != null) return false;
         if (geoOutlineId != null ? !geoOutlineId.equals(that.geoOutlineId) : that.geoOutlineId != null) return false;
         if (timeCreated != null ? !timeCreated.equals(that.timeCreated) : that.timeCreated != null) return false;
-        if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
-        if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
+        if (creatorId != null ? !creatorId.equals(that.creatorId) : that.creatorId != null) return false;
+        if (createOrgId != null ? !createOrgId.equals(that.createOrgId) : that.createOrgId != null) return false;
+        if (modifierId != null ? !modifierId.equals(that.modifierId) : that.modifierId != null) return false;
+        if (timeModified != null ? !timeModified.equals(that.timeModified) : that.timeModified != null) return false;
+        return enabled != null ? enabled.equals(that.enabled) : that.enabled == null;
 
-        return true;
     }
 
     @Override
@@ -338,10 +386,14 @@ public class GridEntity {
         result = 31 * result + (manualSn != null ? manualSn.hashCode() : 0);
         result = 31 * result + (geoOutlineId != null ? geoOutlineId.hashCode() : 0);
         result = 31 * result + (timeCreated != null ? timeCreated.hashCode() : 0);
-        result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
+        result = 31 * result + (creatorId != null ? creatorId.hashCode() : 0);
+        result = 31 * result + (createOrgId != null ? createOrgId.hashCode() : 0);
+        result = 31 * result + (modifierId != null ? modifierId.hashCode() : 0);
+        result = 31 * result + (timeModified != null ? timeModified.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
     }
+
 
     @Override
     public String toString() {
@@ -363,7 +415,10 @@ public class GridEntity {
                 ", manualSn=" + manualSn +
                 ", geoOutlineId=" + geoOutlineId +
                 ", timeCreated=" + timeCreated +
-                ", lastModified=" + lastModified +
+                ", creatorId=" + creatorId +
+                ", createOrgId=" + createOrgId +
+                ", modifierId=" + modifierId +
+                ", timeModified=" + timeModified +
                 ", enabled=" + enabled +
                 '}';
     }
