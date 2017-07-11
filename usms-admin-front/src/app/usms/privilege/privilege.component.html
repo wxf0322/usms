@@ -13,7 +13,8 @@
 <div class="ui-g content">
     <div class="ui-g-12" appAutoHeight="content" >
       <p-dataTable [value]="viewData" [(selection)]="selectedData"
-                   scrollable="true" selectionMode="multiple">
+                   scrollable="true" selectionMode="multiple"
+                   emptyMessage="{{emptyMessage}}">
         <p-column [style]="{'width':'60px'}">
           <ng-template let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>

@@ -29,7 +29,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   /**
    * 用户所选的机构id
    */
-  institutionId: string;
+  institutionId: number;
 
   /**
    * 当前所属的机构名称
@@ -115,7 +115,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   }
 
   showDialog(type: string, id: string) {
-    this.userDialog.showDialog(type, id);
+    this.userDialog.showDialog(type, id,this.institutionId,this.institutionName);
   }
 
   query() {

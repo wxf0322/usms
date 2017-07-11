@@ -29,7 +29,7 @@ import java.net.URL;
  * @version 1.0
  * @created 2017/7/6 下午4:38
  */
-public class ClientFilter implements Filter {
+public class OAuthFilter implements Filter {
 
     /**
      * clientId
@@ -79,7 +79,6 @@ public class ClientFilter implements Filter {
         return oauthResponse;
     }
 
-
     /**
      * 验证accessToken是否有效
      *
@@ -116,15 +115,17 @@ public class ClientFilter implements Filter {
         this.clientId = filterConfig.getInitParameter("clientId");
         this.clientSecret = filterConfig.getInitParameter("clientSecret");
         this.serverUrl = filterConfig.getInitParameter("serverUrl");
-        this.tokenUrl = this.serverUrl + "/authorize";
-        this.authUrl = this.serverUrl + "/accessToken";
+        this.authUrl = this.serverUrl + "/authorize";
+        this.tokenUrl = this.serverUrl + "/accessToken";
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        // 获得 httpRequest, httpResponse
+        // 获得 httpRequest
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        // 获得 httpResponse
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // 获得 session 对象
@@ -136,6 +137,9 @@ public class ClientFilter implements Filter {
         // 获得session中的accessToken
         String accessToken = (String) session.getAttribute("accessToken");
 
+        if (StringUtils.isNotEmpty(accessToken)) {
+            System.out.println(accessToken);
+        }
         // 获得请求地址
         String requestUrl = httpRequest.getRequestURL().toString();
 
@@ -168,7 +172,6 @@ public class ClientFilter implements Filter {
                     .append("&response_type=code&redirect_uri=")
                     .append(requestUrl);
             String redirectUrl = sb.toString();
-
             // 如果session中有令牌，且access_token有效，则继续请求，否则重定向至OAuth2服务器进行认证
             if (StringUtils.isNotEmpty(accessToken) && checkAccessToken(httpRequest, accessToken)) {
                 chain.doFilter(request, response);

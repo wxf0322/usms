@@ -1,4 +1,4 @@
-import {Component, OnInit,Output,EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {BaseDetail} from "../../../shared/util/base-detail";
@@ -14,13 +14,32 @@ import {TreeUtil} from "../../../shared/util/tree-util";
 })
 export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
 
+  /**
+   * 网格树
+   */
   tree: TreeNode[];
+
+  /**
+   * 未选中的用户
+   * @type {Array}
+   */
   sourceUsers: any = [];
+
+  /**
+   * 已选中的用户
+   * @type {Array}
+   */
   targetUsers: any = [];
+
+  /**
+   * 网格编码
+   */
   gridCode: any;
 
-  dialogDisplay:boolean =false;
-  // 双向绑定 dialogDisplay
+  /**
+   * 绑定事件
+   * @type {EventEmitter}
+   */
   @Output() onSaved = new EventEmitter();
 
   constructor(private location: Location,
@@ -33,11 +52,10 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.display = false;
   }
 
   save() {
-    this.dialogDisplay = false;
     let url = "grid/updateUsers";
     let userIds = this.targetUsers.map(user => user.ID).join(',');
     let params = {
@@ -49,8 +67,9 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '成功更新'
+          detail: '所属用户，更新成功'
         });
+        this.goBack();
         this.onSaved.emit("refreshTable");
       }
     );
@@ -67,7 +86,7 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
       });
   }
 
-  usersInit(gridCode:string) {
+  usersInit(gridCode: string) {
     let targetUrl = 'grid/users/target';
     let sourceUrl = 'grid/users/source';
     let params = {
@@ -81,9 +100,9 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
     );
   }
 
-  showDialog(code:string){
+  showDialog(code: string) {
     this.gridCode = code;
-    this.dialogDisplay = true;
+    this.display = true;
     this.refreshTree();
     this.usersInit(code);
   }

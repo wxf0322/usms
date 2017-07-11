@@ -20,46 +20,57 @@ export class GridComponent extends BaseTable<any> implements OnInit {
    * 组织机构树查询的关键字
    */
   instQueryWord: string;
+
   /**
    * 树形表查询关键字
    */
   tableQueryWord: string;
-  /**
-   * 组织机构名称
-   */
-  institutionName: string;
-  /**
-   * 组织机构名称
-   */
-  institutionId: number;
-  /**
-   * 树形节点
-   */
-  institutionTree: TreeNode[];
+
   /**
    * 用户id
    */
   userId: string;
+
   /**
-   * 关联网格树的回填资源
+   * 组织机构名称
    */
-  selectedNodes: TreeNode[] = [];
+  institutionName: string;
+
   /**
-   * 选中的节点
+   * 组织机构Id
    */
-  tableSelectedNode: TreeNode;
+  institutionId: number;
+
   /**
-   * 选中的组织机构节点
+   * 组织机构树
    */
-  instSelectedNode: TreeNode;
+  institutionTree: TreeNode[];
+
   /**
-   * 弹框树
+   * 弹框网格树
    */
   dialogTree: TreeNode[];
+
+  /**
+   * 弹框网格树，已选中数据
+   */
+  selectedNodes: TreeNode[] = [];
+
   /**
    * 树形表
    */
   tableTree: TreeNode[];
+
+  /**
+   * 选中的树形表节点
+   */
+  tableSelectedNode: TreeNode;
+
+  /**
+   * 选中的组织机构节点
+   */
+  instSelectedNode: TreeNode;
+
   /**
    * 是否显示弹框
    */
@@ -191,7 +202,7 @@ export class GridComponent extends BaseTable<any> implements OnInit {
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '成功更新'
+          detail: '成功更新，该用户所属网格'
         });
         this.display = false;
         this.getDataByPage(this.page.number, this.page.size, this.filter)

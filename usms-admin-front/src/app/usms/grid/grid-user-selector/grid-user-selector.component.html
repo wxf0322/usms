@@ -1,6 +1,6 @@
 <div class="ui-g">
   <div class="ui-g-4 left-panel">
-    <input pInputText type="text" placeholder="组织机构名称" [(ngModel)]="queryWord">
+    <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="queryWord">
     <button pButton type="button" icon="fa-search" (click)="queryNode()"></button>
     <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
             (onNodeSelect)="nodeSelect($event)">

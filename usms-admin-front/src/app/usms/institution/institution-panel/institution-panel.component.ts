@@ -122,7 +122,7 @@ export class InstitutionPanelComponent implements OnInit {
               this.httpService.setMessage({
                 severity: 'error',
                 summary: '操作失败',
-                detail: '该机构存在子机构，或者该机构存在用户，所以删除失败！'
+                detail: '该机构存在子机构，或者该机构存在用户!'
               });
             }
           }

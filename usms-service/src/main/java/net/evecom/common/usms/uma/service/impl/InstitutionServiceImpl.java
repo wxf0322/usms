@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,6 +60,9 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
      */
     @Override
     public List<InstitutionEntity> listInstsByUserId(Long userId) {
+        if(userId==null){
+            return new ArrayList<>();
+        }
         return institutionDao.listInstsByUserId(userId);
     }
 

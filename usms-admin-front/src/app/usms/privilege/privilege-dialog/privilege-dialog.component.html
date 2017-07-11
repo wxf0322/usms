@@ -1,70 +1,69 @@
 <p-dialog header="角色信息" [(visible)]="display" modal="modal" width="1000" [responsive]="true">
-<perfect-scrollbar>
-    <div class="ui-g">
-      <div class="ui-g-12">
-        <div class="detail-layout">
-          <form #reForm="ngForm">
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <h3 class="legend">基本信息</h3>
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="detail-layout">
+        <form #reForm="ngForm">
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <h3 class="legend">基本信息</h3>
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-6">
+              <label class="required control-label">权限名称:</label>
+              <input pInputText [(ngModel)]="detailData.label"
+                     name="label" #label="ngModel" [rangeLength]="[1,30]" required>
+              <div class="validation" *ngIf="label.errors?.required">该项必填</div>
+              <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
             </div>
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <div class="ui-g-6">
-                <label class="required control-label">权限名称:</label>
-                <input pInputText [(ngModel)]="detailData.label"
-                       name="label" #label="ngModel" [rangeLength]="[1,30]" required>
-                <div class="validation" *ngIf="label.errors?.required">该项必填</div>
-                <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
-              </div>
-              <div class="ui-g-6">
-                <label class="required control-label">权限编码:</label>
-                <input pInputText [(ngModel)]="detailData.name"
-                       name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-                <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-                <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>              </div>
+            <div class="ui-g-6">
+              <label class="required control-label">权限编码:</label>
+              <input pInputText [(ngModel)]="detailData.name"
+                     name="name" #name="ngModel" [rangeLength]="[1,30]" required>
+              <div class="validation" *ngIf="name.errors?.required">该项必填</div>
+              <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>
             </div>
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <div class="ui-g-6">
-                <label class="control-label">状态:</label>
-                <p-radioButton name="enbled" value="1" label="正常"
-                               [(ngModel)]="detailData.enabled"></p-radioButton>
-                &nbsp;
-                <p-radioButton name="enbled" value="0" label="冻结"
-                               [(ngModel)]="detailData.enabled"></p-radioButton>
-              </div>
-              <div class="ui-g-6">
-                <label class=" control-label">备注:</label>
-                <input pInputText [(ngModel)]="detailData.remarks"
-                       name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
-                <div class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
-              </div>
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-6">
+              <label class="control-label">状态:</label>
+              <p-radioButton name="enbled" value="1" label="正常"
+                             [(ngModel)]="detailData.enabled"></p-radioButton>
+              &nbsp;
+              <p-radioButton name="enbled" value="0" label="冻结"
+                             [(ngModel)]="detailData.enabled"></p-radioButton>
             </div>
+            <div class="ui-g-6">
+              <label class=" control-label">备注:</label>
+              <input pInputText [(ngModel)]="detailData.remarks"
+                     name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
+              <div class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
+            </div>
+          </div>
 
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <h3 class="legend">拥有该权限的角色</h3>
-            </div>
-            <br><br>
-            <div>
-              <p-pickList [source]="sourceRoles" [target]="targetRoles"
-                          sourceHeader="可选角色列表" targetHeader="已选角色列表" [responsive]="true"
-                          [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
-                <ng-template let-role pTemplate="item">
-                  <div class="ui-helper-clearfix">
-                    <div class="left-picklist">
-                      {{role.label}}
-                    </div>
-                    <div class="right-picklist">
-                      {{role.name}}
-                    </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <h3 class="legend">拥有该权限的角色</h3>
+          </div>
+          <br><br>
+          <div>
+            <p-pickList [source]="sourceRoles" [target]="targetRoles"
+                        sourceHeader="可选角色列表" targetHeader="已选角色列表" [responsive]="true"
+                        [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+              <ng-template let-role pTemplate="item">
+                <div class="ui-helper-clearfix">
+                  <div class="left-picklist">
+                    {{role.label}}
                   </div>
-                </ng-template>
-              </p-pickList>
-            </div>
-          </form>
-        </div>
+                  <div class="right-picklist">
+                    {{role.name}}
+                  </div>
+                </div>
+              </ng-template>
+            </p-pickList>
+          </div>
+        </form>
       </div>
     </div>
-  </perfect-scrollbar>
+  </div>
   <p-footer>
-    <eve-dialog-bar  (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
+    <eve-dialog-bar (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
   </p-footer>
 </p-dialog>

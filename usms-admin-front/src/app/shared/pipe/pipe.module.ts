@@ -3,15 +3,16 @@ import {CaseLvlCdePipe, CaseTypePipe, SeriousCaseStatusPipe} from './serious-cas
 import {IsOrNotPipe} from './isOrNot.pipe';
 import {EnablePipe} from './enabled.pipe';
 import {OperationTypePipe} from './operation-type.pipe';
+import {InstitutionPipe} from "./institution-type";
 
 @NgModule({
   declarations: [
-    IsOrNotPipe, EnablePipe, OperationTypePipe,
+    IsOrNotPipe, EnablePipe, OperationTypePipe,InstitutionPipe,
     /*重大案件*/
     CaseLvlCdePipe, CaseTypePipe, SeriousCaseStatusPipe
   ],
   exports: [
-    IsOrNotPipe, EnablePipe,
+    IsOrNotPipe, EnablePipe,InstitutionPipe,
     CaseLvlCdePipe, CaseTypePipe, SeriousCaseStatusPipe
   ]
 })

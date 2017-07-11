@@ -1,76 +1,75 @@
-<p-dialog header="角色信息" [(visible)]="display"  modal="modal"   width="1100"  [responsive]="true">
-<div >
-  <perfect-scrollbar>
-    <div class="ui-g">
-      <div class="ui-g-12">
-        <div class="detail-layout">
-          <form #reForm="ngForm">
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <h3 class="legend">基本信息</h3>
+<p-dialog header="角色信息" [(visible)]="display" modal="modal" width="1100" [responsive]="true">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="detail-layout">
+        <form #reForm="ngForm">
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <h3 class="legend">基本信息</h3>
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-6">
+              <label class="required control-label">角色名称:</label>
+              <input pInputText [(ngModel)]="detailData.label"
+                     name="label" #label="ngModel" [rangeLength]="[1,30]" required>
+              <div class="validation" *ngIf="label.errors?.required">该项必填</div>
+              <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
             </div>
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <div class="ui-g-6">
-                <label class="required control-label">角色名称:</label>
-                <input pInputText [(ngModel)]="detailData.label"
-                       name="label" #label="ngModel" [rangeLength]="[1,30]" required>
-                <div class="validation" *ngIf="label.errors?.required">该项必填</div>
-                <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>              </div>
-              <div class="ui-g-6">
-                <label class="required control-label">角色编码:</label>
-                <input pInputText [(ngModel)]="detailData.name"
-                       name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-                <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-                <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>              </div>
+            <div class="ui-g-6">
+              <label class="required control-label">角色编码:</label>
+              <input pInputText [(ngModel)]="detailData.name"
+                     name="name" #name="ngModel" [rangeLength]="[1,30]" required>
+              <div class="validation" *ngIf="name.errors?.required">该项必填</div>
+              <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>
             </div>
-            <div class="ui-g-12 ui-g-nopad control-group">
-              <div class="ui-g-6">
-                <label class="control-label">状态:</label>
-                <p-radioButton name="enbled" value="1" label="正常"
-                               [(ngModel)]="detailData.enabled"></p-radioButton>
-                &nbsp;
-                <p-radioButton name="enbled" value="0" label="冻结"
-                               [(ngModel)]="detailData.enabled"></p-radioButton>
-              </div>
-              <div class="ui-g-6">
-                <label class=" control-label">备注:</label>
-                <input pInputText [(ngModel)]="detailData.remarks"
-                       name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
-                <div class="validation"
-                     *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
-              </div>
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-6">
+              <label class="control-label">状态:</label>
+              <p-radioButton name="enbled" value="1" label="正常"
+                             [(ngModel)]="detailData.enabled"></p-radioButton>
+              &nbsp;
+              <p-radioButton name="enbled" value="0" label="冻结"
+                             [(ngModel)]="detailData.enabled"></p-radioButton>
             </div>
-          </form>
-        </div>
-        <p-tabView>
-          <p-tabPanel header="分配权限">
-            <div class="ui-g">
-              <div class="ui-g-12">
-                <p-pickList [source]="sourcePrivileges" [target]="targetPrivileges"
-                            sourceHeader="可选权限列表" targetHeader="已选权限列表" [responsive]="true"
-                            [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
-                  <ng-template let-privilege pTemplate="item">
-                    <div class="ui-helper-clearfix">
-                      <div class="left-picklist">{{privilege.label}}</div>
-                      <div class="right-picklist">{{privilege.name}}</div>
-                    </div>
-                  </ng-template>
-                </p-pickList>
+            <div class="ui-g-6">
+              <label class=" control-label">备注:</label>
+              <input pInputText [(ngModel)]="detailData.remarks"
+                     name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
+              <div class="validation"
+                   *ngIf="remarks.errors?.rangeLength">不多于500个字符
               </div>
             </div>
-          </p-tabPanel>
-          <p-tabPanel header="分配用户">
-            <app-role-user-selector [(sourceUsers)]='sourceUsers'
-                                    [(targetUsers)]='targetUsers'
-                                    [tree]='tree' [roleId]="roleId">
-            </app-role-user-selector>
-          </p-tabPanel>
-        </p-tabView>
+          </div>
+        </form>
       </div>
+      <p-tabView>
+        <p-tabPanel header="分配权限">
+          <div class="ui-g">
+            <div class="ui-g-12">
+              <p-pickList [source]="sourcePrivileges" [target]="targetPrivileges"
+                          sourceHeader="可选权限列表" targetHeader="已选权限列表" [responsive]="true"
+                          [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+                <ng-template let-privilege pTemplate="item">
+                  <div class="ui-helper-clearfix">
+                    <div class="left-picklist">{{privilege.label}}</div>
+                    <div class="right-picklist">{{privilege.name}}</div>
+                  </div>
+                </ng-template>
+              </p-pickList>
+            </div>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="分配用户">
+          <app-role-user-selector [(sourceUsers)]='sourceUsers'
+                                  [(targetUsers)]='targetUsers'
+                                  [tree]='tree' [roleId]="roleId">
+          </app-role-user-selector>
+        </p-tabPanel>
+      </p-tabView>
     </div>
-  </perfect-scrollbar>
-</div >
+  </div>
   <p-footer>
-    <eve-dialog-bar  (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
+    <eve-dialog-bar (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
   </p-footer>
-  </p-dialog>
+</p-dialog>
 

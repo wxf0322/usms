@@ -50,7 +50,7 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements Pr
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_privileges p ")
                 .append(sqlFilter.getWhereSql())
-                .append(" order by p.id");
+                .append(" order by p.id desc");
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }

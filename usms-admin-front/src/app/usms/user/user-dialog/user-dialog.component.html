@@ -1,5 +1,4 @@
 <p-dialog header="用户信息" width="1100" resizable="true" [responsive]="true" [(visible)]="display">
-
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="detail-layout">
@@ -74,7 +73,6 @@
               </a>
             </div>
           </div>
-
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-12">
               <label class="control-label">现居住地址:</label>
@@ -83,7 +81,6 @@
               <div class="validation" *ngIf="curResidence.errors?.rangeLength">不多于500个字符</div>
             </div>
           </div>
-
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-4">
               <label class="control-label">别名:</label>
@@ -222,9 +219,7 @@
       </div>
     </div>
   </div>
-
   <p-footer>
     <eve-dialog-bar (execute)="doExecute($event)" [display]="!reForm.form.valid"></eve-dialog-bar>
   </p-footer>
-
 </p-dialog>

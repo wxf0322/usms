@@ -51,7 +51,7 @@ public class RoleDaoImpl extends BaseDaoImpl<RoleEntity> implements RoleDaoCusto
     public Page<RoleEntity> listRolesByPage(int page, int size, SqlFilter sqlFilter) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_roles r  ").append(sqlFilter.getWhereSql())
-                .append(" order by r.id ");
+                .append(" order by r.id  desc");
         String sql = sb.toString();
         return queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }

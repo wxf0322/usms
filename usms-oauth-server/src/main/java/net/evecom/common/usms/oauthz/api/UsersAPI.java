@@ -151,7 +151,9 @@ public class UsersAPI {
     public ResponseEntity getUserForTaskCenter(HttpServletRequest request) {
         String clientId = request.getParameter("client_id");
         String loginName = request.getParameter("login_name");
+        String userId = request.getParameter("user_id");
 
+        // 判断client_id是否有效
         if (!oAuthService.checkClientId(clientId)) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
@@ -159,21 +161,36 @@ public class UsersAPI {
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
         }
 
-        String accessToken = oAuthService.getAccessToken(loginName, clientId);
-        UserEntity user = userService.getUserByLoginName(loginName);
-
-        if (user == null) {
+        // 如果用户名已经用户ID同时为空，返回参数无效的json
+        if (StringUtils.isEmpty(loginName) && StringUtils.isEmpty(userId)) {
             ErrorStatus errorStatus = new ErrorStatus
                     .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
                     .buildJSONMessage();
             return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
-        } else {
-            JSONObject resultJson = new JSONObject();
-            JSONObject userJson = getUserJSONObject(user);
-            userJson.put("accessToken", accessToken);
-            resultJson.put("user", userJson);
-            return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
         }
+
+        UserEntity user;
+        if (StringUtils.isEmpty(loginName)) {
+            // 根据id，获得用户实体类
+            user = userService.findOne(Long.valueOf(userId));
+            loginName = user.getLoginName();
+        } else {
+            // 根据登入名，获得用户实体类
+            user = userService.getUserByLoginName(loginName);
+        }
+        // 获得accessToken
+        String accessToken = oAuthService.getAccessToken(loginName, clientId);
+
+        JSONObject resultJson = new JSONObject();
+        JSONObject userJson;
+        if (StringUtils.isEmpty(accessToken)) {
+            userJson = new JSONObject();
+        } else {
+            userJson = getUserJSONObject(user);
+            userJson.put("accessToken", accessToken);
+        }
+        resultJson.put("user", userJson);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
     /**

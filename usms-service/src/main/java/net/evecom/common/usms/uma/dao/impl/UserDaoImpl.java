@@ -67,7 +67,7 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from usms_users u ")
                     .append("left join usms_staffs s on u.staff_id = s.id ")
                     .append(sqlFilter.getWhereSql())
-                    .append(" order by u.id");
+                    .append(" order by u.id desc");
         } else {
             sb.append("select u.id, u.login_name, u.name, u.enabled, s.mobile from ( ")
                     .append("select distinct u.id, u.login_name, u.name, u.staff_id, ")
@@ -76,7 +76,8 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
                     .append("where ui.institution_id = ?) u ")
                     .append("left join usms_staffs s ")
                     .append("on u.staff_id = s.id ")
-                    .append(sqlFilter.getWhereSql());
+                    .append(sqlFilter.getWhereSql())
+                    .append( " order by u.id  desc");
             params.add(institutionId);
         }
         params.addAll(sqlFilter.getParams());

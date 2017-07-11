@@ -26,7 +26,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl<ApplicationEntity> implement
         StringBuilder sb = new StringBuilder();
         sb.append("select * from usms_applications a ")
                 .append(sqlFilter.getWhereSql())
-                .append(" order by id");
+                .append(" order by id desc");
         String sql = sb.toString();
         return super.queryForClass(sql, sqlFilter.getParams().toArray(), page, size);
     }

@@ -43,6 +43,30 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- oAuth对接核心过滤器 -->
+    <!--
+    <filter>
+        <filter-name>oAuthFilter</filter-name>
+        <filter-class>net.evecom.common.usms.uma.filter.OAuthFilter</filter-class>
+        <init-param>
+            <param-name>clientId</param-name>
+            <param-value>6433ada9-de68-40ba-89a0-7aa8ee9128df</param-value>
+        </init-param>
+        <init-param>
+            <param-name>clientSecret</param-name>
+            <param-value>3910c13e-33e0-437c-ac96-b487de9f1141</param-value>
+        </init-param>
+        <init-param>
+            <param-name>serverUrl</param-name>
+            <param-value>http://192.168.200.209:8080/usms</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>oAuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    -->
+
     <!-- Spring MVC 控制器-->
     <servlet>
         <servlet-name>spring</servlet-name>

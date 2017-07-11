@@ -18,6 +18,8 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
 
   documentClickListener: any; // 监听事件
 
+  emptyMessage='未找到相关数据';//无数据显示信息
+
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
@@ -93,6 +95,14 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
    * @param url
    */
   delete(url: string, colName: string) {
+    if(this.selectedData.length==0){
+      this.httpService.setMessage({
+        severity: 'failed',
+        summary: '提示:',
+        detail: '请选择至少一条数据'
+      });
+      return;
+    }
     this.confirmationService.confirm({
       message: '确定要删除这' + this.selectedData.length + '条数据吗？',
       header: '删除',

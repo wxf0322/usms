@@ -1,6 +1,6 @@
 <div class="ui-g-3 max-height-panel">
   <p-panel header="组织机构树">
-    <input type="text" placeholder="组织机构名称" pInputText [(ngModel)]="queryWord" size="15"/>
+    <input type="text" placeholder="组织机构名称" pInputText [(ngModel)]="queryWord" size="14"/>
     <button pButton type="button" icon="fa-search"
             (click)="queryNode()"></button>
     <div appAutoPanelHeight="max-height-panel">
@@ -30,7 +30,8 @@
   <div appAutoHeight="content">
     <p-dataTable [value]="viewData" scrollable="true"
                  [(selection)]="selectedData"
-                 selectionMode="multiple">
+                 selectionMode="multiple"
+                 emptyMessage="{{emptyMessage}}">
       <p-column [style]="{'width':'60px'}">
         <ng-template let-ri="rowIndex" pTemplate="body">
           <span>{{index[ri]}}</span>

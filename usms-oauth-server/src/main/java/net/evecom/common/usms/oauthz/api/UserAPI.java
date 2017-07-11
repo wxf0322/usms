@@ -140,7 +140,7 @@ public class UserAPI {
     }
 
     /**
-     * 获得用户信息
+     * 获得用户信息，如果用户没有登入该系统返回空串
      *
      * @param request
      * @return
@@ -151,15 +151,19 @@ public class UserAPI {
     public ResponseEntity getUser(HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
+
         // 获取Access Token
         String accessToken = oauthRequest.getAccessToken();
+
         // 获取用户名
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
+
         // 获取ClientId
         String clientId = oAuthService.getClientIdByAccessToken(accessToken);
 
         // 获得用户实体类
         UserEntity user = userService.getUserByLoginName(loginName);
+
         // 获得员工id
         Long staffId = (user.getStaffEntity() != null) ? user.getStaffEntity().getId() : null;
 

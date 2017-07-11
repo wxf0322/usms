@@ -39,7 +39,7 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
     /**
      * 根据登陆名获取机构列表
      *
-     * @param name
+     * @param
      * @return
      */
     InstitutionEntity getInstByInstName(String instName);

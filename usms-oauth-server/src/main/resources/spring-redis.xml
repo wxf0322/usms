@@ -26,5 +26,4 @@
         <property name="enableTransactionSupport" value="true"></property>
     </bean>
 
-
 </beans>

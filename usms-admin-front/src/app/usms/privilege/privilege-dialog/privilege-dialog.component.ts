@@ -13,14 +13,27 @@ import {Privilege} from '../privilege';
 })
 export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements OnInit {
 
+  /**
+   * 未选中的角色
+   * @type {Array}
+   */
   sourceRoles: any = [];
+
+  /**
+   * 已选中的角色
+   * @type {Array}
+   */
   targetRoles: any = [];
 
-  // 表单验证
+  /**
+   * 表单验证
+   */
   @ViewChild('reForm') reForm: NgForm;
 
-
-  // 双向绑定 onSaved
+  /**
+   * 绑定事件
+   * @type {EventEmitter}
+   */
   @Output() onSaved = new EventEmitter();
 
   constructor(private location: Location,
@@ -30,6 +43,8 @@ export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements O
     this.detailData = new Privilege();
   }
 
+  ngOnInit(): void {
+  }
 
   save() {
     this.display = false;
@@ -41,23 +56,10 @@ export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements O
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '成功更新' + this.detailData.name
+          detail: '权限数据，' + this.detailData.label + '，更新或保存成功'
         });
         this.onSaved.emit('refreshTable');
       });
-  }
-
-  ngOnInit(): void {
-  }
-
-  // 取消或保存
-  doExecute(event) {
-    if (event.goBack) {
-      this.goBack();
-    }
-    if (event.save) {
-      this.save();
-    }
   }
 
   // 角色选择器的初始化
@@ -69,18 +71,14 @@ export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements O
     }
     const params = {privilegeId: id};
     this.httpService.executeByParams(sourceUrl, params).then(
-      res => {
-        this.sourceRoles = res;
-      }
+      res => this.sourceRoles = res
     );
     this.httpService.executeByParams(targetUrl, params).then(
-      res => {
-        this.targetRoles = res;
-      }
+      res => this.targetRoles = res
     );
   }
 
-  showDialog(type: string, id: any){
+  showDialog(type: string, id: any) {
     this.display = true;
     const url = 'privilege/find';
     this.rolesInit(id);
@@ -90,6 +88,16 @@ export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements O
         this.detailData.enabled = 1;
       }
     });
+  }
+
+  // 取消或保存
+  doExecute(event) {
+    if (event.goBack) {
+      this.goBack();
+    }
+    if (event.save) {
+      this.save();
+    }
   }
 
   goBack() {

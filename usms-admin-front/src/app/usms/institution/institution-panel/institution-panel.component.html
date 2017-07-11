@@ -21,19 +21,21 @@
       </div>
     </div>
     <div class="ui-g-12 ui-g-nopad control-group">
-      <div class="ui-g-6">
+      <div class="ui-g-12">
         <label class="control-label">中文名称:</label>
         <span>{{detailData.label}}</span>
-      </div>
-      <div class="ui-g-6">
-        <label class="control-label">英文编码:</label>
-        <span>{{detailData.name}}</span>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-12">
+      <label class="control-label">英文编码:</label>
+      <span>{{detailData.name}}</span>
       </div>
     </div>
     <div class="ui-g-12 ui-g-nopad control-group">
       <div class="ui-g-6">
         <label class="control-label">类型:</label>
-        <span>{{detailData.type}}</span>
+        <span>{{detailData.type | institutionTypePipe}}</span>
       </div>
       <div class="ui-g-6">
         <label class="control-label">状态:</label>

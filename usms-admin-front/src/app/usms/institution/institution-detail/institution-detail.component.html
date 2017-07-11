@@ -14,19 +14,23 @@
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
-        <div class="ui-g-6">
+        <div class="ui-g-12">
           <label class="required control-label">中文名称:</label>
           <input pInputText [(ngModel)]="detailData.label" name="label" #label="ngModel"
                  [rangeLength]="[1,30]" required>
           <div class="validation" *ngIf="label.errors?.required">该项必填</div>
           <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
           </div>
-        <div class="ui-g-6">
-          <label class="required control-label">英文编码:</label>
-          <input pInputText [(ngModel)]="detailData.name"
-                 name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-          <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-          <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>        </div>
+      </div>
+
+      <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-12">
+        <label class="required control-label">英文编码:</label>
+        <input pInputText [(ngModel)]="detailData.name"
+               name="name" #name="ngModel" [rangeLength]="[1,30]" required>
+        <div class="validation" *ngIf="name.errors?.required">该项必填</div>
+        <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>
+      </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
@@ -78,8 +82,8 @@
         <div class="ui-g-6">
           <label class="control-label">同级手动排序:</label>
           <input pInputText [(ngModel)]="detailData.manualSn"
-                 name="manualSn" #manualSn="ngModel" [rangeLength]="[1,4]" number>
-          <div class="validation" *ngIf="manualSn.errors?.rangeLength || manualSn.errors?.number ">不多于4位数字</div>
+                 name="manualSn" #manualSn="ngModel" [rangeLength]="[0,4]" number>
+          <div class="validation" *ngIf="manualSn.errors?.rangeLength ">不多于4位数字</div>
         </div>
       </div>
     </form>

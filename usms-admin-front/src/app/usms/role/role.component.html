@@ -14,7 +14,8 @@
     <div class="ui-g-12" appAutoHeight="content" >
       <p-dataTable [value]="viewData" scrollable="true"
                    [(selection)]="selectedData"
-                   selectionMode="multiple">
+                   selectionMode="multiple"
+                   emptyMessage="{{emptyMessage}}">
         <p-column header="序号" [style]="{'width':'60px'}">
           <ng-template let-ri="rowIndex" pTemplate="body">
             <span>{{index[ri]}}</span>

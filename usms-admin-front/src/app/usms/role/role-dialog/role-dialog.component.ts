@@ -17,20 +17,49 @@ import {TreeUtil} from '../../../shared/util/tree-util';
 })
 export class RoleDialogComponent extends BaseDetail<Role> implements OnInit {
 
-  // 筛选框资源
+  /**
+   * 未选中的权限
+   * @type {Array}
+   */
   sourcePrivileges: Privilege[] = [];
+
+  /**
+   * 已选中的权限
+   * @type {Array}
+   */
   targetPrivileges: Privilege[] = [];
+
+  /**
+   * 未选中的用户
+   * @type {Array}
+   */
   sourceUsers: any = [];
+
+  /**
+   * 已选中的用户
+   * @type {Array}
+   */
   targetUsers: any = [];
-  // 树资源
+
+  /**
+   * 组织机构树
+   */
   tree: TreeNode[];
 
+  /**
+   * 角色id
+   */
   roleId: any;
 
-  // 双向绑定 onSaved
+  /**
+   * 绑定事件
+   * @type {EventEmitter}
+   */
   @Output() onSaved = new EventEmitter();
 
-  // 表单验证
+  /**
+   * 表单验证
+   */
   @ViewChild('reForm') reForm: NgForm;
 
   constructor(private location: Location,
@@ -84,7 +113,7 @@ export class RoleDialogComponent extends BaseDetail<Role> implements OnInit {
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '成功更新' + this.detailData.name
+          detail: '角色数据，' + this.detailData.label + '，更新或保存成功'
         });
         this.onSaved.emit('refreshTable');
       });

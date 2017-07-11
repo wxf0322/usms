@@ -218,7 +218,8 @@
 
 /*growl*/
 .ui-growl-item-container {
-  top: 35px;
+  top: 250px;
+  right: 500px;
 }
 
 /* 自定义树形组件样式 */

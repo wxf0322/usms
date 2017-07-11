@@ -15,9 +15,14 @@ import {InstitutionService} from '../institution.service';
 export class InstitutionDetailComponent extends BaseDetail<Institution>
   implements OnInit {
 
-  // 表单验证
+  /**
+   * 表单验证
+   */
   @ViewChild('reForm') reForm: NgForm;
 
+  /**
+   * 父节点标签名称
+   */
   parentLabel: string;
 
   constructor(private location: Location,
@@ -26,17 +31,18 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
               protected institutionService: InstitutionService) {
     super(httpService, route);
     this.detailData = new Institution();
-    this.detailData.enabled = 1;
-    this.detailData.type = 1;
   }
 
   /**
    * 初始化操作
    */
   ngOnInit(): void {
+    this.detailData.enabled = 1;
+    this.detailData.type = 1;
     this.parentLabel = this.route.snapshot.params['parentLabel'];
     const url = 'institution/find';
     this.init(url);
+    parseInt(this.detailData.manualSn.toString());
   }
 
   /**
@@ -59,7 +65,7 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '组织机构数据保存成功' + this.detailData.label
+          detail: '组织机构数据，' + this.detailData.label + '，更新或保存成功'
         });
         this.institutionService.sendMessage('refreshTree');
         this.goBack();

@@ -36,7 +36,7 @@ export class OperationDetailComponent extends BaseDetail<Operation>
 
   save() {
     let url = 'operation/saveOrUpdate';
-    if(this.detailData.id == null) {
+    if (this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];
     }
     this.detailData.applicationId = +this.route.snapshot.params['applicationId'];
@@ -45,7 +45,7 @@ export class OperationDetailComponent extends BaseDetail<Operation>
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '树形数据插入成功' + this.detailData.label
+          detail: '操作数据，' + this.detailData.label + '，更新或保存成功'
         });
         this.goBack();
       });

@@ -20,15 +20,32 @@ import {Observable} from 'rxjs';
 })
 export class UserDialogComponent extends BaseDetail<any> implements OnInit {
 
-  // 表单验证
+  /**
+   * 表单验证
+   */
   @ViewChild('reForm') reForm: NgForm;
 
-  date: Date;
-
+  /**
+   * 未选中的角色
+   * @type {Array}
+   */
   sourceRoles: Role[] = [];
 
+  /**
+   * 已选中的角色
+   * @type {Array}
+   */
   targetRoles: Role[] = [];
 
+  /**
+   * 用户生日数据
+   */
+  date: Date;
+
+  /**
+   * 当前用户所属的组织机构树
+   * @type {Array}
+   */
   tree: TreeNode[] = [];
 
   /**
@@ -39,6 +56,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
 
   /**
    * 回填机构树的数据
+   * @type {Array}
    */
   selectedNodes: TreeNode[] = [];
 
@@ -48,9 +66,9 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   selectedNames: string;
 
   /**
-   * 主键id
+   * 用户id
    */
-  id: string;
+  userId: string;
 
   /**
    * 时间相关汉化
@@ -58,10 +76,23 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   en: any;
 
   /**
-   * 双向绑定 onSaved
+   * 绑定事件
    */
   @Output() onSaved = new EventEmitter();
 
+  /**
+   * 类型
+   */
+  type: string;
+
+  /**
+   * 当前组织机构ID
+   */
+  institutionId: number;
+  /**
+   * 当前组织机构名称
+   */
+  institutionName:string;
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute,
@@ -69,19 +100,6 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
               protected http: Http,) {
     super(httpService, route);
     this.detailData = new User();
-    this.detailData.pictureUrl = this.nullPicture;
-  }
-
-  refreshTree() {
-    const url = 'institution/tree';
-    let treeDataArr: TreeData[];
-    this.httpService.findByParams(url)
-      .then(res => {
-        treeDataArr = res;
-        this.tree = TreeUtil.buildTrees(treeDataArr);
-        this.tree[0].expanded = true;
-        this.setInstitutions();
-      });
   }
 
   ngOnInit(): void {
@@ -95,9 +113,26 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
     };
   }
 
-  showDialog(type: string, id: string) {
+  refreshTree() {
+    const url = 'institution/tree';
+    let treeDataArr: TreeData[];
+    this.httpService.findByParams(url)
+      .then(res => {
+        treeDataArr = res;
+        this.tree = TreeUtil.buildTrees(treeDataArr);
+        this.tree[0].expanded = true;
+
+        this.setInstitutions();
+      });
+  }
+
+  showDialog(type: string, id: string, institutionId:number ,institutionName:string) {
     this.display = true;
     this.detailData.pictureUrl = this.nullPicture;
+
+    this.type = type;
+    this.institutionId = institutionId;
+    this.institutionName = institutionName;
     const url = 'user/find';
     this.initDialog(url, type, id).then(
       res => {
@@ -115,7 +150,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
           this.detailData.sex = 1;
         }
       });
-    this.id = id;
+    this.userId = id;
     this.refreshTree();
     this.roleInit();
   }
@@ -137,7 +172,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
         this.httpService.setMessage({
           severity: 'success',
           summary: '操作成功',
-          detail: '成功更新' + this.detailData.name
+          detail: '用户数据，' + this.detailData.loginName + '，更新或保存成功'
         });
         this.goBack();
         this.onSaved.emit('refreshTable');
@@ -145,7 +180,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   }
 
   roleInit() {
-    let id = this.id;
+    let id = this.userId;
     let targetUrl = 'user/roles/target';
     let sourceUrl = 'user/roles/source';
     if (id === 'null') {
@@ -161,17 +196,21 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   }
 
   setInstitutions() {
-    let id = this.id;
-    const url = 'user/institutions';
-    const params = {userId: id};
-    this.httpService.findByParams(url, params)
-      .then(res => {
-        this.selectedNames = res.map(node => node.label).join(',');
-        // 回填已选中的网格数据
-        TreeUtil.setSelection(this.tree, this.selectedNodes, res);
-      });
+    if (this.type === 'add') {
+      TreeUtil.setSelection(this.tree, this.selectedNodes, [{id: this.institutionId}]);
+      this.selectedNames = this.institutionName;
+    }else {
+      let id = this.userId;
+      const url = 'user/institutions';
+      const params = {userId: id};
+      this.httpService.findByParams(url, params)
+        .then(res => {
+          this.selectedNames = res.map(node => node.label).join(',');
+          // 回填已选中的网格数据
+          TreeUtil.setSelection(this.tree, this.selectedNodes, res);
+        });
+    }
   }
-
 
   fileSelected() {
     let url = 'file/upload';

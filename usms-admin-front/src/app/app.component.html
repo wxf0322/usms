@@ -8,9 +8,10 @@
 <p-growl [value]="messages" styleClass="eve-growl" life="5000"></p-growl>
 
 <!--操作确认-->
-<p-confirmDialog width="425" #exit>
-  <footer>
-    <button type="button" pButton icon="fa-close" label="否" (click)="exit.reject()"></button>
-    <button type="button" pButton icon="fa-check" label="是" (click)="exit.accept()"></button>
-  </footer>
+<p-confirmDialog width="425" #cd>
+  <p-footer>
+    <button type="button" pButton icon="fa-close" label="取消" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="fa-check" label="确定" (click)="cd.accept()"></button>
+  </p-footer>
 </p-confirmDialog>
+
