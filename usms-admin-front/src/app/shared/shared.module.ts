@@ -55,6 +55,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, InplaceModule,
     // 管道
     PipeModule,BusyModule,
+
+
   ],
   declarations: [
     EveLabelInputComponent,

@@ -11,15 +11,15 @@
               <label class="required control-label">权限名称:</label>
               <input pInputText [(ngModel)]="detailData.label"
                      name="label" #label="ngModel" [rangeLength]="[1,30]" required>
-              <div class="validation" *ngIf="label.errors?.required">该项必填</div>
-              <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
+              <span class="validation" *ngIf="label.errors?.required">该项必填</span>
+              <span class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</span>
             </div>
             <div class="ui-g-6">
               <label class="required control-label">权限编码:</label>
               <input pInputText [(ngModel)]="detailData.name"
                      name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-              <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-              <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>
+              <span class="validation" *ngIf="name.errors?.required">该项必填</span>
+              <span class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</span>
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
@@ -35,7 +35,7 @@
               <label class=" control-label">备注:</label>
               <input pInputText [(ngModel)]="detailData.remarks"
                      name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
-              <div class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
+              <span class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</span>
             </div>
           </div>
 

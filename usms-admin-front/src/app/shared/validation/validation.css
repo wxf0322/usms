@@ -1,5 +1,5 @@
 .validation-tip {
-  position: absolute;
+  position: relative;
   display: none;
   padding: .25em .5em;
 }
@@ -23,7 +23,7 @@
 }
 
 .validation-tip-arrow {
-  position: absolute;
+  position: relative;
   width: 0;
   height: 0;
   border-color: transparent;

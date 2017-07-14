@@ -13,13 +13,16 @@ import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
 import {InstitutionService} from './institution/institution.service';
-import {UserAssociateComponent} from './grid/user-associate/user-associate.component';
 import {RoleUserSelectorComponent} from './role/role-user-selector/role-user-selector.component';
 import {GridUserSelectorComponent} from './grid/grid-user-selector/grid-user-selector.component';
 import {ApplicationDialogComponent} from './application/application-dialog/application-dialog.component';
 import {UserDialogComponent} from './user/user-dialog/user-dialog.component';
 import {RoleDialogComponent} from './role/role-dialog/role-dialog.component';
 import {PrivilegeDialogComponent} from './privilege/privilege-dialog/privilege-dialog.component';
+import {UserPanelComponent} from "./grid/user-panel/user-panel.component";
+import {GridPanelComponent} from "./grid/grid-panel/grid-panel.component";
+import {GridAssociateDialogComponent} from "./grid/grid-associate-dialog/grid-associate-dialog.component";
+import {UserAssociateDialogComponent} from "./grid/user-associate-dialog/user-associate-dialog.component";
 
 /**
  * 统一用户管理根模块
@@ -36,7 +39,8 @@ import {PrivilegeDialogComponent} from './privilege/privilege-dialog/privilege-d
     OperationComponent, OperationDetailComponent,
     ApplicationComponent, ApplicationDialogComponent,
     InstitutionComponent, InstitutionPanelComponent, InstitutionDetailComponent,
-    GridComponent, UserAssociateComponent, GridUserSelectorComponent,
+    GridComponent, UserPanelComponent, GridPanelComponent,
+    GridAssociateDialogComponent, UserAssociateDialogComponent, GridUserSelectorComponent,
   ],
   providers: [
     InstitutionService

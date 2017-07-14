@@ -217,10 +217,7 @@
 }
 
 /*growl*/
-.ui-growl-item-container {
-  top: 250px;
-  right: 500px;
-}
+.ui-growl-item-container {}
 
 /* 自定义树形组件样式 */
 .max-height-panel {

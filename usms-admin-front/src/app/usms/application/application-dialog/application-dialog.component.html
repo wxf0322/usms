@@ -5,7 +5,7 @@
         <form #reForm="ngForm">
 
           <div class="ui-g-12 ui-g-nopad control-group" *ngIf="clientInfoDisplay">
-            <div class="ui-g-6" >
+            <div class="ui-g-6">
               <label class="control-label">Client Id:</label>
               <span>{{detailData.clientId}}</span>
             </div>
@@ -20,43 +20,43 @@
               <label class="required control-label">应用名称:</label>
               <input pInputText [(ngModel)]="detailData.label"
                      name="label" #label="ngModel" required [rangeLength]="[1, 30]">
-              <div class="validation" *ngIf="label.errors?.required">该项必填</div>
-              <div class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</div>
+              <span class="validation" *ngIf="label.errors?.required">该项必填</span>
+              <span class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</span>
             </div>
             <div class="ui-g-6">
               <label class=" required control-label">应用编码:</label>
               <input pInputText [(ngModel)]="detailData.name"
                      name="name" #name="ngModel" required [rangeLength]="[1, 30]">
-              <div class="validation" *ngIf="name.errors?.required">该项必填</div>
-              <div class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</div>
+              <span class="validation" *ngIf="name.errors?.required">该项必填</span>
+              <span class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</span>
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
               <label class="control-label">首页地址:</label>
               <input pInputText [(ngModel)]="detailData.clientUri"
-                     name="clientUri" #clientUri="ngModel" [rangeLength]="[1, 300]">
-              <div class="validation" *ngIf="clientUri.errors?.rangeLength">地址不多于300字符</div>
+                     name="clientUri" #clientUri="ngModel" [rangeLength]="[1, 200]">
+              <span class="validation" *ngIf="clientUri.errors?.rangeLength">不多于200字符</span>
             </div>
             <div class="ui-g-6">
               <label class="control-label">回调地址:</label>
               <input pInputText [(ngModel)]="detailData.redirectUri"
-                     name="redirectUri" #redirectUri="ngModel" [rangeLength]="[1, 300]">
-              <div class="validation" *ngIf="redirectUri.errors?.rangeLength">地址不多于300字符</div>
+                     name="redirectUri" #redirectUri="ngModel" [rangeLength]="[1, 200]">
+              <span class="validation" *ngIf="redirectUri.errors?.rangeLength">不多于200字符</span>
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
               <label class="control-label">登出地址:</label>
               <input pInputText [(ngModel)]="detailData.logoutUri"
-                     name="logoutUri" #logoutUri="ngModel" [rangeLength]="[1, 300]">
-              <div class="validation" *ngIf="logoutUri.errors?.rangeLength">地址不多于300字符</div>
+                     name="logoutUri" #logoutUri="ngModel" [rangeLength]="[1, 200]">
+              <span class="validation" *ngIf="logoutUri.errors?.rangeLength">不多于200字符</span>
             </div>
             <div class="ui-g-6">
               <label class="control-label">图标地址:</label>
               <input pInputText [(ngModel)]="detailData.logoUri"
-                     name="logoUri" #logoUri="ngModel" [rangeLength]="[0, 300]">
-              <div class="validation" *ngIf="logoUri.errors?.rangeLength">地址不多于300字符</div>
+                     name="logoUri" #logoUri="ngModel" [rangeLength]="[0, 200]">
+              <span class="validation" *ngIf="logoUri.errors?.rangeLength">不多于200字符</span>
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
@@ -74,7 +74,7 @@
               <label class="control-label">应用描述:</label>
               <input pInputText size="80" [(ngModel)]="detailData.clientDesc"
                      name="clientDesc" #clientDesc="ngModel" [rangeLength]="[0, 300]">
-              <div class="validation" *ngIf="clientDesc.errors?.rangeLength">描述不多于300字符</div>
+              <span class="validation" *ngIf="clientDesc.errors?.rangeLength">不多于300字符</span>
             </div>
           </div>
         </form>

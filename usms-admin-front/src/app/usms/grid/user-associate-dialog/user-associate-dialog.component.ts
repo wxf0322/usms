@@ -8,14 +8,14 @@ import {TreeData} from "../../../shared/util/tree-data";
 import {TreeUtil} from "../../../shared/util/tree-util";
 
 @Component({
-  selector: 'app-user-associate',
-  templateUrl: './user-associate.component.html',
-  styleUrls: ['./user-associate.component.css']
+  selector: 'app-user-associate-dialog',
+  templateUrl: './user-associate-dialog.component.html',
+  styleUrls: ['./user-associate-dialog.component.css']
 })
-export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
+export class UserAssociateDialogComponent extends BaseDetail<any> implements OnInit {
 
   /**
-   * 网格树
+   * 组织机构树
    */
   tree: TreeNode[];
 
@@ -49,6 +49,13 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  showDialog(code: string) {
+    this.gridCode = code;
+    this.display = true;
+    this.refreshTree();
+    this.usersInit(code);
   }
 
   goBack() {
@@ -100,10 +107,4 @@ export class UserAssociateComponent extends BaseDetail<any> implements OnInit {
     );
   }
 
-  showDialog(code: string) {
-    this.gridCode = code;
-    this.display = true;
-    this.refreshTree();
-    this.usersInit(code);
-  }
 }
