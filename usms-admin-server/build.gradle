@@ -1,7 +1,4 @@
-apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'idea'
-apply plugin: 'maven'
 
 // JDK 8
 sourceCompatibility = 1.8

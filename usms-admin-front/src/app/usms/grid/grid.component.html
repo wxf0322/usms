@@ -39,7 +39,7 @@
     </p-tabPanel>
 
     <p-tabPanel header="网格角度">
-      <div class="ui-g">
+      <div class="ui-g-12" [ngBusy] = "httpService.loading">
         <input pInputText type="text" size="19" [(ngModel)]="tableQueryWord" placeholder="网格名称"/>
         <button pButton type="button" icon="fa-search" (click)="queryTreeTable()"></button>
         <p-treeTable selectionMode="single" [(selection)]="tableSelectedNode" [value]="tableTree">
@@ -57,6 +57,7 @@
   </p-tabView>
 </div>
 
+<div class="ui-g-12" [ngBusy] = "httpService.loading">
 <p-dialog header="所在网格" [width]="500" [(visible)]="display">
   <p-tree [value]="dialogTree" selectionMode="checkbox" [(selection)]="selectedNodes">
   </p-tree>
@@ -67,5 +68,5 @@
     </div>
   </p-footer>
 </p-dialog>
-
+</div>
 <app-user-associate (onSaved)="onSaved($event)"></app-user-associate>

@@ -4,7 +4,8 @@ import {Subject} from 'rxjs/Subject';
 import {Message} from 'primeng/primeng';
 import 'rxjs/add/operator/toPromise';
 import * as $ from 'jquery';
-
+import {Loading} from "../../shared/animation/loading";
+import {IBusyConfig} from "angular2-busy";
 
 /**
  *  HTTP公用服务组件
@@ -50,7 +51,23 @@ export class HttpService {
    */
   private msgs: Message[];
 
+  /**
+   * loading
+   */
+  loading: IBusyConfig = Loading;
+
   constructor(private http: Http) {
+  }
+
+  /**
+   * 错误响应
+   * @param error
+   * @returns {Promise<never>}
+   */
+  private handleError(error: any): Promise<any> {
+    console.error('出错了：', error);
+    console.log('状态：', error.status);
+    return Promise.reject(error.message || error);
   }
 
   /**
@@ -70,7 +87,7 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   saveOrUpdate(url: string, obj: any) {
-    return this.http.post(url, obj, {headers: this.jsonHeaders})
+    return this.loading.busy = this.http.post(url, obj, {headers: this.jsonHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -136,7 +153,7 @@ export class HttpService {
    */
   findById(url: string, id: string) {
     let params = {id: id};
-    return this.findByParams(url, params);
+    return this.loading.busy = this.findByParams(url, params);
   }
 
   /**
@@ -146,7 +163,7 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   findByParams(url: any, params?: any) {
-    return this.executeByParams(url, params);
+    return this.loading.busy = this.executeByParams(url, params);
   }
 
   /**
@@ -157,7 +174,7 @@ export class HttpService {
    */
   executeByParams(url: any, params?: any) {
     const requestBody = (params == null) ? null : $.param(params);
-    return this.http.post(url, requestBody, {headers: this.formHeaders})
+    return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
@@ -178,21 +195,11 @@ export class HttpService {
     };
     const pageRequest = $.extend(pageBean, queryParams);
     const requestBody = $.param(pageRequest);
-    return this.http.post(url, requestBody, {headers: this.formHeaders})
+    return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
       .then(res => res.json())
       .catch(this.handleError);
   }
 
-  /**
-   * 错误响应
-   * @param error
-   * @returns {Promise<never>}
-   */
-  private handleError(error: any): Promise<any> {
-    console.error('出错了：', error);
-    console.log('状态：', error.status);
-    return Promise.reject(error.message || error);
-  }
 
 }

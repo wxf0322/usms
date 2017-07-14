@@ -2,7 +2,7 @@
   <p-panel header="系统资源树">
     <p-dropdown [style]="{'width':'100%'}" [options]="applications" (onChange)="selectChange()">
     </p-dropdown>
-    <div appAutoPanelHeight="max-height-panel">
+    <div treeAutoHeight="max-height-panel">
       <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode"
               (onNodeSelect)="nodeSelect($event)">
         <ng-template let-node pTemplate="default">

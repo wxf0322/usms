@@ -12,12 +12,16 @@ import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
 import {UserAssociateComponent} from './grid/user-associate/user-associate.component';
+
 /**
  * 页面组件路由
  */
 const childrenRoutes: Routes = [
-  {path: '', redirectTo: 'application', pathMatch: 'full'},
   {
+    path: '',
+    redirectTo: 'application',
+    pathMatch: 'full'
+  }, {
     path: 'user',
     children: [
       {path: '', component: UserComponent}

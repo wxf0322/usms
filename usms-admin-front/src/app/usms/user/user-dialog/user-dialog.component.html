@@ -19,7 +19,7 @@
               </div>
               <div class="ui-g-12 ui-g-nopad control-group">
                 <div class="ui-g-6">
-                  <label class="required control-label">登入名:</label>
+                  <label class="required control-label">帐号:</label>
                   <input size="10" pInputText [(ngModel)]="detailData.loginName"
                          name="loginName" #loginName="ngModel" [rangeLength]="[1,30]" required>
                   <div class="validation" *ngIf="loginName.errors?.required">该项必填</div>

@@ -1,9 +1,19 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
+import {LoginComponent} from "./core/component/login/login.component";
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'usms', pathMatch: 'full'},
-  {path: 'usms', loadChildren: './usms/usms.module#UsmsModule'}
+  {
+    path: '',
+    redirectTo: 'usms',
+    pathMatch: 'full'
+  }, {
+    path: 'usms',
+    loadChildren: './usms/usms.module#UsmsModule'
+  }, {
+    path: 'login',
+    component: LoginComponent
+  }
 ];
 
 @NgModule({

@@ -28,11 +28,7 @@
         "./assets/css/common.css",
         "styles.css"
       ],
-      "scripts": [
-        "assets/plugins/amcharts/amcharts.js",
-        "assets/plugins/amcharts/pie.js",
-        "assets/plugins/amcharts/serial.js"
-      ],
+      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

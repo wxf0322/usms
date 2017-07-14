@@ -3,7 +3,7 @@
     <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="queryWord"/>
     <button pButton type="button" icon="fa-search"
             (click)="queryNode()"></button>
-    <div appAutoPanelHeight="max-height-panel">
+    <div treeAutoHeight="max-height-panel">
       <p-tree [value]="tree" selectionMode="single"
               [(selection)]="selectedNode"
               (onNodeSelect)="nodeSelect($event)">

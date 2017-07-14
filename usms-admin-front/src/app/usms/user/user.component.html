@@ -3,7 +3,7 @@
     <input type="text" placeholder="组织机构名称" pInputText [(ngModel)]="queryWord" size="14"/>
     <button pButton type="button" icon="fa-search"
             (click)="queryNode()"></button>
-    <div appAutoPanelHeight="max-height-panel">
+    <div treeAutoHeight="max-height-panel">
       <p-tree [value]="tree" selectionMode="single"
               [(selection)]="selectedNode"
               (onNodeSelect)="nodeSelect($event)">
@@ -27,7 +27,7 @@
   </div>
 </div>
 <div class="ui-g-9 content" style="top: 45px">
-  <div appAutoHeight="content">
+  <div tableAutoHeight="content">
     <p-dataTable [value]="viewData" scrollable="true"
                  [(selection)]="selectedData"
                  selectionMode="multiple"
@@ -46,7 +46,7 @@
                     (click)="showDialog('edit',user.id)">{{user.name}}</span>
         </ng-template>
       </p-column>
-      <p-column field="institutionNames" header="所在机构">
+      <p-column field="institutionNames" header="所属机构">
       </p-column>
       <p-column field="enabled" header="状态">
         <ng-template let-user="rowData" pTemplate="body">

@@ -16,7 +16,14 @@ import {
   GrowlModule, TooltipModule, CheckboxModule, ContextMenuModule, TreeTableModule, ListboxModule,
   PickListModule, ToggleButtonModule, InputSwitchModule, InplaceModule
 } from 'primeng/primeng';
+
+
+import {BusyModule } from "angular2-busy";
+
+/*
 import {EveHighlightDirective} from './attribute-directive/highlight.directive';
+*/
+
 import {EveLabelInputComponent} from './component/label-input/label-input.component';
 import {SideMenuComponent} from './component/side-menu/side-menu.component';
 import {ValidationRuleEngine} from './validation/validation-rule-engine';
@@ -28,9 +35,10 @@ import {TopBarComponent} from './component/top-bar/top-bar.component';
 import {PipeModule} from './pipe/pipe.module';
 import {CustomFormsModule} from 'ng2-validation';
 import {CombotreeComponent} from './component/combotree/combotree.component';
-import {AppAutoHeightDirective} from './attribute-directive/auto-height.directive';
+import {TableAutoHeightDirective} from './attribute-directive/table-auto-height.directive';
 import {DialogBarComponent} from './component/dialog-bar/dialog-bar.component';
-import {AppAutoPanelHeightDirective} from './attribute-directive/auto-panel-height.directive';
+import {TreeAutoHeightDirective} from './attribute-directive/tree-auto-height.directive';
+import {DialogHeightDirective} from "./attribute-directive/dialog-height.directive";
 
 
 /* directive */
@@ -46,18 +54,19 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule, TreeTableModule,
     PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, InplaceModule,
     // 管道
-    PipeModule,
+    PipeModule,BusyModule,
   ],
   declarations: [
-    EveHighlightDirective,
     EveLabelInputComponent,
     SideMenuComponent,
     // 表单验证
     ValidationRuleEngine, SubmitDirective,
     // 分页
     PaginatorComponent, CombotreeComponent,
-    TopBarComponent, AppAutoHeightDirective, DialogBarComponent,
-    AppAutoPanelHeightDirective
+    TopBarComponent, DialogBarComponent,
+    // directive：共享指令
+    TableAutoHeightDirective,
+    TreeAutoHeightDirective,DialogHeightDirective,
   ],
   exports: [
     // module：导出共享模块，导入本模块的模块无需重复导入这些模块，包括一些常用的第三方模块
@@ -71,11 +80,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule, ListboxModule, InputSwitchModule, PickListModule,
     InplaceModule, TreeTableModule,
     // directive：共享指令
-    EveHighlightDirective,
+    TableAutoHeightDirective,
+    TreeAutoHeightDirective,
     // 共享组件
     EveLabelInputComponent, SideMenuComponent,
     // pipe：共享管道
-    PipeModule,
+    PipeModule,BusyModule,
     // 表单验证
     ValidationRuleEngine, SubmitDirective,
     // 分页
@@ -83,8 +93,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TopBarComponent, CombotreeComponent, DialogBarComponent,
     // ng2 validation
     CustomFormsModule,
-    AppAutoHeightDirective,
-    AppAutoPanelHeightDirective
+    TableAutoHeightDirective,
+    TreeAutoHeightDirective,DialogHeightDirective,
   ]
 })
 export class SharedModule {

@@ -81,7 +81,7 @@ export class GridComponent extends BaseTable<any> implements OnInit {
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
-              protected httpService: HttpService,
+              public httpService: HttpService,
               protected confirmationService: ConfirmationService,
               protected renderer: Renderer) {
     super(router, route, httpService, confirmationService, renderer);
@@ -205,7 +205,8 @@ export class GridComponent extends BaseTable<any> implements OnInit {
           detail: '成功更新，该用户所属网格'
         });
         this.display = false;
-        this.getDataByPage(this.page.number, this.page.size, this.filter)
+        this.getDataByPage(this.page.number, this.page.size, this.filter);
+        this.refreshGridTree();
       });
   }
 
@@ -214,7 +215,9 @@ export class GridComponent extends BaseTable<any> implements OnInit {
   }
 
   onSaved(event) {
+    this.tableTree=[];
     this.refreshGridTree();
+    this.getDataByPage(this.page.number,this.page.size,this.filter);
   }
 
 }

@@ -43,29 +43,27 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- oAuth对接核心过滤器 -->
-    <!--
-    <filter>
-        <filter-name>oAuthFilter</filter-name>
-        <filter-class>net.evecom.common.usms.uma.filter.OAuthFilter</filter-class>
+    <!-- oAuth对接核心servlet -->
+    <servlet>
+        <servlet-name>accessTokenServlet</servlet-name>
+        <servlet-class>net.evecom.common.usms.uma.servlet.AccessTokenServlet</servlet-class>
+        <init-param>
+            <param-name>accessTokenUrl</param-name>
+            <param-value>http://192.168.200.209:8080/usms/accessToken</param-value>
+        </init-param>
         <init-param>
             <param-name>clientId</param-name>
-            <param-value>6433ada9-de68-40ba-89a0-7aa8ee9128df</param-value>
+            <param-value>0277956b-9520-48e5-adc1-2bbd62019bf0</param-value>
         </init-param>
         <init-param>
             <param-name>clientSecret</param-name>
-            <param-value>3910c13e-33e0-437c-ac96-b487de9f1141</param-value>
+            <param-value>ee1c3037-6265-496d-ab3f-60563ab5cf9a</param-value>
         </init-param>
-        <init-param>
-            <param-name>serverUrl</param-name>
-            <param-value>http://192.168.200.209:8080/usms</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>oAuthFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    -->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>accessTokenServlet</servlet-name>
+        <url-pattern>/accessToken</url-pattern>
+    </servlet-mapping>
 
     <!-- Spring MVC 控制器-->
     <servlet>
@@ -76,7 +74,6 @@
             <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
-
         <multipart-config>
             <max-file-size>52428800</max-file-size>
             <max-request-size>52428800</max-request-size>
