@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compile project(':usms-service')
+    compile project(':usms-oauth-client')
     compile fileTree(dir: '../libs', include: ['*.jar'])
 }
 

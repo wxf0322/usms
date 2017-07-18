@@ -7,7 +7,7 @@
             <h3 class="legend">基本信息</h3>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-8">
+            <div class="ui-g-10">
               <div class="ui-g-12 ui-g-nopad control-group">
                 <div class="ui-g-12">
                   <label class="control-label">所属机构:</label>
@@ -20,33 +20,33 @@
               <div class="ui-g-12 ui-g-nopad control-group">
                 <div class="ui-g-6">
                   <label class="required control-label">帐号:</label>
-                  <input size="10" pInputText [(ngModel)]="detailData.loginName"
+                  <input pInputText [(ngModel)]="detailData.loginName"
                          name="loginName" #loginName="ngModel" [rangeLength]="[1,30]" required>
-                  <span class="validation" *ngIf="loginName.errors?.required">该项必填</span>
-                  <span class="validation" *ngIf="loginName.errors?.rangeLength">不多于30个字符</span>
+                  <span class="validation" *ngIf="loginName.errors?.required">必填</span>
+                  <span class="validation" *ngIf="loginName.errors?.rangeLength">少于30字符</span>
                 </div>
                 <div class="ui-g-6">
                   <label class=" control-label">姓名:</label>
-                  <input size="10" pInputText [(ngModel)]="detailData.name"
+                  <input pInputText [(ngModel)]="detailData.name"
                          name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-                  <span class="validation" *ngIf="name.errors?.required">该项必填</span>
-                  <span class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</span>
+                  <span class="validation" *ngIf="name.errors?.required">必填</span>
+                  <span class="validation" *ngIf="name.errors?.rangeLength">少于30字符</span>
                 </div>
               </div>
               <div class="ui-g-12 ui-g-nopad control-group">
                 <div class="ui-g-6">
                   <label class="control-label">手机电话:</label>
-                  <input size="10" pInputText [(ngModel)]="detailData.mobile"
+                  <input pInputText [(ngModel)]="detailData.mobile"
                          name="mobile" #mobile="ngModel" phone="CN" [rangeLength]="[11,11]">
                   <span class="validation" *ngIf="mobile.errors?.phone
-                  || mobile.errors?.rangeLength||mobile.errors?.number">请输入11位数字
+                  || mobile.errors?.rangeLength || mobile.errors?.number">格式错误
                   </span>
                 </div>
                 <div class="ui-g-6">
                   <label class="control-label">固定电话:</label>
-                  <input size="10" pInputText [(ngModel)]="detailData.tel"
+                  <input pInputText [(ngModel)]="detailData.tel" number
                          name="tel" #tel="ngModel" [rangeLength]="[3,20]">
-                  <span class="validation" *ngIf="tel.errors?.rangeLength||tel.errors?.number">输入长度为3-20位数字</span>
+                  <span class="validation" *ngIf="tel.errors?.rangeLength||tel.errors?.number">3-20位数</span>
                 </div>
               </div>
               <div class="ui-g-12 ui-g-nopad control-group">
@@ -64,8 +64,7 @@
                 </div>
               </div>
             </div>
-            <div class="ui-g-4">
-              <label class="control-textarea-label">照片:</label>
+            <div class="ui-g-2" align="center">
               <img [src]="detailData.pictureUrl" style="height: 99px; width: 71px"
                    onerror="this.src='static/images/null.png'">
               <a href="javascript:void(0);" class="file">选择文件
@@ -74,17 +73,9 @@
             </div>
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-12">
-              <label class="control-label">现居住地址:</label>
-              <input pInputText [(ngModel)]="detailData.curResidence"
-                     size="60px" name="curResidence" #curResidence="ngModel" [rangeLength]="[1,500]">
-              <span class="validation" *ngIf="curResidence.errors?.rangeLength">不多于500个字符</span>
-            </div>
-          </div>
-          <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
               <label class="control-label">别名:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.aliasNames"
+              <input pInputText [(ngModel)]="detailData.aliasNames"
                      name="aliasNames" #aliasNames="ngModel" [rangeLength]="[1,30]">
               <span class="validation" *ngIf="aliasNames.errors?.rangeLength">不多于30个字符</span>
             </div>
@@ -99,7 +90,7 @@
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
               <label class="control-label">身份证号码:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.citizenIdNumber"
+              <input pInputText [(ngModel)]="detailData.citizenIdNumber"
                      name="citizenIdNumber" #citizenIdNumber="ngModel" number
                      class="form-control" [rangeLength]="[18, 18]">
               <span class="validation" *ngIf="citizenIdNumber.errors?.rangeLength">
@@ -108,7 +99,7 @@
             </div>
             <div class="ui-g-6">
               <label class="control-label">邮编:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.zipCode"
+              <input pInputText [(ngModel)]="detailData.zipCode"
                      name="zipCode" #zipCode="ngModel" [rangeLength]="[1,30]">
               <span class="validation" *ngIf="zipCode.errors?.rangeLength">不多于30个字符</span>
             </div>
@@ -117,71 +108,68 @@
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
               <label class="control-label">内网邮箱:</label>
-              <input size="10" pInputText
-                     [(ngModel)]="detailData.email"
-                     name="email" #email="ngModel" email [rangeLength]="[1,60]"
-                     class="form-control">
-              <span class="validation" *ngIf="email.errors?.email">邮箱格式错误</span>
+              <input pInputText [(ngModel)]="detailData.email" [email]
+                     name="email" #email="ngModel" [rangeLength]="[0,60]">
+              <span class="validation" *ngIf="email.errors?.email ">邮箱格式错误</span>
               <span class="validation" *ngIf="email.errors?.rangeLength">不多于60个字符</span>
             </div>
             <div class="ui-g-6">
               <label class="control-label">外网邮箱:</label>
-              <input size="10" pInputText
+              <input pInputText type="email"
                      [(ngModel)]="detailData.extranetEmail"
-                     name="extranetEmail" #extranetEmail="ngModel" email
-                     class="form-control" [rangeLength]="[1,60]">
+                     name="extranetEmail" #extranetEmail="ngModel" [email]
+                     class="form-control" [rangeLength]="[0,60]">
               <span class="validation" *ngIf="extranetEmail.errors?.email">邮箱格式错误</span>
               <span class="validation" *ngIf="extranetEmail.errors?.rangeLength">不多于60个字符</span>
             </div>
           </div>
 
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-4">
+            <div class="ui-g-6">
               <label class="control-label">职称:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.professionalTitle"
+              <input pInputText [(ngModel)]="detailData.professionalTitle"
                      name="professionalTitle" #professionalTitle="ngModel" [rangeLength]="[1,60]">
               <span class="validation" *ngIf="professionalTitle.errors?.rangeLength">不多于60个字符</span>
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-6">
               <label class="control-label">职责:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.officalPost"
+              <input pInputText [(ngModel)]="detailData.officalPost"
                      name="officalPost" #officalPost="ngModel" [rangeLength]="[1,60]">
               <span class="validation" *ngIf="officalPost.errors?.rangeLength">不多于60个字符</span>
             </div>
-            <div class="ui-g-4">
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-12">
               <label class="control-label">职务:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.officalDuty"
+              <input pInputText [(ngModel)]="detailData.officalDuty"
                      name="officalDuty" #officalDuty="ngModel" [rangeLength]="[1,60]">
               <span class="validation" *ngIf="officalDuty.errors?.rangeLength">不多于60个字符</span>
             </div>
           </div>
-
           <div class="ui-g-12 ui-g-nopad control-group">
-            <div class="ui-g-4">
+            <div class="ui-g-6">
               <label class="control-label">员工类型:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.employeeType"
+              <input pInputText [(ngModel)]="detailData.employeeType"
                      name="employeeType" #employeeType="ngModel" [rangeLength]="[1,60]">
               <span class="validation" *ngIf="employeeType.errors?.rangeLength">不多于60个字符</span>
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-6">
               <label class="control-label">员工工号:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.employeeNo"
+              <input pInputText [(ngModel)]="detailData.employeeNo"
                      name="employeeNo" #employeeNo="ngModel" [rangeLength]="[1,60]">
               <span class="validation" *ngIf="employeeNo.errors?.rangeLength">不多于60个字符</span>
             </div>
-
           </div>
-
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-6">
-              <label class="control-label">居住地行政区划:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.adminDivision"
+              <label class="control-label">行政区划:</label>
+              <input pInputText [(ngModel)]="detailData.adminDivision"
                      name="adminDivision" #adminDivision="ngModel" [rangeLength]="[1,100]">
               <div class="validation" *ngIf="adminDivision.errors?.rangeLength">不多于100个字符</div>
             </div>
             <div class="ui-g-6">
-              <label style="width: 150px" class="control-label">居住地行政区划编号:</label>
-              <input size="10" pInputText [(ngModel)]="detailData.adminDivisionCode"
+              <label class="control-label">行政区划编号:</label>
+              <input pInputText [(ngModel)]="detailData.adminDivisionCode"
                      name="adminDivisionCode" #adminDivisionCode="ngModel"
                      [rangeLength]="[1,15]">
               <div class="validation" *ngIf="adminDivisionCode.errors?.rangeLength">不多于15个字符</div>
@@ -189,13 +177,20 @@
           </div>
           <div class="ui-g-12 ui-g-nopad control-group">
             <div class="ui-g-12">
+              <label class="control-label">现居住地址:</label>
+              <input pInputText [(ngModel)]="detailData.curResidence"
+                     size="60" name="curResidence" #curResidence="ngModel" [rangeLength]="[1,500]">
+              <span class="validation" *ngIf="curResidence.errors?.rangeLength">不多于500个字符</span>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-g-nopad control-group">
+            <div class="ui-g-12">
               <label class="control-label">备注说明:</label>
               <input pInputText [(ngModel)]="detailData.remarks"
-                     name="remarks" #remarks="ngModel" [rangeLength]="[1,500]" size="60px">
+                     name="remarks" #remarks="ngModel" [rangeLength]="[1,500]" size="60">
               <div class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</div>
             </div>
           </div>
-
           <div class="ui-g-12 ui-g-nopad control-group">
             <h3 class="legend">角色分配</h3>
           </div>
@@ -206,12 +201,8 @@
                         [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
               <ng-template let-role pTemplate="item">
                 <div class="ui-helper-clearfix">
-                  <div class="right-picklist">
-                    {{role.label}}
-                  </div>
-                  <div class="left-picklist">
-                    {{role.name}}
-                  </div>
+                  <div class="right-picklist">{{role.label}}</div>
+                  <div class="left-picklist">{{role.name}}</div>
                 </div>
               </ng-template>
             </p-pickList>

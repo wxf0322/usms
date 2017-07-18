@@ -269,7 +269,7 @@ public class TreeServiceImpl implements TreeService {
         treeData.put("tree_level", level + 1);
         treeData.put("parent_id", parentId);
         Long maxSn = getMaxManualSortNumber(tableName, parentId);
-        if (maxSn < 1) maxSn = 1L;
+        if (maxSn < 0 || maxSn == null) maxSn = 0L;
 
         // 更新操作
         if (entityId == null) { // 新增

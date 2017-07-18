@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer, ViewChild} from "@angular/core";
+import {Component, OnInit, Renderer, ViewChild, EventEmitter,Output} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService, TreeNode} from "primeng/primeng";
 import {BaseTable} from "../../../shared/util/base-table";
@@ -7,6 +7,7 @@ import {TreeUtil} from "../../../shared/util/tree-util";
 import {StringUtil} from "../../../shared/util/string-util";
 import {HttpService} from "../../../core/service/http.service";
 import {GridAssociateDialogComponent} from "../grid-associate-dialog/grid-associate-dialog.component";
+import {GridPanelComponent} from "../grid-panel/grid-panel.component";
 
 @Component({
   selector: 'app-user-panel',
@@ -45,6 +46,11 @@ export class UserPanelComponent extends BaseTable<any> implements OnInit {
    */
   @ViewChild(GridAssociateDialogComponent)
   gridAssociateDialog : GridAssociateDialogComponent;
+
+  /**
+   * 监控
+   */
+    @Output() gridSaved = new EventEmitter();
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -148,6 +154,7 @@ export class UserPanelComponent extends BaseTable<any> implements OnInit {
    */
   onSaved(event) {
     this.getDataByPage(this.page.number, this.page.size, this.filter);
+    this.gridSaved.emit("refreshtree");
   }
 
 }

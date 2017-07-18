@@ -34,8 +34,8 @@
             <div class="ui-g-6">
               <label class=" control-label">备注:</label>
               <input pInputText [(ngModel)]="detailData.remarks"
-                     name="remarks" #remarks="ngModel" [rangeLength]="[1,500]">
-              <span class="validation" *ngIf="remarks.errors?.rangeLength">不多于500个字符</span>
+                     name="remarks" #remarks="ngModel" [rangeLength]="[1,200]">
+              <span class="validation" *ngIf="remarks.errors?.rangeLength">不多于200个字符</span>
             </div>
           </div>
 

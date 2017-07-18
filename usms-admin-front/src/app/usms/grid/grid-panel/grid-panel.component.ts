@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, OnInit, ViewChild, EventEmitter,Output} from "@angular/core";
 import {TreeNode} from "primeng/primeng";
 import {TreeUtil} from "../../../shared/util/tree-util";
 import {StringUtil} from "../../../shared/util/string-util";
 import {TreeData} from "../../../shared/util/tree-data";
 import {HttpService} from "../../../core/service/http.service";
 import {UserAssociateDialogComponent} from "../user-associate-dialog/user-associate-dialog.component";
+import {UserPanelComponent} from "../user-panel/user-panel.component";
 
 @Component({
   selector: 'app-grid-panel',
@@ -34,6 +35,11 @@ export class GridPanelComponent implements OnInit {
   @ViewChild(UserAssociateDialogComponent)
   userAssociateDialog : UserAssociateDialogComponent;
 
+  /**
+   * 监控
+   */
+  @Output() gridSaved = new EventEmitter();
+
   constructor(public httpService: HttpService) {}
 
   ngOnInit(): void {
@@ -62,6 +68,7 @@ export class GridPanelComponent implements OnInit {
 
   onSaved(event) {
     this.refreshTree();
+    this.gridSaved.emit("refreshtable");
   }
 
 }

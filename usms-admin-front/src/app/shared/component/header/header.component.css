@@ -4,7 +4,7 @@
   height: 50px;
   line-height: 50px;
   color: #fff;
-  background-color: #2DC3E8;
+  background-color: #1e3a5f;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -23,12 +23,12 @@
   padding: 0 20px;
 }
 
-.nav-items li {
+.nav-list > li {
   float: left;
   font-size: 14px;
 }
 
-.nav-items li a {
+.nav-list .nav-item a {
   display: block;
   padding: 0 16px;
   line-height: 50px;
@@ -36,7 +36,38 @@
   text-decoration: none;
 }
 
-.nav-items li a.active,
-.nav-items li a:hover {
-  background: #02aed9;
+.nav-list .nav-item a.active,
+.nav-list .nav-item a:hover {
+  background: #1e3a5f;
+}
+
+.user-info {
+  position: relative;
+}
+
+.user-info a {
+  cursor: pointer;
+}
+
+.user-info > a {
+  display: block;
+  padding: 0 16px;
+  line-height: 50px;
+}
+
+.user-info li {
+  line-height: normal;
+  margin: 8px 0;
+}
+
+.user-info li a {
+  display: block;
+  padding: 6px;
+  color: #666;
+  text-align: left;
+}
+
+.user-info li a:hover {
+  color: #fff;
+  background: #1e3a5f;
 }

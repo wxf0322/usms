@@ -2,14 +2,12 @@
  * 全局配置文件
  */
 export const GlobalVariable = Object.freeze({
-  /* 基础URL地址 */
-  baseUrl: 'http://localhost:8080/',
-
-  /* oauth2 认证 */
-  loginUrl: 'http://192.168.200.209:8080/usms/authorize', // 地址
-  clientId: '0277956b-9520-48e5-adc1-2bbd62019bf0', // 本应用在单点服务器的客户id（对应关系）
-  responseType: 'code', // 单点登录服务器定义
-  redirectUri: encodeURIComponent('http://localhost:4200/#/login'), // 登录成功后重定向地址
-  indexUri: 'usms'
-
+  locale: {
+    firstDayOfWeek: 0,
+    dayNames: ["日", "一", "二", "三", "四", "五", "六"],
+    dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+    monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  }
 });

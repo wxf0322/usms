@@ -3,7 +3,7 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.uma.filter;
+package net.evecom.common.usms.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;

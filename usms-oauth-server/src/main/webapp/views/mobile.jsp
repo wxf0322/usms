@@ -20,7 +20,7 @@
                 <p>平潭综合实验区</p>
             </div>
             <div class="tip">
-                <p style="color: red;">asdf</p>
+                <p style="color: red;"></p>
             </div>
             <div>
                 <div class="line1">

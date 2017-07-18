@@ -37,7 +37,7 @@ export class GridAssociateDialogComponent extends BaseDetail<any> implements OnI
   @Output() onSaved = new EventEmitter();
 
   constructor(private location: Location,
-              protected httpService: HttpService,
+              public httpService: HttpService,
               protected route: ActivatedRoute) {
     super(httpService, route);
   }

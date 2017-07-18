@@ -3,9 +3,9 @@
  * EVECOM PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  */
-package net.evecom.common.usms.uma.servlet;
+package net.evecom.common.usms.servlet;
 
-import net.evecom.common.usms.core.vo.ResultStatus;
+import net.evecom.common.usms.vo.ResultStatus;
 import net.sf.json.JSONObject;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
@@ -115,14 +116,18 @@ public class AccessTokenServlet extends HttpServlet {
             String accessToken = authAccessTokenResponse.getAccessToken();
 
             // 将 accessToken 存入session之中
-            request.getSession().setAttribute("accessToken", accessToken);
+            HttpSession session = request.getSession();
+            session.setAttribute("accessToken", accessToken);
 
-            ResultStatus resultStatus = new ResultStatus(true, "");
-            JSONObject resultJson = JSONObject.fromObject(resultStatus);
-            writer.write(resultJson.toString());
+            // 将accessToken信息返回response
+            writer.write(authAccessTokenResponse.getBody());
         } catch (OAuthProblemException | OAuthSystemException e) {
-            logger.info(e.getMessage());
-            ResultStatus resultStatus = new ResultStatus(false, "");
+            logger.error(e.getMessage());
+
+            // 设置响应信息
+            response.setContentType("text/html;charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ResultStatus resultStatus = new ResultStatus(false, e.getMessage());
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             writer.write(resultJson.toString());
         }

@@ -43,26 +43,40 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- oAuth对接核心servlet -->
+    <!-- oAuth2.0对接servlet -->
     <servlet>
         <servlet-name>accessTokenServlet</servlet-name>
-        <servlet-class>net.evecom.common.usms.uma.servlet.AccessTokenServlet</servlet-class>
+        <servlet-class>net.evecom.common.usms.servlet.AccessTokenServlet</servlet-class>
         <init-param>
             <param-name>accessTokenUrl</param-name>
             <param-value>http://192.168.200.209:8080/usms/accessToken</param-value>
         </init-param>
         <init-param>
             <param-name>clientId</param-name>
-            <param-value>0277956b-9520-48e5-adc1-2bbd62019bf0</param-value>
+            <param-value>6433ada9-de68-40ba-89a0-7aa8ee9128df</param-value>
         </init-param>
         <init-param>
             <param-name>clientSecret</param-name>
-            <param-value>ee1c3037-6265-496d-ab3f-60563ab5cf9a</param-value>
+            <param-value>3910c13e-33e0-437c-ac96-b487de9f1141</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>accessTokenServlet</servlet-name>
         <url-pattern>/accessToken</url-pattern>
+    </servlet-mapping>
+
+    <!-- oAuth2.0登出servlet -->
+    <servlet>
+        <servlet-name>logoutServlet</servlet-name>
+        <servlet-class>net.evecom.common.usms.servlet.LogoutServlet</servlet-class>
+        <init-param>
+            <param-name>logoutUrl</param-name>
+            <param-value>http://192.168.200.209:8080/usms/v1/openapi/logout</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <!-- Spring MVC 控制器-->
@@ -85,6 +99,10 @@
         <servlet-name>spring</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <session-config>
+        <session-timeout>480</session-timeout>
+    </session-config>
 
     <welcome-file-list>
         <welcome-file>/index.html</welcome-file>

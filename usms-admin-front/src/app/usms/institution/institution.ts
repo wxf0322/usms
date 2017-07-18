@@ -42,5 +42,5 @@ export class Institution {
   /**
    * 手动排序
    */
-  manualSn: number;
+  manualSn: string;
 }

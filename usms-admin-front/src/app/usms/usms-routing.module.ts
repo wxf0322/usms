@@ -11,6 +11,7 @@ import {OperationDetailComponent} from './operation/operation-detail/operation-d
 import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
+import {AuthGuard} from "../client/service/auth.guard.service";
 
 /**
  * 页面组件路由
@@ -22,9 +23,7 @@ const childrenRoutes: Routes = [
     pathMatch: 'full'
   }, {
     path: 'user',
-    children: [
-      {path: '', component: UserComponent}
-    ]
+    component: UserComponent
   }, {
     path: 'institution',
     component: InstitutionComponent,
@@ -36,30 +35,24 @@ const childrenRoutes: Routes = [
   },
   {
     path: 'role',
-    children: [
-      {path: '', component: RoleComponent}
-    ]
+    component: RoleComponent
   }, {
     path: 'operation',
+    component: OperationComponent,
     children: [
-      {path: '', component: OperationComponent},
       {path: 'detail', component: OperationDetailComponent}
     ]
   }, {
     path: 'privilege',
-    children: [
-      {path: '', component: PrivilegeComponent}
-    ]
+    canActivate: [AuthGuard],
+    component: PrivilegeComponent
   }, {
     path: 'grid',
-    children: [
-      {path: '', component: GridComponent}
-    ]
+    component: GridComponent
   }, {
     path: 'application',
-    children: [
-      {path: '', component: ApplicationComponent}
-    ]
+    canActivate: [AuthGuard],
+    component: ApplicationComponent
   }
 ];
 

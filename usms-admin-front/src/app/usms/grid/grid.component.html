@@ -1,10 +1,10 @@
 <div style="top: 0;">
   <p-tabView>
     <p-tabPanel header="用户角度">
-      <app-user-panel></app-user-panel>
+      <app-user-panel (gridSaved)="gridSaved($event)"></app-user-panel>
     </p-tabPanel>
     <p-tabPanel header="网格角度">
-      <app-grid-panel></app-grid-panel>
+      <app-grid-panel (gridSaved)="gridSaved($event)"></app-grid-panel>
     </p-tabPanel>
   </p-tabView>
 </div>

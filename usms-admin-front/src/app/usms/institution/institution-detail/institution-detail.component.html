@@ -16,24 +16,25 @@
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-12">
           <label class="required control-label">中文名称:</label>
-          <input pInputText [(ngModel)]="detailData.label" name="label" #label="ngModel"
+          <input pInputText [(ngModel)]="detailData.label" name="label"
+                 #label="ngModel" size="40"
                  [rangeLength]="[1,30]" required>
           <span class="validation" *ngIf="label.errors?.required">该项必填</span>
           <span class="validation" *ngIf="label.errors?.rangeLength">不多于30个字符</span>
-          </div>
+        </div>
       </div>
 
       <div class="ui-g-12 ui-g-nopad control-group">
-      <div class="ui-g-12">
-        <label class="required control-label">英文编码:</label>
-        <input pInputText [(ngModel)]="detailData.name"
-               name="name" #name="ngModel" [rangeLength]="[1,30]" required>
-        <span class="validation" *ngIf="name.errors?.required">该项必填</span>
-        <span class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</span>
-      </div>
+        <div class="ui-g-12">
+          <label class="required control-label">英文编码:</label>
+          <input pInputText [(ngModel)]="detailData.name" size="40"
+                 name="name" #name="ngModel" [rangeLength]="[1,30]" required>
+          <span class="validation" *ngIf="name.errors?.required">该项必填</span>
+          <span class="validation" *ngIf="name.errors?.rangeLength">不多于30个字符</span>
+        </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
-        <div class="ui-g-12">
+        <div class="ui-g-6">
           <label class=" control-label">类型:</label>
           <p-radioButton name="type" value="1" label="机构"
                          [(ngModel)]="detailData.type"></p-radioButton>
@@ -41,54 +42,60 @@
           <p-radioButton name="type" value="2" label="部门"
                          [(ngModel)]="detailData.type"></p-radioButton>
         </div>
-      </div>
-      <div class="ui-g-12 ui-g-nopad control-group">
-      <div class="ui-g-12">
-        <label class="control-label">状态:</label>
-        <p-radioButton name="enbled" value="1" label="正常"
-                       [(ngModel)]="detailData.enabled"></p-radioButton>
-        &nbsp;
-        <p-radioButton name="enbled" value="0" label="冻结"
-                       [(ngModel)]="detailData.enabled"></p-radioButton>
-      </div>
-      </div>
-
-      <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-6">
-          <label class="control-label">行政区划:</label>
-          <input pInputText [(ngModel)]="detailData.adminDivision"
-                 name="adminDivision" #adminDivision="ngModel" [rangeLength]="[1,100]">
-          <span class="validation" *ngIf="adminDivision.errors?.rangeLength">不多于100个字符</span>
-        </div>
-        <div class="ui-g-6">
-          <label class="control-label">行政区划代码:</label>
-          <input pInputText [(ngModel)]="detailData.adminDivisionCode"
-                 name="adminDivisionCode" #adminDivisionCode="ngModel" [rangeLength]="[1,15]">
-          <span class="validation" *ngIf="adminDivisionCode.errors?.rangeLength">不多于15个字符</span>
-        </div>
-      </div>
-      <div class="ui-g-12 ui-g-nopad control-group">
-        <div class="ui-g-6">
-          <label class="control-label">社会信用代码:</label>
-          <input pInputText [(ngModel)]="detailData.socialCreditUnicode"
-                 name="socialCreditUnicode" #socialCreditUnicode="ngModel" [rangeLength]="[1,15]">
-          <span class="validation" *ngIf="socialCreditUnicode.errors?.rangeLength">不多于15个字符</span>
-        </div>
-        <div class="ui-g-6">
-          <label class="control-label">组织机构代码:</label>
-          <input pInputText [(ngModel)]="detailData.orgCode"
-                 name="orgCode" #orgCode="ngModel" [rangeLength]="[1,60]">
-          <span style="white-space:nowrap;" class="validation" *ngIf="orgCode.errors?.rangeLength">不多于60个字符</span>
+          <label class="control-label">状态:</label>
+          <p-radioButton name="enbled" value="1" label="正常"
+                         [(ngModel)]="detailData.enabled"></p-radioButton>
+          &nbsp;
+          <p-radioButton name="enbled" value="0" label="冻结"
+                         [(ngModel)]="detailData.enabled"></p-radioButton>
         </div>
       </div>
       <div class="ui-g-12 ui-g-nopad control-group">
         <div class="ui-g-12">
+          <label class="control-label">行政区划:</label>
+          <input pInputText [(ngModel)]="detailData.adminDivision" size="40"
+                 name="adminDivision" #adminDivision="ngModel" [rangeLength]="[1,30]">
+          <span class="validation" *ngIf="adminDivision.errors?.rangeLength">不多于30个字符</span>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-g-nopad control-group">
+        <div class="ui-g-12">
+          <label class="control-label">行政区划代码:</label>
+          <input pInputText [(ngModel)]="detailData.adminDivisionCode" size="40"
+                 name="adminDivisionCode" #adminDivisionCode="ngModel" [rangeLength]="[1,15]">
+          <span class="validation" *ngIf="adminDivisionCode.errors?.rangeLength">不多于15个字符</span>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-g-nopad control-group">
+        <div class="ui-g-12">
+          <label class="control-label">社会信用代码:</label>
+          <input pInputText [(ngModel)]="detailData.socialCreditUnicode" size="40"
+                 name="socialCreditUnicode" #socialCreditUnicode="ngModel" [rangeLength]="[1,15]">
+          <span class="validation" *ngIf="socialCreditUnicode.errors?.rangeLength">不多于15个字符</span>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-g-nopad control-group">
+        <div class="ui-g-12">
+          <label class="control-label">组织机构代码:</label>
+          <input pInputText [(ngModel)]="detailData.orgCode" size="40"
+                 name="orgCode" #orgCode="ngModel" [rangeLength]="[1,30]">
+          <span style="white-space:nowrap;" class="validation" *ngIf="orgCode.errors?.rangeLength">不多于30个字符</span>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-g-nopad control-group" *ngIf="manualSnDisplay">
+        <div class="ui-g-12">
           <label class="control-label">同级手动排序:</label>
-          <input pInputText [(ngModel)]="detailData.manualSn"
-                 name="manualSn" #manualSn="ngModel" [rangeLength]="[0,4]" number>
-          <span class="validation" *ngIf="manualSn.errors?.rangeLength ">不多于4位数字</span>
+          <input pInputText [(ngModel)]="detailData.manualSn" size="40" [rangeLength]="[0,4]"
+                 name="manualSn" #manualSn="ngModel" number>
+          <span class="validation" *ngIf="manualSn.errors?.number|| manualSn.errors?.rangeLength">不多于四位的数字</span>
         </div>
       </div>
     </form>
+
   </div>
 </div>

@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
+
 /**
  * cookie服务
- * @author Warren Chan 2017年5月26日 10:38:33
+ * @author Warren Chan
  */
 @Injectable()
 export class CookieService {
@@ -62,19 +63,17 @@ export class CookieService {
    * 设置cookie
    * @param name cookie名字
    * @param value cookie值
-   * @param expires cookie过期时间（天或者具体时间）
+   * @param expires cookie过期时间（秒）
    * @param path
+   * @param domain
+   * @param secure
    */
-  public set(name: string, value: string, expires?: number | Date,
+  public set(name: string, value: string, expires?: number,
              path?: string, domain?: string, secure?: boolean) {
     let cookieStr = encodeURIComponent(name) + '=' + encodeURIComponent(value) + ';';
     if (expires) {
-      if (typeof expires === 'number') { // 数字类型转换为天
-        const dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
-        cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
-      } else { // 直接设置具体时间
-        cookieStr += 'expires=' + expires.toUTCString() + ';';
-      }
+      const dtExpires = new Date(new Date().getTime() + expires * 1000);
+      cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
     }
     if (path) {
       cookieStr += 'path=' + path + ';';

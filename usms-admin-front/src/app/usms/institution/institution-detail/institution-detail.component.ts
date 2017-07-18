@@ -6,6 +6,7 @@ import {BaseDetail} from '../../../shared/util/base-detail';
 import {HttpService} from '../../../core/service/http.service';
 import {Institution} from '../institution';
 import {InstitutionService} from '../institution.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'institution-detail',
@@ -25,6 +26,11 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
    */
   parentLabel: string;
 
+  /**
+   * 手动排序的隐藏
+   */
+  manualSnDisplay: boolean;
+
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute,
@@ -41,8 +47,15 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
     this.detailData.type = 1;
     this.parentLabel = this.route.snapshot.params['parentLabel'];
     const url = 'institution/find';
-    this.init(url);
-    parseInt(this.detailData.manualSn.toString());
+    this.manualSnDisplay = !(this.route.snapshot.params['type'] === 'add');
+    this.init(url).then(res => {
+      //解决页面上手动排序字段位数显示问题
+      if(this.route.snapshot.params['type'] === 'edit'){
+      if (isNullOrUndefined(this.detailData.manualSn.length)) {
+        this.detailData.manualSn = this.detailData.manualSn.toString();
+      }
+      }
+    });
   }
 
   /**
@@ -56,6 +69,7 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
    * 保存操作
    */
   save() {
+    console.dir(this.detailData);
     const url = 'institution/saveOrUpdate';
     if (this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];

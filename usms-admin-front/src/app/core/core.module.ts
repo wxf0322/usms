@@ -6,19 +6,18 @@ import {SharedModule} from '../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {HttpService} from './service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
-import {EveHeaderComponent} from '../shared/component/nav/header.component';
-import {CookieService} from "./service/cookie.service";
-import {AuthGuard} from "./service/auth.guard.service";
-import {LoginComponent} from "./component/login/login.component";
+import {ClientModule} from "../client/client.module";
+import {EveHeaderComponent} from "../shared/component/header/header.component";
+import {SlideToggleComponent} from "../shared/component/slide-toggle/slide-toggle.component";
 
 @NgModule({
   imports: [
-    SharedModule, RouterModule
+    SharedModule, RouterModule, ClientModule
   ],
-  declarations: [EveHeaderComponent, LoginComponent],
-  exports: [EveHeaderComponent, LoginComponent],
+  declarations: [EveHeaderComponent, SlideToggleComponent],
+  exports: [EveHeaderComponent, SlideToggleComponent],
   providers: [
-    ConfirmationService, HttpService, CookieService, AuthGuard
+    ConfirmationService, HttpService,
   ]
 })
 export class CoreModule {

@@ -4,4 +4,5 @@ include 'usms-admin-front',
         'usms-admin-server',
         'usms-oauth-server',
         'usms-core',
-        'usms-service'
+        'usms-service',
+        'usms-oauth-client'

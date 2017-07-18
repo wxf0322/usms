@@ -1,0 +1,11 @@
+.slide-toggle {
+  text-align: center;
+  color: #666;
+  overflow: hidden;
+  background-color: #ffffff;
+  position: absolute;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+  webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.15);
+}

@@ -11,7 +11,7 @@ import {TreeUtil} from '../../../shared/util/tree-util';
 import {TreeNode} from 'primeng/primeng';
 import {RequestOptions, Http, Headers} from '@angular/http';
 import {Observable} from 'rxjs';
-
+import {GlobalVariable} from "../../../shared/global-variable";
 
 @Component({
   selector: 'app-user-dialog',
@@ -92,7 +92,8 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
   /**
    * 当前组织机构名称
    */
-  institutionName:string;
+  institutionName: string;
+
   constructor(private location: Location,
               protected httpService: HttpService,
               protected route: ActivatedRoute,
@@ -100,17 +101,12 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
               protected http: Http,) {
     super(httpService, route);
     this.detailData = new User();
+
   }
 
+
   ngOnInit(): void {
-    this.en = {
-      firstDayOfWeek: 0,
-      dayNames: ["日", "一", "二", "三", "四", "五", "六"],
-      dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
-      monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-      monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    };
+    this.en = GlobalVariable.locale;
   }
 
   refreshTree() {
@@ -121,12 +117,11 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
         treeDataArr = res;
         this.tree = TreeUtil.buildTrees(treeDataArr);
         this.tree[0].expanded = true;
-
         this.setInstitutions();
       });
   }
 
-  showDialog(type: string, id: string, institutionId:number ,institutionName:string) {
+  showDialog(type: string, id: string, institutionId: number, institutionName: string) {
     this.display = true;
     this.detailData.pictureUrl = this.nullPicture;
 
@@ -136,6 +131,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
     const url = 'user/find';
     this.initDialog(url, type, id).then(
       res => {
+
         if (this.detailData.birthday != null) {
           this.date = new Date(this.detailData.birthday);
         } else {
@@ -199,7 +195,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
     if (this.type === 'add') {
       TreeUtil.setSelection(this.tree, this.selectedNodes, [{id: this.institutionId}]);
       this.selectedNames = this.institutionName;
-    }else {
+    } else {
       let id = this.userId;
       const url = 'user/institutions';
       const params = {userId: id};

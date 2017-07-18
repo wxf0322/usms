@@ -12,6 +12,8 @@ export class AppComponent {
   // 消息提示
   messages: Message[] = [];
 
+  title = "统一用户管理系统";
+
   constructor(private httpService: HttpService) {
     /*监听提示信息变化*/
     this.httpService.messages$.subscribe(msgs => {

@@ -95,8 +95,8 @@ http://192.168.200.209:8080/usms/authorize
 (3) 输入参数
 
 | 参数名          | 是否必填 | 说明                         |
-|----------------|--------|------------------------------|
-| client_id      |   是    | 填子系统在 USMS 注册的client_id |
+|----------------|---------|------------------------------|
+| client_id      |   是    | 填子系统在 USMS 注册的client_id  |
 | response_type  |   是    | code: 授权码模式，token: 简化模式 |
 | redirect_uri   |   是    | 子系统的回调地址                 |
 
@@ -205,7 +205,7 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 (2) 接口地址
 
-重定向至 http://192.168.200.209:8080/usms/v1/openapi/logout ，进行退出
+http://192.168.200.209:8080/usms/v1/openapi/logout
 
 (3) 输入参数
 
