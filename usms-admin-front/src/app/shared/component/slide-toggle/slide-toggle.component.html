@@ -1,4 +1,6 @@
-<div class="slide-toggle" [@toggleState]="toggleState" (mouseleave)="onMouseleave()"
+<div class="slide-toggle"
+     [@toggleState]="toggleState"
+     (mouseleave)="onMouseleave()"
      [ngStyle]="{'width': width}">
   <ng-content></ng-content>
 </div>

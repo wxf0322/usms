@@ -5,12 +5,9 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
-import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +35,6 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
     private InstitutionDao institutionDao;
 
     /**
-     * @see UserDao
-     */
-    @Autowired
-    private UserDao userDao;
-
-    /**
      * 根据登入名查询组织机构
      *
      * @param loginName
@@ -66,11 +57,22 @@ public class InstitutionServiceImpl extends BaseServiceImpl<InstitutionEntity, L
         return institutionDao.listInstsByUserId(userId);
     }
 
+    /**
+     * 查询子组织机构
+     *
+     * @param instName
+     * @return
+     */
+    @Override
+    public List<InstitutionEntity> listSubInstsByInstName(String instName) {
+        return institutionDao.listSubInstsByInstName(instName);
+    }
+
 
     /**
      * 根据编码查找组织机构
      *
-     * @param name
+     * @param instName
      * @return
      */
     @Override

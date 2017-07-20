@@ -1,18 +1,30 @@
-<div class="ui-g">
-  <div class="ui-g-3 left-panel">
-    <p-panel header="组织机构树">
-      <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="instQueryWord"/>
-      <button pButton type="button" icon="fa-search" (click)="queryInstitution()"></button>
+<div class="ui-g-3 max-height-panel" style="top: 30px;">
+  <p-panel header="组织机构树">
+    <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="instQueryWord"/>
+    <button pButton type="button" icon="fa-search" (click)="queryInstitution()"></button>
+    <div treeAutoHeight="max-height-panel">
       <p-tree [value]="institutionTree" selectionMode="single"
               [(selection)]="instSelectedNode"
               (onNodeSelect)="nodeSelect($event)">
       </p-tree>
-    </p-panel>
+    </div>
+  </p-panel>
+</div>
+<div class="ui-g-9 content" style="top: 30px">
+  <div class="toolkit">
+    <ul>
+      <li class="toolkit-item e-right">
+        <input type="text" pInputText placeholder="账号或姓名" [(ngModel)]="filter">
+        <button pButton type="button" icon="fa-search" (click)="query()" label="查询"></button>
+      </li>
+    </ul>
   </div>
-  <div class="ui-g-9">
-    <input type="text" pInputText placeholder="账号或姓名" [(ngModel)]="filter">
-    <button pButton type="button" icon="fa-search" (click)="query()" label="查询"></button>
-    <p-dataTable [value]="viewData" selectionMode="multiple" emptyMessage="{{emptyMessage}}">
+</div>
+<div class="ui-g-9 content" style="top: 75px">
+  <div tableAutoHeight="content">
+    <p-dataTable [value]="viewData" scrollable="true"
+                 selectionMode="multiple"
+                 emptyMessage="{{emptyMessage}}">
       <p-column header="序号" [style]="{'width':'60px'}">
         <ng-template let-ri="rowIndex" pTemplate="body"><span>{{index[ri]}}</span></ng-template>
       </p-column>

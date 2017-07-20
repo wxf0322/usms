@@ -50,10 +50,10 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
     this.manualSnDisplay = !(this.route.snapshot.params['type'] === 'add');
     this.init(url).then(res => {
       //解决页面上手动排序字段位数显示问题
-      if(this.route.snapshot.params['type'] === 'edit'){
-      if (isNullOrUndefined(this.detailData.manualSn.length)) {
-        this.detailData.manualSn = this.detailData.manualSn.toString();
-      }
+      if (this.route.snapshot.params['type'] === 'edit') {
+        if (isNullOrUndefined(this.detailData.manualSn.length)) {
+          this.detailData.manualSn = this.detailData.manualSn.toString();
+        }
       }
     });
   }
@@ -69,7 +69,6 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
    * 保存操作
    */
   save() {
-    console.dir(this.detailData);
     const url = 'institution/saveOrUpdate';
     if (this.detailData.id == null) {
       this.detailData.parentId = this.route.snapshot.params['parentId'];
@@ -78,8 +77,7 @@ export class InstitutionDetailComponent extends BaseDetail<Institution>
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '组织机构数据，' + this.detailData.label + '，更新或保存成功'
+          detail: '操作成功',
         });
         this.institutionService.sendMessage('refreshTree');
         this.goBack();

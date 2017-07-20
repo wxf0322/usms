@@ -101,7 +101,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
               protected http: Http,) {
     super(httpService, route);
     this.detailData = new User();
-
+    this.detailData.pictureUrl = this.nullPicture;
   }
 
 
@@ -167,8 +167,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '用户数据，' + this.detailData.loginName + '，更新或保存成功'
+          detail: '操作成功'
         });
         this.goBack();
         this.onSaved.emit('refreshTable');
@@ -220,7 +219,7 @@ export class UserDialogComponent extends BaseDetail<any> implements OnInit {
       .catch(error => Observable.throw(error))
       .subscribe(
         data => this.detailData.pictureUrl = data['filename'],
-        error => console.log(error)
+        error => console.error(error)
       );
   }
 

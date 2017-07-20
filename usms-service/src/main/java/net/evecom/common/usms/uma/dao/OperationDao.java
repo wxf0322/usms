@@ -6,7 +6,7 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
+import net.evecom.common.usms.uma.dao.custom.OperationDaoCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,7 +19,7 @@ import java.util.List;
  * @created 2017-5-8 14:20
  */
 @Repository
-public interface OperationDao extends JpaRepository<OperationEntity, Long> {
+public interface OperationDao extends JpaRepository<OperationEntity, Long>, OperationDaoCustom {
 
     /**
      * 获取应用操作列表
@@ -33,6 +33,12 @@ public interface OperationDao extends JpaRepository<OperationEntity, Long> {
             , nativeQuery = true)
     List<OperationEntity> listOpersByAppName(String appName);
 
+    /**
+     * 根据userId获得所有的操作
+     *
+     * @param userId
+     * @return
+     */
     @Query(value = "select * from usms_operations o where o.id in " +
             "(select po.oper_id from usms_privilege_operation po " +
             " where po.priv_id in " +
@@ -45,12 +51,11 @@ public interface OperationDao extends JpaRepository<OperationEntity, Long> {
             "and o.enabled = 1", nativeQuery = true)
     List<OperationEntity> listOpersByUserId(Long userId);
 
-
     /**
      * 判断是否拥有该操作
      *
      * @param userId
-     * @param operationName
+     * @param operName
      * @return
      */
     @Query(value = "select * from usms_operations p where p.id in( " +

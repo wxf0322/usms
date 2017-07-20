@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core"
 
 @Component({
-  moduleId: module.id,
   selector: 'eve-dialog-bar',
   templateUrl: './dialog-bar.component.html',
   styleUrls: ['./dialog-bar.component.css']

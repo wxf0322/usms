@@ -73,8 +73,8 @@ export class UserAssociateDialogComponent extends BaseDetail<any> implements OnI
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '所属用户，更新成功'
+          detail: '操作成功',
+
         });
         this.goBack();
         this.onSaved.emit("refreshTable");

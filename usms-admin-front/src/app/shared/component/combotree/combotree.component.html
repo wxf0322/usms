@@ -1,19 +1,15 @@
-<div id="combotreeContain" (click)="onMouseclick($event)"
-     class="ui-dropdown ui-widget ui-dropdown-open">
+<div id="combotree" (click)="onMouseclick($event)" class="ui-dropdown">
 
   <!--选择后数据-->
   <input class="ui-inputtext" pInputText [size]="size" [(ngModel)]="selectedNames">
 
-  <!--下拉操作-->
-  <div class="ui-dropdown-trigger ui-corner-right">
-    <span class="fa fa-caret-down"></span>
-  </div>
+  <!--下拉三角形-->
+  <span class="{{triangleClass}}"></span>
 
   <!--下拉面板-->
-  <div *ngIf="panelVisible" style="z-index: 9" class="ui-dropdown-panel ui-widget-content ui-corner-all ui-shadow">
+  <div *ngIf="panelVisible" style="z-index: 9" class="ui-dropdown-panel ui-corner-all ui-shadow">
     <div class="ui-dropdown-items-wrapper">
-      <p-tree selectionMode="checkbox"
-              [(value)]="value"
+      <p-tree selectionMode="checkbox" [(value)]="value"
               [(selection)]="selection"
               (onNodeSelect)="nodeSelect($event)"
               (onNodeUnselect)="nodeUnSelect($event)"></p-tree>

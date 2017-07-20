@@ -34,16 +34,14 @@ export class InstitutionPanelComponent implements OnInit {
    * 初始化操作
    */
   ngOnInit() {
-    this.route.params
-      .subscribe(params => {
+    this.route.params.subscribe(params => {
         const id = this.detailData.id = params['id'];
         this.parentLabel = params['parentLabel'];
         if (typeof (id) !== 'undefined') {
           const url = 'institution/find';
           this.httpService.findById(url, id).then(
-            res => {
-              this.detailData = res;
-            });
+            res => this.detailData = res
+          );
         }
       });
   }
@@ -114,8 +112,7 @@ export class InstitutionPanelComponent implements OnInit {
               this.detailData = new Institution();
               this.httpService.setMessage({
                 severity: 'success',
-                summary: '操作成功',
-                detail: '该机构部门删除成功！'
+                detail: '操作成功'
               });
               this.institutionService.sendMessage('refreshTree');
             } else {

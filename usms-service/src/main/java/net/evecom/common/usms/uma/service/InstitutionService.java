@@ -35,11 +35,17 @@ public interface InstitutionService extends BaseService<InstitutionEntity, Long>
      */
     List<InstitutionEntity> listInstsByUserId(Long userId);
 
+    /**
+     * 查询子组织机构
+     * @param instName
+     * @return
+     */
+    List<InstitutionEntity> listSubInstsByInstName(String instName);
 
     /**
      * 根据登陆名获取机构列表
      *
-     * @param
+     * @param instName
      * @return
      */
     InstitutionEntity getInstByInstName(String instName);

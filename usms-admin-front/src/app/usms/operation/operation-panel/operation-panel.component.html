@@ -1,0 +1,57 @@
+<div class="ui-g-9 content" style="top: 0">
+  <div class="toolkit">
+    <ul>
+      <li class="toolkit-item e-left">
+        <button pButton type="button" icon="fa-plus" label="新增"
+                (click)="addTreeNode('add',detailData.id,applicationId)"></button>
+        <button pButton type="button" icon="fa-edit" label="编辑" (click)="editTreeNode('edit',detailData.id)">
+        </button>
+        <button pButton type="button" icon="fa-trash" label="删除" (click)="deleteTreeNode(detailData.id)">
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="ui-g-9 content" style="top: 45px">
+  <div class="detail-layout">
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <h3 class="legend">操作信息</h3>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-12">
+        <label class="control-label">父机构名称:</label>
+        <span>{{parentLabel}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">操作名称</label>
+        <span>{{detailData.label}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">操作编码</label>
+        <span>{{detailData.name}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">资源URL</label>
+        <span>{{detailData.resUrl}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">资源图片路径</label>
+        <span>{{detailData.iconPath}}</span>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad control-group">
+      <div class="ui-g-6">
+        <label class="control-label">资源类型</label>
+        <span>{{detailData.optType}}</span>
+      </div>
+      <div class="ui-g-6">
+        <label class="control-label">状态</label>
+        <span>{{detailData.enabled | enabledPipe}}</span>
+      </div>
+    </div>
+  </div>
+</div>

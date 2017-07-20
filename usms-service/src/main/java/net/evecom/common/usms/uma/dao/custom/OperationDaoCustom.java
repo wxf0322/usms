@@ -6,16 +6,16 @@
 package net.evecom.common.usms.uma.dao.custom;
 
 import net.evecom.common.usms.core.dao.BaseDao;
-import net.evecom.common.usms.entity.InstitutionEntity;
+import net.evecom.common.usms.entity.OperationEntity;
 
 /**
  * 描述
  *
  * @author Wash Wang
  * @version 1.0
- * @created 2017/6/28 下午5:25
+ * @created 2017/7/20 上午9:25
  */
-public interface InstitutionDaoCustom extends BaseDao<InstitutionEntity> {
+public interface OperationDaoCustom extends BaseDao<OperationEntity> {
 
     /**
      * 检查是否能被删除

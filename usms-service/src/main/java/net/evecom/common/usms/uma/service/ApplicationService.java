@@ -60,6 +60,15 @@ public interface ApplicationService extends BaseService<ApplicationEntity, Long>
     ApplicationEntity getAppByClientSecret(String clientSecret);
 
     /**
+     * 根据ClientId与ClientSecret查询
+     *
+     * @param clientId
+     * @param clientSecret
+     * @return
+     */
+    ApplicationEntity getApplication(String clientId, String clientSecret);
+
+    /**
      * 通过 Id 查找应用
      *
      * @param id

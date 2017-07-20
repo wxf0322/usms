@@ -23,10 +23,6 @@
   overflow: auto;
 }
 
-.perfect-scrollbar {
-  height: 100%;
-}
-
 /*详情页返回按钮*/
 .back-btn {
   padding: 8px;
@@ -88,7 +84,7 @@
   resize: none;
 }
 
-/*必填项*/
+/* 必填项 */
 .required:before {
   content: "*";
   color: red;
@@ -157,6 +153,10 @@
 }
 
 .ui-widget-header {
+  border: 1px solid #1e3a5f;
+  background: #1e3a5f;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .ui-widget-content {
@@ -216,11 +216,15 @@
   padding: 0 8px;
 }
 
-/*growl*/
 .ui-growl-item-container {
 
 }
 
+.ui-growl{
+  position: absolute;
+  top:50%;
+  left:40%;
+ }
 
 /* 自定义树形组件样式 */
 .max-height-panel {
@@ -313,8 +317,8 @@
 }
 
 .file:hover {
-  background: #AADFFD;
-  border-color: #78C3F3;
+  background: #aadffd;
+  border-color: #78c3f3;
   color: #004974;
   text-decoration: none;
 }
@@ -330,3 +334,4 @@
   float: right;
   margin-right: 20px;
 }
+

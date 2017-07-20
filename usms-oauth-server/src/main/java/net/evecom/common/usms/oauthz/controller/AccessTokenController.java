@@ -69,19 +69,13 @@ public class AccessTokenController {
             // 构建OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
 
+            String clientId = oauthRequest.getClientId();
+            String clientSecret = oauthRequest.getClientSecret();
+
             // 检查提交的客户端id是否正确
-            if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
+            if (!oAuthService.checkClient(clientId, clientSecret)) {
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_CLIENT)
-                        .setErrorDescription(Constants.INVALID_CLIENT_ID)
-                        .buildJSONMessage();
-                return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-            }
-
-            // 检查客户端安全Key是否正确
-            if (!oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
-                OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
-                        .setError(OAuthError.TokenResponse.UNAUTHORIZED_CLIENT)
                         .setErrorDescription(Constants.INVALID_CLIENT_ID)
                         .buildJSONMessage();
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
@@ -101,8 +95,6 @@ public class AccessTokenController {
 
             // 获取当前登入名
             String loginName = oAuthService.getLoginNameByAuthCode(authCode);
-            // 获取当前client_id
-            String clientId = oauthRequest.getClientId();
 
             // 检查重定向地址是否和上次的一样
             String preRedirectUri = oAuthService.getRedirectUri(loginName, clientId);

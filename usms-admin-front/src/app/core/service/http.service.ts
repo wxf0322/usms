@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {Headers, Http} from '@angular/http';
 import {Subject} from 'rxjs/Subject';
 import {Message} from 'primeng/primeng';
+import {Loading} from "../../shared/animation/loading";
+import {IBusyConfig} from "tixif-ngx-busy";
 import 'rxjs/add/operator/toPromise';
 import * as $ from 'jquery';
-import {Loading} from "../../shared/animation/loading";
-import {IBusyConfig} from "angular2-busy";
 
 /**
  *  HTTP公用服务组件
@@ -96,8 +96,8 @@ export class HttpService {
   /**
    * 删除id数组的记录，后端用columns进行读取
    * @param url
-   * @param objects
-   * @returns {Promise<any>}
+   * @param cols
+   * @returns {Promise<any|TResult2|TResult1>}
    */
   deleteByColNames(url: string, cols: string[]) {
     const requestBody = $.param({
@@ -159,8 +159,8 @@ export class HttpService {
   /**
    * 根据条件得到对象
    * @param url
-   * @param dataMap 用户自定义的对象
-   * @returns {Promise<any>}
+   * @param params
+   * @returns {Promise<any|TResult2|TResult1>}
    */
   findByParams(url: any, params?: any) {
     return this.loading.busy = this.executeByParams(url, params);
@@ -173,6 +173,7 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   executeByParams(url: any, params?: any) {
+    url = encodeURI(url);
     const requestBody = (params == null) ? null : $.param(params);
     return this.loading.busy = this.http.post(url, requestBody, {headers: this.formHeaders})
       .toPromise()
@@ -189,6 +190,7 @@ export class HttpService {
    * @returns {Promise<any>}
    */
   findByPage(url: string, currentPage: number, rowsPerPage: number, queryParams: any) {
+    url = encodeURI(url);
     const pageBean = {
       page: currentPage,
       size: rowsPerPage
@@ -200,6 +202,5 @@ export class HttpService {
       .then(res => res.json())
       .catch(this.handleError);
   }
-
 
 }

@@ -17,6 +17,8 @@ export class CombotreeComponent implements OnInit {
 
   panelVisible: boolean; // 是否显示下拉面板
 
+  triangleClass: string; // 三角形
+
   // 输入框大小
   @Input() size: number;
 
@@ -44,24 +46,28 @@ export class CombotreeComponent implements OnInit {
     this.selectionChange.emit(this.selectionValue);
   }
 
-  ngOnInit() {
+  constructor(private renderer: Renderer) {
   }
 
-  constructor(private renderer: Renderer) {
+  ngOnInit() {
+    this.triangleClass = 'fa fa-caret-up';
     // 监听body的点击事件
     this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {
-      if (event.target.id !== 'combotreeContain' && this.selfClick === false) {
+      if (event.target.id !== 'combotree' && this.selfClick === false) {
+        this.triangleClass = 'fa fa-caret-up';
         this.panelVisible = false;
       }
       this.selfClick = false;
     });
   }
 
+
   onMouseclick(event) {
     // 如果禁用和只读，点击无效果
     if (this.disabled || this.readonly) {
       return;
     }
+    this.triangleClass = 'fa fa-caret-down';
     this.selfClick = true;
     this.panelVisible = true;
   }

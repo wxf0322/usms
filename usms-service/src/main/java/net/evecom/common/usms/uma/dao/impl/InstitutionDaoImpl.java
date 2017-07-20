@@ -29,8 +29,10 @@ public class InstitutionDaoImpl extends BaseDaoImpl<InstitutionEntity> implement
         if (children != null && children.size() > 0) return false;
         sql = "select ui.user_id from usms_user_institution ui where ui.institution_id = ?";
         List<Object> users = super.queryForObject(sql, new Object[]{id});
-        if (users != null && users.size() > 0) return false;
-        else return true;
+        if (users != null && users.size() > 0)
+            return false;
+        else
+            return true;
     }
 
 }

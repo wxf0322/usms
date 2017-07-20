@@ -112,8 +112,7 @@ export class RoleDialogComponent extends BaseDetail<Role> implements OnInit {
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '角色数据，' + this.detailData.label + '，更新或保存成功'
+          detail: '操作成功',
         });
         this.onSaved.emit('refreshTable');
       });

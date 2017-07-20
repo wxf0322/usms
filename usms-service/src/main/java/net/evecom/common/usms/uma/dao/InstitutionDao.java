@@ -6,7 +6,6 @@
 package net.evecom.common.usms.uma.dao;
 
 import net.evecom.common.usms.entity.InstitutionEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.custom.InstitutionDaoCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -37,12 +36,30 @@ public interface InstitutionDao extends JpaRepository<InstitutionEntity, Long>, 
             " where u.login_name = ?1))", nativeQuery = true)
     List<InstitutionEntity> listInstsByLoginName(String loginName);
 
+    /**
+     * 查询子组织机构
+     *
+     * @param instName
+     * @return
+     */
+    @Query(value = "select * from usms_institutions i where i.path like NVL((" +
+            "select i.path from usms_institutions i where i.name = ?1), '-1') || '%'",
+            nativeQuery = true)
+    List<InstitutionEntity> listSubInstsByInstName(String instName);
+
+    /**
+     * 根据用户id查询该用户所属的组织机构
+     *
+     * @param userId
+     * @return
+     */
     @Query(value = "select * from usms_institutions i where i.id in " +
             "(select ui.institution_id from usms_user_institution ui where ui.user_id = ?1) ",
             nativeQuery = true)
     List<InstitutionEntity> listInstsByUserId(Long userId);
 
     /**
+     * 根据组织机构编码查询组织机构信息
      *
      * @param instName
      * @return

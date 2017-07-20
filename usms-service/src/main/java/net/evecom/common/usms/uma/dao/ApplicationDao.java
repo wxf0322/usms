@@ -39,6 +39,14 @@ public interface ApplicationDao extends JpaRepository<ApplicationEntity, Long>, 
      */
     ApplicationEntity findFirstByClientSecret(String clientSecret);
 
+    /**
+     * 根据ClientId与ClientSecret查询应用
+     * @param clientId
+     * @param clientSecret
+     * @return
+     */
+    ApplicationEntity findFirstByClientIdAndClientSecret(String clientId, String clientSecret);
+
     @Query(value = "select * from usms_applications a where a.id in ( " +
             "select distinct o.application_id from usms_operations o " +
             "where o.id in (select po.oper_id " +

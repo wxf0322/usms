@@ -18,7 +18,7 @@ export class TreeAutoHeightDirective implements AfterViewInit, AfterViewChecked 
   ele: Element; // 当前元素
   pEle: Element; // 父元素
   panelEle: Element; // 需要动态设置滚动条的元素
-  deduct = 105; // 扣除高度（一般扣除分页条的高度，看需求自己写成输入属性）
+  deduct = 110; // 扣除高度（一般扣除分页条的高度，看需求自己写成输入属性）
 
   @HostListener('window:resize')onWindowResize() { // 正常使用本方法
   }

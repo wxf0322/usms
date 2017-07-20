@@ -21,7 +21,6 @@ export class ValidationPrompt {
   }
 
   ngAfterViewChecked(): void {
-    console.log('view');
     this.show();
   }
 
@@ -40,7 +39,6 @@ export class ValidationPrompt {
     let top: number;
 
     let content = this.el.nativeElement;
-    // console.log('content', content);
     let contentOffset = this.getOffset(content);
 
     //输入框的宽高
@@ -56,9 +54,6 @@ export class ValidationPrompt {
       let outerChildHeight = this.getOuterHeight(content.querySelector('div'));
       elHeight = elHeight > outerChildHeight ? elHeight : outerChildHeight;
     }
-
-    // console.log('offset width', this.getOuterWidth(content));
-    // console.log('offset height', this.getOuterHeight(content));
 
     this.container.style.display = 'block';
     switch (this.position) {
@@ -82,7 +77,6 @@ export class ValidationPrompt {
     this.container.style.left = left + 'px';
     this.container.style.top = top + 'px';
     this.container.style.zIndex = 2000;
-    // console.log('container', this.container);
   }
 
   create() {
@@ -136,7 +130,6 @@ export class ValidationPrompt {
   getOffset(el) {
     let x = el.offsetLeft;
     let y = el.offsetTop;
-    // console.log('el.offsetParent', el.offsetParent);
     while (el = el.offsetParent) {
       x += el.offsetLeft;
       y += el.offsetTop;

@@ -1,7 +1,7 @@
 /**
  * 配置http请求加载动画
  */
-import {IBusyConfig} from "angular2-busy";
+import {IBusyConfig} from "tixif-ngx-busy";
 export const Loading: IBusyConfig = {
   message: 'loading...',
   backdrop: true,

@@ -43,27 +43,23 @@ export class ValidationRuleEngine implements Validator, OnInit, OnChanges {
 
   @HostListener('mouseenter', ['$event'])
   onMouseEnter(e: Event) {
-    //console.log('enter');
     this.vp.show();
   }
 
   @HostListener('mouseleave', ['$event'])
   onMouseLeave(e: Event) {
-    //console.log('leave');
     if (this.state === 'focus') return;
     this.vp.hide();
   }
 
   @HostListener('focus', ['$event'])
   onFocus(e: Event) {
-    //console.log('focus');
     this.state = 'focus';
     this.vp.show();
   }
 
   @HostListener('blur', ['$event'])
   onBlur(e: Event) {
-    //console.log('blur');
     this.state = 'blur';
     this.vp.hide();
   }

@@ -1,6 +1,3 @@
-/**
- * Created by thinkpad on 2017-7-12.
- */
 import {
   AfterViewChecked, AfterViewInit, Directive, ElementRef, HostListener, Input, Renderer2
 } from '@angular/core';
@@ -26,8 +23,6 @@ export class DialogHeightDirective implements AfterViewInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-  /* const pEleHeight = this.pEle.clientHeight;
-    const scrollEleHeight = pEleHeight - this.deduct;*/
     this.renderer2.setStyle(this.dialogEle, 'max-height', this.dialogHeight + 'px');
     this.renderer2.setStyle(this.dialogEle, 'height', this.dialogHeight + 'px');
   }

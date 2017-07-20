@@ -42,8 +42,6 @@ public class FileController {
         JSONObject jsonObject = new JSONObject();
         try {
             part = request.getPart("uploadFile");
-           /* String root = request.getServletContext().getRealPath("/attachment");
-           */
             String root = imagesPath;
             // 判断文件夹是否存在，如果不存在创建一个文件夹
             File file = new File(root);

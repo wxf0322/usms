@@ -18,19 +18,15 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.cookie.get('token')) { // 已登录，跳转到首页
-      this.router.navigate([ClientVariable.indexUri]);
-    } else { // 未登录
-      /* 获取单点登录返回临时授权码 */
-      this.route.queryParams.subscribe((params: Params) => {
-        let code = params['code'];
-        if (code) {
-          this.setCookie(code); // 通过授权码获取用户信息
-        } else {
-          this.router.navigate([ClientVariable.indexUri]);
-        }
-      });
-    }
+    /* 获取单点登录返回临时授权码 */
+    this.route.queryParams.subscribe((params: Params) => {
+      let code = params['code'];
+      if (code) {
+        this.setCookie(code); // 通过授权码获取用户信息
+      } else {
+        this.router.navigate([ClientVariable.indexUri]);
+      }
+    });
   }
 
   /**
@@ -38,15 +34,17 @@ export class LoginComponent implements OnInit {
    * @param code
    */
   setCookie(code: string) {
-    let url = 'accessToken?code=' + code
-      + '&redirectUri=' + encodeURIComponent(ClientVariable.redirectUri);
+    let url = 'accessToken?code=' + code + '&redirectUri='
+      + encodeURIComponent(ClientVariable.redirectUri);
     this.http.get(url).toPromise().then(res => {
       let token = res.json();
       let expires: number = +token['expires_in'];
+      // 设置token
       this.cookie.set('token', token, expires);
-      const url = localStorage.getItem('redirectUri');
-      let redirectUri = url ? url : ClientVariable.indexUri;
-      this.router.navigate([redirectUri]);
+      // 判断redirectUri是否为空，如果为空则跳转至首页
+      const redirectUri = localStorage.getItem('redirectUri');
+      let url = redirectUri ? redirectUri : ClientVariable.indexUri;
+      this.router.navigate([url]);
     });
   }
 

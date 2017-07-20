@@ -84,8 +84,7 @@ export class GridAssociateDialogComponent extends BaseDetail<any> implements OnI
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '成功更新，该用户所属网格'
+          detail: '操作成功'
         });
         this.goBack();
         this.onSaved.emit('refreshTable');

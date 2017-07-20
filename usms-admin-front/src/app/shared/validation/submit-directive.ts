@@ -10,21 +10,6 @@ export class SubmitDirective implements /*Validator,*/ OnInit {
   private validator: ValidatorFn;
 
   ngOnInit() {
-    // console.log('init form', this.form);
   }
 
-  // @HostListener('click', ['$event'])
-  // onClick(e: Event) {
-  //   console.log('e', e);
-  //   this.vp.show();
-  // }
-
-  // validate(c: AbstractControl): { [key: string]: any } {
-  //   console.log('control', c);
-  // return this.validator(c);
-  // }
-
-  // registerOnValidatorChange(fn: () => void): void {
-  //   this.onChange = fn;
-  // }
 }

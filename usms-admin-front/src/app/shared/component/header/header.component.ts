@@ -24,7 +24,7 @@ export class EveHeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  showUserOp() { // 显示用户更多操作
+  showItems() { // 显示用户更多操作
     this.toggleState = 'on';
   }
 

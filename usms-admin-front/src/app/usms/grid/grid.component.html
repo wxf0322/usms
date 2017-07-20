@@ -1,11 +1,9 @@
-<div style="top: 0;">
-  <p-tabView>
-    <p-tabPanel header="用户角度">
-      <app-user-panel (gridSaved)="gridSaved($event)"></app-user-panel>
-    </p-tabPanel>
-    <p-tabPanel header="网格角度">
-      <app-grid-panel (gridSaved)="gridSaved($event)"></app-grid-panel>
-    </p-tabPanel>
-  </p-tabView>
+<div style="margin: 3px 10px 2px 10px;">
+  <p-selectButton [options]="types" [(ngModel)]="selectedType"></p-selectButton>
 </div>
-
+<div *ngIf="selectedType == 'user'">
+  <app-user-panel></app-user-panel>
+</div>
+<div *ngIf="selectedType == 'grid'">
+  <app-grid-panel></app-grid-panel>
+</div>

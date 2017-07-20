@@ -1,6 +1,7 @@
-import {Component, OnInit,ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {UserPanelComponent} from "./user-panel/user-panel.component";
 import {GridPanelComponent} from "./grid-panel/grid-panel.component";
+import {SelectItem} from "primeng/primeng";
 
 @Component({
   selector: 'app-grid',
@@ -9,28 +10,16 @@ import {GridPanelComponent} from "./grid-panel/grid-panel.component";
 })
 export class GridComponent implements OnInit {
 
-  /**
-   * 关联用户组件
-   */
-  @ViewChild(UserPanelComponent)
-  userPanelComponent : UserPanelComponent;
+  types: SelectItem[];
 
-  /**
-   * 关联网格组件
-   */
-  @ViewChild(GridPanelComponent)
-  gridPanelComponent : GridPanelComponent;
+  selectedType: string;
+
   ngOnInit(): void {
-
-
+    this.types = [];
+    this.types.push({label: '用户角度', value: 'user'});
+    this.types.push({label: '网格角度', value: 'grid'});
+    this.selectedType = 'user';
   }
-  gridSaved(event) {
-    if(event === 'refreshtable'){
-      this.userPanelComponent.getDataByPage(0,10,null);
-    }
-    if(event === 'refreshtree'){
-      this.gridPanelComponent.refreshTree();
-    }
-  }
+
 }
 

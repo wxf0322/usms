@@ -63,8 +63,7 @@ export class ApplicationDialogComponent extends BaseDetail<Application> implemen
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '应用数据，' + this.detailData.label + '，更新或保存成功，'
+          detail: '操作成功'
         });
         this.goBack();
         this.onSaved.emit('refreshTable');

@@ -97,6 +97,11 @@ public class ApplicationServiceImpl extends BaseServiceImpl<ApplicationEntity, L
     }
 
     @Override
+    public ApplicationEntity getApplication(String clientId, String clientSecret) {
+        return applicationDao.findFirstByClientIdAndClientSecret(clientId, clientSecret);
+    }
+
+    @Override
     public List<ApplicationEntity> listAppsByUserId(Long userId) {
         return applicationDao.listAppsByUserId(userId);
     }

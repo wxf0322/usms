@@ -137,9 +137,6 @@ public class OAuthFilter implements Filter {
         // 获得session中的accessToken
         String accessToken = (String) session.getAttribute("accessToken");
 
-        if (StringUtils.isNotEmpty(accessToken)) {
-            System.out.println(accessToken);
-        }
         // 获得请求地址
         String requestUrl = httpRequest.getRequestURL().toString();
 

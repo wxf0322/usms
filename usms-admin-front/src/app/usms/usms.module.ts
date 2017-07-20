@@ -23,6 +23,8 @@ import {UserPanelComponent} from "./grid/user-panel/user-panel.component";
 import {GridPanelComponent} from "./grid/grid-panel/grid-panel.component";
 import {GridAssociateDialogComponent} from "./grid/grid-associate-dialog/grid-associate-dialog.component";
 import {UserAssociateDialogComponent} from "./grid/user-associate-dialog/user-associate-dialog.component";
+import {OperationPanelComponent} from "./operation/operation-panel/operation-panel.component";
+import {OperationService} from "./operation/operation.service";
 
 /**
  * 统一用户管理根模块
@@ -36,14 +38,14 @@ import {UserAssociateDialogComponent} from "./grid/user-associate-dialog/user-as
     UserComponent, UserDialogComponent,
     RoleComponent, RoleUserSelectorComponent, RoleDialogComponent,
     PrivilegeComponent, PrivilegeDialogComponent,
-    OperationComponent, OperationDetailComponent,
+    OperationComponent, OperationDetailComponent, OperationPanelComponent,
     ApplicationComponent, ApplicationDialogComponent,
     InstitutionComponent, InstitutionPanelComponent, InstitutionDetailComponent,
     GridComponent, UserPanelComponent, GridPanelComponent,
     GridAssociateDialogComponent, UserAssociateDialogComponent, GridUserSelectorComponent,
   ],
   providers: [
-    InstitutionService
+    InstitutionService, OperationService
   ]
 })
 export class UsmsModule {

@@ -48,7 +48,7 @@ public class OAuthServiceImpl implements OAuthService {
     private Long authCodeExpires;
 
     /**
-     * 注入ApplicationService
+     * @see ApplicationService
      */
     @Autowired
     private ApplicationService applicationService;
@@ -222,6 +222,17 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public boolean checkClientSecret(String clientSecret) {
         return applicationService.getAppByClientSecret(clientSecret) != null;
+    }
+
+    /**
+     *
+     * @param clientId
+     * @param clientSecret
+     * @return
+     */
+    @Override
+    public boolean checkClient(String clientId, String clientSecret) {
+        return applicationService.getApplication(clientId, clientSecret) != null;
     }
 
     /**

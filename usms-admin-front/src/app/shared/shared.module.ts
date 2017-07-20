@@ -17,13 +17,7 @@ import {
   PickListModule, ToggleButtonModule, InputSwitchModule, InplaceModule
 } from 'primeng/primeng';
 
-
-import {BusyModule } from "angular2-busy";
-
-/*
-import {EveHighlightDirective} from './attribute-directive/highlight.directive';
-*/
-
+import {BusyModule} from "tixif-ngx-busy";
 import {EveLabelInputComponent} from './component/label-input/label-input.component';
 import {SideMenuComponent} from './component/side-menu/side-menu.component';
 import {ValidationRuleEngine} from './validation/validation-rule-engine';
@@ -40,7 +34,6 @@ import {DialogBarComponent} from './component/dialog-bar/dialog-bar.component';
 import {TreeAutoHeightDirective} from './attribute-directive/tree-auto-height.directive';
 import {DialogHeightDirective} from "./attribute-directive/dialog-height.directive";
 
-
 /* directive */
 /* pipe */
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -54,9 +47,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TreeModule, ButtonModule, SelectButtonModule, SplitButtonModule, DialogModule, TreeTableModule,
     PerfectScrollbarModule.forChild(), TabViewModule, CalendarModule, InplaceModule,
     // 管道
-    PipeModule,BusyModule,
-
-
+    PipeModule, BusyModule,
   ],
   declarations: [
     EveLabelInputComponent,
@@ -68,7 +59,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TopBarComponent, DialogBarComponent,
     // directive：共享指令
     TableAutoHeightDirective,
-    TreeAutoHeightDirective,DialogHeightDirective,
+    TreeAutoHeightDirective,
+    DialogHeightDirective,
   ],
   exports: [
     // module：导出共享模块，导入本模块的模块无需重复导入这些模块，包括一些常用的第三方模块
@@ -87,7 +79,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // 共享组件
     EveLabelInputComponent, SideMenuComponent,
     // pipe：共享管道
-    PipeModule,BusyModule,
+    PipeModule, BusyModule,
     // 表单验证
     ValidationRuleEngine, SubmitDirective,
     // 分页
@@ -96,7 +88,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // ng2 validation
     CustomFormsModule,
     TableAutoHeightDirective,
-    TreeAutoHeightDirective,DialogHeightDirective,
+    TreeAutoHeightDirective,
+    DialogHeightDirective,
   ]
 })
 export class SharedModule {

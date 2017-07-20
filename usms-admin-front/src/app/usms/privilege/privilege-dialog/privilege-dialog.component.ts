@@ -55,8 +55,7 @@ export class PrivilegeDialogComponent extends BaseDetail<Privilege> implements O
       res => {
         this.httpService.setMessage({
           severity: 'success',
-          summary: '操作成功',
-          detail: '权限数据，' + this.detailData.label + '，更新或保存成功'
+          detail: '操作成功',
         });
         this.onSaved.emit('refreshTable');
       });

@@ -19,7 +19,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   ]
 })
 export class SlideToggleComponent {
-  @Input() direction = 'v'; // 滑动方向v(vertical垂直）,h（horizontal水平）
+  @Input() direction = 'v'; // 滑动方向v(vertical垂直)，h(horizontal水平)
   @Input() toggleState: string; // 滑动开关0关1开
   @Input() label: string; // 显示文字
   @Input() width = '80px'; // 面板宽度

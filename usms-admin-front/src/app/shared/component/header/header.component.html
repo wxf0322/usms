@@ -7,7 +7,7 @@
   <div class="eve-hd-right">
     <ul class="nav-list">
       <li class="e-right user-info" style="float: right">
-        <a (mouseenter)="showUserOp()">你好，{{user?.name}}</a>
+        <a (mouseenter)="showItems()">你好，{{user?.name}}</a>
         <app-slide-toggle [toggleState]="toggleState" (mouseleave)="onMouseleave()" width="100px">
           <ul>
             <li><a class="fa fa-sign-out" (click)="logout()"> 退出</a></li>

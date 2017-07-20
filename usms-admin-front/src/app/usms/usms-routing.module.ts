@@ -12,6 +12,7 @@ import {InstitutionComponent} from './institution/institution.component';
 import {InstitutionDetailComponent} from './institution/institution-detail/institution-detail.component';
 import {InstitutionPanelComponent} from './institution/institution-panel/institution-panel.component';
 import {AuthGuard} from "../client/service/auth.guard.service";
+import {OperationPanelComponent} from "./operation/operation-panel/operation-panel.component";
 
 /**
  * 页面组件路由
@@ -23,9 +24,11 @@ const childrenRoutes: Routes = [
     pathMatch: 'full'
   }, {
     path: 'user',
+    canActivate: [AuthGuard],
     component: UserComponent
   }, {
     path: 'institution',
+    canActivate: [AuthGuard],
     component: InstitutionComponent,
     children: [
       {path: '', redirectTo: 'panel', pathMatch: 'full'},
@@ -35,11 +38,14 @@ const childrenRoutes: Routes = [
   },
   {
     path: 'role',
+    canActivate: [AuthGuard],
     component: RoleComponent
   }, {
     path: 'operation',
     component: OperationComponent,
     children: [
+      {path: '', redirectTo: 'panel', pathMatch: 'full'},
+      {path: 'panel', component: OperationPanelComponent},
       {path: 'detail', component: OperationDetailComponent}
     ]
   }, {

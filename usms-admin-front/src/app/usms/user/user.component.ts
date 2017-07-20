@@ -64,7 +64,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = 'user/list?key=' + StringUtil.trim(this.filter);
+    const url = 'user/list?key=' + StringUtil.trim(this.filter)
     this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
       res => this.setData(res)
     );
@@ -73,7 +73,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   queryNode() {
     this.selectedNode = TreeUtil.findNodesByLabel(this.tree, StringUtil.trim(this.queryWord));
     this.institutionName = this.selectedNode.label;
-    const url = 'user/list?key=' + this.filter;
+    const url = 'user/list?key=' + StringUtil.trim(this.filter);
     if (this.selectedNode.data.parentId !== 0) {
       this.institutionId = this.selectedNode.data.id;
     } else {

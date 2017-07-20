@@ -103,6 +103,7 @@ public class InstitutionAPI {
 
     /**
      * 根据组织类型查询组织机构列表
+     *
      * @return
      */
     @RequestMapping(value = "/institutions/all", produces = "application/json; charset=UTF-8")
@@ -120,6 +121,35 @@ public class InstitutionAPI {
     }
 
     /**
+     * 查询当前组织机构，及其下属组织机构
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "institutions/children", produces = "application/json; charset=UTF-8")
+    private ResponseEntity findSubInstitutions(HttpServletRequest request) {
+        String instName = request.getParameter("institution");
+        if (StringUtils.isEmpty(instName)) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder(ErrorStatus.INVALID_PARAMS, Constants.INVALID_PARAMS)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+        List<InstitutionEntity> institutionEntities = institutionService.listSubInstsByInstName(instName);
+        JSONArray jsonArray = new JSONArray();
+        for (InstitutionEntity institutionEntity : institutionEntities) {
+            InstitutionVO institutionVO = new InstitutionVO(institutionEntity);
+            JSONObject jsonObject = JSONObject.fromObject(institutionVO);
+            jsonArray.add(jsonObject);
+        }
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("institutions", jsonArray);
+        return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
+    }
+
+    /**
+     * 将组织机构数据转换为json数据
+     *
      * @param inst
      * @return
      */

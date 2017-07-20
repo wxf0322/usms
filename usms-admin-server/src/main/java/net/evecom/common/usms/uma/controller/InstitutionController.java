@@ -75,8 +75,7 @@ public class InstitutionController {
         try {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(institutionVO));
             this.treeService.saveOrUpdateTreeData(entityId,
-                    parentId,
-                    underlineMap,
+                    parentId, underlineMap,
                     "usms_institutions",
                     "usms_institutions_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

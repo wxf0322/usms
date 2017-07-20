@@ -5,12 +5,9 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.OperationEntity;
-import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
-import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +30,6 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
      */
     @Autowired
     private OperationDao operationDao;
-
-    /**
-     * @see UserDao
-     */
-    @Autowired
-    private UserDao userDao;
 
     /**
      * 获取应用操作列表
@@ -73,6 +64,17 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
     public boolean hasOperation(long userId, String operName) {
         List<OperationEntity> result = operationDao.listUserOperations(userId, operName);
         return result.size() != 0;
+    }
+
+    /**
+     * 判断该操作节点能否被删除
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean canBeDeleted(Long id) {
+        return operationDao.canBeDeleted(id);
     }
 
 }

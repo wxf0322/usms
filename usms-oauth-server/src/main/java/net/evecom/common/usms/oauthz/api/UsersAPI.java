@@ -173,11 +173,18 @@ public class UsersAPI {
         if (StringUtils.isEmpty(loginName)) {
             // 根据id，获得用户实体类
             user = userService.findOne(Long.valueOf(userId));
-            loginName = user.getLoginName();
         } else {
             // 根据登入名，获得用户实体类
             user = userService.getUserByLoginName(loginName);
         }
+        // 如果用户为空返回用户不存在的信息
+        if (user == null) {
+            ErrorStatus errorStatus = new ErrorStatus
+                    .Builder("error", Constants.UNKNOWN_ACCOUNT)
+                    .buildJSONMessage();
+            return new ResponseEntity(errorStatus.getBody(), HttpStatus.BAD_REQUEST);
+        }
+        loginName = user.getLoginName();
         // 获得accessToken
         String accessToken = oAuthService.getAccessToken(loginName, clientId);
 
@@ -237,9 +244,7 @@ public class UsersAPI {
     @RequestMapping(value = "/v1/openapi/users/like", produces = "application/json; charset=UTF-8")
     public ResponseEntity listUsersByNameLike(HttpServletRequest request) {
         String name = request.getParameter("name");
-        if (StringUtils.isEmpty(name)) {
-            name = "";
-        }
+        if (StringUtils.isEmpty(name)) name = "";
         //获取名字关键字
         name = "%" + name + "%";
         List<UserEntity> users = userService.listUsersByNameLike(name);

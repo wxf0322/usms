@@ -42,4 +42,12 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
      */
     boolean hasOperation(long userId, String operName);
 
+    /**
+     * 检查该操作节点是否能被删除
+     *
+     * @param id
+     * @return
+     */
+    boolean canBeDeleted(Long id);
+
 }

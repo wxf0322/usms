@@ -72,12 +72,10 @@ public class PasswordController {
     public ResponseEntity passwordGrant(HttpServletRequest request) {
         try {
             PasswordRequest passwordRequest = new PasswordRequest(request);
-
             String clientId = passwordRequest.getClientId();
             String clientSecret = passwordRequest.getClientSecret();
             // 检查提交的客户端id是否正确
-            if (!oAuthService.checkClientId(clientId)
-                    || !oAuthService.checkClientSecret(clientSecret)) {
+            if (!oAuthService.checkClient(clientId, clientSecret)) {
                 OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                         .setError(OAuthError.TokenResponse.INVALID_CLIENT)
                         .setErrorDescription(Constants.INVALID_CLIENT_ID)

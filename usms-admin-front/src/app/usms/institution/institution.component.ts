@@ -1,9 +1,8 @@
-import {Component, OnInit, Renderer} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TreeNode} from 'primeng/primeng';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
-import {BaseTable} from '../../shared/util/base-table';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {TreeData} from '../../shared/util/tree-data';
 import {InstitutionService} from './institution.service';
@@ -14,7 +13,7 @@ import {StringUtil} from "../../shared/util/string-util";
   templateUrl: './institution.component.html',
   styleUrls: ['./institution.component.css']
 })
-export class InstitutionComponent extends BaseTable<any> implements OnInit {
+export class InstitutionComponent implements OnInit {
 
   /**
    * 树形数据
@@ -27,15 +26,16 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
    */
   selectedNode: TreeNode;
 
+  /**
+   * 查询关键字
+   */
   queryWord: string;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
               protected httpService: HttpService,
               protected confirmationService: ConfirmationService,
-              protected renderer: Renderer,
               protected institutionService: InstitutionService) {
-    super(router, route, httpService, confirmationService, renderer);
   }
 
   /**
@@ -94,15 +94,6 @@ export class InstitutionComponent extends BaseTable<any> implements OnInit {
       relativeTo: this.route,
       skipLocationChange: true
     });
-  }
-
-  deleteSelected() {
-  }
-  getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-  }
-  showDialog(type: string, id: string) {
-  }
-  query() {
   }
 
 }

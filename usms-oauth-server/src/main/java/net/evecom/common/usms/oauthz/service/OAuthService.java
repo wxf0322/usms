@@ -115,6 +115,15 @@ public interface OAuthService {
     boolean checkClientSecret(String clientSecret);
 
     /**
+     * 判断clientId与clientSecret是否对应
+     *
+     * @param clientId
+     * @param clientSecret
+     * @return
+     */
+    boolean checkClient(String clientId, String clientSecret);
+
+    /**
      * 删除授权码
      *
      * @param loginName

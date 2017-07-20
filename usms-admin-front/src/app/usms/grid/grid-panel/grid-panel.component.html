@@ -1,7 +1,13 @@
-<div class="ui-g" [ngBusy]="httpService.loading">
+<div class="toolkit" style="top: 3px">
+  <ul>
+    <li class="toolkit-item e-right">
+      <input pInputText type="text" size="19" [(ngModel)]="tableQueryWord" placeholder="网格名称"/>
+      <button pButton type="button" icon="fa-search" (click)="queryTreeTable()"></button>
+    </li>
+  </ul>
+</div>
+<div class="ui-g content" style="top: 77px" [ngBusy]="httpService.loading">
   <div class="ui-g-12">
-    <input pInputText type="text" size="19" [(ngModel)]="tableQueryWord" placeholder="网格名称"/>
-    <button pButton type="button" icon="fa-search" (click)="queryTreeTable()"></button>
     <p-treeTable selectionMode="single" [(selection)]="tableSelectedNode" [value]="tableTree">
       <p-column field="label" header="网格名称"></p-column>
       <p-column field="code" header="网格编码"></p-column>
@@ -15,5 +21,4 @@
   </div>
 </div>
 
-<app-user-associate-dialog (onSaved)="onSaved($event)">
-</app-user-associate-dialog>
+<app-user-associate-dialog (onSaved)="onSaved($event)"></app-user-associate-dialog>

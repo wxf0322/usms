@@ -57,8 +57,9 @@ public class OperationController {
     @RequestMapping(value = "tree")
     public List<TreeData> listTreeData(HttpServletRequest request) {
         SqlFilter sqlFilter = new SqlFilter();
-        if (!StringUtils.isEmpty(request.getParameter("applicationId"))) {
-            sqlFilter.addFilter("QUERY_o#application_id_L_EQ", request.getParameter("applicationId"));
+        String applicationId = request.getParameter("applicationId");
+        if (!StringUtils.isEmpty(applicationId)) {
+            sqlFilter.addFilter("QUERY_o#application_id_L_EQ", applicationId);
         }
         return treeService.listTreeData("usms_operations o", sqlFilter);
     }
@@ -76,12 +77,10 @@ public class OperationController {
     public ResultStatus saveOrUpdate(@RequestBody OperationVO operationVO) {
         Long entityId = operationVO.getId();
         Long parentId = operationVO.getParentId();
-        System.out.printf(operationVO.toString());
         try {
             Map<String, Object> underlineMap = MapUtil.toUnderlineStringMap(MapUtil.toMap(operationVO));
             treeService.saveOrUpdateTreeData(entityId,
-                    parentId,
-                    underlineMap,
+                    parentId, underlineMap,
                     "usms_operations",
                     "usms_operations_s");
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -94,8 +93,12 @@ public class OperationController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(Long id) {
-        operationService.delete(id);
-        return new ResultStatus(true, "");
+        if (operationService.canBeDeleted(id)) {
+            operationService.delete(id);
+            return new ResultStatus(true, "");
+        } else {
+            return new ResultStatus(false, "");
+        }
     }
 
 }
