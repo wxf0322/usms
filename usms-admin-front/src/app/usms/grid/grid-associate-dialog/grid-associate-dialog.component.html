@@ -1,4 +1,4 @@
-<p-dialog header="所在网格" [width]="500" [(visible)]="display">
+<p-dialog header="所在网格" [width]="500" dialogHeight="400" [(visible)]="display">
   <div style="width: 100%" [ngBusy]="httpService.loading">
     <p-tree selectionMode="checkbox" [value]="tree" [(selection)]="selectedNodes">
     </p-tree>

@@ -37,10 +37,11 @@ export class LoginComponent implements OnInit {
     let url = 'accessToken?code=' + code + '&redirectUri='
       + encodeURIComponent(ClientVariable.redirectUri);
     this.http.get(url).toPromise().then(res => {
-      let token = res.json();
-      let expires: number = +token['expires_in'];
+      let userInfo = res.json();
+      let expires: number = +userInfo['expiresIn'];
+      console.dir(userInfo);
       // 设置token
-      this.cookie.set('token', token, expires);
+      this.cookie.set('user', userInfo, expires);
       // 判断redirectUri是否为空，如果为空则跳转至首页
       const redirectUri = localStorage.getItem('redirectUri');
       let url = redirectUri ? redirectUri : ClientVariable.indexUri;

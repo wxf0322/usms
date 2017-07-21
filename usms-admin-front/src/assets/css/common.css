@@ -148,8 +148,9 @@
 }
 
 /************* primeNG样式重写 **************/
-/*base*/
 .ui-widget {
+  font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+  font-size: 1em;
 }
 
 .ui-widget-header {
@@ -198,7 +199,7 @@
   background: none;
 }
 
-/*paginator*/
+/* paginator */
 .ui-paginator {
   text-align: right;
 }
@@ -217,14 +218,13 @@
 }
 
 .ui-growl-item-container {
-
 }
 
-.ui-growl{
+.ui-growl {
   position: absolute;
-  top:50%;
-  left:40%;
- }
+  top: 48%;
+  left: 40%;
+}
 
 /* 自定义树形组件样式 */
 .max-height-panel {

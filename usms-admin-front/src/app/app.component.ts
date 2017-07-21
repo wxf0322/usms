@@ -14,8 +14,10 @@ export class AppComponent {
 
   title = "统一用户管理系统";
 
+  user = "";
+
   constructor(private httpService: HttpService) {
-    /*监听提示信息变化*/
+    /* 监听提示信息变化 */
     this.httpService.messages$.subscribe(msgs => {
       this.messages = msgs;
     });

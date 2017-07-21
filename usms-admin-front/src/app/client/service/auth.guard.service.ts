@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.cookie.get('token')) {
+    if (this.cookie.get('user')) {
       return true;
     } else {
       // 保存用户访问地址
