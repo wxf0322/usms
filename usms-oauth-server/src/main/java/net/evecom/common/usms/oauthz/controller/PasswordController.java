@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +69,7 @@ public class PasswordController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "token", produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "token", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public ResponseEntity passwordGrant(HttpServletRequest request) {
         try {
             PasswordRequest passwordRequest = new PasswordRequest(request);

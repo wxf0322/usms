@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js">
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" >
     <title>OAuth2 Server</title>
 </head>
 <body>

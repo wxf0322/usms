@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>《统一用户管理系统API文档_v20170714_1》</title>
+    <title>《统一用户管理系统API文档_v20170720_1》</title>
 </head>
 <body style="display:none">
 <xmp theme="cerulean">
@@ -12,7 +12,6 @@
 ## 1. 总体设计
 ### 1.1 框架选型
 &nbsp;&nbsp;&nbsp;&nbsp;OAuth是一个关于授权（authorization）的开放网络标准，在全世界得到广泛应用，目前的版本是2.0版。它允许子系统通过令牌代替用户密码，访问用户存放在资源服务器的资源。
-
 &nbsp;&nbsp;&nbsp;&nbsp;本系统基于**Apache OLTU**开发，**Apache OLUT**实现了**OAuth2.0**的规范，是一种可靠的授权解决方案。
 
 ### 1.2 名词解释
@@ -28,7 +27,7 @@
 ### 1.3 逻辑设计
 #### 1.3.1 OAuth2认证过程
 
-![usms](../static/doc/usms.jpg)
+![usms](../static/doc/oauth2.jpg)
 
 1. 浏览器从子系统跳转到USMS，请求用户认证与授权。
 2. 用户认证通过，浏览器跳回子系统，并带回临时授权码code。
@@ -48,14 +47,14 @@
 #### 2.1.1 返回状态码说明
 请求结果首先通过状态码进行判断成功或失败，然后再根据具体内容解析json值。
 
-| 状态码      | 说明                                  |
+| 状态码     | 说明                                 |
 |------------|--------------------------------------|
-| 200        | 操作成功                               |
-| 302        | 回调成功                               |
-| 400        | 请求参数不完整或参数错误                  |
-| 401        | 未授权，code/accessToken错误或已经失效。  |
-| 403        | 禁止，例如要求post，却使用了get请求。      |
-| 404        | 无法找到，没有该接口                     |
+| 200        | 操作成功                              |
+| 302        | 回调成功                              |
+| 400        | 请求参数不完整或参数错误              |
+| 401        | 未授权，code/accessToken错误或已经失效。 |
+| 403        | 禁止，例如要求post，却使用了get请求。     |
+| 404        | 无法找到，没有该接口                  |
 
 #### 2.1.2 错误返回说明
 
@@ -197,11 +196,11 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http://ww
 
 该请求在服务端只能通过post提交，获取到access token后，子系统可将其保存，做后续使用。
 
-#### 2.1.3 登出全部系统
+#### 2.1.3 登出系统
 
 (1) 接口说明
 
-用户退出，该用户登入的所有系统
+用户退出登入的所有对接系统
 
 (2) 接口地址
 
@@ -210,8 +209,8 @@ http://192.168.200.209:8080/usms/v1/openapi/logout
 (3) 输入参数
 
 | 参数名        |   说明   |
-|---------------|---------|
-| access_token  | 访问令牌  |
+|---------------|----------|
+| access_token  | 访问令牌 |
 
 (4) 输入样例
 
@@ -221,8 +220,8 @@ http://192.168.200.209:8080/usms/v1/openapi/logout?access_token=ACCESS_TOKEN
 
 (5) 输出参数
 
-| 参数名        | 说明     |
-|--------------|----------|
+| 参数名       | 说明      |
+|--------------|-----------|
 | success      | 是否成功  |
 | msg          | 错误信息  |
 
@@ -244,9 +243,9 @@ http://192.168.200.209:8080/usms/checkAccessToken
 
 (3) 输入参数
 
-| 参数名        | 是否必填      | 说明     |
+| 参数名       | 是否必填    | 说明     |
 |--------------|-------------|----------|
-| access_token | 是          | 访问令牌  |
+| access_token | 是          | 访问令牌 |
 
 (4) 输入样例
 
@@ -276,8 +275,8 @@ http://192.168.200.209:8080/usms/v1/openapi/user
 (3) 输入参数
 
 | 参数名       | 是否必填   | 说明     |
-|--------------|-------------|----------|
-|access_token  |是           | 访问令牌 |
+|--------------|------------|----------|
+|access_token  | 是         | 访问令牌 |
 
 (4) 输入样例
 
@@ -287,11 +286,11 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
 
 (5) 输出参数
 
-| 参数名       | 说明      |
+| 参数名      | 说明      |
 |-------------|-----------|
-| id          | 用户ID     |
-| loginName	  |  登录名    |
-| name	      |  用户姓名   |
+| id          | 用户ID    |
+| loginName	  | 登录名    |
+| name	      | 用户姓名  |
 | staff       |	关联员工的具体信息，具体参数详见 2.3.2 节 输出参数 |
 | application | 当前接入系统的应用信息，里面包含着操作信息  |
 | operations  | 该用户所拥有的操作信息，具体参数详见 2.3.10 节 输出参数 |
@@ -382,7 +381,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明      |
+| 参数名       | 是否必填  | 说明      |
 |--------------|-----------|-----------|
 |grid          |是         | 网格编码，注意该输入参数对应数据库中的 **code** 字段 |
 |access_token  |是         | 访问令牌 |
@@ -395,30 +394,30 @@ http://192.168.200.209:8080/usms/v1/openapi/users?grid=GRID_CODE&access_token=AC
 
 (5) 输出参数
 
-| 参数名            |   说明       |
-|------------------|---------------|
+| 参数名             |  说明         |
+|--------------------|---------------|
 | id                 | 用户ID        |
-| loginName          | 登录名          |
-| name               | 姓名             |
-| tel                | 固定电话          |
-| zipCode            | 邮编             |
-| mobile             | 手机电话          |
-| email              | 内网邮箱          |
-| extranetEmail      | 外网邮箱          |
-| aliasNames         | 别名              |
-| sex                | 性别              |
-| professionalTitle  | 职称              |
-| officalPost        | 职责              |
-| officalDuty        | 职务              |
-| employeeType       | 员工类型          |
-| employeeNo         | 员工工号          |
+| loginName          | 登录名        |
+| name               | 姓名          |
+| tel                | 固定电话      |
+| zipCode            | 邮编          |
+| mobile             | 手机电话      |
+| email              | 内网邮箱      |
+| extranetEmail      | 外网邮箱      |
+| aliasNames         | 别名          |
+| sex                | 性别          |
+| professionalTitle  | 职称          |
+| officalPost        | 职责          |
+| officalDuty        | 职务          |
+| employeeType       | 员工类型      |
+| employeeNo         | 员工工号      |
 | birthday           | 出生日期，注意：这里返回的日期为数值类型的时间戳，需要通过代码转化为日期类型 |
-| adminDivisionCode  | 居住地行政区划编号 |
+| adminDivisionCode  | 居住地行政区划编号|
 | adminDivision      | 居住地行政区划    |
-| curResidence       | 现居住地址       |
-| remarks            | 备注说明         |
-| citizenIdNumber    | 身份证号码       |
-| pictureUrl         | 照片路径         |
+| curResidence       | 现居住地址        |
+| remarks            | 备注说明          |
+| citizenIdNumber    | 身份证号码        |
+| pictureUrl         | 照片路径          |
 
 (6) 输出样例
 
@@ -465,10 +464,10 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
-|--------------|-------------|----------|
-|institution   |是           | 组织机构编码，注意该输入参数对应表：**usms_institution** 的 **name** 字段 |
-|access_token  |是           | 访问令牌 |
+| 参数名       | 是否必填   |  说明    |
+|--------------|------------|----------|
+|institution   | 是         | 组织机构编码，注意该输入参数对应表：**usms_institution** 的 **name** 字段 |
+|access_token  | 是         | 访问令牌 |
 
 (4) 输入样例
 
@@ -496,10 +495,10 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填    | 说明    |
-|-------------|-------------|----------|
-|application    | 是          | 应用编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段  |
-|access_token | 是          | 访问令牌 |
+| 参数名       | 是否必填    | 说明     |
+|--------------|-------------|----------|
+|application   | 是          | 应用编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段  |
+|access_token  | 是          | 访问令牌 |
 
 (4) 输入样例
 
@@ -527,7 +526,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
+| 参数名       | 是否必填    | 说明     |
 |--------------|-------------|----------|
 |privilege     |是           | 操作编码，注意该输入参数对应表：**usms_privileges** 的 **name** 字段  |
 |access_token  |是           | 访问令牌 |
@@ -556,7 +555,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
+| 参数名       | 是否必填    | 说明     |
 |--------------|-------------|----------|
 |operation     | 是          | 网格编码，注意该输入参数对应表：**usms_operations** 的 **name** 字段  |
 |access_token  | 是          | 访问令牌 |
@@ -585,7 +584,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名        | 是否必填     | 说明    |
+| 参数名       | 是否必填    | 说明     |
 |--------------|-------------|----------|
 | role         |是           | 网格编码，注意该输入参数对应表：**usms_roles** 的 **name** 字段 |
 | access_token |是           | 访问令牌 |
@@ -616,8 +615,8 @@ http://192.168.200.209:8080/usms/v1/openapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
-|--------------|-------------|---------|
+| 参数名       | 是否必填    | 说明     |
+|--------------|-------------|----------|
 | offical_post |是           | 职务名称 |
 | access_token |是           | 访问令牌 |
 
@@ -645,10 +644,10 @@ http://192.168.200.209:8080/usms/v1/openapi/privileges
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
-|--------------|-------------|----------|
-| application  | 是      | 操作编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段|
-| access_token | 是      | 访问令牌 |
+| 参数名       | 是否必填 | 说明    |
+|--------------|----------|---------|
+| application  | 是       | 操作编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段|
+| access_token | 是       | 访问令牌|
 
 (4) 输入样例
 
@@ -658,8 +657,8 @@ http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_N
 
 (5) 输出参数
 
-| 参数名      | 说明    |
-|------------|----------|
+| 参数名   | 说明    |
+|----------|---------|
 | id       | 权限id           |
 | label    | 权限名称中文     |
 | name     | 权限名称编码     |
@@ -691,7 +690,7 @@ http://192.168.200.209:8080/usms/v1/openapi/operations
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明    |
+| 参数名       | 是否必填| 说明    |
 |--------------|---------|---------|
 | application  | 是      | 操作编码，注意该输入参数对应表：**usms_applications** 的 **name** 字段 |
 | access_token | 是      | 访问令牌 |
@@ -704,15 +703,15 @@ http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_N
 
 (5) 输出参数
 
-| 参数名      | 说明    |
+| 参数名     | 说明     |
 |------------|----------|
 | id         | 操作id                |
 | parentId   | 父亲ID                |
-| label      | 操作名称_中文          |
-| name       | 操作名称_英文          |
-| resUrl    | 操作URL               |
-| iconPath  | 操作图标路径            |
-| optType   | 操作类型 (1:菜单 2:按钮 3: 系统)   |
+| label      | 操作名称_中文         |
+| name       | 操作名称_英文         |
+| resUrl     | 操作URL               |
+| iconPath   | 操作图标路径          |
+| optType    | 操作类型 (1:菜单 2:按钮 3: 系统)   |
 
 (6) 输出样例
 
@@ -744,10 +743,10 @@ http://192.168.200.209:8080/usms/v1/openapi/role/exist
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
-|--------------|-------------|----------|
-| role  | 是      | 角色编码，注意该输入参数对应表：**usms_roles** 的 **name** 字段 |
-| access_token | 是      | 访问令牌 |
+| 参数名       | 是否必填  | 说明     |
+|--------------|-----------|----------|
+| role         | 是        | 角色编码，注意该输入参数对应表：**usms_roles** 的 **name** 字段 |
+| access_token | 是        | 访问令牌 |
 
 (4) 输入样例
 
@@ -759,7 +758,7 @@ http://192.168.200.209:8080/usms/v1/openapi/role/exist?role=ROLE_NAME&access_tok
 
 | 参数名     | 说明    |
 |------------|----------|
-| result     |     返回结果，true为是，false为否  |
+| result     | 返回结果，true为是，false为否  |
 
 
 (6) 输出样例
@@ -780,7 +779,7 @@ http://192.168.200.209:8080/usms/v1/openapi/privilege/exist
 
 (3) 输入参数
 
-| 参数名       | 是否必填     | 说明    |
+| 参数名       | 是否必填    | 说明    |
 |--------------|-------------|---------|
 | privilege    | 是          | 权限编码，注意该输入参数对应表：**usms_privileges** 的 **name** 字段 |
 | access_token | 是          | 访问令牌 |
@@ -793,7 +792,7 @@ http://192.168.200.209:8080/usms/v1/openapi/privilege/exist?privilege=PRIVILEGE_
 
 (5) 输出参数
 
-| 参数名     | 说明    |
+| 参数名    | 说明    |
 |-----------|----------|
 | result    |     返回结果，true为是，false为否  |
 
@@ -929,7 +928,38 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions?access_token=ACCESS_TOK
 
 同 2.3.14 输出样例
 
-### 2.3.16 组织机构信息，根据组织机构编码查询，需access_token鉴权
+### 2.3.16 组织机构列表，根据组织机构编码查询，需access_token鉴权
+
+(1) 接口说明
+
+返回当前组织机构及其子组织机构列表，根据组织机构编码查询，需access_token鉴权。
+
+(2) 接口地址
+
+http://192.168.200.209:8080/usms/v1/openapi/institutions/children
+
+(3) 输入参数
+
+| 参数名       | 是否必填     | 说明    |
+|--------------|-------------|----------|
+| institution  | 是      | 组织机构编码，注意该输入参数对应表：**usms_institutions** 的 **name** 字段 |
+| access_token | 是      | 访问令牌 |
+
+(4) 输入样例
+
+```
+http://192.168.200.209:8080/usms/v1/openapi/institutions/children?institution=INSTITUTION_NAME&access_token=ACCESS_TOKEN
+```
+
+(5) 输出参数
+
+同 2.3.14 输出参数
+
+(6) 输出样例
+
+同 2.3.14 输出样例
+
+### 2.3.17 组织机构信息，根据组织机构编码查询，需access_token鉴权
 
 (1) 接口说明
 
@@ -941,7 +971,7 @@ http://192.168.200.209:8080/usms/v1/openapi/institutions
 
 (3) 输入参数
 
-| 参数名        | 是否必填 | 说明    |
+| 参数名       | 是否必填| 说明    |
 |--------------|---------|----------|
 | institution  | 是      | 组织机构编码，注意该输入参数对应表：**usms_institutions** 的 **name** 字段 |
 | access_token | 是      | 访问令牌 |
@@ -954,17 +984,17 @@ http://192.168.200.209:8080/usms/v1/openapi/institution?institution=INSTITUTION_
 
 (5) 输出参数
 
-| 参数名                 |    说明                   |
+| 参数名                |    说明                  |
 |-----------------------|--------------------------|
-| id                    | 机构id                    |
-| label                 | 中文名称                    |
-| name                  | 英文名称                    |
-| parentId              | 父机构ID                    |
-| type                  | 类型 1:机构 2:部门           |
-| adminDivisionCode     | 行政区划代码                 |
-| adminDivision         | 行政区划                    |
-| socialCreditUnicode   | 社会信用统一代码             |
-| orgCode               | 组织机构代码                |
+| id                    | 机构id                   |
+| label                 | 中文名称                 |
+| name                  | 英文名称                 |
+| parentId              | 父机构ID                 |
+| type                  | 类型 1:机构 2:部门       |
+| adminDivisionCode     | 行政区划代码             |
+| adminDivision         | 行政区划                 |
+| socialCreditUnicode   | 社会信用统一代码         |
+| orgCode               | 组织机构代码             |
 
 (6) 输出样例
 
@@ -984,7 +1014,7 @@ http://192.168.200.209:8080/usms/v1/openapi/institution?institution=INSTITUTION_
 }
 ```
 
-### 2.3.17 管辖区域列表，根据access_token查询
+### 2.3.18 管辖区域列表，根据access_token查询
 
 (1) 接口说明
 
@@ -997,8 +1027,8 @@ http://192.168.200.209:8080/usms/v1/openapi/grids
 (3) 输入参数
 
 | 参数名       | 是否必填  | 说明    |
-|--------------|----------|---------|
-| access_token | 是       | 访问令牌 |
+|--------------|-----------|---------|
+| access_token | 是        | 访问令牌|
 
 (4) 输入样例
 
@@ -1008,23 +1038,23 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 
 (5) 输出参数
 
-| 参数名                | 说明                     |
+| 参数名               | 说明                    |
 |----------------------|-------------------------|
-| id                   | 网格id                   |
-| code                 | 网格编码                  |
-| lvl                  | 网格层级                  |
-| name                 | 网格名称                  |
-| gridType             | 网格类型                  |
-| descripiton          | 描述                     |
-| dutyPhone            | 值班电话                  |
-| photoUrl             | 网格图片                  |
-| memberNum            | 网格员数量                |
-| householdeNum        | 网格户数                  |
-| area                 | 网格面积（平方米）          |
-| parentId             | 上级网格ID                |
-| adminDivisionCode    | 隶属行政区划编码           |
-| adminDivision        | 隶属行政区划              |
-| manualSn             | 手动排序                 |
+| id                   | 网格id                  |
+| code                 | 网格编码                |
+| lvl                  | 网格层级                |
+| name                 | 网格名称                |
+| gridType             | 网格类型                |
+| descripiton          | 描述                    |
+| dutyPhone            | 值班电话                |
+| photoUrl             | 网格图片                |
+| memberNum            | 网格员数量              |
+| householdeNum        | 网格户数                |
+| area                 | 网格面积（平方米）      |
+| parentId             | 上级网格ID              |
+| adminDivisionCode    | 隶属行政区划编码        |
+| adminDivision        | 隶属行政区划            |
+| manualSn             | 手动排序                |
 | geoOutlineId         | 轮廓ID                  |
 | enabled              | 可用状态（0: 冻结 1: 正常）|
 
@@ -1056,7 +1086,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 }
 ```
 
- ### 2.3.18 返回管辖区域列表，需access_token鉴权
+ ### 2.3.19 返回管辖区域列表，需access_token鉴权
 
 (1) 接口说明
 
@@ -1068,8 +1098,8 @@ http://192.168.200.209:8080/usms/v1/openapi/grids/all
 
 (3) 输入参数
 
-| 参数名       | 是否必填  | 说明    |
-|--------------|----------|---------|
+| 参数名       | 是否必填 | 说明     |
+|--------------|----------|----------|
 | access_token | 是       | 访问令牌 |
 
 (4) 输入样例
@@ -1086,7 +1116,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids/all?access_token=ACCESS_TOKEN
 
 同 2.3.17 输出样例
 
-### 2.3.19 角色列表，需access_token鉴权
+### 2.3.20 角色列表，需access_token鉴权
 
 (1) 接口说明
 
@@ -1098,7 +1128,7 @@ http://192.168.200.209:8080/usms/v1/openapi/roles
 
 (3) 输入参数
 
-| 参数名       | 是否必填 | 说明    |
+| 参数名       | 是否必填| 说明    |
 |--------------|---------|---------|
 | access_token | 是      | 访问令牌 |
 
@@ -1108,7 +1138,7 @@ http://192.168.200.209:8080/usms/v1/openapi/roles
 http://192.168.200.209:8080/usms/v1/openapi/roles?access_token=ACCESS_TOKEN
 ```
 
-### 2.3.20 用户列表，根据用户姓名模糊查询，需access_token鉴权
+### 2.3.21 用户列表，根据用户姓名模糊查询，需access_token鉴权
 
 (1) 接口说明
 
@@ -1120,7 +1150,7 @@ http://192.168.200.209:8080/usms/v1/openapi/users/like
 
 (3) 输入参数
 
-| 参数名        | 是否必填   | 说明    |
+| 参数名       | 是否必填 | 说明    |
 |--------------|----------|---------|
 | name         | 是       | 用户姓名 |
 | access_token | 是       | 访问令牌 |
@@ -1133,27 +1163,27 @@ http://192.168.200.209:8080/usms/v1/openapi/users/like?name=USER_NAME&access_tok
 
 (5) 输出参数
 
-| 参数名              |   说明       |
+| 参数名             |   说明        |
 |--------------------|---------------|
-| id                 | 用户ID         |
-| loginName          | 登录名         |
-| name               | 姓名           |
-| tel                | 固定电话         |
-| zipCode            | 邮编             |
-| mobile             | 手机电话          |
-| email              | 内网邮箱          |
-| extranetEmail      | 外网邮箱          |
-| aliasNames         | 别名              |
-| sex                | 性别              |
-| professionalTitle  | 职称              |
-| officalPost        | 职责              |
-| officalDuty        | 职务              |
-| employeeType       | 员工类型          |
-| employeeNo         | 员工工号          |
+| id                 | 用户ID        |
+| loginName          | 登录名        |
+| name               | 姓名          |
+| tel                | 固定电话      |
+| zipCode            | 邮编          |
+| mobile             | 手机电话      |
+| email              | 内网邮箱      |
+| extranetEmail      | 外网邮箱      |
+| aliasNames         | 别名          |
+| sex                | 性别          |
+| professionalTitle  | 职称          |
+| officalPost        | 职责          |
+| officalDuty        | 职务          |
+| employeeType       | 员工类型      |
+| employeeNo         | 员工工号      |
 | birthday           | 出生日期，注意：这里返回的日期为数值类型的时间戳，需要通过代码转化为日期类型 |
-| adminDivisionCode  | 居住地行政区划编号  |
+| adminDivisionCode  | 居住地行政区划编号 |
 | adminDivision      | 居住地行政区划     |
-| curResidence       | 现居住地址        |
+| curResidence       | 现居住地址         |
 | remarks            | 备注说明         |
 | citizenIdNumber    | 身份证号码       |
 | pictureUrl         | 照片路径         |
@@ -1251,7 +1281,7 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名 | 是否必填  | 说明     |
+| 参数名 | 是否必填 | 说明  |
 |--------|--------|---------|
 | roles  | 是     | 角色编码集合，用 "," 连接 |
 
@@ -1281,9 +1311,9 @@ http://192.168.200.209:8080/usms/v1/internalapi/users
 
 (3) 输入参数
 
-| 参数名       | 是否必填    | 说明     |
+| 参数名      | 是否必填  | 说明     |
 |-------------|-----------|----------|
-|login_names  |是          | 登入名集合，用 "," 连接 |
+|login_names  |是         | 登入名集合，用 "," 连接 |
 
 (4) 输入样例
 
@@ -1311,10 +1341,10 @@ http://192.168.200.209:8080/usms/v1/internalapi/user
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明     |
+| 参数名      | 是否必填  | 说明     |
 |-------------|-----------|----------|
-|login_name   | 是         | 登入名 |
-|client_id    | 是        | 应用ID  |
+|login_name   | 是        | 登入名   |
+|client_id    | 是        | 应用ID   |
 
 (4) 输入样例
 
@@ -1342,10 +1372,10 @@ http://192.168.200.209:8080/usms/v1/internalapi/user
 
 (3) 输入参数
 
-| 参数名       | 是否必填   | 说明   |
-|-------------|-----------|-------|
+| 参数名      | 是否必填  | 说明   |
+|-------------|-----------|--------|
 |user_id      | 是        | 用户ID |
-|client_id    | 是        | 应用ID  |
+|client_id    | 是        | 应用ID |
 
 (4) 输入样例
 

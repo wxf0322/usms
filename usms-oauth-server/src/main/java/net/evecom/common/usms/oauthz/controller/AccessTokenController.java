@@ -48,7 +48,7 @@ public class AccessTokenController {
 
     @RequestMapping("/access")
     public ModelAndView access(Model model) {
-        return new ModelAndView("accesstoken");
+        return new ModelAndView("access_token");
     }
 
     /**

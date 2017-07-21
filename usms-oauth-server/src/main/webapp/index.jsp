@@ -55,11 +55,9 @@ http://www.baidu.com/?code=63910432da9186b22b1ad888d55ae8ae
 http://192.168.200.209:8080/usms/access
 ```
 
-首先GET方式请求该页面，会打开一个表单在该表单中填入必填项，具体表单参数，详见参数说明。
+首先GET方式请求该页面，会出现一个表单，在该表单中填入必填项，具体详见参数说明。
 
 表单将会以POST方式提交到 http://192.168.200.209:8080/usms/accessToken ，最终返回 access_token
-
-需要以POST方式提交以下参数换取 access_token
 
 ####3.2 参数说明
 
@@ -71,7 +69,7 @@ http://192.168.200.209:8080/usms/access
 | code          | 63910432da9186b22b1ad888d55ae8ae     | 用户登录授权后的授权码 |
 | redirect_uri  | http://www.baidu.com                 | 回调地址    |
 
-最终返回如下数据
+####3.2 返回参数
 
 ```
 { "expires_in":3600, "access_token":"223ae05dfbb0794396fb60a0960c197e" }
@@ -87,27 +85,15 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=223ae05dfbb0794396
 
 测试成功的话可以返回当前用户名的详细信息，access_token=223ae05dfbb0794396fb60a0960c197e 为上一步获取的 **access_token**
 
+###5. 简化模式
 
-## 二、移动端接入流程说明
-
-###1. 先在统一用户管理系统中注册对接应用
-
-统一用户管理系统会分配给对接系统 **client_id** 和 **client_secret**
-
-|   参数名       |   值                                | 参数说明   |
-|---------------|-------------------------------------|-----------|
-| client_id     | 6433ada9-de68-40ba-89a0-7aa8ee9128df | 应用id     |
-| client_secret | 3910c13e-33e0-437c-ac96-b487de9f1141 | 应用secret |
-
-###2. 请求授权码
-
-####2.1 请求地址
+####5.1 请求地址
 
 ```
 http://192.168.200.209:8080/usms/authorize?client_id=6433ada9-de68-40ba-89a0-7aa8ee9128df&response_type=token&redirect_uri=http://www.baidu.com
 ```
 
-####2.2 参数说明
+####5.2 参数说明
 
 |   参数名       |   值         |
 |---------------|--------------|
@@ -129,10 +115,9 @@ Location: http://www.baidu.com/#access_token=27893fa79e38e449baf09fc2b066f1cc&ex
 
 其中 access_token=27893fa79e38e449baf09fc2b066f1cc 即为访问令牌，expires_in=3600 为访问令牌有效时间。
 
-###2.3 备注
+###5.3 备注
 
-该接口请求在浏览器端完成，assess_token对用户可见，请在前端调用需要访问的api。
-
+该接口相应在前端完成，assess_token对用户可见，请在前端调用需要访问的api。
 
 </xmp>
 

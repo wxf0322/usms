@@ -176,7 +176,7 @@ public class AuthorizeController {
 
         // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
         if (user == null && !login(request)) {
-            return "oauth2login";
+            return "oauth2_login";
         }
 
         // 获取用户名
@@ -228,7 +228,7 @@ public class AuthorizeController {
 
         // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
         if (user == null && !login(request)) {
-            return "oauth2login";
+            return "oauth2_login";
         }
 
         // 获取用户名
