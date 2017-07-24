@@ -7,6 +7,9 @@ package net.evecom.common.usms.uma.dao.custom;
 
 import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.entity.OperationEntity;
+import net.evecom.common.usms.vo.OperationVO;
+
+import java.util.List;
 
 /**
  * 描述
@@ -24,4 +27,14 @@ public interface OperationDaoCustom extends BaseDao<OperationEntity> {
      * @return
      */
     boolean canBeDeleted(Long id);
+
+
+    /**
+     * 查找权限ID对应的操作列表
+     *
+     * @param privilegeId
+     * @return
+     */
+    List<OperationVO> listOpersByPrivId(Long privilegeId);
+
 }

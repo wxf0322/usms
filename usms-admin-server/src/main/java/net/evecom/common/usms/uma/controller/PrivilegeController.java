@@ -9,9 +9,11 @@ import net.evecom.common.usms.core.vo.ResultStatus;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
+import net.evecom.common.usms.uma.service.OperationService;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.vo.PrivilegeVO;
 import net.evecom.common.usms.uma.service.PrivilegeService;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +39,7 @@ import java.util.List;
 public class PrivilegeController {
 
     /**
-     * 日志管理器
+     * @see Logger
      */
     private static Logger logger = LoggerFactory.getLogger(PrivilegeController.class);
 
@@ -45,6 +48,12 @@ public class PrivilegeController {
      */
     @Autowired
     private PrivilegeService privilegeService;
+
+    /**
+     * @see OperationService
+     */
+    @Autowired
+    private OperationService operationService;
 
     @ResponseBody
     @RequestMapping(value = "list")
@@ -66,9 +75,10 @@ public class PrivilegeController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(String columns) {
-        String[] ids = columns.split(",");
-        for (String id : ids) {
-            privilegeService.delete(Long.valueOf(id));
+        if (StringUtils.isNotEmpty(columns)) {
+            String[] ids = columns.split(",");
+            long[] entityIds = Arrays.stream(ids).mapToLong(Long::valueOf).toArray();
+            privilegeService.delete(ArrayUtils.toObject(entityIds));
         }
         return new ResultStatus(true, "");
     }
@@ -109,7 +119,7 @@ public class PrivilegeController {
     @ResponseBody
     @RequestMapping(value = "operations")
     public List<OperationVO> listOpersByPrivId(Long privilegeId) {
-        return privilegeService.listOpersByPrivId(privilegeId);
+        return operationService.listOpersByPrivId(privilegeId);
     }
 
     @ResponseBody

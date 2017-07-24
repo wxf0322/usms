@@ -5,6 +5,7 @@
  */
 package net.evecom.common.usms.servlet;
 
+import net.evecom.common.usms.util.HttpUtil;
 import net.evecom.common.usms.vo.ResultStatus;
 import net.sf.json.JSONObject;
 import org.apache.oltu.oauth2.client.OAuthClient;
@@ -41,9 +42,19 @@ public class AccessTokenServlet extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(AccessTokenServlet.class);
 
     /**
-     * accessTokenUrl
+     * 获取accessToken地址
      */
     private String accessTokenUrl;
+
+    /**
+     * 服务器地址
+     */
+    private String serverUrl;
+
+    /**
+     * 用户信息地址
+     */
+    private String userUrl;
 
     /**
      * clientId
@@ -100,9 +111,11 @@ public class AccessTokenServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        this.accessTokenUrl = this.getInitParameter("accessTokenUrl");
+        this.serverUrl = this.getInitParameter("serverUrl");
         this.clientId = this.getInitParameter("clientId");
         this.clientSecret = this.getInitParameter("clientSecret");
+        this.accessTokenUrl = serverUrl + "/accessToken";
+        this.userUrl = serverUrl + "/v1/openapi/user";
 
         String code = request.getParameter("code");
         String redirectUri = URLDecoder.decode(request.getParameter("redirectUri"), "UTF-8");
@@ -111,16 +124,25 @@ public class AccessTokenServlet extends HttpServlet {
 
         try {
             // 获得accessToken
-            OAuthAccessTokenResponse authAccessTokenResponse =
+            OAuthAccessTokenResponse accessTokenResponse =
                     this.makeTokenRequestWithAuthCode(code, redirectUri);
-            String accessToken = authAccessTokenResponse.getAccessToken();
+
+            String accessToken = accessTokenResponse.getAccessToken();
+            Long expiresIn = accessTokenResponse.getExpiresIn();
 
             // 将 accessToken 存入session之中
             HttpSession session = request.getSession();
             session.setAttribute("accessToken", accessToken);
 
-            // 将accessToken信息返回response
-            writer.write(authAccessTokenResponse.getBody());
+            String url = this.userUrl + "?access_token=" + accessToken;
+            String html = HttpUtil.httpGet(url);
+            JSONObject userInfo = JSONObject.fromObject(html);
+
+            userInfo.put("accessToken", accessToken);
+            userInfo.put("expiresIn", expiresIn);
+
+            // 将用户信息返回给前端
+            writer.write(userInfo.toString());
         } catch (OAuthProblemException | OAuthSystemException e) {
             logger.error(e.getMessage());
 
@@ -131,7 +153,6 @@ public class AccessTokenServlet extends HttpServlet {
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             writer.write(resultJson.toString());
         }
-
     }
 
 }

@@ -1,6 +1,6 @@
 <div class="ui-g-3 max-height-panel" style="top: 30px;">
   <p-panel header="组织机构树">
-    <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="instQueryWord"/>
+    <input pInputText type="text" placeholder="组织机构名称" size="14" [(ngModel)]="queryWord"/>
     <button pButton type="button" icon="fa-search" (click)="queryInstitution()"></button>
     <div treeAutoHeight="max-height-panel">
       <p-tree [value]="institutionTree" selectionMode="single"

@@ -8,7 +8,9 @@ package net.evecom.common.usms.uma.service.impl;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.entity.OperationEntity;
 import net.evecom.common.usms.uma.dao.OperationDao;
+import net.evecom.common.usms.uma.dao.PrivilegeDao;
 import net.evecom.common.usms.uma.service.OperationService;
+import net.evecom.common.usms.vo.OperationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +78,11 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
     public boolean canBeDeleted(Long id) {
         return operationDao.canBeDeleted(id);
     }
+
+    @Override
+    public List<OperationVO> listOpersByPrivId(Long privilegeId) {
+        return operationDao.listOpersByPrivId(privilegeId);
+    }
+
 
 }

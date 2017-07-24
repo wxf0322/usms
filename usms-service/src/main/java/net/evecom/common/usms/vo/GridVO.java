@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * 描述
@@ -93,10 +94,6 @@ public class GridVO {
      * 可用状态
      */
     private Long enabled;
-    /**
-     * 关联的用户名称
-     */
-    private String[] userNames;
 
     public long getId() {
         return id;

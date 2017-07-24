@@ -698,7 +698,7 @@ http://192.168.200.209:8080/usms/v1/openapi/operations
 (4) 输入样例
 
 ```
-http://192.168.200.209:8080/usms/v1/openapi/privileges?application=APPLICATION_NAME&access_token=ACCESS_TOKEN
+http://192.168.200.209:8080/usms/v1/openapi/operations?application=APPLICATION_NAME&access_token=ACCESS_TOKEN
 ```
 
 (5) 输出参数
@@ -1086,7 +1086,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids?access_token=ACCESS_TOKEN
 }
 ```
 
- ### 2.3.19 返回管辖区域列表，需access_token鉴权
+ ### 2.3.19 所有管辖区域列表，需access_token鉴权
 
 (1) 接口说明
 
@@ -1116,7 +1116,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids/all?access_token=ACCESS_TOKEN
 
 同 2.3.17 输出样例
 
-### 2.3.20 角色列表，需access_token鉴权
+### 2.3.20 所有角色列表，需access_token鉴权
 
 (1) 接口说明
 
@@ -1124,7 +1124,7 @@ http://192.168.200.209:8080/usms/v1/openapi/grids/all?access_token=ACCESS_TOKEN
 
 (2) 接口地址
 
-http://192.168.200.209:8080/usms/v1/openapi/roles
+http://192.168.200.209:8080/usms/v1/openapi/roles/all
 
 (3) 输入参数
 

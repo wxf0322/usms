@@ -46,12 +46,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     private PrivilegeDao privilegeDao;
 
     /**
-     * @see UserDao
-     */
-    @Autowired
-    private UserDao userDao;
-
-    /**
      * 查找所有角色列表
      *
      * @return
@@ -109,16 +103,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleEntity, Long>
     @Override
     public void updatePrivileges(Long roleId, String[] privileges) {
         roleDao.updatePrivileges(roleId, privileges);
-    }
-
-    /**
-     * 根据角色id查找用户列表
-     *
-     * @param roleId
-     * @return
-     */
-    public List<UserEntity> listUsersByRoleId(Long roleId) {
-        return userDao.listUsersByRoleId(roleId);
     }
 
     /**

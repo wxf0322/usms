@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-export class UsmsClientPage {
+export class UsmsAdminFrontPage {
   navigateTo() {
     return browser.get('/');
   }

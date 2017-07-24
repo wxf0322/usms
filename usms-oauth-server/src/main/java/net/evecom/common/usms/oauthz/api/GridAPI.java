@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 描述
+ * 描述 网格相关API接口
  *
  * @author Wash Wang
  * @version 1.0
@@ -97,5 +97,4 @@ public class GridAPI {
     }
 
 }
-
 

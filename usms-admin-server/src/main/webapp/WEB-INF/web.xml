@@ -48,8 +48,8 @@
         <servlet-name>accessTokenServlet</servlet-name>
         <servlet-class>net.evecom.common.usms.servlet.AccessTokenServlet</servlet-class>
         <init-param>
-            <param-name>accessTokenUrl</param-name>
-            <param-value>http://192.168.200.209:8080/usms/accessToken</param-value>
+            <param-name>serverUrl</param-name>
+            <param-value>http://192.168.200.209:8080/usms/</param-value>
         </init-param>
         <init-param>
             <param-name>clientId</param-name>

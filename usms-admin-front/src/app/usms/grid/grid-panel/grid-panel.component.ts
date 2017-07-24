@@ -16,7 +16,7 @@ export class GridPanelComponent implements OnInit {
   /**
    * 树形表查询关键字
    */
-  tableQueryWord: string;
+  queryWord: string;
 
   /**
    * 树形表
@@ -45,7 +45,7 @@ export class GridPanelComponent implements OnInit {
   }
 
   queryTreeTable() {
-    this.tableSelectedNode = TreeUtil.findNodesByLabel(this.tableTree, StringUtil.trim(this.tableQueryWord));
+    this.tableSelectedNode = TreeUtil.findNodesByLabel(this.tableTree, StringUtil.trim(this.queryWord));
   }
 
   refreshTree() {

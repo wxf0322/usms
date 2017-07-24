@@ -16,6 +16,7 @@ import net.evecom.common.usms.uma.service.InstitutionService;
 import net.evecom.common.usms.vo.GridVO;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.service.UserService;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,9 +75,10 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(String columns) {
-        String[] ids = columns.split(",");
-        for (String id : ids) {
-            userService.delete(Long.valueOf(id));
+        if (StringUtils.isNotEmpty(columns)) {
+            String[] ids = columns.split(",");
+            long[] entityIds = Arrays.stream(ids).mapToLong(Long::valueOf).toArray();
+            userService.delete(ArrayUtils.toObject(entityIds));
         }
         return new ResultStatus(true, "");
     }
@@ -91,7 +94,6 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "saveOrUpdate")
     public ResultStatus saveOrUpdate(@RequestBody UserVO userVO) {
-
         String[] roleIds = StringUtils.isEmpty(userVO.getRoleIds()) ?
                 null : userVO.getRoleIds().split(",");
 
@@ -167,7 +169,5 @@ public class UserController {
     public List<RoleEntity> listSourceRoles(Long userId) {
         return userService.listSourceRoles(userId);
     }
-
-
 
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 描述 用户视图对象
@@ -133,12 +134,12 @@ public class UserVO {
     /**
      * 关联的组织机构名称
      */
-    String[] institutionNames;
+    List<String> institutionNames;
 
     /**
      * 关联的网格名称
      */
-    String[] gridNames;
+    List<String> gridNames;
 
     public Long getId() {
         return id;
@@ -340,19 +341,19 @@ public class UserVO {
         this.institutionIds = institutionIds;
     }
 
-    public String[] getInstitutionNames() {
+    public List<String> getInstitutionNames() {
         return institutionNames;
     }
 
-    public void setInstitutionNames(String[] institutionNames) {
+    public void setInstitutionNames(List<String> institutionNames) {
         this.institutionNames = institutionNames;
     }
 
-    public String[] getGridNames() {
+    public List<String> getGridNames() {
         return gridNames;
     }
 
-    public void setGridNames(String[] gridNames) {
+    public void setGridNames(List<String> gridNames) {
         this.gridNames = gridNames;
     }
 

@@ -56,11 +56,6 @@ public interface PrivilegeService extends BaseService<PrivilegeEntity, Long> {
      */
     void updateOperations(Long privilegeId, String[] operationIds);
 
-    /**
-     * 查找权限ID对应的操作列表
-     */
-    List<OperationVO> listOpersByPrivId(Long privilegeId);
-
     List<RoleEntity> listTargetRoles(Long privilegeId);
 
     List<RoleEntity> listSourceRoles(Long privilegeId);

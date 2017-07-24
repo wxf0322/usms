@@ -37,7 +37,7 @@ import java.util.Map;
 public class OperationController {
 
     /**
-     * 注入日志管理器
+     * @see Logger
      */
     private static Logger logger = LoggerFactory.getLogger(OperationController.class);
 

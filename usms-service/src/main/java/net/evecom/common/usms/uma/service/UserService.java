@@ -80,6 +80,14 @@ public interface UserService extends BaseService<UserEntity, Long> {
     List<UserEntity> listUsersByRoleName(String roleName);
 
     /**
+     * 根据角色id查找用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    List<UserEntity> listUsersByRoleId(Long roleId);
+
+    /**
      * 根据权限角色查询列表用户列表
      *
      * @param roleNames

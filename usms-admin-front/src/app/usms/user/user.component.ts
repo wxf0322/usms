@@ -36,13 +36,13 @@ export class UserComponent extends BaseTable<any> implements OnInit {
    */
   institutionName: string;
 
-  @ViewChild(UserDialogComponent)
-  userDialog: UserDialogComponent;
-
   /**
    * 树形节点查询关键字
    */
   queryWord: string;
+
+  @ViewChild(UserDialogComponent)
+  userDialog: UserDialogComponent;
 
   constructor(protected router: Router,
               protected route: ActivatedRoute,
@@ -64,8 +64,12 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   }
 
   getDataByPage(currentPage: any, rowsPerPage: any, filter: any) {
-    const url = 'user/list?key=' + StringUtil.trim(this.filter)
-    this.httpService.findByPage(url, currentPage, rowsPerPage, filter).then(
+    const url = 'user/list';
+    const params = {
+      key: StringUtil.trim(this.filter),
+      institutionId: this.institutionId
+    };
+    this.httpService.findByPage(url, currentPage, rowsPerPage, params).then(
       res => this.setData(res)
     );
   }
@@ -73,7 +77,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   queryNode() {
     this.selectedNode = TreeUtil.findNodesByLabel(this.tree, StringUtil.trim(this.queryWord));
     this.institutionName = this.selectedNode.label;
-    const url = 'user/list?key=' + StringUtil.trim(this.filter);
+    const url = 'user/list';
     if (this.selectedNode.data.parentId !== 0) {
       this.institutionId = this.selectedNode.data.id;
     } else {
@@ -81,7 +85,10 @@ export class UserComponent extends BaseTable<any> implements OnInit {
     }
     this.page.number = 0;
     this.page.size = 10;
-    const params = {institutionId: this.institutionId};
+    const params = {
+      key: StringUtil.trim(this.filter),
+      institutionId: this.institutionId
+    };
     this.httpService.findByPage(url, this.page.number, this.page.size, params).then(
       res => this.setData(res)
     );
@@ -115,7 +122,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
   }
 
   showDialog(type: string, id: string) {
-    this.userDialog.showDialog(type, id,this.institutionId,this.institutionName);
+    this.userDialog.showDialog(type, id, this.institutionId, this.institutionName);
   }
 
   query() {
@@ -129,7 +136,7 @@ export class UserComponent extends BaseTable<any> implements OnInit {
    */
   nodeSelect(event) {
     this.institutionName = event.node.label;
-    const url = 'user/list?key=' + StringUtil.trim(this.filter);
+    const url = 'user/list';
     if (event.node.data.parentId !== 0) {
       this.institutionId = event.node.data.id;
     } else {
@@ -137,7 +144,10 @@ export class UserComponent extends BaseTable<any> implements OnInit {
     }
     this.page.number = 0;
     this.page.size = 10;
-    const params = {institutionId: this.institutionId};
+    const params = {
+      key: StringUtil.trim(this.filter),
+      institutionId: this.institutionId
+    };
     this.httpService.findByPage(url, this.page.number, this.page.size, params).then(
       res => this.setData(res)
     );

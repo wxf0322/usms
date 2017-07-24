@@ -102,14 +102,12 @@ public class GridDaoImpl extends BaseDaoImpl<GridEntity> implements GridDaoCusto
             List<UserEntity> users = userDao.listUsersByGridCode(code);
             List<String> userNames = new ArrayList<>();
             if (users != null) {
-                for (UserEntity user : users) {
-                    userNames.add(user.getName());
-                }
+                for (UserEntity user : users) userNames.add(user.getName());
             }
             data.put("code", code);
             data.put("descripiton", descripiton);
             data.put("dutyPhone", dutyPhone);
-            data.put("userNames", userNames.toArray());
+            data.put("userNames", userNames);
             treeData.setData(data);
             result.add(treeData);
         }

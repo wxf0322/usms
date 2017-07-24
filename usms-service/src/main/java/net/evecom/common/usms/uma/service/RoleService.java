@@ -74,14 +74,6 @@ public interface RoleService extends BaseService<RoleEntity, Long> {
     void updatePrivileges(Long roleId, String[] privileges);
 
     /**
-     * 根据角色id查找用户列表
-     *
-     * @param roleId
-     * @return
-     */
-    List<UserEntity> listUsersByRoleId(Long roleId);
-
-    /**
      * 根据角色ID查找已选用户列表
      *
      * @param roleId

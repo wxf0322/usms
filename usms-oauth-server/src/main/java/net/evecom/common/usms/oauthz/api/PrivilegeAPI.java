@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 描述
+ * 描述 权限相关API接口
  *
  * @author Wash Wang
  * @version 1.0

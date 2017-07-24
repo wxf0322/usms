@@ -7,6 +7,7 @@ package net.evecom.common.usms.uma.service;
 
 import net.evecom.common.usms.core.service.BaseService;
 import net.evecom.common.usms.entity.OperationEntity;
+import net.evecom.common.usms.vo.OperationVO;
 
 import java.util.List;
 
@@ -49,5 +50,14 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
      * @return
      */
     boolean canBeDeleted(Long id);
+
+    /**
+     * 查找权限ID对应的操作列表
+     *
+     * @param privilegeId
+     * @return
+     */
+    List<OperationVO> listOpersByPrivId(Long privilegeId);
+
 
 }

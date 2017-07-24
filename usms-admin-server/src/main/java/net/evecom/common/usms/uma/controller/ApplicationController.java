@@ -10,7 +10,7 @@ import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.ApplicationEntity;
 import net.evecom.common.usms.uma.service.ApplicationService;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -77,7 +77,6 @@ public class ApplicationController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(String columns) {
-        // 多行删除写法
         if (StringUtils.isNotEmpty(columns)) {
             String[] ids = columns.split(",");
             long[] entityIds = Arrays.stream(ids).mapToLong(Long::valueOf).toArray();

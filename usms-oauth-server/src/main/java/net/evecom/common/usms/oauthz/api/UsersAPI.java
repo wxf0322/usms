@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 描述 返回用户列表接口
+ * 描述 返回用户列表API接口
  *
  * @author Wash Wang
  * @version 1.0

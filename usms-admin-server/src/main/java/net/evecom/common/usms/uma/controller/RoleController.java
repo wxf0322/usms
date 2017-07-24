@@ -11,6 +11,7 @@ import net.evecom.common.usms.entity.PrivilegeEntity;
 import net.evecom.common.usms.entity.RoleEntity;
 import net.evecom.common.usms.vo.RoleVO;
 import net.evecom.common.usms.uma.service.RoleService;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -71,9 +73,10 @@ public class RoleController {
     @ResponseBody
     @RequestMapping(value = "delete")
     public ResultStatus delete(String columns) {
-        String[] ids = columns.split(",");
-        for (String id : ids) {
-            roleService.delete(Long.valueOf(id));
+        if (StringUtils.isNotEmpty(columns)) {
+            String[] ids = columns.split(",");
+            long[] entityIds = Arrays.stream(ids).mapToLong(Long::valueOf).toArray();
+            roleService.delete(ArrayUtils.toObject(entityIds));
         }
         return new ResultStatus(true, "");
     }

@@ -64,10 +64,8 @@ subprojects {
 
         // apache commons
         compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
-        compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
 
-        // httpclient
-        compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+        // commons-httpclient
         compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
 
         // oltu
@@ -87,6 +85,5 @@ subprojects {
         // Jackson 将response转化为json的依赖文件
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.2'
     }
-
 
 }

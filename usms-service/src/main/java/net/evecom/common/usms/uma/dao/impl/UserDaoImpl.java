@@ -13,7 +13,6 @@ import net.evecom.common.usms.entity.InstitutionEntity;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.uma.dao.GridDao;
 import net.evecom.common.usms.uma.dao.InstitutionDao;
-import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.uma.dao.custom.UserDaoCustom;
 import net.evecom.common.usms.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,26 +93,27 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
 
             // 获得登入名
             String loginName = (String) var.get("LOGIN_NAME");
-
             // 获得组织机构列表
-            List<InstitutionEntity> insts = institutionDao.listInstsByUserId(userId);
+            List<InstitutionEntity> institutions = institutionDao.listInstsByUserId(userId);
 
             // 获得组织机构名
             List<String> instNames = new ArrayList<>();
-            if (insts != null) {
+            if (institutions != null) {
                 Long minLevel = Long.MAX_VALUE;
-                for (InstitutionEntity inst : insts) {
-                    minLevel = Math.min(minLevel, inst.getTreeLevel());
+                for (InstitutionEntity institution : institutions) {
+                    minLevel = Math.min(minLevel, institution.getTreeLevel());
                 }
-                for (InstitutionEntity inst : insts) {
-                    if (inst.getTreeLevel().equals(minLevel)) {
-                        instNames.add(inst.getName());
+                for (InstitutionEntity institution : institutions) {
+                    if (institution.getTreeLevel().equals(minLevel)) {
+                        instNames.add(institution.getName());
                     }
                 }
             }
 
-            List<String> gridNames = new ArrayList<>();
+            // 获得网格列表
             List<GridEntity> grids = gridDao.listGridsByLoginName(loginName);
+            // 获得网格名称
+            List<String> gridNames = new ArrayList<>();
             if (grids != null) {
                 Long minLevel = Long.MAX_VALUE;
                 for (GridEntity grid : grids) {
@@ -131,13 +131,12 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
             userVO.setName((String) var.get("NAME"));
             userVO.setMobile((String) var.get("MOBILE"));
             userVO.setEnabled(((BigDecimal) var.get("ENABLED")).longValue());
-            userVO.setInstitutionNames(instNames.toArray(new String[instNames.size()]));
-            userVO.setGridNames(gridNames.toArray(new String[gridNames.size()]));
+            userVO.setInstitutionNames(instNames);
+            userVO.setGridNames(gridNames);
             results.add(userVO);
         }
         return new PageImpl<>(results, new PageRequest(page, size), pageBean.getTotalElements());
     }
-
 
     @Override
     public List<UserEntity> listUsersByLoginNames(String[] loginNames) {
@@ -148,7 +147,6 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
         String sql = sb.toString();
         return super.queryForClass(sql, loginNames);
     }
-
 
     @Override
     public void updateRoles(Long userId, String[] roleIds) {
@@ -212,6 +210,5 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDaoCusto
         String sql = sb.toString();
         return super.queryForClass(UserEntity.class, sql, roleNames);
     }
-
 
 }

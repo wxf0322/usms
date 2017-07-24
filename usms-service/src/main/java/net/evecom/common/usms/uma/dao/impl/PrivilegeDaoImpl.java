@@ -74,27 +74,6 @@ public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements Pr
     }
 
     @Override
-    public List<OperationVO> listOpersByPrivId(Long privilegeId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from usms_operations where id in( ")
-                .append("select oper_id from usms_privilege_operation t ")
-                .append("where priv_id=?) and enabled=1");
-        String sql = sb.toString();
-        List<Map<String, Object>> rows = super.queryForMap(sql, new Object[]{privilegeId});
-        List<OperationVO> result = new ArrayList<>();
-        for (Map<String, Object> row : rows) {
-            try {
-                Map<String, Object> camelMap = MapUtil.toCamelCaseMap(row);
-                OperationVO operation = MapUtil.toObject(OperationVO.class ,camelMap);
-                result.add(operation);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-        return result;
-    }
-
-    @Override
     public void updateRoles(Long privilegeId, String[] roleIds) {
         String sql = "delete from usms_privilege_role where priv_id =:privilegeId";
         Query query = manager.createNativeQuery(sql);

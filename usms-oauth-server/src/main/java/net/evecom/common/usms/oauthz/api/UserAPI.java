@@ -6,14 +6,11 @@
 package net.evecom.common.usms.oauthz.api;
 
 import net.evecom.common.usms.entity.*;
-import net.evecom.common.usms.uma.service.StaffService;
+import net.evecom.common.usms.uma.service.*;
 import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.vo.StaffVO;
 import net.evecom.common.usms.oauthz.service.OAuthService;
-import net.evecom.common.usms.uma.service.ApplicationService;
-import net.evecom.common.usms.uma.service.OperationService;
-import net.evecom.common.usms.uma.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -30,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 描述 用户信息接口
+ * 描述 用户信息API接口
  *
  * @author Wash Wang
  * @version 1.0
@@ -41,25 +38,25 @@ import java.util.List;
 public class UserAPI {
 
     /**
-     * 注入OAuthService
+     * @see OAuthService
      */
     @Autowired
     private OAuthService oAuthService;
 
     /**
-     * 注入UserService
+     * @see UserService
      */
     @Autowired
     private UserService userService;
 
     /**
-     * 注入ApplicationService
+     * @see ApplicationService
      */
     @Autowired
     private ApplicationService applicationService;
 
     /**
-     * 注入OperationService
+     * @see OperationService
      */
     @Autowired
     private OperationService operationService;
@@ -69,6 +66,12 @@ public class UserAPI {
      */
     @Autowired
     private StaffService staffService;
+
+    /**
+     * @see RoleService
+     */
+    @Autowired
+    private RoleService roleService;
 
     /**
      * 获得员工JSON对象
@@ -92,7 +95,7 @@ public class UserAPI {
      * @param userId
      * @return
      */
-    private JSONArray getInstitutionJSONArray(Long userId) {
+    private JSONArray listInstitutions(Long userId) {
         UserEntity userEntity = userService.findOne(userId);
         // 构造机构信息
         List<InstitutionEntity> institutions = userEntity.getInstitutions();
@@ -104,6 +107,24 @@ public class UserAPI {
             instJsonArr.add(instJson);
         }
         return instJsonArr;
+    }
+
+    /**
+     * 获得角色信息
+     *
+     * @param userId
+     * @return
+     */
+    private JSONArray listRoles(Long userId) {
+        List<RoleEntity> roles = roleService.listRolesByUserId(userId);
+        JSONArray roleJsonArr = new JSONArray();
+        for (RoleEntity role : roles) {
+            if (role.getEnabled() == 0) continue;
+            JSONObject roleJson = JSONObject.fromObject(role);
+            roleJson.remove("enabled");
+            roleJsonArr.add(roleJson);
+        }
+        return roleJsonArr;
     }
 
     /**
@@ -170,7 +191,8 @@ public class UserAPI {
         // 获得相应的json对象
         JSONObject staffJson = getStaffJSONObject(staffId);
         JSONObject appJson = getApplicationJSONObject(clientId);
-        JSONArray instJsonArr = getInstitutionJSONArray(user.getId());
+        JSONArray instJsonArr = listInstitutions(user.getId());
+        JSONArray roleJsonArr = listRoles(user.getId());
 
         // 构造userJson
         JSONObject resultJson = new JSONObject();
@@ -179,6 +201,7 @@ public class UserAPI {
         resultJson.put("loginName", user.getLoginName());
         resultJson.put("staff", staffJson);
         resultJson.put("institutions", instJsonArr);
+        resultJson.put("roles", roleJsonArr);
         resultJson.put("application", appJson);
 
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);

@@ -28,7 +28,7 @@ export class UserPanelComponent extends BaseTable<any> implements OnInit {
   /**
    * 组织机构树查询的关键字
    */
-  instQueryWord: string;
+  queryWord: string;
 
   /**
    * 组织机构树
@@ -110,7 +110,7 @@ export class UserPanelComponent extends BaseTable<any> implements OnInit {
    * 查询组织机构树
    */
   queryInstitution() {
-    this.instSelectedNode = TreeUtil.findNodesByLabel(this.institutionTree, StringUtil.trim(this.instQueryWord));
+    this.instSelectedNode = TreeUtil.findNodesByLabel(this.institutionTree, StringUtil.trim(this.queryWord));
     this.institutionName = this.instSelectedNode.label;
     const url = 'user/list?key=' + StringUtil.trim(this.filter);
     if (this.instSelectedNode.data.parentId !== 0) {

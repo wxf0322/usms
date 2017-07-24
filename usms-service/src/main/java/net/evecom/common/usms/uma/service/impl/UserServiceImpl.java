@@ -130,6 +130,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity, Long>
     }
 
     /**
+     * 根据角色id查找用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    public List<UserEntity> listUsersByRoleId(Long roleId) {
+        return userDao.listUsersByRoleId(roleId);
+    }
+
+
+    /**
      * 根据角色编码列表查询用户列表
      *
      * @param roleNames

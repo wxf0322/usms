@@ -106,11 +106,6 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<PrivilegeEntity, Long>
     }
 
     @Override
-    public List<OperationVO> listOpersByPrivId(Long privilegeId) {
-        return privilegeDao.listOpersByPrivId(privilegeId);
-    }
-
-    @Override
     public List<RoleEntity> listTargetRoles(Long privilegeId) {
         if (privilegeId == null) {
             return new ArrayList<>();

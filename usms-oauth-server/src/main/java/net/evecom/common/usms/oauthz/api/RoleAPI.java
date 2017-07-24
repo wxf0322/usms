@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
+ * 描述 角色相关API接口
+ *
  * @author Pisces Lu
  * @version 1.0
  * @created 2017-5-8 18:13
@@ -86,8 +88,8 @@ public class RoleAPI {
         return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/roles", produces = "application/json; charset=UTF-8")
-    public ResponseEntity getRoles(HttpServletRequest request) {
+    @RequestMapping(value = "/roles/all", produces = "application/json; charset=UTF-8")
+    public ResponseEntity findAll() {
         List<RoleEntity> roles = roleService.findAll();
         JSONArray roleJsonArr = new JSONArray();
         for(RoleEntity role : roles) {
