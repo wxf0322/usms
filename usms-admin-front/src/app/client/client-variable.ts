@@ -7,5 +7,5 @@ export const ClientVariable = Object.freeze({
   responseType: 'code', // 相应类型
   redirectUri: 'http://localhost:4200/#/login', // 登录成功后重定向地址
   //redirectUri:'http://192.168.200.209:8080/uma/#/login',
-  indexUri: 'usms' // 项目首页地址
+  indexUri: 'usms', // 项目首页地址
 });

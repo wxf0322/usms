@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PasswordRequest {
 
     /**
-     * 登入名
+     * 登录名
      */
     private String loginName;
 

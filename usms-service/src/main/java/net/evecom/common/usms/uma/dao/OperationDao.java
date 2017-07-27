@@ -52,6 +52,25 @@ public interface OperationDao extends JpaRepository<OperationEntity, Long>, Oper
     List<OperationEntity> listOpersByUserId(Long userId);
 
     /**
+     * 根据userId，appId获得相应的操作
+     *
+     * @param userId
+     * @param appId
+     * @return
+     */
+    @Query(value = "select * from usms_operations o where o.id in " +
+            "(select po.oper_id from usms_privilege_operation po " +
+            " where po.priv_id in " +
+            "(select p.id from usms_privileges p where p.id in " +
+            " (select pr.priv_id from usms_privilege_role pr, usms_roles r " +
+            " where pr.role_id in " +
+            " (select ur.role_id from usms_user_role ur where ur.user_id = ?1) " +
+            " and pr.role_id = r.id and r.enabled = 1) " +
+            " and p.enabled = 1)) " +
+            " and o.enabled = 1 and o.application_id = ?2 order by o.id", nativeQuery = true)
+    List<OperationEntity> listOpersByUserIdAndAppId(Long userId, Long appId);
+
+    /**
      * 判断是否拥有该操作
      *
      * @param userId

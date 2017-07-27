@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {TreeNode} from "primeng/primeng";
 import {TreeUtil} from "../../../shared/util/tree-util";
 import {StringUtil} from "../../../shared/util/string-util";
-import {TreeData} from "../../../shared/util/tree-data";
+import {TreeData} from "../../../shared/api";
 import {HttpService} from "../../../core/service/http.service";
 import {UserAssociateDialogComponent} from "../user-associate-dialog/user-associate-dialog.component";
 

@@ -68,7 +68,7 @@
         <!-- 保证该系统不会受到跨域的脚本操作攻击 -->
         <property name="httpOnly" value="true"/>
         <!-- 定义Cookie的过期时间，单位为秒，如果设置为-1表示浏览器关闭，则Cookie消失 -->
-        <property name="maxAge" value="-1"/>
+        <property name="maxAge" value="28800"/>
     </bean>
 
     <!-- 定义会话管理器的操作 -->

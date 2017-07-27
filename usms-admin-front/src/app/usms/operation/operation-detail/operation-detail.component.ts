@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from '@angular/common';
 import {NgForm} from "@angular/forms";
-import {BaseDetail} from "../../../shared/util/base-detail";
+import {BaseDetail} from "../../../shared/base-component/base-detail";
 import {HttpService} from "../../../core/service/http.service";
 import {Operation} from "../operation";
 import {OperationService} from "../operation.service";

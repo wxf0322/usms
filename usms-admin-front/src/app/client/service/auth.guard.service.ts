@@ -12,15 +12,15 @@ import {ClientVariable} from "../client-variable";
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
 
-  constructor(private cookie: CookieService) {
+  constructor() {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.cookie.get('user')) {
+    if (localStorage.getItem('user')) {
       return true;
     } else {
       // 保存用户访问地址
-      localStorage.setItem('redirectUri', state.url);
+      localStorage.setItem('currentUrl', state.url);
       window.location.href = ClientVariable.authUrl
         + '?client_id=' + ClientVariable.clientId
         + '&response_type=' + ClientVariable.responseType

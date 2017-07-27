@@ -1,7 +1,7 @@
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService, MenuItem} from 'primeng/primeng';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BasePaginator} from '../filter/base-paginator';
+import {BasePaginator} from './base-paginator';
 import {Renderer} from '@angular/core';
 
 export abstract class BaseTable<T> extends BasePaginator<T> {

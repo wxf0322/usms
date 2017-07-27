@@ -3,7 +3,7 @@ import {TreeNode, SelectItem} from 'primeng/primeng';
 import {Router, ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
-import {TreeData} from 'app/shared/util/tree-data';
+import {TreeData} from 'app/shared/api';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {Operation} from './operation';
 import {OperationService} from "./operation.service";

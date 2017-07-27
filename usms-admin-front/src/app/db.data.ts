@@ -22,10 +22,10 @@ export const usmsMenus = [
       }, {
         title: '用户网格关系',
         routerLink: '/usms/grid'
-      }, /*{
+      }, {
         title: '操作管理',
         routerLink: '/usms/operation'
-      }*/
+      }
     ]
   }
 ];

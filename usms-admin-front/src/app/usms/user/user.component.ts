@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild, Renderer} from '@angular/core';
 import {TreeNode} from 'primeng/primeng';
-import {BaseTable} from '../../shared/util/base-table';
+import {BaseTable} from '../../shared/base-component/base-table';
 import {ConfirmationService} from 'primeng/primeng';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../core/service/http.service';
-import {TreeData} from '../../shared/util/tree-data';
+import {TreeData} from '../../shared/api';
 import {TreeUtil} from '../../shared/util/tree-util';
 import {UserDialogComponent} from './user-dialog/user-dialog.component';
 import {StringUtil} from "../../shared/util/string-util";

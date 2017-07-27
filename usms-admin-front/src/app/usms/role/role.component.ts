@@ -1,6 +1,6 @@
 import {Component, OnInit, Renderer, ViewChild} from '@angular/core';
 import {Role} from "./role";
-import {BaseTable} from "../../shared/util/base-table";
+import {BaseTable} from "../../shared/base-component/base-table";
 import {Router, ActivatedRoute} from "@angular/router";
 import {HttpService} from "../../core/service/http.service";
 import {ConfirmationService} from "primeng/components/common/api";

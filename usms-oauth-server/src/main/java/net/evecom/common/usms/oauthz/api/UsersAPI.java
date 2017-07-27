@@ -174,7 +174,7 @@ public class UsersAPI {
             // 根据id，获得用户实体类
             user = userService.findOne(Long.valueOf(userId));
         } else {
-            // 根据登入名，获得用户实体类
+            // 根据登录名，获得用户实体类
             user = userService.getUserByLoginName(loginName);
         }
         // 如果用户为空返回用户不存在的信息

@@ -1,4 +1,4 @@
-import {TreeData} from './tree-data';
+import {TreeData} from '../api';
 import {TreeNode} from 'primeng/primeng';
 
 export class TreeUtil {

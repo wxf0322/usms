@@ -4,10 +4,11 @@
       <img class="logo-image"> {{title}}
     </div>
   </div>
+
   <div class="eve-hd-right">
     <ul class="nav-list">
       <li class="e-right user-info" style="float: right" (mouseleave)="onMouseleave()">
-        <a (mouseenter)="showItems()">你好，{{user?.name}}</a>
+        <a (mouseenter)="showItems()">{{user?.name}}</a>
         <app-slide-toggle [toggleState]="toggleState"  width="100px">
           <ul>
             <li><a class="fa fa-sign-out" (click)="logout()"> 退出</a></li>

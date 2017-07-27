@@ -2,12 +2,12 @@ import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core'
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {BaseDetail} from '../../../shared/util/base-detail';
+import {BaseDetail} from '../../../shared/base-component/base-detail';
 import {HttpService} from '../../../core/service/http.service';
 import {Role} from '../role';
 import {Privilege} from '../../privilege/privilege';
 import {TreeNode} from 'primeng/primeng';
-import {TreeData} from '../../../shared/util/tree-data';
+import {TreeData} from '../../../shared/api';
 import {TreeUtil} from '../../../shared/util/tree-util';
 
 @Component({

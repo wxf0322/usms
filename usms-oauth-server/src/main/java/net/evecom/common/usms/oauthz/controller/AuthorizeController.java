@@ -35,10 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 
 /**
  * 描述 权限Controller层
@@ -174,7 +172,7 @@ public class AuthorizeController {
         Subject subject = SecurityUtils.getSubject();
         UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
 
-        // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
+        // 如果session中不存在该用户，且用户没有登录，或者登录失败，跳转到登陆页面
         if (user == null && !login(request)) {
             return "oauth2_login";
         }
@@ -226,7 +224,7 @@ public class AuthorizeController {
         Subject subject = SecurityUtils.getSubject();
         UserEntity user = (UserEntity) subject.getSession().getAttribute("user");
 
-        // 如果session中不存在该用户，且用户没有登录，或者登入失败，跳转到登陆页面
+        // 如果session中不存在该用户，且用户没有登录，或者登录失败，跳转到登陆页面
         if (user == null && !login(request)) {
             return "oauth2_login";
         }
@@ -260,7 +258,7 @@ public class AuthorizeController {
     }
 
     /**
-     * 登入判断
+     * 登录判断
      *
      * @param request
      * @return
@@ -290,6 +288,7 @@ public class AuthorizeController {
 
         // 传入加密过的密码
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, encryptPwd);
+
         Subject subject = SecurityUtils.getSubject();
         String error = null;
 
@@ -312,7 +311,8 @@ public class AuthorizeController {
             // 设置session
             Session session = subject.getSession();
             session.setAttribute("user", user);
-            logger.info("[{}]用户登入成功！", loginName);
+
+            logger.info("[{}]用户登录成功！", loginName);
             return true;
         }
     }

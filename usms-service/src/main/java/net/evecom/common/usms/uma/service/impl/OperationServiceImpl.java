@@ -56,6 +56,18 @@ public class OperationServiceImpl extends BaseServiceImpl<OperationEntity, Long>
     }
 
     /**
+     * 根据userId，appId查找用户
+     *
+     * @param userId
+     * @param appId
+     * @return
+     */
+    @Override
+    public List<OperationEntity> listOpersByUserIdAndAppId(Long userId, Long appId) {
+        return operationDao.listOpersByUserIdAndAppId(userId, appId);
+    }
+
+    /**
      * 判断是否拥有该操作
      *
      * @param userId

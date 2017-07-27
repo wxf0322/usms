@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
-import {BaseDetail} from '../../../shared/util/base-detail';
+import {BaseDetail} from '../../../shared/base-component/base-detail';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
 import {HttpService} from '../../../core/service/http.service';

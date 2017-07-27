@@ -110,6 +110,7 @@ public class AccessTokenServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
 
         this.serverUrl = this.getInitParameter("serverUrl");
         this.clientId = this.getInitParameter("clientId");

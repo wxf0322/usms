@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from "./core/service/http.service";
 import {ClientService} from "./client/service/client.service";
 import {Message} from 'primeng/primeng';
-import {CookieService} from "./client/service/cookie.service";
 
 @Component({
   selector: 'app-root',
@@ -21,14 +20,13 @@ export class AppComponent implements OnInit {
   user: any;
 
   constructor(private httpService: HttpService,
-              private cookie: CookieService,
               private clientService: ClientService) {
   }
 
   ngOnInit(): void {
-    let userInfo = this.cookie.get('user');
-    if(userInfo) {
-      this.user = JSON.parse(userInfo);
+    let user = localStorage.getItem('user');
+    if(user) {
+      this.user = JSON.parse(user);
     }
 
     /* 监听提示信息变化 */

@@ -42,8 +42,7 @@ export class EveHeaderComponent implements OnInit {
       message: '你确定要退出该系统吗。',
       accept: () => {
         this.cookie.deleteAll();
-        this.httpService.findByParams('logout')
-          .then(res => {
+        this.httpService.findByParams('logout').then(res => {
             window.location.href = ClientVariable.authUrl
               + '?client_id=' + ClientVariable.clientId
               + '&response_type=' + ClientVariable.responseType

@@ -13,8 +13,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
 import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 描述 登入相关控制器
+ * 描述 登录相关控制器
  *
  * @author Wash Wang
  * @version 1.0
@@ -63,7 +61,7 @@ public class LoginAPI {
      * @throws OAuthSystemException
      */
     @ResponseBody
-    @RequestMapping(value = "logout")
+    @RequestMapping(value = "logout", produces = "application/json; charset=UTF-8")
     public ResponseEntity logout(HttpServletRequest request) throws OAuthProblemException, OAuthSystemException {
         // 构建OAuth资源请求
         OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
@@ -71,26 +69,22 @@ public class LoginAPI {
         // 获取Access Token
         String accessToken = oauthRequest.getAccessToken();
 
-        // 获取用户名
+        // 获取用户
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
-
-        // 获得session与sessionDAO
-        Session session = shiroSecurityHelper.getSessionByLoginName(loginName);
-        SessionDAO sessionDAO = shiroSecurityHelper.getSessionDAO();
-
         try {
-            sessionDAO.delete(session);
+            shiroSecurityHelper.kickOutUser(loginName);
             oAuthService.deleteAccountByLoginName(loginName);
             logger.info("[{}] 登出系统成功！", loginName);
-            ResultStatus resultStatus = new ResultStatus(true, "");
+            ResultStatus resultStatus = new ResultStatus(true, "登出成功");
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
         } catch (Exception e) {
             logger.info("[{}] 登出系统失败！", loginName);
-            ResultStatus resultStatus = new ResultStatus(false, "");
+            ResultStatus resultStatus = new ResultStatus(false, "登出失败");
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             return new ResponseEntity(resultJson.toString(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }
 

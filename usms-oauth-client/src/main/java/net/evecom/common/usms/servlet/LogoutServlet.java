@@ -7,6 +7,8 @@ package net.evecom.common.usms.servlet;
 
 import net.evecom.common.usms.vo.ResultStatus;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +28,11 @@ import java.net.URL;
  * @created 2017/7/17 下午4:50
  */
 public class LogoutServlet extends HttpServlet {
+
+    /**
+     * @see Logger
+     */
+    private static Logger logger = LoggerFactory.getLogger(LogoutServlet.class);
 
     /**
      * @param request
@@ -48,6 +55,8 @@ public class LogoutServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+
         String logoutUrl = this.getInitParameter("logoutUrl");
 
         HttpSession session = request.getSession();
@@ -59,13 +68,14 @@ public class LogoutServlet extends HttpServlet {
 
         PrintWriter writer = response.getWriter();
         if (HttpServletResponse.SC_OK == conn.getResponseCode()) {
+            logger.info("登出成功！");
             session.invalidate();
-
-            ResultStatus resultStatus = new ResultStatus(true, "");
+            ResultStatus resultStatus = new ResultStatus(true, "登出成功");
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             writer.write(resultJson.toString());
         } else {
-            ResultStatus resultStatus = new ResultStatus(false, "");
+            logger.info("登出失败！");
+            ResultStatus resultStatus = new ResultStatus(false, "登出失败");
             JSONObject resultJson = JSONObject.fromObject(resultStatus);
             writer.write(resultJson.toString());
         }

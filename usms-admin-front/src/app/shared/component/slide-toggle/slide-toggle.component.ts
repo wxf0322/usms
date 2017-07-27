@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {animate, group, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-slide-toggle',
@@ -9,12 +9,22 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     trigger('toggleState', [
       state('on', style({})),
       state('off', style({
-        maxHeight: 0,
         padding: 0,
         display: 'none'
       })),
-      transition('* => on', animate('500ms')),
-      transition('* => off', animate('0ms'))
+      transition('* => on', [
+        style({width: 10, transform: 'translateX(50px)', opacity: 0}),
+        group([
+          animate('0.3s 0.1s ease', style({
+            transform: 'translateX(0)',
+            width: 120
+          })),
+          animate('0.3s ease', style({
+            opacity: 1
+          }))
+        ])
+      ]),
+      transition('* => off', [])
     ])
   ]
 })

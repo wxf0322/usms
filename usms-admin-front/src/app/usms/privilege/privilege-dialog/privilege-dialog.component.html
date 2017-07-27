@@ -1,4 +1,4 @@
-<p-dialog header="角色信息" [(visible)]="display" modal="modal" width="1000" [responsive]="true">
+<p-dialog header="权限信息" [(visible)]="display" modal="modal" width="1000" [responsive]="true">
   <div class="ui-g">
     <div class="ui-g-12">
       <div class="detail-layout">
@@ -49,12 +49,8 @@
                         [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
               <ng-template let-role pTemplate="item">
                 <div class="ui-helper-clearfix">
-                  <div class="left-picklist">
-                    {{role.label}}
-                  </div>
-                  <div class="right-picklist">
-                    {{role.name}}
-                  </div>
+                  <div class="left-picklist">{{role.label}}</div>
+                  <div class="right-picklist">{{role.name}}</div>
                 </div>
               </ng-template>
             </p-pickList>

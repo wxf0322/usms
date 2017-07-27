@@ -93,7 +93,7 @@ public class AccessTokenController {
                 }
             }
 
-            // 获取当前登入名
+            // 获取当前登录名
             String loginName = oAuthService.getLoginNameByAuthCode(authCode);
 
             // 检查重定向地址是否和上次的一样

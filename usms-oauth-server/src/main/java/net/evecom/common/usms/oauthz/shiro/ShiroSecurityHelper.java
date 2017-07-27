@@ -107,8 +107,16 @@ public class ShiroSecurityHelper {
      * @param loginName
      */
     public void kickOutUser(String loginName) {
-        Session session = getSessionByLoginName(loginName);
-        if (null != session && !StringUtils.equals(String.valueOf(session.getId()), getSessionId())) {
+        boolean flag = false;
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        for (Session session : sessions) {
+            String sessionKey = String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
+            if (null != session && StringUtils.equals(sessionKey, loginName)) {
+                session.stop();
+                flag = true;
+            }
+        }
+        if(flag) {
             logger.info("成功踢出用户[{}]！", loginName);
         }
     }

@@ -1,8 +1,8 @@
 import {Component, OnInit, Renderer, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService, TreeNode} from "primeng/primeng";
-import {BaseTable} from "../../../shared/util/base-table";
-import {TreeData} from "../../../shared/util/tree-data";
+import {BaseTable} from "../../../shared/base-component/base-table";
+import {TreeData} from "../../../shared/api";
 import {TreeUtil} from "../../../shared/util/tree-util";
 import {StringUtil} from "../../../shared/util/string-util";
 import {HttpService} from "../../../core/service/http.service";

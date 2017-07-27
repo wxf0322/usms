@@ -4,7 +4,7 @@ import {TreeNode} from 'primeng/primeng';
 import {HttpService} from '../../core/service/http.service';
 import {ConfirmationService} from 'primeng/primeng';
 import {TreeUtil} from '../../shared/util/tree-util';
-import {TreeData} from '../../shared/util/tree-data';
+import {TreeData} from '../../shared/api';
 import {InstitutionService} from './institution.service';
 import {StringUtil} from "../../shared/util/string-util";
 

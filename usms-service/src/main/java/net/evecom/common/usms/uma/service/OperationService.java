@@ -35,6 +35,15 @@ public interface OperationService extends BaseService<OperationEntity, Long> {
     List<OperationEntity> listOpersByUserId(Long userId);
 
     /**
+     * 根据 userId与AppId 查找操作
+     *
+     * @param userId
+     * @param appId
+     * @return
+     */
+    List<OperationEntity> listOpersByUserIdAndAppId(Long userId, Long appId);
+
+    /**
      * 判断是否拥有该操作
      *
      * @param userId

@@ -1,4 +1,4 @@
-import {Pagination} from './pagination';
+import {Pagination} from '../filter/pagination';
 
 export abstract class BasePaginator<T> extends Pagination<T> {
 

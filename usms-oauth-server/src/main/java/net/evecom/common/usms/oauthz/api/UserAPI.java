@@ -133,7 +133,8 @@ public class UserAPI {
      * @param clientId
      * @return
      */
-    private JSONObject getApplicationJSONObject(String clientId) {
+    private JSONObject getApplicationJSONObject(Long userId, String clientId) {
+
         ApplicationEntity application = applicationService.getAppByClientId(clientId);
 
         JSONObject resultJson = new JSONObject();
@@ -143,8 +144,8 @@ public class UserAPI {
         resultJson.put("clientId", application.getClientId());
         resultJson.put("clientSecret", application.getClientSecret());
 
-        String appName = application.getName();
-        List<OperationEntity> operations = operationService.listOpersByAppName(appName);
+        Long appId = application.getId();
+        List<OperationEntity> operations = operationService.listOpersByUserIdAndAppId(userId, appId);
 
         // 构造操作
         JSONArray operJsonArr = new JSONArray();
@@ -161,7 +162,7 @@ public class UserAPI {
     }
 
     /**
-     * 获得用户信息，如果用户没有登入该系统返回空串
+     * 获得用户信息，如果用户没有登录该系统返回空串
      *
      * @param request
      * @return
@@ -190,7 +191,7 @@ public class UserAPI {
 
         // 获得相应的json对象
         JSONObject staffJson = getStaffJSONObject(staffId);
-        JSONObject appJson = getApplicationJSONObject(clientId);
+        JSONObject appJson = getApplicationJSONObject(user.getId(), clientId);
         JSONArray instJsonArr = listInstitutions(user.getId());
         JSONArray roleJsonArr = listRoles(user.getId());
 
