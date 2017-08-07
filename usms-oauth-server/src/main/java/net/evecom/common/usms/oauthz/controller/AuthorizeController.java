@@ -10,6 +10,7 @@ import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauthz.service.OAuthService;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
+import net.evecom.gsmp.srv.log.op.app.annotation.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -89,6 +91,7 @@ public class AuthorizeController {
      * @throws URISyntaxException
      * @throws OAuthSystemException
      */
+    @Log
     @RequestMapping(value = "/authorize", produces = "application/json; charset=UTF-8")
     public Object authorize(HttpServletRequest request) throws URISyntaxException, OAuthSystemException {
         try {
@@ -115,6 +118,7 @@ public class AuthorizeController {
             } else if (responseType.equals(ResponseType.TOKEN.toString())) {
                 return implicitGrant(request);
             }
+
 
             OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                     .setError(OAuthError.TokenResponse.INVALID_CLIENT)
@@ -311,6 +315,13 @@ public class AuthorizeController {
             // 设置session
             Session session = subject.getSession();
             session.setAttribute("user", user);
+
+            HttpSession httpSession = request.getSession();
+
+            httpSession.setAttribute("applicationName", "net.evecom.common.usms");
+            httpSession.setAttribute("applicationLabel", "统一用户管理系统");
+            httpSession.setAttribute("userId", user.getId());
+            httpSession.setAttribute("userName", user.getName());
 
             logger.info("[{}]用户登录成功！", loginName);
             return true;

@@ -7,6 +7,7 @@ package net.evecom.common.usms.oauthz.api;
 
 import net.evecom.common.usms.entity.*;
 import net.evecom.common.usms.uma.service.*;
+import net.evecom.common.usms.vo.GridVO;
 import net.evecom.common.usms.vo.InstitutionVO;
 import net.evecom.common.usms.vo.OperationVO;
 import net.evecom.common.usms.vo.StaffVO;
@@ -74,6 +75,12 @@ public class UserAPI {
     private RoleService roleService;
 
     /**
+     * @see GridService
+     */
+    @Autowired
+    private GridService gridService;
+
+    /**
      * 获得员工JSON对象
      *
      * @param staffId
@@ -125,6 +132,24 @@ public class UserAPI {
             roleJsonArr.add(roleJson);
         }
         return roleJsonArr;
+    }
+
+    /**
+     * 获得网格信息
+     *
+     * @param loginName
+     * @return
+     */
+    private JSONArray listGrids(String loginName) {
+        List<GridEntity> grids = gridService.listGridsByLoginName(loginName);
+        JSONArray gridJsonArr = new JSONArray();
+        // 遍历网格数据
+        for (GridEntity grid : grids) {
+            GridVO gridVO = new GridVO(grid);
+            JSONObject gridJson = JSONObject.fromObject(gridVO);
+            gridJsonArr.add(gridJson);
+        }
+        return gridJsonArr;
     }
 
     /**
@@ -194,6 +219,7 @@ public class UserAPI {
         JSONObject appJson = getApplicationJSONObject(user.getId(), clientId);
         JSONArray instJsonArr = listInstitutions(user.getId());
         JSONArray roleJsonArr = listRoles(user.getId());
+        JSONArray gridJsonArr = listGrids(user.getLoginName());
 
         // 构造userJson
         JSONObject resultJson = new JSONObject();
@@ -203,6 +229,7 @@ public class UserAPI {
         resultJson.put("staff", staffJson);
         resultJson.put("institutions", instJsonArr);
         resultJson.put("roles", roleJsonArr);
+        resultJson.put("grids", gridJsonArr);
         resultJson.put("application", appJson);
 
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);

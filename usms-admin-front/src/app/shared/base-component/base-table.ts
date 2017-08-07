@@ -50,7 +50,6 @@ export abstract class BaseTable<T> extends BasePaginator<T> {
     this.router.navigate(['detail', {type: type, id: id}], {relativeTo: this.route});
   }
 
-
   /**
    * 双击查看详情事件
    * @param event

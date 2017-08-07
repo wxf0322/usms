@@ -33,11 +33,6 @@ import java.util.Map;
 public class PrivilegeDaoImpl extends BaseDaoImpl<PrivilegeEntity> implements PrivilegeDaoCustom {
 
     /**
-     * 日志管理器
-     */
-    private static Logger logger = LoggerFactory.getLogger(PrivilegeDaoImpl.class);
-
-    /**
      * 查找权限列表
      *
      * @param page

@@ -347,6 +347,35 @@ http://192.168.200.209:8080/usms/v1/openapi/user?access_token=ACCESS_TOKEN
             "type": 1
         }
     ],
+    "roles": [
+       {
+            "id": 234,
+            "label": "社区门户管理员",
+            "name": "csmpadmin",
+            "remarks": ""
+       }
+    ],
+    "grids": [
+        {
+            "adminDivision": "白青乡",
+            "adminDivisionCode": "350128200000",
+            "area": 0,
+            "code": "351009006",
+            "descripiton": "",
+            "dutyPhone": "",
+            "enabled": 0,
+            "geoOutlineId": 82903,
+            "gridType": "1",
+            "householdeNum": 0,
+            "id": 532,
+            "lvl": 3,
+            "manualSn": 0,
+            "memberNum": 0,
+            "name": "岱峰村",
+            "parentId": 530,
+            "photoUrl": ""
+        }
+    ],
     "application" : {
         "id": 10
         "label": "综治网格",

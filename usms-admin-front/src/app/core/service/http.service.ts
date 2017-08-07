@@ -110,42 +110,6 @@ export class HttpService {
   }
 
   /**
-   * 带附件的更新
-   * @param url
-   * @param data 要更新的实体
-   * @param files 新上传的附件
-   * @param deleteFileIds 要删除附件ID
-   * @returns {Promise<T>}
-   */
-  updateWithUpload(url: any, data: any, files: any, deleteFileIds?: any) {
-    return new Promise((resolve, reject) => {
-      const xhr: XMLHttpRequest = new XMLHttpRequest();
-      const formData = new FormData();
-
-      if (files != null) {
-        for (let i = 0; i < files.length; i++) {
-          formData.append('uploadFile', files[i]);
-        }
-      }
-      if (deleteFileIds) {
-        formData.append('deleteFiles', deleteFileIds);
-      }
-      formData.append('jsonData', JSON.stringify(data));
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            resolve(<any>JSON.parse(xhr.response));
-          } else {
-            reject(xhr.response);
-          }
-        }
-      };
-      xhr.open('POST', url, true);
-      xhr.send(formData);
-    });
-  }
-
-  /**
    * 根据id得到对象
    * @param url
    * @param id
