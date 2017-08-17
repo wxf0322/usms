@@ -14,6 +14,7 @@ import net.evecom.common.usms.vo.StaffVO;
 import net.evecom.common.usms.oauthz.service.OAuthService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -25,7 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 描述 用户信息API接口
@@ -134,22 +138,39 @@ public class UserAPI {
         return roleJsonArr;
     }
 
+
+    /**
+     * 设置 父节点名称-当前网格
+     *
+     * @param grids
+     * @return
+     */
+    private List<GridVO> setGridParentName(List<GridVO> grids) {
+        Map<Long, String> map = new HashMap<>();
+        for (GridVO grid : grids) {
+            map.put(grid.getId(), grid.getName());
+        }
+        return grids.stream().map(grid -> {
+            Long parentId = grid.getParentId();
+            String parentName = map.get(parentId);
+            String name = grid.getName();
+            if (StringUtils.isNotEmpty(parentName)) {
+                grid.setName(parentName + "-" + name);
+            }
+            return grid;
+        }).collect(Collectors.toList());
+    }
+
     /**
      * 获得网格信息
      *
      * @param loginName
      * @return
      */
-    private JSONArray listGrids(String loginName) {
+    private List<GridVO> listGrids(String loginName) {
         List<GridEntity> grids = gridService.listGridsByLoginName(loginName);
-        JSONArray gridJsonArr = new JSONArray();
-        // 遍历网格数据
-        for (GridEntity grid : grids) {
-            GridVO gridVO = new GridVO(grid);
-            JSONObject gridJson = JSONObject.fromObject(gridVO);
-            gridJsonArr.add(gridJson);
-        }
-        return gridJsonArr;
+        List<GridVO> gridVOs = grids.stream().map(grid-> new GridVO(grid)).collect(Collectors.toList());
+        return setGridParentName(gridVOs);
     }
 
     /**
@@ -219,7 +240,7 @@ public class UserAPI {
         JSONObject appJson = getApplicationJSONObject(user.getId(), clientId);
         JSONArray instJsonArr = listInstitutions(user.getId());
         JSONArray roleJsonArr = listRoles(user.getId());
-        JSONArray gridJsonArr = listGrids(user.getLoginName());
+        List<GridVO> gridJsonArr = listGrids(user.getLoginName());
 
         // 构造userJson
         JSONObject resultJson = new JSONObject();

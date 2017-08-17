@@ -11,6 +11,7 @@ import net.evecom.common.usms.oauthz.service.OAuthService;
 import net.evecom.common.usms.uma.service.GridService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 描述 网格相关API接口
@@ -47,6 +51,30 @@ public class GridAPI {
     @Autowired
     private GridService gridService;
 
+
+    /**
+     * 设置 父节点名称-当前网格
+     *
+     * @param grids
+     * @return
+     */
+    private List<GridVO> setGridParentName(List<GridVO> grids) {
+        Map<Long, String> map = new HashMap<>();
+        for (GridVO grid : grids) {
+            map.put(grid.getId(), grid.getName());
+        }
+        return grids.stream().map(grid -> {
+            Long parentId = grid.getParentId();
+            String parentName = map.get(parentId);
+            String name = grid.getName();
+            if (StringUtils.isNotEmpty(parentName)) {
+                grid.setName(parentName + "-" + name);
+            }
+            return grid;
+        }).collect(Collectors.toList());
+    }
+
+
     /**
      * 根据 access_token 返回网格信息
      *
@@ -65,15 +93,12 @@ public class GridAPI {
         String loginName = oAuthService.getLoginNameByAccessToken(accessToken);
         // 获取网格数据
         List<GridEntity> grids = gridService.listGridsByLoginName(loginName);
-        JSONArray gridJsonArr = new JSONArray();
+
         // 遍历网格数据
-        for (GridEntity grid : grids) {
-            GridVO gridVO = new GridVO(grid);
-            JSONObject gridJson = JSONObject.fromObject(gridVO);
-            gridJsonArr.add(gridJson);
-        }
+        List<GridVO> gridVOs = grids.stream().map(grid -> new GridVO(grid)).collect(Collectors.toList());
+        gridVOs = setGridParentName(gridVOs);
         JSONObject resultJson = new JSONObject();
-        resultJson.put("grids", gridJsonArr);
+        resultJson.put("grids", gridVOs);
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 
@@ -85,14 +110,10 @@ public class GridAPI {
     @RequestMapping(value = "/grids/all", produces = "application/json; charset=UTF-8")
     public ResponseEntity findAll() {
         List<GridEntity> grids = gridService.findAll();
-        JSONArray gridJsonArr = new JSONArray();
-        for (GridEntity grid : grids) {
-            GridVO gridVO = new GridVO(grid);
-            JSONObject gridJson = JSONObject.fromObject(gridVO);
-            gridJsonArr.add(gridJson);
-        }
+        List<GridVO> gridVOs = grids.stream().map(grid -> new GridVO(grid)).collect(Collectors.toList());
+        gridVOs = setGridParentName(gridVOs);
         JSONObject resultJson = new JSONObject();
-        resultJson.put("grids", gridJsonArr);
+        resultJson.put("grids", gridVOs);
         return new ResponseEntity(resultJson.toString(), HttpStatus.OK);
     }
 

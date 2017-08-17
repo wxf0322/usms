@@ -5,13 +5,10 @@
  */
 package net.evecom.common.usms.uma.service.impl;
 
-import net.evecom.common.usms.core.dao.BaseDao;
 import net.evecom.common.usms.core.vo.TreeData;
 import net.evecom.common.usms.core.service.impl.BaseServiceImpl;
 import net.evecom.common.usms.core.util.SqlFilter;
 import net.evecom.common.usms.entity.GridEntity;
-import net.evecom.common.usms.entity.UserEntity;
-import net.evecom.common.usms.uma.dao.UserDao;
 import net.evecom.common.usms.vo.UserVO;
 import net.evecom.common.usms.uma.dao.GridDao;
 import net.evecom.common.usms.uma.service.GridService;
@@ -20,8 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 描述
@@ -40,12 +39,6 @@ public class GridServiceImpl extends BaseServiceImpl<GridEntity, Long>
      */
     @Autowired
     private GridDao gridDao;
-
-    /**
-     * @see UserDao
-     */
-    @Autowired
-    private UserDao userDao;
 
     /**
      * 根据登入名获取网格的数据

@@ -112,7 +112,7 @@ public class ShiroSecurityHelper {
         for (Session session : sessions) {
             String sessionKey = String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
             if (null != session && StringUtils.equals(sessionKey, loginName)) {
-                session.stop();
+                session.removeAttribute("user");
                 flag = true;
             }
         }

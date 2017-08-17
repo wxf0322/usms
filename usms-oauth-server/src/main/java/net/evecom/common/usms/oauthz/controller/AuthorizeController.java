@@ -8,6 +8,7 @@ package net.evecom.common.usms.oauthz.controller;
 import net.evecom.common.usms.constant.Constants;
 import net.evecom.common.usms.entity.UserEntity;
 import net.evecom.common.usms.oauthz.service.OAuthService;
+import net.evecom.common.usms.oauthz.shiro.ShiroSecurityHelper;
 import net.evecom.common.usms.uma.service.PasswordHelper;
 import net.evecom.common.usms.uma.service.UserService;
 import net.evecom.gsmp.srv.log.op.app.annotation.Log;
@@ -80,6 +81,12 @@ public class AuthorizeController {
     private PasswordHelper passwordHelper;
 
     /**
+     * @see ShiroSecurityHelper
+     */
+    @Autowired
+    private ShiroSecurityHelper shiroSecurityHelper;
+
+    /**
      * 获得授权码，支持授权码模式，与密码模式
      * client_id错误或者失效，返回400
      * 重定向成功，返回302
@@ -118,7 +125,6 @@ public class AuthorizeController {
             } else if (responseType.equals(ResponseType.TOKEN.toString())) {
                 return implicitGrant(request);
             }
-
 
             OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                     .setError(OAuthError.TokenResponse.INVALID_CLIENT)
@@ -312,12 +318,13 @@ public class AuthorizeController {
             request.setAttribute("error", error);
             return false;
         } else {
+            shiroSecurityHelper.kickOutUser(user.getLoginName());
+
             // 设置session
-            Session session = subject.getSession();
+            Session session = subject.getSession(true);
             session.setAttribute("user", user);
 
             HttpSession httpSession = request.getSession();
-
             httpSession.setAttribute("applicationName", "net.evecom.common.usms");
             httpSession.setAttribute("applicationLabel", "统一用户管理系统");
             httpSession.setAttribute("userId", user.getId());
